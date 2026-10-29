@@ -290,42 +290,44 @@ export const CvSectionDashboard: FC<CvSectionDashboardProps> = ({
   const aboutMe = data.aboutMe;
 
   return (
-    <div className="space-y-6">
+    <div className="border-border bg-card w-full max-w-full min-w-0 rounded-xl border shadow-sm">
       {/* Top Section Tabs Bar */}
-      <div className="border-border/80 bg-card rounded-xl border p-2 shadow-2xs">
+      <div className="border-border bg-muted/30 min-w-0 overflow-hidden rounded-t-xl border-b px-3">
         <Tabs
           value={activeSection}
           onValueChange={(val) => setActiveSection(val as CvSectionId)}
         >
-          <TabsList
-            variant="line"
-            className="flex h-12 w-fit justify-start gap-1 overflow-x-auto pb-1"
-          >
-            {SECTIONS_CONFIG.map((sec) => {
-              const label = t(`sections.${sec.labelKey}`) || sec.defaultLabel;
-              const count = counts[sec.id];
+          <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+            <TabsList
+              variant="line"
+              className="flex min-h-12 w-max min-w-full justify-start gap-1"
+            >
+              {SECTIONS_CONFIG.map((sec) => {
+                const label = t(`sections.${sec.labelKey}`) || sec.defaultLabel;
+                const count = counts[sec.id];
 
-              return (
-                <TabsTrigger
-                  key={sec.id}
-                  value={sec.id}
-                  className="flex shrink-0 items-center gap-2 px-3 py-2 text-xs font-medium sm:text-sm"
-                >
-                  <span>{label}</span>
-                  {!sec.single ? (
-                    <span className="bg-muted/70 text-foreground/80 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold tabular-nums">
-                      {count}
-                    </span>
-                  ) : null}
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
+                return (
+                  <TabsTrigger
+                    key={sec.id}
+                    value={sec.id}
+                    className="flex shrink-0 items-center gap-2 px-3 py-2 text-xs font-medium sm:text-sm"
+                  >
+                    <span>{label}</span>
+                    {!sec.single ? (
+                      <span className="bg-muted/70 text-foreground/80 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold tabular-nums">
+                        {count}
+                      </span>
+                    ) : null}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+          </div>
         </Tabs>
       </div>
 
       {/* Active Section Content Pane */}
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-4 p-4 sm:p-6">
         {/* SECTION: HEADER */}
         {activeSection === "header" && (
           <div className="space-y-4">

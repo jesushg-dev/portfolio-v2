@@ -103,7 +103,23 @@ function emptyCvDb() {
           cvContact: { deleteMany: jest.fn() },
           cvEducation: { deleteMany: jest.fn() },
           cvLanguage: { deleteMany: jest.fn() },
-          cvTechnicalSkill: { deleteMany: jest.fn() },
+          cvTechnicalSkill: {
+            deleteMany: jest.fn(),
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockResolvedValue({ id: "skill-1" }),
+            update: jest.fn().mockResolvedValue({ id: "skill-1" }),
+          },
+          skill: {
+            findMany: jest
+              .fn()
+              .mockImplementation((args: { where: { id: { in: string[] } } }) =>
+                Promise.resolve(args.where.id.in.map((id) => ({ id }))),
+              ),
+          },
+          cvTechnicalSkillSelection: {
+            updateMany: jest.fn(),
+            upsert: jest.fn(),
+          },
           cvSoftSkill: { deleteMany: jest.fn() },
           cvAdditionalInfo: { deleteMany: jest.fn() },
           cvPersonalReference: { deleteMany: jest.fn() },
@@ -242,13 +258,13 @@ describe("cvRouter", () => {
     const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));
     await caller.createTechnicalSkill({
       category: "FRONTEND",
-      items: ["React"],
+      skillIds: ["000000000000000000000001"],
       order: 0,
     });
     await caller.updateTechnicalSkill({
       id: "skill-1",
       category: "FRONTEND",
-      items: ["React", "Next.js"],
+      skillIds: ["000000000000000000000001", "000000000000000000000002"],
       order: 1,
     });
     await expect(

@@ -38,13 +38,7 @@ export function certificationYear(
 }
 
 async function loadResumeTechnicalSkills(db: PrismaClient, userId: string) {
-  const curated = await db.cvTechnicalSkill.findMany({
-    where: { userId },
-    orderBy: { order: "asc" },
-  });
-  // The CV editor's curated categories are the source for printed skills.
-  // Portfolio-wide skills are useful only when no CV-specific list exists.
-  return curated.length ? curated : resolveUserTechnicalSkills(db, userId);
+  return resolveUserTechnicalSkills(db, userId);
 }
 
 export async function loadCvStructuredDraft(
@@ -113,7 +107,6 @@ export async function loadCvStructuredDraft(
   const headerT = field.for(header.translations);
 
   const summary =
-    headerT("heroSummary") ||
     (await db.cvAboutMe
       .findUnique({
         where: { userId },

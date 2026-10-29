@@ -45,7 +45,7 @@ describe("loadCvStructuredDraft", () => {
             {
               appLanguageId: "lang-en",
               degree: "Math",
-              heroSummary: "Builder",
+              heroSummary: "Public hero copy that must never enter the CV",
             },
           ],
         }),
@@ -53,7 +53,11 @@ describe("loadCvStructuredDraft", () => {
       profile: {
         findUnique: jest.fn().mockResolvedValue({ defaultLocale: "en" }),
       },
-      cvAboutMe: { findUnique: jest.fn() },
+      cvAboutMe: {
+        findUnique: jest.fn().mockResolvedValue({
+          translations: [{ appLanguageId: "lang-en", aboutMe: "Builder" }],
+        }),
+      },
       cvExperience: {
         findMany: jest.fn().mockResolvedValue([
           {
@@ -106,9 +110,19 @@ describe("loadCvStructuredDraft", () => {
         ]),
       },
       cvTechnicalSkill: {
-        findMany: jest
-          .fn()
-          .mockResolvedValue([{ category: "FRONTEND", items: ["React"] }]),
+        findMany: jest.fn().mockResolvedValue([
+          {
+            id: "group-1",
+            category: "FRONTEND",
+            order: 0,
+            selections: [
+              {
+                skillId: "skill-react",
+                skill: { userId: "user-1", title: "React" },
+              },
+            ],
+          },
+        ]),
       },
       cvContact: {
         findMany: jest
@@ -163,7 +177,7 @@ describe("loadCvStructuredDraft", () => {
     expect(tailored?.experiences[0].atsResponsibilities).toEqual([]);
   });
 
-  it("populates draft.skills from portfolio skills (db.skill)", async () => {
+  it("does not automatically include unselected portfolio skills", async () => {
     const db = {
       appLanguage: {
         findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
@@ -197,14 +211,6 @@ describe("loadCvStructuredDraft", () => {
       locale: "en",
     });
 
-    expect(draft?.skills).toEqual([
-      { id: "tech-skill-frontend", category: "FRONTEND", items: ["React"] },
-      { id: "tech-skill-backend", category: "BACKEND", items: ["Node.js"] },
-      {
-        id: "tech-skill-database",
-        category: "DATABASE",
-        items: ["PostgreSQL"],
-      },
-    ]);
+    expect(draft?.skills).toEqual([]);
   });
 });

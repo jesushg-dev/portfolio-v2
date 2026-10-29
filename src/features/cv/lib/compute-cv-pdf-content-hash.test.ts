@@ -7,7 +7,6 @@ const baseSnapshot: CvPreviewSnapshot = {
     degree: "BSc Computer Science",
     photoUrl: null,
     backgroundImageUrl: null,
-    heroSummary: "Backend engineer",
     clientImageAlt: "",
   },
   aboutMeText: "About me",

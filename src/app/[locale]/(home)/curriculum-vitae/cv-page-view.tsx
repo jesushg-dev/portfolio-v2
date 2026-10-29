@@ -139,7 +139,6 @@ const CvPageView: FC<CvPageViewProps> = async ({
 
   const field = createLocalizedFieldResolver(appLanguages, currentLocale);
   const aboutMeText = resolveCvAboutPreviewText(
-    field(header?.translations, "heroSummary"),
     aboutMe ? field(aboutMe.translations, "aboutMe") : null,
   );
   const downloadFileName = buildAtsCvFileName({

@@ -157,7 +157,6 @@ export async function GET(request: Request) {
     );
 
     const aboutMeText = resolveCvAboutPreviewText(
-      field(header.translations, "heroSummary"),
       aboutMe ? field(aboutMe.translations, "aboutMe") : null,
     );
 

@@ -19,6 +19,7 @@ import {
 } from "../fixtures/portfolio-skills";
 import { ensureAdminOrigin } from "./admin-origin";
 import { selectSkillsInPicker } from "./skill-picker-actions";
+import { normalizeSkillTitle } from "../../src/features/cv/lib/cv-skill-catalog";
 import { clickSelectOption } from "./select-option";
 
 const CV_LOCALES = ["es", "en", "nl"] as const;
@@ -308,6 +309,37 @@ export async function fillCvTechnicalSkill(
   page: Page,
   skill: PortfolioCvTechnicalSkillFixture,
 ): Promise<void> {
+  const catalogue = await trpcQuery<{ data: { title: string }[] }>(
+    page,
+    "skillsAdmin.getMine",
+  );
+  for (const title of skill.items) {
+    const canonical = normalizeSkillTitle(title);
+    if (
+      !catalogue.data.some(
+        (item) => normalizeSkillTitle(item.title) === canonical,
+      )
+    ) {
+      const name =
+        canonical === "tailwind css"
+          ? "Tailwind CSS"
+          : canonical === "node.js"
+            ? "Node.js"
+            : title;
+      await trpcMutate(page, "skillsAdmin.createItem", {
+        title: name,
+        image: "/favicon.svg",
+        type:
+          skill.category === "DATABASE"
+            ? "DATA"
+            : skill.category === "OTHER"
+              ? "TOOLS"
+              : skill.category,
+        translations: {},
+      });
+      catalogue.data.push({ title: name });
+    }
+  }
   await ensureCvItemAddReady(page, "skills", "cv-skills-add");
   await openCvItemSheet(page, "cv-skills-add");
   await clickSelectOption(
@@ -315,7 +347,19 @@ export async function fillCvTechnicalSkill(
     "cv-skill-category",
     `cv-skill-category-option-${skill.category}`,
   );
-  await page.locator("#cv-skill-items").fill(skill.items.join(", "));
+  await page
+    .locator("#skill-picker-grid button")
+    .first()
+    .waitFor({ state: "visible" });
+  for (const title of skill.items) {
+    const canonical = normalizeSkillTitle(title);
+    await page.locator("#skill-picker-search").fill(canonical);
+    const tile = page.locator("#skill-picker-grid button").first();
+    await tile.waitFor({ state: "visible" });
+    if ((await tile.getAttribute("aria-pressed")) !== "true")
+      await tile.click();
+  }
+  await page.locator("#skill-picker-search").fill("");
   await submitCvForm(page, "cv-skill-form", "createTechnicalSkill");
   await waitForCvItemSheetClosed(page);
 }

@@ -73,7 +73,6 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
   );
 
   const aboutMePreview = resolveCvAboutPreviewText(
-    field(data?.header?.translations, "heroSummary"),
     field(data?.aboutMe?.translations, "aboutMe"),
   );
 
@@ -123,118 +122,130 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
 
-      {/* Sticky floating control card with canonical tabs and section links */}
-      <div className="border-border/80 bg-card/95 supports-backdrop-filter:bg-card/80 sticky top-0 z-20 mb-6 space-y-3 rounded-xl border p-4 shadow-sm backdrop-blur md:top-16">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          {/* Canonical Line Tabs for View Switcher */}
-          <Tabs
-            value={view}
-            onValueChange={(val) => setView(val as EditorView)}
-          >
-            <TabsList variant="line" className="h-10 w-fit justify-start">
-              <TabsTrigger value="visual" className="text-sm">
-                {t("visualSheet")}
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="text-sm">
-                {t("preview")}
-              </TabsTrigger>
-              <TabsTrigger value="import" className="text-sm">
-                {t("import")}
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+      <div className="border-border bg-card w-full max-w-full min-w-0 rounded-xl border shadow-sm">
+        {/* Canonical tabs and section links */}
+        <div className="border-border bg-muted/30 sticky top-0 z-20 space-y-3 rounded-t-xl border-b p-3 backdrop-blur md:top-16">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* Canonical Line Tabs for View Switcher */}
+            <Tabs
+              className="w-full min-w-0 sm:w-auto sm:flex-1"
+              value={view}
+              onValueChange={(val) => setView(val as EditorView)}
+            >
+              <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+                <TabsList
+                  variant="line"
+                  className="min-h-12 w-max min-w-full justify-start"
+                >
+                  <TabsTrigger value="visual" className="text-sm">
+                    {t("visualSheet")}
+                  </TabsTrigger>
+                  <TabsTrigger value="preview" className="text-sm">
+                    {t("preview")}
+                  </TabsTrigger>
+                  <TabsTrigger value="import" className="text-sm">
+                    {t("import")}
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </Tabs>
 
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Scalable Layout Style Switcher (for visual/preview views) */}
-            {view === "visual" || view === "preview" ? (
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Scalable Layout Style Switcher (for visual/preview views) */}
+              {view === "visual" || view === "preview" ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground text-xs font-medium">
+                    {t("layoutVersion")}
+                  </span>
+                  <Tabs
+                    value={layoutStyle}
+                    onValueChange={(val) =>
+                      setLayoutStyle(val as CvLayoutStyle)
+                    }
+                  >
+                    <TabsList variant="pill" className="h-8">
+                      {cvLayoutRegistry.map((entry) => (
+                        <TabsTrigger
+                          key={entry.id}
+                          value={entry.id}
+                          className="px-2.5 py-1 text-xs"
+                        >
+                          {t(entry.labelKey)}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </Tabs>
+                </div>
+              ) : null}
+
+              {/* Language Selector */}
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground text-xs font-medium">
-                  {t("layoutVersion")}
+                  {t("previewLanguage")}
                 </span>
-                <Tabs
-                  value={layoutStyle}
-                  onValueChange={(val) => setLayoutStyle(val as CvLayoutStyle)}
-                >
-                  <TabsList variant="pill" className="h-8">
-                    {cvLayoutRegistry.map((entry) => (
-                      <TabsTrigger
-                        key={entry.id}
-                        value={entry.id}
-                        className="px-2.5 py-1 text-xs"
-                      >
-                        {t(entry.labelKey)}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
+                <LocaleSegment
+                  id="cv-preview-locale-tabs"
+                  buttonIdPrefix="cv-preview-locale"
+                  value={previewLocale}
+                  onChange={setPreviewLocale}
+                  defaultLocale={defaultLocale}
+                />
               </div>
-            ) : null}
-
-            {/* Language Selector */}
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground text-xs font-medium">
-                {t("previewLanguage")}
-              </span>
-              <LocaleSegment
-                id="cv-preview-locale-tabs"
-                buttonIdPrefix="cv-preview-locale"
-                value={previewLocale}
-                onChange={setPreviewLocale}
-                defaultLocale={defaultLocale}
-              />
             </div>
           </div>
+
+          {/* Section Quick Jump Links (when in visual mode) */}
+          {view === "visual" ? (
+            <nav
+              aria-label={t("sectionNavAria")}
+              className="border-border/60 flex gap-1.5 overflow-x-auto border-t pt-3"
+            >
+              {SECTION_LINKS.map((section) => {
+                const label = t(`sections.${section.labelKey}`);
+                return (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className="text-muted-foreground hover:bg-muted hover:text-foreground shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors"
+                  >
+                    {label}
+                  </a>
+                );
+              })}
+            </nav>
+          ) : null}
         </div>
 
-        {/* Section Quick Jump Links (when in visual mode) */}
-        {view === "visual" ? (
-          <nav
-            aria-label={t("sectionNavAria")}
-            className="border-border/60 flex gap-1.5 overflow-x-auto border-t pt-3"
-          >
-            {SECTION_LINKS.map((section) => {
-              const label = t(`sections.${section.labelKey}`);
-              return (
-                <a
-                  key={section.id}
-                  href={`#${section.id}`}
-                  className="text-muted-foreground hover:bg-muted hover:text-foreground shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors"
-                >
-                  {label}
-                </a>
-              );
-            })}
-          </nav>
-        ) : null}
+        <div className="min-w-0 p-4 sm:p-6">
+          {view === "preview" && previewData ? (
+            <CvPageFrame
+              hint={t("previewRefresh", {
+                locale: localsDisplay[previewLocale],
+              })}
+            >
+              <div id="cv-admin-preview">
+                <CvPreview
+                  data={localizedPreviewData!}
+                  aboutMeText={aboutMePreview}
+                  locale={previewLocale}
+                />
+              </div>
+            </CvPageFrame>
+          ) : view === "import" ? (
+            <ResumeImportWorkflow onImported={() => setView("visual")} />
+          ) : (
+            <CvPageFrame hint={t("editingBanner")}>
+              <EditableCvLayout
+                data={previewData!}
+                aboutMeText={aboutMePreview}
+                currentLocale={previewLocale}
+                defaultLocale={defaultLocale}
+                layoutStyle={layoutStyle}
+              />
+            </CvPageFrame>
+          )}
+        </div>
       </div>
-
-      {view === "preview" && previewData ? (
-        <CvPageFrame
-          hint={t("previewRefresh", {
-            locale: localsDisplay[previewLocale],
-          })}
-        >
-          <div id="cv-admin-preview">
-            <CvPreview
-              data={localizedPreviewData!}
-              aboutMeText={aboutMePreview}
-              locale={previewLocale}
-            />
-          </div>
-        </CvPageFrame>
-      ) : view === "import" ? (
-        <ResumeImportWorkflow onImported={() => setView("visual")} />
-      ) : (
-        <CvPageFrame hint={t("editingBanner")}>
-          <EditableCvLayout
-            data={previewData!}
-            aboutMeText={aboutMePreview}
-            currentLocale={previewLocale}
-            defaultLocale={defaultLocale}
-            layoutStyle={layoutStyle}
-          />
-        </CvPageFrame>
-      )}
     </div>
   );
 };

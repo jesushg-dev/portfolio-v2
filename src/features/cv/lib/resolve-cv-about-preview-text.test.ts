@@ -2,32 +2,23 @@ import { resolveCvAboutPreviewText } from "./resolve-cv-about-preview-text";
 
 describe("resolveCvAboutPreviewText", () => {
   it("prefers aboutMe when both are present", () => {
-    expect(resolveCvAboutPreviewText("Hero summary", "About me")).toBe(
-      "About me",
-    );
+    expect(resolveCvAboutPreviewText("About me")).toBe("About me");
   });
 
-  it("falls back to heroSummary when aboutMe is empty", () => {
-    expect(resolveCvAboutPreviewText("Hero summary", "")).toBe("Hero summary");
-    expect(resolveCvAboutPreviewText("Hero summary", "   ")).toBe(
-      "Hero summary",
-    );
-    expect(resolveCvAboutPreviewText("Hero summary", null)).toBe(
-      "Hero summary",
-    );
-    expect(resolveCvAboutPreviewText("Hero summary", undefined)).toBe(
-      "Hero summary",
-    );
+  it("keeps missing CV text empty without consulting public content", () => {
+    expect(resolveCvAboutPreviewText("")).toBeNull();
+    expect(resolveCvAboutPreviewText("   ")).toBeNull();
+    expect(resolveCvAboutPreviewText(null)).toBeNull();
+    expect(resolveCvAboutPreviewText(undefined)).toBeNull();
   });
 
   it("returns null when both are empty", () => {
-    expect(resolveCvAboutPreviewText("", "")).toBeNull();
-    expect(resolveCvAboutPreviewText("  ", "  ")).toBeNull();
-    expect(resolveCvAboutPreviewText(null, undefined)).toBeNull();
+    expect(resolveCvAboutPreviewText("")).toBeNull();
+    expect(resolveCvAboutPreviewText("  ")).toBeNull();
+    expect(resolveCvAboutPreviewText(undefined)).toBeNull();
   });
 
   it("trims the selected value", () => {
-    expect(resolveCvAboutPreviewText("Hero", "  About  ")).toBe("About");
-    expect(resolveCvAboutPreviewText("  Hero  ", "")).toBe("Hero");
+    expect(resolveCvAboutPreviewText("  About  ")).toBe("About");
   });
 });
