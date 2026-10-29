@@ -1,7 +1,7 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import {
@@ -17,7 +17,6 @@ interface Props {
 
 const NowAdminPage: FC<Props> = async ({ params, searchParams }) => {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const tabParam = typeof search.tab === "string" ? search.tab : "SNAPSHOT";
   const initialTab: NowTab =
@@ -29,7 +28,7 @@ const NowAdminPage: FC<Props> = async ({ params, searchParams }) => {
       : "SNAPSHOT";
 
   const [t, { settings, focuses, languages }] = await Promise.all([
-    getTranslations("admin.now"),
+    getTranslations({ locale: locale as Locale, namespace: "admin.now" }),
     getNowAdminPageData(),
   ]);
 

@@ -7,6 +7,7 @@ import {
   mapNowFocusToEditorDto,
   mapNowFocusesToEditorDto,
   mapNowSettingsToEditorDto,
+  nowSettingsEditorInclude,
 } from "@/features/now/lib/now-editor-dto";
 
 export async function getNowAdminPageData() {
@@ -17,7 +18,7 @@ export async function getNowAdminPageData() {
 
   let settings = await db.nowSettings.findUnique({
     where: { userId },
-    include: { NowSettingsTranslation: true },
+    include: nowSettingsEditorInclude,
   });
 
   settings ??= await db.nowSettings.create({
@@ -29,13 +30,11 @@ export async function getNowAdminPageData() {
             appLanguageId: lang.id,
             statusBody: "",
             statusRelative: "",
-            githubBody: "",
-            githubRelative: "",
           })),
         },
       },
     },
-    include: { NowSettingsTranslation: true },
+    include: nowSettingsEditorInclude,
   });
 
   const focuses = await db.nowFocus.findMany({

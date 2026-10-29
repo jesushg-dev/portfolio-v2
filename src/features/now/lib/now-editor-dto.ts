@@ -1,9 +1,6 @@
-import type {
-  NowFocus,
-  NowFocusTranslation,
-  NowSettings,
-  NowSettingsTranslation,
-} from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+import type { StatusSlotInput } from "./status-schedule";
+import type { NowFocus, NowFocusTranslation } from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
@@ -15,8 +12,6 @@ import {
 export interface NowSettingsTranslationFields {
   statusBody: string;
   statusRelative: string;
-  githubBody: string;
-  githubRelative: string;
 }
 
 export type NowSettingsTranslationMap =
@@ -27,13 +22,14 @@ export interface NowSettingsEditorDTO {
   timezone: string;
   githubUsername: string;
   statusEmoji: string;
+  statusSchedule: StatusSlotInput[];
+  readingCoverUrl: string;
+  watchedCoverUrl: string;
   readingTitle: string;
   readingAuthors: string;
   readingProgress: number;
   watchedTitle: string;
   watchedRating: number;
-  githubRepo: string;
-  githubHref: string;
   photoUrls: string[];
   translations: NowSettingsTranslationMap;
 }
@@ -51,13 +47,11 @@ export interface NowFocusEditorDTO {
   translations: NowFocusTranslationMap;
 }
 
-export type NowFocusCreateFormDTO = Omit<NowFocusEditorDTO, "id">;
+export type NowFocusCreateFormDTO = Omit<NowFocusEditorDTO, "id" | "order">;
 
 const emptySettingsTranslation: NowSettingsTranslationFields = {
   statusBody: "",
   statusRelative: "",
-  githubBody: "",
-  githubRelative: "",
 };
 
 const emptyFocusTranslation: NowFocusTranslationFields = {
@@ -65,9 +59,16 @@ const emptyFocusTranslation: NowFocusTranslationFields = {
   body: "",
 };
 
-type NowSettingsWithRelations = NowSettings & {
-  NowSettingsTranslation: NowSettingsTranslation[];
-};
+export const nowSettingsEditorInclude = {
+  NowSettingsTranslation: true,
+  statusSchedule: {
+    include: { translations: true },
+    orderBy: [{ startMinute: "asc" }, { id: "asc" }],
+  },
+} satisfies Prisma.NowSettingsInclude;
+type NowSettingsWithRelations = Prisma.NowSettingsGetPayload<{
+  include: typeof nowSettingsEditorInclude;
+}>;
 
 type NowFocusWithRelations = NowFocus & {
   NowFocusTranslation: NowFocusTranslation[];
@@ -82,8 +83,6 @@ export function mapNowSettingsToEditorDto(
       appLanguageId: translation.appLanguageId,
       statusBody: translation.statusBody ?? "",
       statusRelative: translation.statusRelative ?? "",
-      githubBody: translation.githubBody ?? "",
-      githubRelative: translation.githubRelative ?? "",
     })) ?? [];
 
   return {
@@ -91,13 +90,26 @@ export function mapNowSettingsToEditorDto(
     timezone: settings.timezone,
     githubUsername: settings.githubUsername ?? "",
     statusEmoji: settings.statusEmoji ?? "🚀",
+    statusSchedule: (settings.statusSchedule ?? []).map((slot) => ({
+      id: slot.id,
+      startMinute: slot.startMinute,
+      endMinute: slot.endMinute,
+      weekdays: slot.weekdays,
+      emoji: slot.emoji,
+      translations: Object.fromEntries(
+        (slot.translations ?? []).map((row) => [
+          row.appLanguageId,
+          { body: row.body },
+        ]),
+      ),
+    })),
+    readingCoverUrl: settings.readingCoverUrl ?? "",
+    watchedCoverUrl: settings.watchedCoverUrl ?? "",
     readingTitle: settings.readingTitle ?? "",
     readingAuthors: settings.readingAuthors ?? "",
     readingProgress: settings.readingProgress ?? 0,
     watchedTitle: settings.watchedTitle ?? "",
     watchedRating: settings.watchedRating ?? 0,
-    githubRepo: settings.githubRepo ?? "",
-    githubHref: settings.githubHref ?? "",
     photoUrls: settings.photoUrls ?? [],
     translations: mergeTranslationMap(
       languages,
@@ -114,13 +126,14 @@ export function buildEmptyNowSettingsDto(
     timezone: "America/Mexico_City",
     githubUsername: "",
     statusEmoji: "🚀",
+    statusSchedule: [],
+    readingCoverUrl: "",
+    watchedCoverUrl: "",
     readingTitle: "",
     readingAuthors: "",
     readingProgress: 0,
     watchedTitle: "",
     watchedRating: 0,
-    githubRepo: "",
-    githubHref: "",
     photoUrls: [],
     translations: buildEmptyTranslationMap(languages, emptySettingsTranslation),
   };
@@ -155,7 +168,6 @@ export function buildEmptyNowFocusCreateDto(
   languages: LanguageRef[],
 ): NowFocusCreateFormDTO {
   return {
-    order: 0,
     translations: buildEmptyTranslationMap(languages, emptyFocusTranslation),
   };
 }

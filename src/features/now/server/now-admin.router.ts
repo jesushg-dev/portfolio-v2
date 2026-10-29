@@ -1,3 +1,8 @@
+import { getGitHubContributions } from "./github-contributions";
+import { getGitHubActivity } from "./github-activity";
+import { TRPCError } from "@trpc/server";
+import { nowTabSchema } from "../lib/now-settings-schema";
+import { saveNowTab } from "./now-settings-persistence";
 import { z } from "zod";
 
 import { assertOwner } from "@/features/portfolio/server/portfolio-admin-shared";
@@ -6,34 +11,10 @@ import {
   mapNowFocusToEditorDto,
   mapNowFocusesToEditorDto,
   mapNowSettingsToEditorDto,
+  nowSettingsEditorInclude,
 } from "@/features/now/lib/now-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-
-const NowSettingsTranslationMapSchema = z.record(
-  z.string(),
-  z.object({
-    statusBody: z.string(),
-    statusRelative: z.string(),
-    githubBody: z.string(),
-    githubRelative: z.string(),
-  }),
-);
-
-const nowSettingsUpsertInput = z.object({
-  timezone: z.string().min(1),
-  githubUsername: z.string().optional().default(""),
-  statusEmoji: z.string().optional().default("🚀"),
-  readingTitle: z.string().optional().default(""),
-  readingAuthors: z.string().optional().default(""),
-  readingProgress: z.number().int().min(0).max(100).default(0),
-  watchedTitle: z.string().optional().default(""),
-  watchedRating: z.number().int().min(0).max(5).default(0),
-  githubRepo: z.string().optional().default(""),
-  githubHref: z.string().optional().default(""),
-  photoUrls: z.array(z.string()).max(6).default([]),
-  translations: NowSettingsTranslationMapSchema,
-});
 
 const NowFocusTranslationMapSchema = z.record(
   z.string(),
@@ -44,18 +25,34 @@ const NowFocusTranslationMapSchema = z.record(
 );
 
 const nowFocusUpsertInput = z.object({
-  order: z.number().int().nonnegative().default(0),
   translations: NowFocusTranslationMapSchema,
 });
 
 export const nowAdminRouter = createTRPCRouter({
+  getGithubActivity: protectedProcedure.query(async ({ ctx }) => {
+    const settings = await ctx.db.nowSettings.findUnique({
+      where: { userId: ctx.user.id },
+      select: { githubUsername: true },
+    });
+    return getGitHubActivity(ctx.user.id, settings?.githubUsername ?? null);
+  }),
+  getGithubContributions: protectedProcedure.query(async ({ ctx }) => {
+    const settings = await ctx.db.nowSettings.findUnique({
+      where: { userId: ctx.user.id },
+      select: { githubUsername: true },
+    });
+    return getGitHubContributions(
+      ctx.user.id,
+      settings?.githubUsername ?? null,
+    );
+  }),
   getSettings: protectedProcedure.query(async ({ ctx }) => {
     const languages = await ctx.db.appLanguage.findMany({
       orderBy: { code: "asc" },
     });
     const existing = await ctx.db.nowSettings.findUnique({
       where: { userId: ctx.user.id },
-      include: { NowSettingsTranslation: true },
+      include: nowSettingsEditorInclude,
     });
     if (existing) return mapNowSettingsToEditorDto(existing, languages);
 
@@ -68,82 +65,18 @@ export const nowAdminRouter = createTRPCRouter({
               appLanguageId: lang.id,
               statusBody: "",
               statusRelative: "",
-              githubBody: "",
-              githubRelative: "",
             })),
           },
         },
       },
-      include: { NowSettingsTranslation: true },
+      include: nowSettingsEditorInclude,
     });
     return mapNowSettingsToEditorDto(created, languages);
   }),
 
-  upsertSettings: protectedProcedure
-    .input(nowSettingsUpsertInput)
-    .mutation(async ({ ctx, input }) => {
-      const { translations, ...rest } = input;
-      const languages = await ctx.db.appLanguage.findMany({
-        orderBy: { code: "asc" },
-      });
-
-      const settings = await ctx.db.nowSettings.upsert({
-        where: { userId: ctx.user.id },
-        create: {
-          userId: ctx.user.id,
-          timezone: rest.timezone,
-          githubUsername: rest.githubUsername || null,
-          statusEmoji: rest.statusEmoji,
-          readingTitle: rest.readingTitle || null,
-          readingAuthors: rest.readingAuthors || null,
-          readingProgress: rest.readingProgress,
-          watchedTitle: rest.watchedTitle || null,
-          watchedRating: rest.watchedRating,
-          githubRepo: rest.githubRepo || null,
-          githubHref: rest.githubHref || null,
-          photoUrls: rest.photoUrls,
-        },
-        update: {
-          timezone: rest.timezone,
-          githubUsername: rest.githubUsername || null,
-          statusEmoji: rest.statusEmoji,
-          readingTitle: rest.readingTitle || null,
-          readingAuthors: rest.readingAuthors || null,
-          readingProgress: rest.readingProgress,
-          watchedTitle: rest.watchedTitle || null,
-          watchedRating: rest.watchedRating,
-          githubRepo: rest.githubRepo || null,
-          githubHref: rest.githubHref || null,
-          photoUrls: rest.photoUrls,
-        },
-      });
-
-      for (const [appLanguageId, fields] of Object.entries(translations)) {
-        const existing = await ctx.db.nowSettingsTranslation.findFirst({
-          where: { nowSettingsId: settings.id, appLanguageId },
-        });
-        if (existing) {
-          await ctx.db.nowSettingsTranslation.update({
-            where: { id: existing.id },
-            data: fields,
-          });
-        } else {
-          await ctx.db.nowSettingsTranslation.create({
-            data: {
-              nowSettingsId: settings.id,
-              appLanguageId,
-              ...fields,
-            },
-          });
-        }
-      }
-
-      const updated = await ctx.db.nowSettings.findUniqueOrThrow({
-        where: { id: settings.id },
-        include: { NowSettingsTranslation: true },
-      });
-      return mapNowSettingsToEditorDto(updated, languages);
-    }),
+  saveTab: protectedProcedure
+    .input(nowTabSchema)
+    .mutation(({ ctx, input }) => saveNowTab(ctx.db, ctx.user.id, input)),
 
   getFocuses: protectedProcedure.query(async ({ ctx }) => {
     const languages = await ctx.db.appLanguage.findMany({
@@ -160,7 +93,12 @@ export const nowAdminRouter = createTRPCRouter({
   createFocus: protectedProcedure
     .input(nowFocusUpsertInput)
     .mutation(async ({ ctx, input }) => {
-      const { translations, order } = input;
+      const { translations } = input;
+      const last = await ctx.db.nowFocus.findFirst({
+        where: { userId: ctx.user.id },
+        orderBy: { order: "desc" },
+        select: { order: true },
+      });
       const translationRows = translationMapEntries(translations);
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
@@ -169,7 +107,7 @@ export const nowAdminRouter = createTRPCRouter({
       const created = await ctx.db.nowFocus.create({
         data: {
           userId: ctx.user.id,
-          order,
+          order: (last?.order ?? -1) + 1,
           NowFocusTranslation: translationRows.length
             ? { createMany: { data: translationRows } }
             : undefined,
@@ -182,7 +120,7 @@ export const nowAdminRouter = createTRPCRouter({
   updateFocus: protectedProcedure
     .input(nowFocusUpsertInput.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, translations, order } = input;
+      const { id, translations } = input;
       await assertOwner(
         await ctx.db.nowFocus.findUnique({ where: { id } }),
         ctx.user.id,
@@ -191,8 +129,6 @@ export const nowAdminRouter = createTRPCRouter({
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
-
-      await ctx.db.nowFocus.update({ where: { id }, data: { order } });
 
       for (const [appLanguageId, fields] of Object.entries(translations)) {
         const existing = await ctx.db.nowFocusTranslation.findFirst({
@@ -215,6 +151,35 @@ export const nowAdminRouter = createTRPCRouter({
         include: { NowFocusTranslation: true },
       });
       return mapNowFocusToEditorDto(updated, languages);
+    }),
+
+  reorderFocuses: protectedProcedure
+    .input(
+      z.object({
+        ids: z
+          .array(z.string().regex(/^[a-f0-9]{24}$/i))
+          .refine((ids) => new Set(ids).size === ids.length),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.$transaction(async (tx) => {
+        const owned = await tx.nowFocus.findMany({
+          where: { userId: ctx.user.id },
+          select: { id: true },
+        });
+        const ids = new Set(input.ids);
+        if (
+          owned.length !== ids.size ||
+          owned.some((item) => !ids.has(item.id))
+        )
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Focus list changed. Refresh and try again.",
+          });
+        for (const [order, id] of input.ids.entries())
+          await tx.nowFocus.update({ where: { id }, data: { order } });
+      });
+      return { success: true };
     }),
 
   deleteFocus: protectedProcedure

@@ -1,4 +1,9 @@
+import type { PublicStatusSlot } from "../lib/status-schedule";
 import "server-only";
+import { getGitHubContributions } from "./github-contributions";
+import { getGitHubActivity } from "./github-activity";
+import type { GitHubActivity } from "../lib/github-activity";
+import type { GitHubContributions } from "../lib/github-contributions";
 
 import type { Locale } from "@/i18n/config";
 import { db } from "@/server/db";
@@ -13,19 +18,20 @@ export interface NowPublicFocus {
 export interface NowPublicPageData {
   timezone: string;
   githubUsername: string | null;
+  githubContributions: GitHubContributions;
+  githubActivity: GitHubActivity;
   statusEmoji: string;
+  statusSchedule: PublicStatusSlot[];
+  readingCoverUrl: string | null;
+  watchedCoverUrl: string | null;
   readingTitle: string | null;
   readingAuthors: string | null;
   readingProgress: number;
   watchedTitle: string | null;
   watchedRating: number;
-  githubRepo: string | null;
-  githubHref: string | null;
   photoUrls: string[];
   statusBody: string;
   statusRelative: string;
-  githubBody: string;
-  githubRelative: string;
   focuses: NowPublicFocus[];
 }
 
@@ -40,6 +46,10 @@ export async function getNowPageData(
       where: { userId: tenant.userId },
       include: {
         NowSettingsTranslation: { include: { language: true } },
+        statusSchedule: {
+          include: { translations: { include: { language: true } } },
+          orderBy: [{ startMinute: "asc" }, { id: "asc" }],
+        },
       },
     }),
     db.nowFocus.findMany({
@@ -58,22 +68,44 @@ export async function getNowPageData(
     settings.NowSettingsTranslation.find((t) => t.language.code === "en") ??
     settings.NowSettingsTranslation[0];
 
+  const [githubContributions, githubActivity] = await Promise.all([
+    getGitHubContributions(tenant.userId, settings.githubUsername),
+    getGitHubActivity(tenant.userId, settings.githubUsername),
+  ]);
   return {
     timezone: settings.timezone,
     githubUsername: settings.githubUsername,
+    githubContributions,
+    githubActivity,
     statusEmoji: settings.statusEmoji,
+    statusSchedule: settings.statusSchedule.map((slot) => {
+      const row =
+        slot.translations.find(
+          (row) => row.language.code === locale && row.body.trim(),
+        ) ??
+        slot.translations.find(
+          (row) => row.language.code === "en" && row.body.trim(),
+        ) ??
+        slot.translations.find((row) => row.body.trim());
+      return {
+        id: slot.id,
+        startMinute: slot.startMinute,
+        endMinute: slot.endMinute,
+        weekdays: slot.weekdays,
+        emoji: slot.emoji,
+        body: row?.body ?? "",
+      };
+    }),
+    readingCoverUrl: settings.readingCoverUrl,
+    watchedCoverUrl: settings.watchedCoverUrl,
     readingTitle: settings.readingTitle,
     readingAuthors: settings.readingAuthors,
     readingProgress: settings.readingProgress,
     watchedTitle: settings.watchedTitle,
     watchedRating: settings.watchedRating,
-    githubRepo: settings.githubRepo,
-    githubHref: settings.githubHref,
     photoUrls: settings.photoUrls,
     statusBody: translation?.statusBody ?? "",
     statusRelative: translation?.statusRelative ?? "",
-    githubBody: translation?.githubBody ?? "",
-    githubRelative: translation?.githubRelative ?? "",
     focuses: focuses.map((focus) => {
       const row =
         focus.NowFocusTranslation.find((t) => t.language.code === locale) ??

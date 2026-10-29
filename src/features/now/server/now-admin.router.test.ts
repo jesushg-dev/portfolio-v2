@@ -13,21 +13,20 @@ const settings = {
   timezone: "America/Mexico_City",
   githubUsername: "ada",
   statusEmoji: "🚀",
+  readingCoverUrl: "",
+  watchedCoverUrl: "",
   readingTitle: "Book",
   readingAuthors: "Author",
   readingProgress: 40,
   watchedTitle: "Show",
   watchedRating: 4,
-  githubRepo: "portfolio",
-  githubHref: "https://github.com/ada/portfolio",
   photoUrls: [],
+  statusSchedule: [],
   NowSettingsTranslation: [
     {
       appLanguageId: "lang-en",
       statusBody: "Building",
       statusRelative: "now",
-      githubBody: "Shipping",
-      githubRelative: "this week",
     },
   ],
 };
@@ -42,21 +41,33 @@ const focus = {
 };
 
 function createDb() {
-  return {
+  const models = {
     appLanguage: { findMany: jest.fn().mockResolvedValue(languages) },
     nowSettings: {
       findUnique: jest.fn().mockResolvedValue(null),
       findUniqueOrThrow: jest.fn().mockResolvedValue(settings),
       create: jest.fn().mockResolvedValue(settings),
       upsert: jest.fn().mockResolvedValue(settings),
+      update: jest.fn().mockResolvedValue(settings),
     },
     nowSettingsTranslation: {
       findFirst: jest.fn().mockResolvedValue(null),
       create: jest.fn(),
       update: jest.fn(),
+      upsert: jest.fn(),
+    },
+    nowStatusSlot: {
+      findMany: jest.fn().mockResolvedValue([]),
+      deleteMany: jest.fn(),
+      create: jest.fn().mockResolvedValue({ id: "slot-1" }),
+      update: jest.fn().mockResolvedValue({ id: "slot-1" }),
+    },
+    nowStatusSlotTranslation: {
+      upsert: jest.fn(),
     },
     nowFocus: {
       findMany: jest.fn().mockResolvedValue([focus]),
+      findFirst: jest.fn().mockResolvedValue(focus),
       findUnique: jest.fn().mockResolvedValue(focus),
       findUniqueOrThrow: jest.fn().mockResolvedValue(focus),
       create: jest.fn().mockResolvedValue(focus),
@@ -69,6 +80,13 @@ function createDb() {
       update: jest.fn(),
       deleteMany: jest.fn(),
     },
+  };
+
+  return {
+    ...models,
+    $transaction: jest.fn(async (cb: (tx: typeof models) => Promise<unknown>) =>
+      cb(models),
+    ),
   };
 }
 
@@ -96,32 +114,20 @@ describe("nowAdminRouter", () => {
     expect(db.nowSettings.create).not.toHaveBeenCalled();
   });
 
-  it("upserts settings and manages focuses", async () => {
+  it("saves the snapshot tab and manages focuses", async () => {
     const db = createDb();
     db.nowSettings.findUnique.mockResolvedValue(settings);
     const caller = createRouterCaller(
       nowAdminRouter,
       createTrpcTestContext({ db }),
     );
-    await caller.upsertSettings({
+    await caller.saveTab({
+      tab: "snapshot",
       timezone: "UTC",
-      githubUsername: "ada",
       statusEmoji: "🚀",
-      readingTitle: "Book",
-      readingAuthors: "Author",
-      readingProgress: 10,
-      watchedTitle: "Show",
-      watchedRating: 5,
-      githubRepo: "portfolio",
-      githubHref: "https://github.com/ada/portfolio",
-      photoUrls: [],
+      statusSchedule: [],
       translations: {
-        "lang-en": {
-          statusBody: "Building",
-          statusRelative: "now",
-          githubBody: "Shipping",
-          githubRelative: "this week",
-        },
+        "lang-en": { statusBody: "Building", statusRelative: "now" },
       },
     });
 
@@ -129,16 +135,14 @@ describe("nowAdminRouter", () => {
     expect(focuses[0]?.translations["lang-en"]?.label).toBe("Work");
 
     await caller.createFocus({
-      order: 1,
       translations: { "lang-en": { label: "Life", body: "Rest" } },
     });
     await caller.updateFocus({
       id: "focus-1",
-      order: 2,
       translations: { "lang-en": { label: "Work", body: "Coverage" } },
     });
     await caller.deleteFocus({ id: "focus-1" });
     const empty = await caller.emptyFocusCreateDto();
-    expect(empty.initialData.order).toBe(0);
+    expect(empty.initialData.translations).toBeDefined();
   });
 });

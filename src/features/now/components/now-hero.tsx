@@ -1,52 +1,23 @@
-import { processEyebrowStyles } from "@/features/process-pages/components/process-page-styles";
+import type { ReactNode } from "react";
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
-import { cn } from "@/lib/utils";
-
-import { nowContainerClassName, nowSectionClassName } from "./now-layout";
-
+import { nowContainerClassName } from "./now-layout";
 interface NowHeroProps {
-  eyebrow: string;
-  title: string;
-  titleHighlight: string;
-  description: string;
+  eyebrow: string; title: string; titleHighlight: string; description: string; children: ReactNode;
 }
-
-export function NowHero({
-  eyebrow,
-  title,
-  titleHighlight,
-  description,
-}: NowHeroProps) {
+export function NowHero({ eyebrow, title, titleHighlight, description, children }: NowHeroProps) {
   return (
-    <header
-      className={cn(
-        nowSectionClassName(),
-        "relative overflow-hidden pt-8 pb-8 md:pt-12 md:pb-10",
-      )}
-    >
-      <div className="from-primary/8 via-background to-background absolute inset-0 -z-10 bg-linear-to-b" />
-
-      <ProcessReveal>
-        <div className={cn(nowContainerClassName, "text-center")}>
-          <p
-            className={cn(
-              processEyebrowStyles,
-              "mb-3 inline-flex items-center gap-2 font-mono tracking-wide normal-case",
-            )}
-          >
-            <span aria-hidden className="bg-primary size-1.5 rounded-sm" />
-            {eyebrow}
-          </p>
-
-          <h1 className="text-foreground mb-4 text-[clamp(2rem,5vw,3.125rem)] leading-[1.15] font-extrabold tracking-tight">
-            {title} <span className="text-primary">{titleHighlight}</span>
+    <header className="relative isolate overflow-hidden px-6 pt-36 pb-20 text-center md:pt-40 md:pb-24">
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,color-mix(in_srgb,var(--primary)_15%,transparent),transparent_70%)]" />
+      <div className={nowContainerClassName}>
+        <ProcessReveal>
+          <p className="text-primary text-base font-medium">{eyebrow}</p>
+          <h1 className="text-foreground mx-auto mt-4 max-w-[12ch] text-[clamp(2.75rem,8vw,5.5rem)] leading-[1.03] font-bold tracking-tight">
+            {title} {titleHighlight}
           </h1>
-
-          <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </ProcessReveal>
+          <p className="text-muted-foreground mx-auto mt-6 max-w-lg text-lg leading-relaxed md:text-xl">{description}</p>
+        </ProcessReveal>
+        {children}
+      </div>
     </header>
   );
 }

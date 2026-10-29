@@ -1,238 +1,76 @@
-import { Book, Film, ImageIcon, Zap } from "lucide-react";
+import { Book, Film } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { MediaImage } from "@/components/shared/media-image";
-import type { ReactNode } from "react";
-import { FaGithub } from "react-icons/fa";
-
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
-import { cn } from "@/lib/utils";
-
+import type { Locale } from "@/i18n/config";
+import type { NowPublicPageData } from "../server/now-public";
 import { NowContribGraph } from "./now-contrib-graph";
+import { NowGithubActivity } from "./now-github-activity";
 import { NowLastPlayed } from "./now-last-played";
-import { nowContainerClassName, nowSectionClassName } from "./now-layout";
+import { NowHover } from "./now-hover";
+import { NowPhotoStrip } from "./now-photo-strip";
+import { nowContainerClassName, nowHeadingClassName, nowSectionClassName } from "./now-layout";
 
-interface NowActivityProps {
-  title: string;
-  labels: {
-    lastStatus: string;
-    lastPlayed: string;
-    nowPlaying: string;
-    reading: string;
-    lastWatched: string;
-    latestPhotos: string;
-    latestGithub: string;
-    contributions: string;
-    reply: string;
-    less: string;
-    more: string;
-    spotifyIdleTitle: string;
-    spotifyIdleSubtitle: string;
-  };
-  statusEmoji: string;
-  statusBody: string;
-  statusRelative: string;
-  readingTitle: string;
-  readingAuthors: string;
-  readingProgress: number;
-  watchedTitle: string;
-  watchedRating: number;
-  photoUrls: string[];
-  githubBody: ReactNode;
-  githubRelative: string;
-  contributionsTotal: string;
-  photosAlt: string;
-  githubUsername?: string | null;
+function ActivityCover({ src, title, kind }: { src: string | null; title: string; kind: "book" | "film" }) {
+  return (
+    <NowHover cover className="bg-muted relative aspect-[2/3] w-14 shrink-0 overflow-hidden rounded-lg shadow-lg">
+      {src ? <MediaImage src={src} alt={title} fill sizes="3.5rem" className="object-cover" />
+        : <span className="text-primary flex size-full items-center justify-center">{kind === "book" ? <Book aria-hidden className="size-6" /> : <Film aria-hidden className="size-6" />}</span>}
+    </NowHover>
+  );
 }
 
-export function NowActivity({
-  title,
-  labels,
-  statusEmoji,
-  statusBody,
-  statusRelative,
-  readingTitle,
-  readingAuthors,
-  readingProgress,
-  watchedTitle,
-  watchedRating,
-  photoUrls,
-  githubBody,
-  githubRelative,
-  contributionsTotal,
-  photosAlt,
-  githubUsername: _githubUsername,
-}: NowActivityProps) {
-  void _githubUsername;
-
-  const photos =
-    photoUrls.length > 0 ? photoUrls.slice(0, 3) : [null, null, null];
-
+export async function NowActivity({ data, locale }: { data: NowPublicPageData; locale: Locale }) {
+  const t = await getTranslations({ locale, namespace: "main.now.activity" });
   return (
-    <section className={cn(nowSectionClassName(true), "py-16 md:py-20")}>
-      <div className={nowContainerClassName}>
-        <ProcessReveal className="mb-8">
-          <h2 className="text-foreground flex items-center gap-3.5 text-2xl font-extrabold tracking-tight sm:text-[27px]">
-            <span className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-xl">
-              <Zap aria-hidden className="size-4" />
-            </span>
-            {title}
-          </h2>
-        </ProcessReveal>
-
-        <div className="space-y-9">
-          <ProcessReveal>
-            <h3 className="text-muted-foreground mb-3 text-xs font-bold tracking-wide uppercase">
-              {labels.lastStatus}
-            </h3>
-            <div className="flex items-start gap-4">
-              <div
-                className="bg-primary/10 flex size-11 shrink-0 items-center justify-center rounded-full text-xl"
-                aria-hidden
-              >
-                {statusEmoji}
-              </div>
-              <div>
-                <p className="text-muted-foreground text-sm">{statusBody}</p>
-                <div className="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
-                  <span>{statusRelative}</span>
-                  <span aria-hidden>·</span>
-                  <span className="text-primary font-semibold">
-                    {labels.reply}
-                  </span>
-                </div>
-              </div>
+    <>
+      <section className={nowSectionClassName}>
+        <div className={nowContainerClassName}>
+          <ProcessReveal><h2 className={nowHeadingClassName}>{t("awayHeading")}</h2></ProcessReveal>
+          <div className="border-border mt-14 grid border-t md:grid-cols-3">
+            <div className="border-border min-w-0 border-b py-8 md:border-r md:border-b-0 md:pr-8">
+              <NowLastPlayed headingPlaying={t("nowPlaying")} headingLast={t("lastPlayed")}
+                idleTitle={t("spotifyIdleTitle")} idleSubtitle={t("spotifyIdleSubtitle")} />
             </div>
-          </ProcessReveal>
-
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <ProcessReveal>
-              <NowLastPlayed
-                headingPlaying={labels.nowPlaying}
-                headingLast={labels.lastPlayed}
-                idleTitle={labels.spotifyIdleTitle}
-                idleSubtitle={labels.spotifyIdleSubtitle}
-              />
-            </ProcessReveal>
-
-            <ProcessReveal delay={0.05}>
-              <h3 className="text-muted-foreground mb-3 text-xs font-bold tracking-wide uppercase">
-                {labels.reading}
-              </h3>
-              <div className="flex items-center gap-3.5">
-                <div className="from-foreground/80 to-foreground flex size-12 shrink-0 items-center justify-center rounded-lg bg-linear-to-br text-white">
-                  <Book aria-hidden className="size-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-foreground truncate text-sm font-bold">
-                    {readingTitle}
-                  </div>
-                  <div className="text-muted-foreground truncate text-xs">
-                    {readingAuthors}
-                  </div>
-                  <div className="bg-border mt-1.5 h-1 overflow-hidden rounded-full">
-                    <div
-                      className="bg-primary h-full rounded-full"
-                      style={{ width: `${readingProgress}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </ProcessReveal>
-
-            <ProcessReveal delay={0.08}>
-              <h3 className="text-muted-foreground mb-3 text-xs font-bold tracking-wide uppercase">
-                {labels.lastWatched}
-              </h3>
-              <div className="flex items-center gap-3.5">
-                <div className="from-muted-foreground to-foreground flex size-12 shrink-0 items-center justify-center rounded-lg bg-linear-to-br text-white">
-                  <Film aria-hidden className="size-5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-foreground truncate text-sm font-bold">
-                    {watchedTitle}
-                  </div>
-                  <div
-                    className="text-primary text-xs"
-                    aria-label={`${watchedRating} of 5`}
-                  >
-                    {"★".repeat(Math.max(0, Math.min(5, watchedRating)))}
-                    <span className="text-border">
-                      {"★".repeat(Math.max(0, 5 - watchedRating))}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </ProcessReveal>
-
-            <ProcessReveal delay={0.1}>
-              <h3 className="text-muted-foreground mb-3 text-xs font-bold tracking-wide uppercase">
-                {labels.latestPhotos}
-              </h3>
-              <div
-                className="grid grid-cols-3 gap-2"
-                role="img"
-                aria-label={photosAlt}
-              >
-                {photos.map((url, index) =>
-                  url ? (
-                    <div
-                      key={url}
-                      className="relative aspect-square overflow-hidden rounded-lg"
-                    >
-                      <MediaImage
-                        src={url}
-                        alt=""
-                        fill
-                        sizes="120px"
-                        className="object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      key={`placeholder-${index}`}
-                      className={cn(
-                        "flex aspect-square items-center justify-center rounded-lg bg-linear-to-br text-white/70",
-                        index === 0 && "from-primary to-muted-foreground",
-                        index === 1 && "from-foreground to-primary",
-                        index === 2 && "from-primary/80 to-foreground",
-                      )}
-                    >
-                      <ImageIcon aria-hidden className="size-5" />
-                    </div>
-                  ),
-                )}
-              </div>
-            </ProcessReveal>
-          </div>
-
-          <ProcessReveal>
-            <h3 className="text-muted-foreground mb-3 text-xs font-bold tracking-wide uppercase">
-              {labels.latestGithub}
-            </h3>
-            <div className="flex items-center gap-4">
-              <div className="bg-foreground text-background flex size-9 shrink-0 items-center justify-center rounded-full">
-                <FaGithub aria-hidden className="size-4" />
-              </div>
+            <div className="border-border flex min-w-0 items-center justify-between gap-5 border-b py-8 md:border-r md:border-b-0 md:px-8">
               <div className="min-w-0">
-                <p className="text-muted-foreground text-sm">{githubBody}</p>
-                <p className="text-muted-foreground mt-1 text-xs">
-                  {githubRelative}
-                </p>
+                <h3 className="text-muted-foreground text-sm">{t("reading")}</h3>
+                <p className="text-foreground mt-2 text-xl leading-tight font-semibold tracking-tight">{data.readingTitle ?? t("noReading")}</p>
+                {data.readingAuthors ? <p className="text-muted-foreground mt-1 text-sm">{data.readingAuthors}</p> : null}
+                {data.readingTitle ? <>
+                  <p className="text-muted-foreground mt-1 text-sm tabular-nums">{data.readingProgress}%</p>
+                  <div className="bg-border mt-4 h-0.5 max-w-48 overflow-hidden rounded-full">
+                    <div className="bg-primary h-full" style={{ width: String(data.readingProgress) + "%" }} />
+                  </div>
+                </> : null}
               </div>
+              <ActivityCover src={data.readingCoverUrl} title={data.readingTitle ?? ""} kind="book" />
             </div>
-          </ProcessReveal>
-
-          <ProcessReveal>
-            <h3 className="text-muted-foreground mb-3 text-xs font-bold tracking-wide uppercase">
-              {labels.contributions}
-            </h3>
-            <NowContribGraph
-              totalLabel={contributionsTotal}
-              lessLabel={labels.less}
-              moreLabel={labels.more}
-            />
-          </ProcessReveal>
+            <div className="flex min-w-0 items-center justify-between gap-5 py-8 md:pl-8">
+              <div className="min-w-0">
+                <h3 className="text-muted-foreground text-sm">{t("lastWatched")}</h3>
+                <p className="text-foreground mt-2 text-xl leading-tight font-semibold tracking-tight">{data.watchedTitle ?? t("noWatching")}</p>
+                {data.watchedRating > 0 ? <p className="text-primary mt-2 text-sm tracking-widest">
+                  <span aria-hidden>{"★".repeat(Math.min(5, data.watchedRating))}{"☆".repeat(Math.max(0, 5 - data.watchedRating))}</span>
+                  <span className="sr-only">{data.watchedRating}/5</span>
+                </p> : null}
+              </div>
+              <ActivityCover src={data.watchedCoverUrl} title={data.watchedTitle ?? ""} kind="film" />
+            </div>
+          </div>
+          {data.photoUrls.length ? <div className="mt-14">
+            <h3 className="text-muted-foreground mb-5 text-sm">{t("latestPhotos")}</h3>
+            <NowPhotoStrip photos={data.photoUrls.slice(0, 3)} alt={t("photosAlt")} />
+          </div> : null}
         </div>
-      </div>
-    </section>
+      </section>
+      <section className={nowSectionClassName}>
+        <div className={nowContainerClassName}>
+          <ProcessReveal><h2 className={nowHeadingClassName}>{t("shippingHeading")}</h2></ProcessReveal>
+          <div className="mt-12 max-w-xl"><NowGithubActivity activity={data.githubActivity} /></div>
+          <div className="mt-16 md:mt-20"><NowContribGraph calendar={data.githubContributions} /></div>
+        </div>
+      </section>
+    </>
   );
 }

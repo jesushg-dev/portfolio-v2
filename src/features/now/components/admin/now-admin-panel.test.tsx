@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { NowAdminPanel } from "./now-admin-panel";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 
-const mockUpsertMutateAsync = jest.fn().mockResolvedValue({ id: "now-1" });
+const mockSaveTabMutateAsync = jest.fn().mockResolvedValue({ id: "now-1" });
 const mockInvalidate = jest.fn().mockResolvedValue(undefined);
 const mockRouterRefresh = jest.fn();
 
@@ -33,12 +33,18 @@ jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
       nowAdmin: {
-        getSettings: {
-          invalidate: mockInvalidate,
-        },
+        invalidate: mockInvalidate,
       },
     }),
+    integrationsAdmin: {
+      getConfigs: { useQuery: () => ({ data: null }) },
+      uploadFile: { useMutation: () => ({ mutateAsync: jest.fn() }) },
+    },
     nowAdmin: {
+      getGithubActivity: { useQuery: () => ({ data: null }) },
+      getGithubContributions: {
+        useQuery: () => ({ data: null, isLoading: false }),
+      },
       getFocuses: {
         useQuery: () => ({ data: [] }),
       },
@@ -48,9 +54,15 @@ jest.mock("@/trpc/react", () => ({
           isPending: false,
         }),
       },
-      upsertSettings: {
+      reorderFocuses: {
         useMutation: () => ({
-          mutateAsync: mockUpsertMutateAsync,
+          mutateAsync: jest.fn(),
+          isPending: false,
+        }),
+      },
+      saveTab: {
+        useMutation: () => ({
+          mutateAsync: mockSaveTabMutateAsync,
           isPending: false,
           error: null,
         }),
@@ -76,20 +88,19 @@ describe("NowAdminPanel", () => {
     timezone: "America/Managua",
     githubUsername: "jesushg",
     statusEmoji: "⚡",
+    readingCoverUrl: "",
+    watchedCoverUrl: "",
     readingTitle: "Pragmatic Programmer",
     readingAuthors: "Andy Hunt",
     readingProgress: 50,
     watchedTitle: "Matrix",
     watchedRating: 5,
-    githubRepo: "portfolio-v2",
-    githubHref: "https://github.com/jesushg/portfolio-v2",
     photoUrls: ["https://example.com/photo.jpg"],
+    statusSchedule: [],
     translations: {
       "lang-en": {
         statusBody: "Building cool stuff",
         statusRelative: "yesterday",
-        githubBody: "Shipping updates",
-        githubRelative: "2 hours ago",
       },
     },
   };

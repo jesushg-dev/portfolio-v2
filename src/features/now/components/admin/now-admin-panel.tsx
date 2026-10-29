@@ -48,41 +48,51 @@ export const NowAdminPanel: FC<NowAdminPanelProps> = ({
       onValueChange={(value) => {
         void setTab((value as NowTab) ?? "SNAPSHOT");
       }}
-      className="flex min-h-0 flex-1 flex-col gap-6"
+      className="border-border bg-card flex min-h-0 w-full max-w-full min-w-0 flex-1 flex-col gap-0 rounded-xl border shadow-sm"
     >
-      <TabsList variant="line" aria-label={t("tabsLabel")}>
-        <TabsTrigger value="SNAPSHOT" className="gap-1.5">
-          <HiOutlineStatusOnline className="size-4" />
-          {t("tabs.snapshot")}
-        </TabsTrigger>
-        <TabsTrigger value="ACTIVITY" className="gap-1.5">
-          <HiOutlineBookOpen className="size-4" />
-          {t("tabs.activity")}
-        </TabsTrigger>
-        <TabsTrigger value="GITHUB" className="gap-1.5">
-          <FaGithub className="size-4" />
-          {t("tabs.github")}
-        </TabsTrigger>
-        <TabsTrigger value="FOCUSES" className="gap-1.5">
-          <HiOutlineCollection className="size-4" />
-          {t("tabs.focuses")}
-        </TabsTrigger>
-      </TabsList>
+      <div className="border-border bg-muted/30 min-w-0 overflow-hidden rounded-t-xl border-b px-3">
+        <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+          <TabsList
+            variant="line"
+            aria-label={t("tabsLabel")}
+            className="w-max min-w-full"
+          >
+            <TabsTrigger value="SNAPSHOT" className="gap-1.5">
+              <HiOutlineStatusOnline className="size-4" />
+              {t("tabs.snapshot")}
+            </TabsTrigger>
+            <TabsTrigger value="ACTIVITY" className="gap-1.5">
+              <HiOutlineBookOpen className="size-4" />
+              {t("tabs.activity")}
+            </TabsTrigger>
+            <TabsTrigger value="GITHUB" className="gap-1.5">
+              <FaGithub className="size-4" />
+              {t("tabs.github")}
+            </TabsTrigger>
+            <TabsTrigger value="FOCUSES" className="gap-1.5">
+              <HiOutlineCollection className="size-4" />
+              {t("tabs.focuses")}
+            </TabsTrigger>
+          </TabsList>
+        </div>
+      </div>
 
-      {currentTab === "FOCUSES" ? (
-        <TabsContent value="FOCUSES" className="min-h-0 flex-1">
-          <NowFocusesList initialFocuses={focuses} languages={languages} />
-        </TabsContent>
-      ) : (
-        <NowSettingsForm
-          currentTab={currentTab}
-          languages={languages}
-          settings={settings}
-          snapshotHint={t("sections.snapshotHint")}
-          activityHint={t("sections.activityHint")}
-          githubHint={t("sections.githubHint")}
-        />
-      )}
+      <div className="min-h-0 min-w-0 flex-1 p-4 sm:p-6">
+        {currentTab === "FOCUSES" ? (
+          <TabsContent value="FOCUSES" className="min-h-0 flex-1">
+            <NowFocusesList initialFocuses={focuses} languages={languages} />
+          </TabsContent>
+        ) : (
+          <NowSettingsForm
+            currentTab={currentTab}
+            languages={languages}
+            settings={settings}
+            snapshotHint={t("sections.snapshotHint")}
+            activityHint={t("sections.activityHint")}
+            githubHint={t("sections.githubHint")}
+          />
+        )}
+      </div>
     </Tabs>
   );
 };

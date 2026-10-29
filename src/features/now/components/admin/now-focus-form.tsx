@@ -21,7 +21,7 @@ import {
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import { LocalizedFormLanguageBar } from "@/components/admin/shared/localized-form-language-bar";
 import { translationMapSchema } from "@/lib/i18n/localized-form";
 import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
 import type {
@@ -47,7 +47,6 @@ export const NowFocusForm: FC<NowFocusFormProps> = ({
     () =>
       z.object({
         id: z.string().optional(),
-        order: z.number().int().nonnegative(),
         translations: translationMapSchema(
           z.object({
             label: z.string(),
@@ -72,7 +71,7 @@ export const NowFocusForm: FC<NowFocusFormProps> = ({
     defaultValues: initialData as FormValues,
   });
 
-  const { activeLangId, setActiveLangId } = useLocalizedForm({
+  const { languageProgress, activeLangId, setActiveLangId } = useLocalizedForm({
     languages,
     form,
     buildDefaultValues: () => initialData as FormValues,
@@ -105,30 +104,12 @@ export const NowFocusForm: FC<NowFocusFormProps> = ({
   return (
     <Form {...form}>
       <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
-        <GlobalLanguageSelector
-          languages={languages}
+        <LocalizedFormLanguageBar
+          languages={languageProgress}
           activeLangId={activeLangId}
-          onLangChange={setActiveLangId}
-          buttonIdPrefix="now-focus"
+          onSelectLang={setActiveLangId}
         />
         <FormContent>
-          <FormSection title={t("sectionBasics")}>
-            <FormField
-              control={form.control}
-              name="order"
-              render={({ field }) => (
-                <FormItem label={t("order")}>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </FormSection>
           {languages.map((lang) => (
             <div
               key={lang.id}
@@ -162,12 +143,12 @@ export const NowFocusForm: FC<NowFocusFormProps> = ({
             </div>
           ))}
         </FormContent>
-        <FormActions>
+        <FormActions
+          isPending={isSaving}
+          title={isEditMode ? t("save") : t("create")}
+        >
           <Button type="button" variant="outline" onClick={() => router.back()}>
             {t("cancel")}
-          </Button>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? t("saving") : isEditMode ? t("save") : t("create")}
           </Button>
         </FormActions>
       </FormRoot>

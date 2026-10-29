@@ -1,35 +1,42 @@
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
-import { cn } from "@/lib/utils";
-
 import { nowContainerClassName, nowSectionClassName } from "./now-layout";
 
 interface NowNoteProps {
-  before: string;
+  description: string;
   linkLabel: string;
-  after: string;
+  inspiredBy?: string;
 }
 
-export function NowNote({ before, linkLabel, after }: NowNoteProps) {
+export function NowNote({ description, linkLabel, inspiredBy }: NowNoteProps) {
   return (
-    <section className={cn(nowSectionClassName(), "pb-16 md:pb-20")}>
-      <ProcessReveal>
-        <p
-          className={cn(
-            nowContainerClassName,
-            "text-muted-foreground text-center text-sm leading-relaxed",
+    <section className={nowSectionClassName}>
+      <ProcessReveal className={nowContainerClassName}>
+        <div className="text-center">
+          <p className="text-foreground mx-auto max-w-[30ch] text-[clamp(1.5rem,3.4vw,2.5rem)] leading-tight font-semibold tracking-tight">
+            {description}
+          </p>
+          {inspiredBy && (
+            <p className="text-muted-foreground mt-4 text-sm sm:text-base">
+              {inspiredBy}{" "}
+              <a
+                href="https://sive.rs/now"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground font-semibold underline underline-offset-4 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+              >
+                Derek Sivers
+              </a>
+            </p>
           )}
-        >
-          {before}{" "}
           <a
-            href="https://nownownow.com"
+            href="https://nownownow.com/about"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary font-semibold underline underline-offset-2"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring mt-7 inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 text-sm font-medium outline-none focus-visible:ring-2"
           >
             {linkLabel}
           </a>
-          {after}
-        </p>
+        </div>
       </ProcessReveal>
     </section>
   );
