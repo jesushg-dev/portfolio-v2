@@ -6,6 +6,26 @@ export interface FilterAndColumnVisibilityOptions {
   filterTestId: string;
   toggleColumnTestId: string;
   noResultsTerm?: string;
+  searchDialog?: boolean;
+}
+
+export async function searchTable(page: Page, term: string): Promise<void> {
+  await page.getByRole("button", { name: /^Search(?::|$)/ }).click();
+  const dialog = page.getByRole("dialog", { name: "Search records" });
+  await dialog.getByRole("searchbox", { name: "Search text" }).fill(term);
+  await dialog.getByRole("button", { name: "Search", exact: true }).click();
+  await expect(dialog).toBeHidden();
+  await expect(page).toHaveURL(
+    (url) => (url.searchParams.get("search") ?? "") === term.trim(),
+  );
+}
+
+async function clearTableSearch(page: Page): Promise<void> {
+  await page.getByRole("button", { name: /^Search:/ }).click();
+  const dialog = page.getByRole("dialog", { name: "Search records" });
+  await dialog.getByRole("button", { name: "Clear search" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(page).toHaveURL((url) => !url.searchParams.has("search"));
 }
 
 function escapeRegex(value: string): string {
@@ -51,13 +71,18 @@ export async function assertFilterAndColumnVisibility(
     filterTestId,
     toggleColumnTestId,
     noResultsTerm = "NonExistentFilterXYZ123",
+    searchDialog = false,
   } = options;
 
   const dataRows = rows.filter({
     has: page.locator("td:nth-child(3)"),
   });
 
-  await expect(page.getByTestId(filterTestId)).toBeVisible();
+  await expect(
+    searchDialog
+      ? page.getByRole("button", { name: "Search", exact: true })
+      : page.getByTestId(filterTestId),
+  ).toBeVisible();
   await expect(dataRows.first()).toBeVisible({ timeout: 30_000 });
 
   await expect
@@ -97,7 +122,8 @@ export async function assertFilterAndColumnVisibility(
   expect(initialCount).toBeGreaterThan(0);
   const filter = page.getByTestId(filterTestId);
 
-  await filter.fill(existingTerm);
+  if (searchDialog) await searchTable(page, existingTerm);
+  else await filter.fill(existingTerm);
   await expect(dataRows.first()).toContainText(
     new RegExp(escapeRegex(existingTerm), "i"),
     { timeout: 30_000 },
@@ -106,17 +132,22 @@ export async function assertFilterAndColumnVisibility(
   expect(filteredCount).toBeGreaterThanOrEqual(1);
   expect(filteredCount).toBeLessThanOrEqual(initialCount);
 
-  await page.getByTestId("reset-filters-btn").click();
+  if (searchDialog) await clearTableSearch(page);
+  else await page.getByTestId("reset-filters-btn").click();
   await waitForRowCount(dataRows, (count) => count >= 1);
 
-  await filter.fill(noResultsTerm);
+  if (searchDialog) await searchTable(page, noResultsTerm);
+  else await filter.fill(noResultsTerm);
   await expect(rows).toHaveCount(1);
   await expect(
     page.locator("td").filter({ hasText: /No results/i }),
   ).toBeVisible();
 
-  await page.getByTestId("reset-filters-btn").click();
-  await filter.fill("");
+  if (searchDialog) await clearTableSearch(page);
+  else {
+    await page.getByTestId("reset-filters-btn").click();
+    await filter.fill("");
+  }
   await expect
     .poll(
       async () => {

@@ -56,11 +56,11 @@ const securityHeaders: { key: string; value: string }[] = [
   },
   ...(isProduction
     ? [
-        {
-          key: "Strict-Transport-Security",
-          value: "max-age=63072000; includeSubDomains; preload",
-        },
-      ]
+      {
+        key: "Strict-Transport-Security",
+        value: "max-age=63072000; includeSubDomains; preload",
+      },
+    ]
     : []),
 ];
 
@@ -77,7 +77,7 @@ const nextConfig: NextConfig = {
   ],
   serverExternalPackages: ["jszip", "docx-preview"],
   outputFileTracingExcludes: {
-    "/*": emailTemplatesDevAssets,
+    "/**/*": emailTemplatesDevAssets,
     "/api/trpc/*": emailTemplatesDevAssets,
   },
   experimental: {
@@ -100,11 +100,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "utfs.io",
-      },
-      {
-        protocol: "https",
-        hostname: "**",
-      },
+      }
     ],
   },
 };

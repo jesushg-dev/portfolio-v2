@@ -2,6 +2,7 @@ import { expect, test } from "./authenticated-test";
 
 import { cleanupUserSkills, fillSkillForm } from "./helpers/fill-skill-form";
 import { waitForAdminListAfterSave } from "./helpers/admin-origin";
+import { searchTable } from "./helpers/table-filters";
 
 test.describe("skills edit and data integrity", () => {
   const uniqueId = Date.now();
@@ -36,12 +37,7 @@ test.describe("skills edit and data integrity", () => {
     await page.goto("/admin/skills");
 
     // 2. Open edit form
-    await page
-      .getByRole("textbox", { name: "Search title..." })
-      .fill(tempSkill.title);
-    await expect(page).toHaveURL(
-      (url) => url.searchParams.get("title") === tempSkill.title,
-    );
+    await searchTable(page, tempSkill.title);
     const cell = page.getByRole("cell", { name: tempSkill.title }).first();
     await expect(cell).toBeVisible();
 

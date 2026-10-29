@@ -64,6 +64,11 @@ CSP does **not** yet lock `script-src` / `style-src` (Next inline runtime + embe
 
 ## Operator checklist
 
+- Publish `public/.well-known/security.txt` at `https://www.jesushg.com/.well-known/security.txt` as plain text. The apex domain redirects to `www`; the file bypasses locale routing because the proxy matcher excludes paths containing dots. Review its contact and renew `Expires` before 2027-10-01; keep expiration less than one year ahead when renewing.
+- Cloudflare Security Insights: configure minimum TLS 1.2 under SSL/TLS > Edge Certificates and keep TLS 1.3 enabled. TLS negotiation happens at the edge, before Next.js handles a request.
+- HSTS is already emitted by the production app. Check the apex redirect and `www` responses separately; Cloudflare-managed HSTS can also cover edge-generated responses. Do not extend HSTS to all subdomains or submit a preload request without verifying HTTPS across those hosts.
+- Enable MFA for the Cloudflare account under My Profile > Authentication and store recovery codes securely. App-level Better Auth MFA does not resolve a Cloudflare account MFA finding.
+- AI Labyrinth is optional crawler control under Cloudflare Security > Settings > Bot traffic; enable it if unwanted AI crawling is a concern.
 - Distinct `BETTER_AUTH_SECRET` (and MongoDB database name) for production vs Preview/e2e.
 - `CV_PDF_GENERATOR_SECRET` ≥ 16 chars in production.
 - Rotate `INTEGRATION_ENCRYPTION_KEY` only with a decrypt/re-encrypt plan (old ciphertexts use the previous key).

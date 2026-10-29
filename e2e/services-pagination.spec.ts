@@ -45,6 +45,7 @@ test.describe("services pagination", () => {
       page,
       rows: page.locator("table tbody tr"),
       filterTestId: "filter-title",
+      searchDialog: true,
       toggleColumnTestId: "toggle-column-type",
       noResultsTerm: "NonExistentServiceXYZ123",
     });

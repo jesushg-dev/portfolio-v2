@@ -22,7 +22,6 @@ interface AppLanguageRow {
 interface CvHeaderMine {
   fullName: string;
   photoUrl: string | null;
-  clientImageAlt: unknown;
 }
 
 interface CvMineHeaderResponse {
@@ -118,13 +117,13 @@ async function submitProfileHeroForm(page: Page): Promise<void> {
   });
   const savePromise = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/profileAdmin.upsertHero") &&
-      response.request().method() === "POST" &&
-      response.ok(),
+      response.url().includes("profileAdmin.upsertHero") &&
+      response.request().method() === "POST",
     { timeout: 30_000 },
   );
   await submit.click();
-  await savePromise;
+  const response = await savePromise;
+  expect(response.ok(), `Profile save failed: ${response.status()}`).toBe(true);
   await expect(submit).toBeHidden({ timeout: 30_000 });
 }
 
@@ -140,15 +139,9 @@ export async function cleanupUserProfile(page: Page): Promise<void> {
     photoUrl: cv.header?.photoUrl ?? "",
   });
 
-  if (cv.header) {
-    await trpcMutate(page, "profileAdmin.upsertPortfolioHeader", {
-      fullName: cv.header.fullName,
-      photoUrl: cv.header.photoUrl,
-      backgroundImageUrl: null,
-      heroSummary: null,
-      clientImageAlt: null,
-    });
-  }
+  await trpcMutate(page, "profileAdmin.upsertAbout", {
+    aboutMeTranslations: {},
+  });
 
   await trpcMutate(page, "terminal.upsert", {
     username: "Jesus-Macbook",
@@ -282,6 +275,14 @@ export async function fillProfileHeroSmoke(
   }
   await selectProfileLocale(page, "en");
   await page.locator("#profile-tr-summary").fill(heroSummary.en);
+
+  await page
+    .getByRole("tab", { name: "About Me & Terminal", exact: true })
+    .click();
+  for (const locale of PROFILE_LOCALES) {
+    await selectProfileLocale(page, locale);
+    await page.locator("#profile-tr-about").fill(portfolioCv.aboutMe[locale]);
+  }
 
   await submitProfileHeroForm(page);
 }

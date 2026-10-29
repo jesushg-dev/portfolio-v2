@@ -242,7 +242,7 @@ export async function fillCvHeader(
     cv.header.clientImageAlt,
   );
   await submitCvForm(page, "cv-header-form", "upsertHeader");
-  await closeCvSectionSheet(page);
+  await activeCvSheet(page).waitFor({ state: "hidden", timeout: 30_000 });
 }
 
 export async function fillCvAbout(
@@ -255,7 +255,7 @@ export async function fillCvAbout(
     .waitFor({ state: "visible", timeout: 20_000 });
   await fillLocalizedField(page, "cv-about-me", cv.aboutMe);
   await submitCvForm(page, "cv-about-form", "upsertAboutMe");
-  await closeCvSectionSheet(page);
+  await activeCvSheet(page).waitFor({ state: "hidden", timeout: 30_000 });
 }
 
 export async function fillCvContact(

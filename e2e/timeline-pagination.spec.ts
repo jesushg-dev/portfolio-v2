@@ -45,6 +45,7 @@ test.describe("timeline pagination", () => {
       page,
       rows: page.locator("table tbody tr"),
       filterTestId: "filter-title",
+      searchDialog: true,
       toggleColumnTestId: "toggle-column-category",
       noResultsTerm: "NonExistentTimelineXYZ123",
     });
