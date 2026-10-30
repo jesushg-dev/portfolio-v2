@@ -1,0 +1,304 @@
+{
+  "slug": "aso-02-modificar-compilar-kernel-linux",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 2,
+  "title": "Modificación en C y Compilación del Kernel Linux desde las Fuentes",
+  "excerpt": "Guía paso a paso para descargar el árbol del kernel Linux, configurar .config, modificar init/main.c con printk a nivel de alerta y compilar paquetes Debian con make deb-pkg.",
+  "tags": [
+    "linux",
+    "kernel",
+    "lenguaje-c",
+    "compilacion",
+    "sistemas-operativos",
+    "archivo-2020"
+  ],
+  "coverImage": null,
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "¿Por qué modificar y compilar el Kernel?"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El núcleo (kernel) de Linux gestiona el acceso al hardware, la asignación de memoria, la planificación de procesos y las llamadas al sistema. Aunque las distribuciones proveen núcleos precompilados, compilar desde las fuentes permite habilitar características experimentales, depurar subsistemas, optimizar para arquitecturas específicas y comprender el flujo de arranque en el anillo de ejecución más privilegiado (Ring 0)."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Instalación de Herramientas de Compilación"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para procesar el código en C, ensamblador y las tablas de configuración del árbol del kernel, se requieren las siguientes bibliotecas y utilidades:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update\nsudo apt install -y gcc make bc bison flex libssl-dev libelf-dev libncurses-dev rsync build-essential"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "gcc y make: compilador C y motor de construcción del proyecto."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "bison y flex: generadores de analizadores sintácticos y léxicos requeridos durante el parseo de configuraciones."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "libncurses-dev: biblioteca para interfaces en terminal requerida por make menuconfig."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "libssl-dev y libelf-dev: soporte para firmado criptográfico y análisis de binarios ELF."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Descarga y Descompresión del Kernel"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Se descarga el tarball oficial desde el repositorio de kernel.org. En el laboratorio original se empleó la versión 5.9.8; el procedimiento se mantiene idéntico en versiones modernas 6.x:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cd ~/Descargas\nwget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.9.8.tar.xz\ntar -xvf linux-5.9.8.tar.xz\ncd linux-5.9.8"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Configuración del Núcleo (.config)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para asegurar compatibilidad con el hardware en uso, clonamos la configuración del kernel que se encuentra actualmente en ejecución:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cp -v /boot/config-$(uname -r) ./.config\n# Aclaración técnica moderna para distribuciones Ubuntu/Debian:\n# Desactivar certificados de confianza locales para evitar fallos de firma:\nscripts/config --set-str SYSTEM_TRUSTED_KEYS \"\"\nscripts/config --set-str SYSTEM_REVOCATION_KEYS \"\""
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Modificación de Código en init/main.c"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Accedemos al subsistema de inicialización en 'init/main.c', el cual contiene la función start_kernel() y la cadena de montaje de los primeros procesos. Localizamos la función numa_default_policy() e insertamos una llamada con printk:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "c"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "/* Modificación en init/main.c tras numa_default_policy() */\nprintk(KERN_ALERT \"===========================================\\n\");\nprintk(KERN_ALERT \"[UNI-ASO] Kernel personalizado iniciado!\\n\");\nprintk(KERN_ALERT \"Integrantes: Jesus Hernandez & Juan Lopez\\n\");\nprintk(KERN_ALERT \"===========================================\\n\");\nmdelay(10000); /* Retardo de 10 segundos para visualización */"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Nota técnica: 'KERN_ALERT' garantiza que el mensaje se emita a la consola independientemente del nivel de log. La función 'mdelay(10000)' implementa un bucle de espera activa (busy-wait); en entornos de producción debe evitarse ya que retiene el hilo de arranque del CPU."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Compilación e Instalación de Paquetes Debian"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Compilamos usando 'deb-pkg'. Se recomienda enfáticamente usar '-j$(nproc)' para habilitar paralelismo multihilo y recortar el tiempo de compilación:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "make -j$(nproc) bindeb-pkg\ncd ..\nsudo dpkg -i linux-image-*.deb linux-headers-*.deb\nsudo update-grub\nsudo reboot"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Tras el reinicio, ejecutamos 'uname -r' para verificar la carga del nuevo kernel modificado y comprobar la emisión del mensaje en dmesg."
+          }
+        ]
+      }
+    ]
+  }
+}

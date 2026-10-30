@@ -1,0 +1,225 @@
+{
+  "slug": "aso-04-servidor-archivos-vsftpd",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 4,
+  "title": "Despliegue y Seguridad de un Servidor de Archivos FTP con vsftpd",
+  "excerpt": "Instalación de vsftpd en Ubuntu, enjaulado chroot de usuarios, cortafuegos UFW, políticas de permisos seguras y comprobación desde clientes Windows y Android.",
+  "tags": [
+    "linux",
+    "ftp",
+    "vsftpd",
+    "redes",
+    "seguridad",
+    "archivo-2020"
+  ],
+  "coverImage": null,
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Fundamentos del Protocolo FTP y Seguridad"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El protocolo FTP (File Transfer Protocol) opera sobre una arquitectura cliente-servidor desacoplando el canal de control (puerto 21 TCP) del canal de transferencia de datos (puerto 20 en modo activo o puertos dinámicos en modo pasivo)."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Instalación de vsftpd y Configuración de Firewall"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update\nsudo apt install -y vsftpd\nsudo systemctl status vsftpd\n\n# Configurar puertos en el cortafuegos UFW\nsudo ufw allow 20/tcp\nsudo ufw allow 21/tcp\nsudo ufw allow 40000:40100/tcp # Rango para modo pasivo"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Creación de Usuario Dedicado y Enjaulado (Chroot)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Por seguridad, aislamos al usuario FTP sin acceso a la consola interactiva SSH y configuramos una jaula de directorio estricta:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Crear usuario con shell restringido\nsudo adduser usuario_ftp\n\n# Denegar acceso interactivo por SSH en /etc/ssh/sshd_config agregando:\n# DenyUsers usuario_ftp\nsudo systemctl restart ssh\n\n# Estructura de directorio segura para chroot en vsftpd\nsudo mkdir -p /home/usuario_ftp/ftp/archivos\nsudo chown nobody:nogroup /home/usuario_ftp/ftp\nsudo chmod a-w /home/usuario_ftp/ftp\nsudo chown usuario_ftp:usuario_ftp /home/usuario_ftp/ftp/archivos\nsudo chmod 755 /home/usuario_ftp/ftp/archivos"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Aclaración técnica sobre permisos: En administraciones de sistemas profesionales nunca se debe otorgar 'chmod 777' en directorios compartidos. La raíz enjaulada debe ser propiedad de nobody sin permisos de escritura global, mientras que el subdirectorio de subida debe tener permisos '755' (rwxr-xr-x) o '775' controlados."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Ajustes en /etc/vsftpd.conf"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Editamos '/etc/vsftpd.conf' para activar escritura, habilitar la jaula chroot y delimitar el modo pasivo:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "ini"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "write_enable=YES\nchroot_local_user=YES\nuser_sub_token=$USER\nlocal_root=/home/$USER/ftp\npasv_min_port=40000\npasv_max_port=40100"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo systemctl restart vsftpd"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Comprobación Multiplataforma"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Obtenemos la dirección IP del servidor ('ip addr show' o 'ifconfig') y realizamos pruebas de transferencia:"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Desde Windows: Utilizando FileZilla Client ingresando IP, usuario, contraseña y puerto 21."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Desde Android: Utilizando Cx File Explorer, seleccionando pestaña Red > Añadir > FTP e ingresando las credenciales."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

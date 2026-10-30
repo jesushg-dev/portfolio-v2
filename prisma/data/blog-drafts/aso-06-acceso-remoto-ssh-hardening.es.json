@@ -1,0 +1,265 @@
+{
+  "slug": "aso-06-acceso-remoto-ssh-hardening",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 6,
+  "title": "Acceso Remoto Seguro y Hardening con OpenSSH Server",
+  "excerpt": "Instalación de openssh-server, securización de sshd_config para mitigar ataques de fuerza bruta, restricción de acceso a root y comprobación remota con clientes SSH.",
+  "tags": [
+    "linux",
+    "ssh",
+    "seguridad",
+    "sysadmin",
+    "redes",
+    "archivo-2020"
+  ],
+  "coverImage": null,
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Arquitectura y Criptografía de OpenSSH"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "OpenSSH provee un canal seguro de administración remota sobre redes inseguras utilizando criptografía de clave pública para la autenticación de servidores/clientes y cifrado simétrico para el tráfico de la sesión. Es el estándar de facto para la administración de servidores UNIX."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Instalación y Verificación del Servicio"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update\nsudo apt install -y openssh-server\nsudo systemctl enable ssh\nsudo systemctl status ssh"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Hardening y Parámetros Defensivos en sshd_config"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para endurecer la seguridad del demonio '/etc/ssh/sshd_config', se aplican las siguientes directivas recomendadas:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "ini"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Port 22\nLoginGraceTime 60\nPermitRootLogin no\nStrictModes yes\nMaxAuthTries 5\nMaxStartups 5:30:100\nAllowUsers usuario_autorizado"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "PermitRootLogin no: previene ataques de diccionario directos contra el superusuario."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "MaxAuthTries 5: corta la conexión tras 5 intentos fallidos, mitigando fuerza bruta automatizada."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "MaxStartups: limita las conexiones concurrentes no autenticadas para resistir inundaciones DoS."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "AllowUsers: establece una lista blanca explícita de cuentas autorizadas a ingresar por SSH."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo sshd -t # Comprobar sintaxis antes de reiniciar\nsudo systemctl restart ssh"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Buenas Prácticas Modernas: Autenticación por Llaves Ed25519"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "En administraciones actuales se recomienda prescindir completamente de contraseñas mediante criptografía de curva elíptica Ed25519:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# En la máquina cliente:\nssh-keygen -t ed25519 -C \"admin@uni-aso\"\nssh-copy-id -i ~/.ssh/id_ed25519.pub usuario_autorizado@IP_SERVIDOR\n\n# Luego en /etc/ssh/sshd_config deshabilitar contraseñas:\n# PasswordAuthentication no"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Comprobación y Acceso desde Clientes"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Desde clientes Windows se valida la conexión empleando PuTTY o la terminal nativa de PowerShell con: 'ssh usuario_autorizado@IP_SERVIDOR', confirmando la correcta autenticación y el bloqueo a usuarios no autorizados o peticiones directas de root."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Conclusiones del Laboratorio Integrado"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Este proyecto integral consolida los pilares formativos de la arquitectura de sistemas operativos: el control y extensión del kernel en Ring 0, la orquestación del proceso de arranque (GRUB/Plymouth) y la administración de subsistemas de red esenciales (almacenamiento, voz y acceso remoto seguro)."
+          }
+        ]
+      }
+    ]
+  }
+}

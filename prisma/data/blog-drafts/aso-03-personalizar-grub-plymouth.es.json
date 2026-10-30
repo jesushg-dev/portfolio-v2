@@ -1,0 +1,217 @@
+{
+  "slug": "aso-03-personalizar-grub-plymouth",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 3,
+  "title": "Personalización del Gestor de Arranque: GRUB 2 y Splash Screen Plymouth",
+  "excerpt": "Ajuste de resolución y fondo de pantalla en /etc/default/grub, regeneración del archivo de configuración con update-grub y sustitución de logotipos de inicio en initramfs.",
+  "tags": [
+    "linux",
+    "grub",
+    "plymouth",
+    "bootloader",
+    "personalizacion",
+    "archivo-2020"
+  ],
+  "coverImage": null,
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Etapas de Arranque Gráfico en Linux"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Cuando el firmware UEFI/BIOS cede el control a GRUB 2 (Grand Unified Bootloader), este presenta el menú de selección de núcleos y sistemas operativos. Posteriormente, el kernel inicializa el hardware y delega la experiencia visual de carga a Plymouth, ocultando los mensajes de inicialización detrás de un splash screen."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Personalización de GRUB (/etc/default/grub)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para personalizar el menú de GRUB, abrimos su archivo de configuración principal con permisos de superusuario:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo nano /etc/default/grub"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Realizamos los siguientes ajustes en las directivas:"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Comentar '#GRUB_TIMEOUT_STYLE=hidden' para asegurar que el menú sea visible."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Establecer 'GRUB_TIMEOUT=10' para dar 10 segundos de margen de selección."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Verificar la resolución soportada con el comando 'xrandr' y asignarla en 'GRUB_GFXMODE=\"1920x1080\"' (o la nativa del monitor)."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Agregar la ruta absoluta a la imagen de fondo con 'GRUB_BACKGROUND=\"/home/usuario/Imágenes/fondo-grub.png\"'."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Regenerar la configuración /boot/grub/grub.cfg\nsudo update-grub"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Personalización del Splash Screen con Plymouth"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Plymouth se ejecuta desde el initramfs antes de que los sistemas de archivos raíz se monten en modo lectura/escritura. Para sustituir el logotipo de arranque:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Reemplazar las imágenes por el logotipo deseado en formato PNG\nsudo cp mi-logo.png /usr/share/plymouth/ubuntu-logo.png\nsudo cp mi-logo.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo.png\nsudo cp mi-logo.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo16.png\n\n# Reconstruir la imagen del sistema de archivos en memoria (initramfs)\nsudo update-initramfs -u"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reiniciamos el sistema con 'sudo reboot' para constatar que tanto la pantalla de selección de GRUB como la animación de carga de Plymouth reflejan la identidad visual personalizada."
+          }
+        ]
+      }
+    ]
+  }
+}

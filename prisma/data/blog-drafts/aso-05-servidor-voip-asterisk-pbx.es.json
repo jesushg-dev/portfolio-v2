@@ -1,0 +1,239 @@
+{
+  "slug": "aso-05-servidor-voip-asterisk-pbx",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 5,
+  "title": "Telefonía IP y Servidor VoIP con Asterisk PBX en Linux",
+  "excerpt": "Configuración de una centralita telefónica con Asterisk, creación de usuarios y extensiones SIP, definición del dialplan en extensions.conf y llamadas de prueba con softphones.",
+  "tags": [
+    "linux",
+    "voip",
+    "asterisk",
+    "sip",
+    "telefonia-ip",
+    "archivo-2020"
+  ],
+  "coverImage": null,
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Introducción a la Telefonía IP y Asterisk"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Asterisk es un framework de telecomunicaciones de código abierto que convierte una máquina Linux en una central telefónica IP (PBX). Emplea el protocolo SIP (Session Initiation Protocol, puerto 5060 UDP) para la señalización y establecimiento de sesiones, y RTP (Real-time Transport Protocol) para el transporte de audio bidireccional."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Nota técnica sobre canales SIP: En el momento de este laboratorio (2020) el canal tradicional 'chan_sip' ('sip.conf') era estándar. A partir de Asterisk 21, 'chan_sip' fue definitivamente retirado en favor de 'chan_pjsip' ('pjsip.conf'). Se preserva aquí la configuración didáctica clásica."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Instalación de Asterisk y Paquetes de Sonido"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update\nsudo apt install -y asterisk asterisk-core-sounds-es-wav asterisk-prompt-es\nsudo systemctl enable asterisk\nsudo systemctl start asterisk"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Creación de Extensiones en sip.conf"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creamos un respaldo de '/etc/asterisk/sip.conf' y definimos una plantilla reutilizable y las extensiones 2001 y 2002:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "ini"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "[usuario](!)\ntype=friend\nhost=dynamic\ncontext=alksoft\ndisallow=all\nallow=ulaw\nallow=alaw\n\n[ext2001](usuario)\nusername=juan\nsecret=ClaveSegura2001!\n\n[ext2002](usuario)\nusername=jesus\nsecret=ClaveSegura2002!"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Definición del Plan de Marcado en extensions.conf"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El archivo '/etc/asterisk/extensions.conf' controla la lógica de enrutamiento telefónico mediante la directiva: exten => <número>,<prioridad>,<aplicación>(<parámetros>):"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "ini"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "[alksoft]\nexten => 2001,1,Dial(SIP/ext2001,20)\nsame => n,Hangup()\n\nexten => 2002,1,Dial(SIP/ext2002,20)\nsame => n,Hangup()"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Recargar configuración sin detener llamadas activas\nsudo asterisk -rx \"sip reload\"\nsudo asterisk -rx \"dialplan reload\"\n# Verificar clientes registrados\nsudo asterisk -rx \"sip show peers\""
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Comprobación con Softphones (Zoiper)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Se instala el cliente Zoiper en dos dispositivos independientes (Windows/Linux y Android):"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Configurar cuenta con formato: 'ext2001@IP_DEL_SERVIDOR' y su respectivo secreto."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Seleccionar protocolo SIP UDP y validar el registro con estado 'Account is ready'."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Marcar la extensión 2002 desde el softphone 2001 y verificar la transmisión de voz en tiempo real."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
