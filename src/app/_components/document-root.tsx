@@ -1,9 +1,8 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import "@/app/globals.css";
 
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 import PreloadTheme from "./preload-theme";
 import ThemeContextProvider from "@/hoc/theme-context-provider";
 import clsx from "clsx";
@@ -35,15 +34,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function DocumentRoot({
+export default function DocumentRoot({
   children,
   locale,
+  messages,
 }: {
   children: ReactNode;
   locale: Locale;
+  messages: NonNullable<
+    ComponentProps<typeof NextIntlClientProvider>["messages"]
+  >;
 }) {
-  const messages = await getMessages({ locale });
-
   return (
     <html
       lang={locale}
@@ -54,7 +55,6 @@ export default async function DocumentRoot({
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://res.cloudinary.com" />
         <PreloadTheme />
       </head>
       <body

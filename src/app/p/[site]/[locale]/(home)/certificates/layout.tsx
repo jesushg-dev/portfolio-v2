@@ -1,9 +1,6 @@
 import type { ReactNode } from "react";
+import PublicMessages from "@/components/providers/public-messages";
 
-export default function CertificatesLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return children;
+export default function RouteLayout({ children }: { children: ReactNode }) {
+  return <PublicMessages scope="certificates">{children}</PublicMessages>;
 }

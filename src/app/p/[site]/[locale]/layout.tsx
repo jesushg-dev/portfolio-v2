@@ -6,6 +6,8 @@ import { site } from "next/root-params";
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { resolvePublicTenant } from "@/lib/public-site/tenant";
+import { getMessages } from "next-intl/server";
+import { pickPublicMessages } from "@/lib/public-site/messages";
 
 export { metadata } from "@/app/_components/document-root";
 export const revalidate = 7200;
@@ -22,5 +24,10 @@ export default async function PublicRootLayout({
   const locale = await getPublicLocale();
   if ((await site()) !== "primary") await connection();
   if (!(await resolvePublicTenant())) notFound();
-  return <DocumentRoot locale={locale}>{children}</DocumentRoot>;
+  const messages = pickPublicMessages(await getMessages({ locale }));
+  return (
+    <DocumentRoot locale={locale} messages={messages}>
+      {children}
+    </DocumentRoot>
+  );
 }

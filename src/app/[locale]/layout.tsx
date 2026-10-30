@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { hasLocale } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import DocumentRoot, {
@@ -47,5 +48,9 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  return <DocumentRoot locale={locale}>{children}</DocumentRoot>;
+  return (
+    <DocumentRoot locale={locale} messages={await getMessages({ locale })}>
+      {children}
+    </DocumentRoot>
+  );
 }
