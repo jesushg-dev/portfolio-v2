@@ -55,7 +55,7 @@ function FooterPreviewLink({
   soonLabel: string;
   soon?: boolean;
 }) {
-  if (!soon) {
+  if (soon) {
     return (
       <span
         className={`${footerLinkClassName} cursor-default gap-2 opacity-85`}

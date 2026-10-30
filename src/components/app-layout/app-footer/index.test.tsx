@@ -32,9 +32,13 @@ it("renders important portfolio links in server HTML without interaction", async
     "/curriculum-vitae",
     "/certificates",
     "/timeline",
+    "/now",
+    "/stats",
+    "/colophon",
   ]) {
     expect(html).toContain(`href="${pathname}"`);
   }
+  expect(html).not.toContain('href="/uses"');
 });
 
 it("keeps a private CV out of the server-rendered navigation", async () => {

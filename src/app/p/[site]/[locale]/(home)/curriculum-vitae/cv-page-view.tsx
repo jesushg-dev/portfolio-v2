@@ -11,7 +11,6 @@ import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-pr
 import { canDeliverPortfolioCvEmail } from "@/lib/email/resend";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { resolveTenant } from "@/lib/tenant/resolve";
-import { db } from "@/server/db";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import {
@@ -24,7 +23,7 @@ import {
   inferCvRoleTrack,
 } from "@/lib/cv/build-ats-cv-file-name";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
-import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
+import { getPublicCvPageData } from "@/features/cv/lib/get-public-cv-page-data";
 import CvUnpublished from "./cv-unpublished";
 
 interface CvPageViewProps {
@@ -74,62 +73,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
     softSkills,
     additionalInformation,
     personalReferences,
-  ] = await Promise.all([
-    db.appLanguage.findMany(),
-    db.profile.findUnique({ where: { userId } }),
-    db.cvHeader.findUnique({
-      where: { userId },
-      include: { translations: true },
-    }),
-    db.cvAboutMe.findUnique({
-      where: { userId },
-      include: { translations: true },
-    }),
-    db.cvContact.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-    db.cvEducation.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-    db.cvLanguage.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-    resolveUserTechnicalSkills(db, userId),
-    db.cvExperience.findMany({
-      where: { userId },
-      include: {
-        translations: true,
-        responsibilities: {
-          include: { translations: true },
-          orderBy: { order: "asc" },
-        },
-        CvExperienceSkill: { include: { skill: true } },
-      },
-      orderBy: { order: "asc" },
-    }),
-    db.cvSoftSkill.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-    db.cvAdditionalInfo.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-    db.cvPersonalReference.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-  ]);
-
+  ] = await getPublicCvPageData(userId, pdfMode);
   const displayContacts = resolveCvDisplayContacts(contacts, profile);
 
   const defaultLocale = tenant.defaultLocale || "en";

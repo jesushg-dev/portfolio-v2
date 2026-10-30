@@ -7,7 +7,7 @@ import { buildPublicAlternates } from "@/lib/public-site/metadata";
 import { buildSocialMetadata } from "@/lib/seo/site";
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
-import { db } from "@/server/db";
+import { getPublicCvPageData } from "@/features/cv/lib/get-public-cv-page-data";
 
 export async function generateMetadata({
   params,
@@ -34,14 +34,10 @@ export async function generateMetadata({
   }
 
   if (tenant) {
-    const [appLanguages, header, aboutMe] = await Promise.all([
-      db.appLanguage.findMany(),
-      db.cvHeader.findUnique({ where: { userId: tenant.userId } }),
-      db.cvAboutMe.findUnique({
-        where: { userId: tenant.userId },
-        include: { translations: true },
-      }),
-    ]);
+    const [appLanguages, , header, aboutMe] = await getPublicCvPageData(
+      tenant.userId,
+      false,
+    );
 
     if (header?.fullName) {
       title = `${header.fullName} - Curriculum Vitae`;
