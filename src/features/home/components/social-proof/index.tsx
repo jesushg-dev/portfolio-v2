@@ -1,15 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState, type FC } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ArrowRightIcon, ChevronDown, ChevronUp, Quote } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
 import { MediaImage } from "@/components/shared/media-image";
-import { Skeleton } from "@/components/ui/skeleton";
 import { usePublicCvVisible } from "@/components/app-layout/public-cv-visible";
-import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
 export interface TestimonialItem {
@@ -30,7 +28,7 @@ interface SocialProofStats {
 
 interface SocialProofProps {
   stats: SocialProofStats;
-  testimonials?: TestimonialItem[];
+  testimonials: TestimonialItem[];
 }
 
 function AuthorName({
@@ -58,48 +56,12 @@ function AuthorName({
   );
 }
 
-function TestimonialSkeleton() {
-  return (
-    <div className="border-border/30 bg-card flex flex-col justify-between rounded-[2rem] border p-8 shadow-xs md:p-10">
-      <Skeleton className="size-11 rounded-2xl" />
-      <div className="my-8 space-y-3">
-        <Skeleton className="h-5 w-full" />
-        <Skeleton className="h-5 w-5/6" />
-        <Skeleton className="h-5 w-4/6" />
-      </div>
-      <div className="border-border/20 flex items-center gap-4 border-t pt-8">
-        <Skeleton className="size-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-3 w-48" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SocialProofWithQuery({ stats }: { stats: SocialProofStats }) {
-  const locale = useLocale();
-  const { data: items = [], isLoading } =
-    api.portfolio.getTestimonialsPublic.useQuery({ locale, limit: 10 });
-
-  return (
-    <SocialProofContent
-      stats={stats}
-      items={items}
-      isTestimonialsLoading={isLoading}
-    />
-  );
-}
-
 function SocialProofContent({
   stats: statsData,
   items,
-  isTestimonialsLoading,
 }: {
   stats: SocialProofStats;
   items: TestimonialItem[];
-  isTestimonialsLoading: boolean;
 }) {
   const t = useTranslations("main.socialProof");
   const cvPublic = usePublicCvVisible();
@@ -178,9 +140,7 @@ function SocialProofContent({
         <div className="mt-8 grid items-stretch gap-4 sm:mt-10 sm:gap-5 md:mt-12 md:grid-cols-12">
           {/* Left Column: Testimonial Figure Card */}
           <div className="flex flex-col md:col-span-7">
-            {isTestimonialsLoading ? (
-              <TestimonialSkeleton />
-            ) : activeTestimonial ? (
+            {activeTestimonial ? (
               <figure
                 onPointerMove={handlePointerMove}
                 onPointerLeave={handlePointerLeave}
@@ -470,21 +430,8 @@ function SocialProofContent({
   );
 }
 
-const SocialProof: FC<SocialProofProps> = ({
-  stats,
-  testimonials: testimonialsFromServer,
-}) => {
-  if (testimonialsFromServer !== undefined) {
-    return (
-      <SocialProofContent
-        stats={stats}
-        items={testimonialsFromServer}
-        isTestimonialsLoading={false}
-      />
-    );
-  }
-
-  return <SocialProofWithQuery stats={stats} />;
-};
+const SocialProof: FC<SocialProofProps> = ({ stats, testimonials }) => (
+  <SocialProofContent stats={stats} items={testimonials} />
+);
 
 export default SocialProof;

@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import type { ProjectType } from "@/utils/interfaces/types";
 import PortfolioGrid from "./portfolio-grid";
@@ -25,7 +25,7 @@ const projects: ProjectType[] = Array.from({ length: 9 }, (_, index) => ({
   csInfo: null,
 }));
 
-it("filters the full server collection beyond the six initial cards without a query provider", () => {
+it("filters the full server collection beyond the six initial cards without a query provider", async () => {
   renderWithIntl(
     <PortfolioGrid projects={projects} totalCount={9} caseStudyCount={0} />,
   );
@@ -45,7 +45,7 @@ it("filters the full server collection beyond the six initial cards without a qu
   expect(within(panel).queryByText("Project 1")).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("tab", { name: /^Mobile \(0\)/ }));
-  expect(screen.getByRole("status")).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
   fireEvent.click(within(screen.getByRole("status")).getByRole("button"));
   expect(screen.getAllByRole("article")).toHaveLength(6);
 });

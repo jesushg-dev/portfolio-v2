@@ -1,17 +1,21 @@
+import type { ComponentType } from "react";
 import { getPublicLocale } from "@/lib/public-site/locale";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowUp, Heart } from "lucide-react";
-import { IoMail } from "react-icons/io5";
 import {
-  FaCalendarAlt,
-  FaLinkedinIn,
-  FaGithub,
-  FaGlobe,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
-import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
-import type { IconType } from "react-icons";
+  ArrowUp,
+  Calendar,
+  Globe,
+  Heart,
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
+import {
+  GithubIcon,
+  LinkedinIcon,
+  WhatsappIcon,
+} from "@/components/shared/brand-icons";
 
 import { Link } from "@/i18n/routing";
 import { LinkPreview } from "@/components/ui/link-preview";
@@ -31,15 +35,15 @@ import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 const footerLinkClassName =
   "text-primary-foreground/90 hover:text-primary-foreground inline-flex min-h-11 min-w-11 items-center text-sm underline-offset-4 transition hover:underline";
 
-const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
-  email: IoMail,
-  phone: RiPhoneFill,
-  whatsapp: RiWhatsappFill,
-  linkedin: FaLinkedinIn,
-  github: FaGithub,
-  website: FaGlobe,
-  location: FaMapMarkerAlt,
-  calendly: FaCalendarAlt,
+const FOOTER_ICONS: Record<ContactIconKey, ComponentType<{ className?: string }>> = {
+  email: Mail,
+  phone: Phone,
+  whatsapp: WhatsappIcon,
+  linkedin: LinkedinIcon,
+  github: GithubIcon,
+  website: Globe,
+  location: MapPin,
+  calendly: Calendar,
 };
 
 const PEOPLE_PLEDGE_URL = "https://peoplepledge.org";

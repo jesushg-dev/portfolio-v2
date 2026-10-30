@@ -1,6 +1,6 @@
-import type { FC } from "react";
-import { FaLinkedin, FaGithub, FaCalendarAlt } from "react-icons/fa";
-import { MdPhone, MdEmail, MdWeb, MdLocationOn } from "react-icons/md";
+import type { ComponentType, FC } from "react";
+import { Calendar, Globe, Mail, MapPin, Phone } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/shared/brand-icons";
 import type { CvContactType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 
@@ -13,15 +13,15 @@ interface IContactMeProps {
   variant?: "header" | "sidebar";
 }
 
-const ICONS: Record<CvContactType, typeof MdWeb> = {
-  PHONE: MdPhone,
-  EMAIL: MdEmail,
-  WEBSITE: MdWeb,
-  LINKEDIN: FaLinkedin,
-  GITHUB: FaGithub,
-  LOCATION: MdLocationOn,
-  CALENDLY: FaCalendarAlt,
-  OTHER: MdWeb,
+const ICONS: Record<CvContactType, ComponentType<{ className?: string }>> = {
+  PHONE: Phone,
+  EMAIL: Mail,
+  WEBSITE: Globe,
+  LINKEDIN: LinkedinIcon,
+  GITHUB: GithubIcon,
+  LOCATION: MapPin,
+  CALENDLY: Calendar,
+  OTHER: Globe,
 };
 
 const buildHref = (type: CvContactType, value: string) => {

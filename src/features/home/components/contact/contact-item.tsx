@@ -1,31 +1,27 @@
-"use client";
-
-import type { FC, CSSProperties } from "react";
+import type { FC, CSSProperties, ComponentType } from "react";
+import { Calendar, Globe, Mail, MapPin, Phone } from "lucide-react";
 import {
-  FaCalendarAlt,
-  FaGithub,
-  FaGlobe,
-  FaLinkedin,
-  FaMapMarkerAlt,
-  FaPhoneAlt,
-  FaRegEnvelope,
-  FaWhatsapp,
-} from "react-icons/fa";
-import type { IconType } from "react-icons";
+  GithubIcon,
+  LinkedinIcon,
+  WhatsappIcon,
+} from "@/components/shared/brand-icons";
 
 import { Link } from "@/i18n/routing";
 import type { ContactIconKey } from "@/utils/contact-links";
 import { cn } from "@/lib/utils";
 
-const CONTACT_ICONS: Record<ContactIconKey, IconType> = {
-  email: FaRegEnvelope,
-  phone: FaPhoneAlt,
-  whatsapp: FaWhatsapp,
-  linkedin: FaLinkedin,
-  github: FaGithub,
-  website: FaGlobe,
-  location: FaMapMarkerAlt,
-  calendly: FaCalendarAlt,
+const CONTACT_ICONS: Record<
+  ContactIconKey,
+  ComponentType<{ className?: string }>
+> = {
+  email: Mail,
+  phone: Phone,
+  whatsapp: WhatsappIcon,
+  linkedin: LinkedinIcon,
+  github: GithubIcon,
+  website: Globe,
+  location: MapPin,
+  calendly: Calendar,
 };
 
 interface ContactItemProps {

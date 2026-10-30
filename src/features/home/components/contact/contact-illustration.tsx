@@ -2,7 +2,8 @@ import type { FC } from "react";
 import ViewportSection from "@/components/shared/viewport-section";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { ContactGlobe, type OwnerMapLocation } from "./contact-globe";
+import type { OwnerMapLocation } from "./contact-globe";
+import ContactGlobeLazy from "./contact-globe-lazy";
 
 interface ContactIllustrationProps {
   location: OwnerMapLocation | null;
@@ -18,7 +19,7 @@ const ContactIllustration: FC<ContactIllustrationProps> = ({ location }) => {
         minHeight="18rem"
         className="h-full"
       >
-        <ContactGlobe location={location} />
+        <ContactGlobeLazy location={location} />
       </ViewportSection>
     </div>
   );

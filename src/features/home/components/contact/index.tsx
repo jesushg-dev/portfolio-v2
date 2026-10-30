@@ -110,7 +110,7 @@ const Contact: FC = async () => {
                 <ViewportSection
                   fallback={<Skeleton className="h-80 w-full rounded-2xl" />}
                   minHeight="20rem"
-                  requiresTrpc
+                  requiresInteraction
                 >
                   <ContactForm />
                 </ViewportSection>

@@ -10,6 +10,7 @@ import DocumentRoot, {
 } from "@/app/_components/document-root";
 import { routing } from "@/i18n/routing";
 import { buildLocaleAlternates } from "@/lib/seo/alternates";
+import { Toaster } from "@/components/ui/sonner";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -51,6 +52,7 @@ export default async function LocaleLayout({
   return (
     <DocumentRoot locale={locale} messages={await getMessages({ locale })}>
       {children}
+      <Toaster />
     </DocumentRoot>
   );
 }

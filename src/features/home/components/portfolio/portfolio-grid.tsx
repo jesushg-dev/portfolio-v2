@@ -6,13 +6,19 @@ import { motion, useInView } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
+import dynamic from "next/dynamic";
 import { LinkPreview } from "@/components/ui/link-preview";
 import type { ProjectType } from "@/utils/interfaces/types";
 
 import FilterType from "./filter-type";
 import PortfolioItem from "./project-item";
-import { ProjectEmptyState } from "./project-empty-state";
 import { PortfolioTopStack } from "./portfolio-top-stack";
+
+const ProjectEmptyState = dynamic(
+  () =>
+    import("./project-empty-state").then((mod) => mod.ProjectEmptyState),
+  { ssr: false },
+);
 
 const type = [undefined, "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
 

@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { usePublicWidgetsReady } from "@/components/providers/public-trpc-provider";
+import { usePublicWidgetsReady } from "@/components/providers/public-widgets-provider";
 
 interface ViewportSectionProps {
   children: ReactNode;
@@ -18,8 +18,8 @@ interface ViewportSectionProps {
   rootMargin?: string;
   id?: string;
   className?: string;
-  /** When true, waits for deferred tRPC before mounting children. */
-  requiresTrpc?: boolean;
+  /** Waits for interaction before mounting optional live widgets on the home page. */
+  requiresInteraction?: boolean;
 }
 
 export default function ViewportSection({
@@ -29,12 +29,12 @@ export default function ViewportSection({
   rootMargin = "250px 0px",
   id,
   className,
-  requiresTrpc = false,
+  requiresInteraction = false,
 }: ViewportSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const trpcReady = usePublicWidgetsReady();
-  const canMountChildren = isVisible && (!requiresTrpc || trpcReady);
+  const widgetsReady = usePublicWidgetsReady();
+  const canMountChildren = isVisible && (!requiresInteraction || widgetsReady);
 
   useEffect(() => {
     const element = containerRef.current;

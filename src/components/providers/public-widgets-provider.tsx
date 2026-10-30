@@ -10,9 +10,8 @@ import {
 } from "react";
 
 import { usePathname } from "@/i18n/routing";
-import { TRPCReactProvider } from "@/trpc/react";
 
-interface PublicTrpcProviderProps {
+interface PublicWidgetsProviderProps {
   children: ReactNode;
 }
 
@@ -28,18 +27,6 @@ export function usePublicWidgetsReady(): boolean {
   return useContext(PublicWidgetsContext).isReady;
 }
 
-function isSkillInterceptRoute(pathname: string): boolean {
-  return pathname.startsWith("/skills/");
-}
-
-function isHomeLandingRoute(pathname: string): boolean {
-  return pathname === "/";
-}
-
-function needsImmediateTrpc(pathname: string): boolean {
-  return isSkillInterceptRoute(pathname) || !isHomeLandingRoute(pathname);
-}
-
 const emptySubscribe = () => () => {
   /* empty */
 };
@@ -53,25 +40,24 @@ function getScrollRestoredServerSnapshot(): boolean {
 }
 
 /**
- * Provides tRPC during prerendering and hydration. Only optional live widgets
- * wait for interaction on the landing page; public content always renders.
+ * Coordinates optional widgets without importing their query or notification
+ * runtimes. Public content stays in the same tree throughout hydration.
  */
-export default function PublicTrpcProvider({
+export default function PublicWidgetsProvider({
   children,
-}: PublicTrpcProviderProps) {
+}: PublicWidgetsProviderProps) {
   const pathname = usePathname();
-  const needsTrpcNow = needsImmediateTrpc(pathname);
+  const needsWidgetsNow = pathname !== "/";
   const [deferredReady, setDeferredReady] = useState(false);
   const scrollRestored = useSyncExternalStore(
     emptySubscribe,
     getScrollRestoredSnapshot,
     getScrollRestoredServerSnapshot,
   );
-  const isReady =
-    needsTrpcNow || deferredReady || (!needsTrpcNow && scrollRestored);
+  const isReady = needsWidgetsNow || deferredReady || scrollRestored;
 
   useEffect(() => {
-    if (needsTrpcNow || deferredReady) {
+    if (needsWidgetsNow || deferredReady) {
       return;
     }
 
@@ -86,13 +72,11 @@ export default function PublicTrpcProvider({
       window.removeEventListener("pointerdown", enable);
       window.removeEventListener("keydown", enable);
     };
-  }, [needsTrpcNow, deferredReady]);
+  }, [needsWidgetsNow, deferredReady]);
 
   return (
-    <TRPCReactProvider>
-      <PublicWidgetsContext.Provider value={{ isReady }}>
-        {children}
-      </PublicWidgetsContext.Provider>
-    </TRPCReactProvider>
+    <PublicWidgetsContext.Provider value={{ isReady }}>
+      {children}
+    </PublicWidgetsContext.Provider>
   );
 }

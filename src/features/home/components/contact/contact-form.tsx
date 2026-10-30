@@ -16,7 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { TurnstileWidget } from "@/components/shared/turnstile-widget";
 import { env } from "@/env";
-import { api } from "@/trpc/react";
+import { api, TRPCReactProvider } from "@/trpc/react";
+import { Toaster } from "@/components/ui/sonner";
 import { Link } from "@/i18n/routing";
 import { SCHEDULE_PATH } from "@/utils/calendly-url";
 
@@ -253,4 +254,11 @@ const ContactForm: FC = () => {
   );
 };
 
-export default ContactForm;
+export default function ContactFormWithProvider() {
+  return (
+    <TRPCReactProvider>
+      <ContactForm />
+      <Toaster />
+    </TRPCReactProvider>
+  );
+}

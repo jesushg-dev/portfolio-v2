@@ -4,15 +4,14 @@ import {
   getIconOptions,
   DEFAULT_FALLBACK_ICON,
 } from "./icon-registry";
-import { Code2, Server, LayoutGrid } from "lucide-react";
-import { RiTeamLine } from "react-icons/ri";
+import { Code2, Server, LayoutGrid, Users } from "lucide-react";
 
 describe("Universal Icon Registry", () => {
   it("resolves exact matches correctly for Lucide and React Icons", () => {
     expect(resolveIcon("code")).toBe(Code2);
     expect(resolveIcon("server")).toBe(Server);
     expect(resolveIcon("layout")).toBe(LayoutGrid);
-    expect(resolveIcon("RiTeamLine")).toBe(RiTeamLine);
+    expect(resolveIcon("RiTeamLine")).toBe(Users);
   });
 
   it("resolves normalized lowercase keys", () => {

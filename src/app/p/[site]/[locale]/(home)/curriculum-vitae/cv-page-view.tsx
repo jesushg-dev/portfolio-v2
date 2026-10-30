@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import CvAtsPreview from "@/components/curriculum-vitae/cv-ats-preview";
 import CvPageActions from "@/features/cv/components/cv-page-actions";
+import { TRPCReactProvider } from "@/trpc/react";
+import { Toaster } from "@/components/ui/sonner";
 import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
@@ -139,15 +141,18 @@ const CvPageView: FC<CvPageViewProps> = async ({
   return (
     <div className="bg-background text-foreground min-h-screen pt-24 pb-16 font-sans print:bg-white print:p-0">
       <div className="chrome mx-auto max-w-[51rem] px-4 pb-4 print:hidden">
-        <CvPageActions
-          fullName={header?.fullName ?? profile?.username ?? "user"}
-          canSendByEmail={canSendByEmail}
-          downloadHref={cvDownloadHref}
-          downloadFileName={downloadFileName}
-          goBackLabel={t("actions.goBack")}
-          downloadLabel={t("actions.download")}
-          paginatePdfPages={paginatePdfPages}
-        />
+        <TRPCReactProvider>
+          <CvPageActions
+            fullName={header?.fullName ?? profile?.username ?? "user"}
+            canSendByEmail={canSendByEmail}
+            downloadHref={cvDownloadHref}
+            downloadFileName={downloadFileName}
+            goBackLabel={t("actions.goBack")}
+            downloadLabel={t("actions.download")}
+            paginatePdfPages={paginatePdfPages}
+          />
+          <Toaster />
+        </TRPCReactProvider>
       </div>
       <main
         id="sheet"

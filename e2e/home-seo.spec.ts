@@ -45,6 +45,34 @@ for (const pathname of ["/", "/es", "/nl"]) {
 test.describe("hydrated portfolio", () => {
   test.use({ javaScriptEnabled: true });
 
+  test("loads live queries when the footer enters the viewport", async ({
+    page,
+  }) => {
+    const errors: string[] = [];
+    const queryRequests: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("request", (request) => {
+      if (request.url().includes("/api/trpc/"))
+        queryRequests.push(request.url());
+    });
+    await page.goto("/", { waitUntil: "load" });
+    await expect(page.locator("main h1")).toBeVisible();
+    expect(queryRequests).toEqual([]);
+
+    const playbackRequest = page.waitForRequest((request) =>
+      request.url().includes("/api/trpc/spotify."),
+    );
+    const spotifyLink = page.locator(
+      'footer a[href="https://developer.spotify.com/documentation/web-api"]',
+    );
+    await expect(async () => {
+      await spotifyLink.scrollIntoViewIfNeeded();
+      await expect(spotifyLink).toBeInViewport();
+    }).toPass({ timeout: 15000 });
+    await playbackRequest;
+    expect(errors).toEqual([]);
+  });
+
   test("keeps project filters interactive", async ({ page }) => {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));

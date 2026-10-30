@@ -13,7 +13,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
-import { IoPause, IoPlay, IoVolumeMediumOutline } from "react-icons/io5";
+import { Pause, Play, Volume2 } from "lucide-react";
 
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
@@ -300,9 +300,9 @@ const ExpandableSpotifyPlayerContent: FC = () => {
                 }
               >
                 {isLocalPlaying ? (
-                  <IoPause size={18} />
+                  <Pause size={18} />
                 ) : (
-                  <IoPlay size={18} className="ml-0.5" />
+                  <Play size={18} className="ml-0.5 fill-current" />
                 )}
               </button>
 
@@ -311,7 +311,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
                   className="absolute right-0 bottom-full mb-2 flex w-28 items-center gap-1.5 rounded-full bg-[#282828] px-2.5 py-1.5 shadow-xl"
                   onClick={(event) => event.stopPropagation()}
                 >
-                  <IoVolumeMediumOutline
+                  <Volume2
                     size={14}
                     className="shrink-0 text-white/70"
                   />

@@ -1,7 +1,7 @@
 import { getPublicLocale } from "@/lib/public-site/locale";
 import { MediaImage } from "@/components/shared/media-image";
 import { getTranslations } from "next-intl/server";
-import { MdOpenInNew } from "react-icons/md";
+import { ExternalLink } from "lucide-react";
 
 import CertificateItem from "@/features/certifications/components/certification-item";
 import { SkillProjectCard } from "./skill-project-card";
@@ -83,7 +83,7 @@ export async function SkillDetailPageView({
                   className="text-primary-600 hover:text-primary-700 inline-flex shrink-0 items-center gap-1.5 text-sm font-medium transition"
                 >
                   {t("modal.readMore")}
-                  <MdOpenInNew className="h-4 w-4" />
+                  <ExternalLink className="size-4" />
                 </a>
               ) : null}
             </div>

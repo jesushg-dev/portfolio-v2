@@ -19,7 +19,6 @@ const geist = Geist({
 });
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
-import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -72,7 +71,6 @@ export default function DocumentRoot({
           <DocumentLang locale={locale} />
           <ThemeContextProvider>{children}</ThemeContextProvider>
         </NextIntlClientProvider>
-        <Toaster />
       </body>
     </html>
   );

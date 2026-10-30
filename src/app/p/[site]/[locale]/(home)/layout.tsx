@@ -6,7 +6,7 @@ import Layout from "@/components/app-layout";
 import { PageViewBeacon } from "@/features/analytics/components/page-view-beacon";
 import { PublicCvVisibleProvider } from "@/components/app-layout/public-cv-visible";
 import { ProcessNavPagesProvider } from "@/components/app-layout/process-nav-pages";
-import PublicTrpcProvider from "@/components/providers/public-trpc-provider";
+import PublicWidgetsProvider from "@/components/providers/public-widgets-provider";
 import { getCachedSiteBrand } from "@/lib/site-brand/get-cached-site-brand";
 import { locales, type Locale as AppLocale } from "@/i18n/config";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
@@ -40,7 +40,7 @@ export default async function SiteLayout({
   });
 
   return (
-    <PublicTrpcProvider>
+    <PublicWidgetsProvider>
       <NuqsAdapter>
         <PublicCvVisibleProvider visible={cvPublic}>
           <ProcessNavPagesProvider pages={processNavPages}>
@@ -56,6 +56,6 @@ export default async function SiteLayout({
         </PublicCvVisibleProvider>
         {modal}
       </NuqsAdapter>
-    </PublicTrpcProvider>
+    </PublicWidgetsProvider>
   );
 }

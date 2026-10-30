@@ -1,15 +1,20 @@
 "use client";
 
 import { useState, useCallback, type FC, type PointerEvent } from "react";
-import { AiFillGithub, AiFillEye } from "react-icons/ai";
-import { ArrowUpRight } from "lucide-react";
+import dynamic from "next/dynamic";
+import { GithubIcon } from "@/components/shared/brand-icons";
+import { ArrowUpRight, Eye } from "lucide-react";
 
 import { MediaImage } from "@/components/shared/media-image";
 import { Link } from "@/i18n/routing";
 import { type ProjectType } from "@/utils/interfaces/types";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
 
-import { ProjectCoverMockup } from "./project-cover-mockup";
+const ProjectCoverMockup = dynamic(
+  () =>
+    import("./project-cover-mockup").then((mod) => mod.ProjectCoverMockup),
+  { ssr: false },
+);
 
 export interface ProjectMetaLabels {
   solo: string;
@@ -331,7 +336,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 aria-label={`${sourceName}: ${title}`}
                 className="text-foreground hover:text-primary relative z-10 inline-flex min-h-11 items-center gap-2 text-sm font-semibold transition-colors"
               >
-                <AiFillGithub className="size-4" aria-hidden="true" />
+                <GithubIcon className="size-4" aria-hidden="true" />
                 <span>{sourceName}</span>
               </a>
             ) : websiteUrl ? (
@@ -360,7 +365,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   title={`${sourceName}: ${title}`}
                   className={actionButtonClass}
                 >
-                  <AiFillGithub className="size-4.5" aria-hidden="true" />
+                  <GithubIcon className="size-4.5" aria-hidden="true" />
                 </a>
               ) : null}
               {caseStudyEnabled && slug && websiteUrl ? (
@@ -372,7 +377,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   title={`${urlName}: ${title}`}
                   className={actionButtonClass}
                 >
-                  <AiFillEye
+                  <Eye
                     className="text-primary size-4.5"
                     aria-hidden="true"
                   />
