@@ -11,7 +11,7 @@ import type { Content } from "@tiptap/core";
 import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
-import { slugifyHeading } from "@/features/blog/lib/blog-headings";
+import { createHeadingIdFactory } from "@/features/blog/lib/blog-headings";
 
 import "@/features/blog/styles/blog-prose.css";
 
@@ -26,7 +26,7 @@ export function TiptapRenderer({ content, className }: TiptapRendererProps) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({ codeBlock: false }),
+      StarterKit.configure({ codeBlock: false, link: false }),
       CodeBlockLowlight.configure({ lowlight }),
       Image.configure({ inline: false }),
       Youtube.configure({ width: 640, height: 360 }),
@@ -45,16 +45,18 @@ export function TiptapRenderer({ content, className }: TiptapRendererProps) {
     if (!editor) return;
 
     const applyHeadingIds = () => {
+      const headingId = createHeadingIdFactory();
       const headings = editor.view.dom.querySelectorAll("h1, h2, h3");
       headings.forEach((heading) => {
         const text = heading.textContent?.trim() ?? "";
-        if (!text) return;
-        const id = slugifyHeading(text);
-        if (id) heading.setAttribute("id", id);
+        heading.setAttribute("id", headingId(text));
       });
     };
 
     applyHeadingIds();
+    editor.view.dom.dispatchEvent(
+      new Event("blog-headings-ready", { bubbles: true }),
+    );
     editor.on("update", applyHeadingIds);
     return () => {
       editor.off("update", applyHeadingIds);

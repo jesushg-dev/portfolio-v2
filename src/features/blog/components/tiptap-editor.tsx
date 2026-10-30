@@ -7,7 +7,7 @@ import Image from "@tiptap/extension-image";
 import Youtube from "@tiptap/extension-youtube";
 import Link from "@tiptap/extension-link";
 import { common, createLowlight } from "lowlight";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import {
   Bold,
   Italic,
@@ -30,6 +30,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Content } from "@tiptap/core";
+
+import "@/features/blog/styles/blog-prose.css";
 
 const lowlight = createLowlight(common);
 
@@ -57,37 +59,50 @@ function ToolbarButton({
       size="sm"
       onClick={onClick}
       title={title}
-      className={cn(
-        "h-8 w-8 p-0",
-        active && "bg-muted text-foreground",
-      )}
+      aria-label={title}
+      aria-pressed={active}
+      className={cn("size-11 p-0", active && "bg-muted text-foreground")}
     >
       {children}
     </Button>
   );
 }
 
-export function TiptapEditor({ content, onChange, className }: TiptapEditorProps) {
+export function TiptapEditor({
+  content,
+  onChange,
+  className,
+}: TiptapEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: true,
     extensions: [
-      StarterKit.configure({ codeBlock: false }),
+      StarterKit.configure({ codeBlock: false, link: false }),
       CodeBlockLowlight.configure({ lowlight }),
       Image.configure({ inline: false, allowBase64: true }),
       Youtube.configure({ width: 640, height: 360 }),
       Link.configure({ openOnClick: false, autolink: true }),
     ],
-     
-    content: (content ? tryParseJson(content) : ""),
+
+    content: content ? tryParseJson(content) : "",
     onUpdate: ({ editor }) => {
       onChange(JSON.stringify(editor.getJSON()));
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm dark:prose-invert max-w-none min-h-[300px] p-4 focus:outline-none",
+        class: "blog-prose min-h-80 max-w-none p-4 focus:outline-none",
       },
     },
   });
+
+  useEffect(() => {
+    if (!editor) return;
+    const incoming = content ? tryParseJson(content) : "";
+    const unchanged = typeof incoming === "string"
+      ? incoming === editor.getHTML()
+      : JSON.stringify(incoming) === JSON.stringify(editor.getJSON());
+    if (!unchanged) editor.commands.setContent(incoming, { emitUpdate: false });
+  }, [content, editor]);
 
   const addImage = useCallback(() => {
     if (!editor) return;
@@ -151,31 +166,37 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
           <Code className="h-4 w-4" />
         </ToolbarButton>
 
-        <div className="bg-border mx-1 w-px" />
+        <div className="bg-border mx-1 w-[0.0625rem]" />
 
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
           active={editor.isActive("heading", { level: 1 })}
           title="Heading 1"
         >
           <Heading1 className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
           active={editor.isActive("heading", { level: 2 })}
           title="Heading 2"
         >
           <Heading2 className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
           active={editor.isActive("heading", { level: 3 })}
           title="Heading 3"
         >
           <Heading3 className="h-4 w-4" />
         </ToolbarButton>
 
-        <div className="bg-border mx-1 w-px" />
+        <div className="bg-border mx-1 w-[0.0625rem]" />
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -206,7 +227,7 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
           <CodeSquare className="h-4 w-4" />
         </ToolbarButton>
 
-        <div className="bg-border mx-1 w-px" />
+        <div className="bg-border mx-1 w-[0.0625rem]" />
 
         <ToolbarButton onClick={addImage} title="Add image">
           <ImageIcon className="h-4 w-4" />
@@ -222,7 +243,7 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
           <LinkIcon className="h-4 w-4" />
         </ToolbarButton>
 
-        <div className="bg-border mx-1 w-px" />
+        <div className="bg-border mx-1 w-[0.0625rem]" />
 
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}

@@ -1,0 +1,777 @@
+{
+  "slug": "monitor-titulo-la-gaceta-nicaragua",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": null,
+  "title": "Construí tu propio monitor de títulos de La Gaceta con JavaScript y Telegram",
+  "excerpt": "Aprendé a consultar tu registro, detectar cambios y enviar avisos a Telegram. Código completo explicado paso a paso y automatización con GitHub Actions.",
+  "tags": [
+    "nicaragua",
+    "automatizacion",
+    "github-actions",
+    "telegram"
+  ],
+  "coverImage": null,
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Si estás esperando que tu título aparezca en La Gaceta de Nicaragua, podés terminar consultando la misma página todos los días. Vamos a construir un programa que haga esa consulta por vos y te avise en Telegram cuando cambien los datos. La meta es que entendás el código y puedas mantener tu propia versión."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El recorrido será: consultar la página oficial, encontrar tu registro, compararlo con la consulta anterior y mandar un mensaje si hay un cambio. Al final lo vamos a programar con GitHub Actions para que no dependa de tu computadora. El código completo está incluido en esta guía; no necesitás clonar mi repositorio."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Qué vas a construir"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Esta versión sigue un solo código oficial con formato AÑO-TPnúmero. Avisa la primera vez y cuando cambia un campo del registro. No calcula fechas estimadas ni intenta buscar personas por nombre: primero vamos a resolver una tarea concreta que sea fácil de entender."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Necesitás tu código de registro tal como aparece en la consulta oficial, una cuenta de GitHub y Telegram. Para ejecutar el script en tu computadora usaremos Node.js 22. Si todavía no tenés un registro, comprobá primero tu caso en la página oficial: este ejemplo no puede determinar el estado de un trámite a partir de una ausencia."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Consultar títulos en La Gaceta",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.lagaceta.gob.ni/consultas",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Prepará los archivos"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creá una carpeta para tu monitor. Dentro, creá scripts/check-title.mjs. La extensión .mjs permite usar módulos de JavaScript en Node.js sin agregar un package.json. El script usa fetch, archivos y rutas incluidos en Node.js; no necesita npm install."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Vamos a usar variables de entorno para separar la configuración del código. TITLE_MONITOR_REGISTRY contiene tu registro. TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID se usarán para enviar mensajes. TITLE_MONITOR_DRY_RUN permite consultar y mostrar el resultado sin enviar nada ni guardar estado."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Entendé cómo se consulta La Gaceta"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "const url = new URL(\"https://www.lagaceta.gob.ni/consultas\");\nurl.searchParams.set(\"t\", \"1\");\nurl.searchParams.set(\"search\", registry);\nconst response = await fetch(url, {\n  signal: AbortSignal.timeout(30_000),\n});"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "URL construye la dirección y searchParams codifica el registro como parámetro de búsqueda. El parámetro t=1 es el que utiliza el monitor de referencia para la consulta de títulos. El límite de 30 segundos evita que la ejecución quede esperando indefinidamente. Una respuesta HTTP correcta todavía no significa que encontramos el registro: hay que revisar su contenido."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "La consulta devuelve HTML. fetchRecord extrae las filas consulta-row, divide sus celdas y busca una coincidencia exacta con tu código. Los índices de un arreglo empiezan en cero: cells[0] es el registro, cells[1] el ingreso, cells[3] el titular, cells[4] la edición, cells[6] la fecha de publicación y cells[8] el estado en el formato revisado."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "decodeText limpia las etiquetas y convierte entidades HTML como &aacute; en texto legible. Esta extracción depende de la estructura actual de la página; si La Gaceta cambia sus columnas o su HTML, habrá que actualizarla. Por eso el script falla cuando no confirma la fila, en lugar de inventar un estado pendiente."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Compará los datos, no la hora"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "const changed = !previous || Object.keys(current).some(\n  (field) => current[field] !== previous[field],\n);"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "current contiene solo los campos que nos interesa seguir. previous es la última versión guardada en .title-monitor-state/state.json. Si el archivo todavía no existe, previous vale null y se manda el primer mensaje. Si existe, some comprueba si al menos un campo cambió."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "La hora de consulta se agrega al mensaje, pero no al objeto que comparamos: si la incluyéramos, cada ejecución parecería una novedad. Si no hubo cambios, no mandamos otro aviso. Un archivo de estado corrupto produce un error para que puedas revisarlo."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Primero esperamos que Telegram confirme el envío y después guardamos el nuevo estado. Si el envío falla, conservamos el anterior para volver a intentar en la próxima ejecución. Eso puede repetir un aviso si el mensaje llegó y falló el guardado, pero evita dar por notificado algo que Telegram no confirmó."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Prepará Telegram"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Abrí @BotFather, verificá que sea la cuenta oficial y enviá /newbot. Seguí sus instrucciones y guardá el token. Después abrí el chat de tu bot y mandale /start. El bot necesita que inicies esa conversación."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Abrir BotFather",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://t.me/BotFather",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para obtener el identificador de tu chat, reemplazá TU_TOKEN en esta dirección por el token real y abrila en tu navegador:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "https://api.telegram.org/botTU_TOKEN/getUpdates"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Dentro de result buscá el mensaje que enviaste y copiá message.chat.id. Si result está vacío, mandá otro mensaje al bot y volvé a consultar. Usá un bot nuevo: getUpdates no funciona cuando ese bot tiene un webhook activo."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El token permite controlar el bot. No lo pongás en el código, capturas ni commits. La URL también lo contiene: no la compartás. Si lo exponés, regeneralo desde BotFather y actualizá el secreto. El identificador del chat y el token van en dos variables distintas."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "notifyTelegram usa POST para enviar un cuerpo JSON a sendMessage. Este ejemplo manda texto plano, así no necesitamos escapar el HTML del titular. Comprueba tanto el estado HTTP como el campo ok de la respuesta antes de guardar el registro."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Copiá el script completo"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Guardá lo siguiente en scripts/check-title.mjs. Incluye los imports, las funciones anteriores y main, que ejecuta los pasos en orden. No tenés que completar funciones que quedaron fuera de la guía."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "import { mkdir, readFile, writeFile } from \"node:fs/promises\";\nimport path from \"node:path\";\n\nconst registry = process.env.TITLE_MONITOR_REGISTRY?.trim().toUpperCase();\nconst dryRun = process.env.TITLE_MONITOR_DRY_RUN === \"true\";\nconst stateDirectory = \".title-monitor-state\";\nconst statePath = path.join(stateDirectory, \"state.json\");\n\nfunction decodeText(html) {\n  const entities = {\n    nbsp: \" \", amp: \"&\", quot: '\"', apos: \"'\",\n    aacute: \"á\", eacute: \"é\", iacute: \"í\", oacute: \"ó\",\n    uacute: \"ú\", ntilde: \"ñ\", uuml: \"ü\",\n  };\n  return html\n    .replace(/<[^>]*>/g, \" \")\n    .replace(/&#(\\d+);/g, (_, number) => {\n      const point = Number(number);\n      return point <= 0x10ffff ? String.fromCodePoint(point) : _;\n    })\n    .replace(/&([a-z]+);/gi, (match, name) => {\n      const value = entities[name.toLowerCase()];\n      if (!value) return match;\n      return name[0] === name[0].toUpperCase() ? value.toUpperCase() : value;\n    })\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nasync function fetchRecord() {\n  const url = new URL(\"https://www.lagaceta.gob.ni/consultas\");\n  url.searchParams.set(\"t\", \"1\");\n  url.searchParams.set(\"search\", registry);\n\n  const response = await fetch(url, {\n    headers: { \"User-Agent\": \"personal-title-monitor/1.0\" },\n    signal: AbortSignal.timeout(30_000),\n  });\n  if (!response.ok) throw new Error(\"La Gaceta respondió HTTP \" + response.status);\n\n  const html = await response.text();\n  const rows = [...html.matchAll(/<tr class=\"consulta-row\">([\\s\\S]*?)<\\/tr>/gi)];\n  const records = rows.map((row) =>\n    [...row[1].matchAll(/<td[^>]*>([\\s\\S]*?)<\\/td>/gi)]\n      .map((cell) => decodeText(cell[1])),\n  );\n  const cells = records.find((row) =>\n    row.length >= 9 && row[0].toUpperCase() === registry,\n  );\n  if (!cells || !cells[3] || !cells[8]) {\n    throw new Error(\"No se confirmó el registro. Revisá la consulta oficial y el formato HTML.\");\n  }\n\n  return {\n    registry: cells[0],\n    receivedAt: cells[1],\n    holder: cells[3],\n    gazetteNumber: cells[4],\n    publicationDate: cells[6],\n    status: cells[8],\n  };\n}\n\nasync function loadPreviousRecord() {\n  try {\n    const saved = JSON.parse(await readFile(statePath, \"utf8\"));\n    if (!saved || typeof saved !== \"object\" || typeof saved.registry !== \"string\") {\n      throw new Error(\"El archivo de estado no tiene el formato esperado.\");\n    }\n    return saved;\n  } catch (error) {\n    if (error.code === \"ENOENT\") return null;\n    throw error;\n  }\n}\n\nasync function notifyTelegram(record) {\n  const token = process.env.TELEGRAM_BOT_TOKEN;\n  const chatId = process.env.TELEGRAM_CHAT_ID;\n  if (!token || !chatId) throw new Error(\"Faltan las credenciales de Telegram.\");\n\n  const message = [\n    \"Monitor personal de títulos — La Gaceta\",\n    \"Registro: \" + record.registry,\n    \"Titular: \" + record.holder,\n    \"Estado: \" + record.status,\n    \"Ingreso: \" + record.receivedAt,\n    \"Gaceta: \" + record.gazetteNumber,\n    \"Publicación: \" + record.publicationDate,\n    \"Comprobación: \" + new Date().toLocaleString(\"es-NI\", {\n      timeZone: \"America/Managua\",\n    }),\n    \"Confirmá los datos en https://www.lagaceta.gob.ni/consultas\",\n  ].join(\"\\n\");\n\n  const response = await fetch(\"https://api.telegram.org/bot\" + token + \"/sendMessage\", {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ chat_id: chatId, text: message }),\n    signal: AbortSignal.timeout(30_000),\n  });\n  if (!response.ok) throw new Error(\"Telegram respondió HTTP \" + response.status);\n  const result = await response.json();\n  if (!result.ok) throw new Error(\"Telegram no confirmó el envío.\");\n}\n\nasync function main() {\n  if (!registry || !/^\\d{4}-TP\\d+$/.test(registry)) {\n    throw new Error(\"Configurá TITLE_MONITOR_REGISTRY con tu código oficial AÑO-TPnúmero.\");\n  }\n  const current = await fetchRecord();\n  if (dryRun) {\n    console.log(current);\n    console.log(\"Prueba de consulta: no se envió Telegram ni se guardó estado.\");\n    return;\n  }\n\n  const previous = await loadPreviousRecord();\n  const changed = !previous || Object.keys(current).some(\n    (field) => current[field] !== previous[field],\n  );\n  if (changed) {\n    await notifyTelegram(current);\n    await mkdir(stateDirectory, { recursive: true });\n    await writeFile(statePath, JSON.stringify(current, null, 2) + \"\\n\");\n    console.log(\"Aviso enviado y estado guardado.\");\n  } else {\n    console.log(\"Sin cambios desde la última consulta.\");\n  }\n}\n\nmain().catch((error) => {\n  console.error(error.message);\n  process.exitCode = 1;\n});\n"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "6. Probá la consulta sin mandar mensajes"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "En PowerShell, desde la carpeta del proyecto, ejecutá lo siguiente. Reemplazá 2026-TP12345 por tu registro real; ese código solo ilustra el formato."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "powershell"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "$env:TITLE_MONITOR_REGISTRY = \"2026-TP12345\"\n$env:TITLE_MONITOR_DRY_RUN = \"true\"\nnode scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "En macOS o Linux podés usar:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "TITLE_MONITOR_REGISTRY=\"2026-TP12345\" TITLE_MONITOR_DRY_RUN=true node scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "DRY_RUN sí consulta la página oficial, pero no usa Telegram ni modifica el estado local. Verificá que el titular, el código y el estado correspondan a tu trámite. Si el comando falla, resolvé la consulta antes de programarlo. Los datos impresos pueden identificarte; revisalos antes de compartir los logs."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para probar un envío real en PowerShell, configurá las credenciales en tu sesión y quitá el modo de consulta. Reemplazá los marcadores por tus datos; no guardés estas líneas con valores reales en el repositorio."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "powershell"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "$env:TELEGRAM_BOT_TOKEN = \"TU_TOKEN\"\n$env:TELEGRAM_CHAT_ID = \"TU_CHAT_ID\"\nRemove-Item Env:TITLE_MONITOR_DRY_RUN\nnode scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Esperá el primer mensaje y comparalo con la consulta oficial. Ejecutá otra vez: si no hay cambios, debería informar Sin cambios desde la última consulta sin repetir el aviso. El archivo de estado se crea después del envío confirmado."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "7. Creá tu repositorio y configurá las variables"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creá un repositorio en tu cuenta de GitHub y agregá scripts/check-title.mjs. Podés usar Add file → Create new file y pegar el contenido desde el navegador. Agregá también un archivo .gitignore con esta línea para no subir el estado de tus consultas:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": ".title-monitor-state/"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "En Settings → Secrets and variables → Actions, creá dos repository secrets: TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID. En la pestaña Variables creá TITLE_MONITOR_REGISTRY con tu código oficial. No configures TITLE_MONITOR_DRY_RUN en el workflow que debe avisarte."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El registro es una variable de configuración; las credenciales son secretos. Si el repositorio es público, asumí que los archivos y logs de Actions pueden ser visibles. El estado que guardaremos en caché contiene datos del trámite: no lo uses para almacenar tokens."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "8. Programalo con GitHub Actions"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creá .github/workflows/monitor-title.yml con este contenido. Guardá ambos archivos en main y usá main como rama predeterminada para esta guía."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "yaml"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "name: Mi monitor de título\n\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"30 14 * * 1-6\"\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: personal-title-monitor\n  cancel-in-progress: false\n\njobs:\n  check:\n    runs-on: ubuntu-latest\n    timeout-minutes: 3\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-node@v6\n        with:\n          node-version: 22\n\n      - uses: actions/cache/restore@v5\n        with:\n          path: .title-monitor-state\n          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}\n          restore-keys: |\n            personal-title-\n\n      - name: Consultar y avisar\n        run: node scripts/check-title.mjs\n        env:\n          TITLE_MONITOR_REGISTRY: ${{ vars.TITLE_MONITOR_REGISTRY }}\n          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}\n          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}\n\n      - uses: actions/cache/save@v5\n        with:\n          path: .title-monitor-state\n          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}\n"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "workflow_dispatch agrega el botón de ejecución manual. schedule programa una consulta de lunes a sábado a las 8:30 de Nicaragua: las 14:30 UTC del cron. Es un horario elegido para este ejemplo, no una afirmación sobre cuándo actualiza La Gaceta. GitHub puede retrasar o descartar ejecuciones programadas cuando hay carga."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "checkout obtiene tu código y setup-node prepara Node.js 22. El paso Consultar y avisar pasa las variables a process.env y ejecuta el script. No agregamos un trigger de push para evitar mandar mensajes solo por editar el repositorio."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Cada máquina de Actions empieza sin tu archivo de estado. cache/restore recupera la versión más reciente y cache/save guarda el resultado con una clave nueva por ejecución. concurrency evita que dos ejecuciones de este workflow comparen y escriban el estado al mismo tiempo. Si una consulta o un envío falla, el script termina con código de error y no se ejecuta el guardado de caché posterior."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "La caché no es una base de datos permanente: puede expirar o eliminarse. Si ocurre, la siguiente consulta se comportará como la primera y podría repetir un aviso. Esa limitación es aceptable para empezar; si necesitás un historial duradero, el siguiente paso es diseñar un almacenamiento persistente."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "9. Comprobá la automatización"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Entrá a Actions → Mi monitor de título → Run workflow y elegí main. Habilitá Actions si GitHub te lo solicita. Revisá el paso de consulta y el mensaje de Telegram. El estado de tu computadora no interviene en esta ejecución."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Como tu archivo local no se subió a GitHub, la primera ejecución de Actions tendrá su propia referencia y puede mandar otro aviso inicial. Las siguientes deberían reutilizar la caché. No borres el estado para probar cambios en un entorno que uses a diario sin tener en cuenta ese aviso extra."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Si no encontrás Run workflow, comprobá que el YAML esté en la rama predeterminada y tenga workflow_dispatch. Los workflows programados de forks vienen deshabilitados por defecto. En repositorios públicos también pueden deshabilitarse después de 60 días sin actividad; revisá Actions si deja de ejecutarse."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Qué revisar cuando falla"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Un error al confirmar el registro puede indicar un código incorrecto, una respuesta incompleta o un cambio de HTML. Abrí la consulta oficial y compará el código y las columnas antes de tocar el parser. Un resultado ausente no demuestra que el trámite siga pendiente."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Un error de Telegram requiere revisar el token, el chat y que hayas iniciado la conversación con el bot. Un HTTP 401 suele apuntar al token. Un 400 puede tener varias causas; empezá por verificar el chat. No compartás el token al pedir ayuda."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para detener nuevas consultas, elegí Disable workflow desde el menú de Actions. Si dejás de usar el bot, podés revocar su token desde BotFather."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Cómo podés hacerlo tuyo"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ahora tenés una base pequeña: una consulta, un objeto de datos, una comparación y un aviso. Podés agregar un enlace a la edición publicada, seguir varios códigos con un arreglo o cambiar el horario. Hacé un cambio por vez y conservá la comprobación de que cada fila corresponde al registro esperado."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Buscar por nombre requiere manejar coincidencias ambiguas; estimar fechas requiere datos históricos y explicar su incertidumbre. Son mejoras distintas, no requisitos para que este primer monitor sea útil. Ninguna estimación reemplaza una fecha oficial."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Fuentes y referencia opcional"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "La estructura de la consulta y de sus columnas se contrastó con title-publication-monitor en el commit 9f3816b3e720cf9e98915b866d5717df77655f5c, revisado el 26 de octubre de 2026. El código didáctico de esta guía es una versión reducida y necesita comprobarse contra la página y un bot real antes de publicarse como tutorial verificado."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Implementación de referencia: varios objetivos y estimaciones",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://github.com/jesushg-dev/title-publication-monitor/blob/9f3816b3e720cf9e98915b866d5717df77655f5c/scripts/check-lagaceta-title.mjs",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram: creación de bots y tokens",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://core.telegram.org/bots/tutorial#obtain-your-bot-token",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram: getUpdates y sendMessage",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://core.telegram.org/bots/api",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub: ejecuciones programadas",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub: habilitar y deshabilitar workflows",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

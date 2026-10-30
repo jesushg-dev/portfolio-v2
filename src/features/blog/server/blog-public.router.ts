@@ -5,6 +5,22 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 const LanguageCode = z.enum(["es", "en", "nl"]);
 
 export const blogPublicRouter = createTRPCRouter({
+  getTags: publicProcedure
+    .input(z.object({ seriesName: z.string().optional() }))
+    .query(async ({ input, ctx }) => {
+      if (!ctx.tenant?.userId) return [];
+      const posts = await ctx.db.blogPost.findMany({
+        where: {
+          userId: ctx.tenant.userId,
+          status: "PUBLISHED",
+          ...(input.seriesName ? { seriesName: input.seriesName } : {}),
+        },
+        select: { tags: true },
+      });
+      return [...new Set(posts.flatMap((post) => post.tags))]
+        .filter((tag) => !tag.toLowerCase().startsWith("series:"))
+        .sort((a, b) => a.localeCompare(b));
+    }),
   getSeries: publicProcedure
     .input(
       z.object({
@@ -38,7 +54,12 @@ export const blogPublicRouter = createTRPCRouter({
 
       const bySeries = new Map<
         string,
-        { name: string; count: number; latestPublishedAt: string | null; sampleTitle: string }
+        {
+          name: string;
+          count: number;
+          latestPublishedAt: string | null;
+          sampleTitle: string;
+        }
       >();
 
       posts.forEach((post) => {
@@ -47,7 +68,9 @@ export const blogPublicRouter = createTRPCRouter({
           .filter((tag) => tag.toLowerCase().startsWith("series:"))
           .map((tag) => tag.replace(/^series:/i, "").trim())
           .filter(Boolean);
-        const seriesNames = post.seriesName ? [post.seriesName, ...tagDerived] : tagDerived;
+        const seriesNames = post.seriesName
+          ? [post.seriesName, ...tagDerived]
+          : tagDerived;
 
         seriesNames.forEach((name) => {
           const current = bySeries.get(name);
@@ -66,7 +89,7 @@ export const blogPublicRouter = createTRPCRouter({
               ? current.latestPublishedAt > publishedAt
                 ? current.latestPublishedAt
                 : publishedAt
-              : current.latestPublishedAt ?? publishedAt;
+              : (current.latestPublishedAt ?? publishedAt);
           bySeries.set(name, {
             ...current,
             count: current.count + 1,
@@ -90,6 +113,7 @@ export const blogPublicRouter = createTRPCRouter({
         cursor: z.string().nullish(),
         tag: z.string().optional(),
         seriesName: z.string().optional(),
+        search: z.string().trim().max(200).optional(),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -105,7 +129,34 @@ export const blogPublicRouter = createTRPCRouter({
         status: "PUBLISHED" as const,
         ...(input.tag ? { tags: { has: input.tag } } : {}),
         ...(input.seriesName ? { seriesName: input.seriesName } : {}),
-        ...(input.cursor ? { id: { lt: input.cursor } } : {}),
+        ...(input.search
+          ? {
+              OR: [
+                { tags: { has: input.search } },
+                {
+                  translations: {
+                    some: {
+                      ...(appLanguage ? { appLanguageId: appLanguage.id } : {}),
+                      OR: [
+                        {
+                          title: {
+                            contains: input.search,
+                            mode: "insensitive" as const,
+                          },
+                        },
+                        {
+                          excerpt: {
+                            contains: input.search,
+                            mode: "insensitive" as const,
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            }
+          : {}),
       };
 
       const posts = await ctx.db.blogPost.findMany({
@@ -116,15 +167,16 @@ export const blogPublicRouter = createTRPCRouter({
           },
         },
         orderBy: input.seriesName
-          ? [{ seriesOrder: "asc" }, { publishedAt: "asc" }]
-          : { publishedAt: "desc" },
+          ? [{ seriesOrder: "asc" }, { publishedAt: "asc" }, { id: "asc" }]
+          : [{ publishedAt: "desc" }, { id: "desc" }],
+        ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
         take: input.limit + 1,
       });
 
       let nextCursor: string | null = null;
       if (posts.length > input.limit) {
-        const next = posts.pop()!;
-        nextCursor = next.id;
+        posts.pop();
+        nextCursor = posts.at(-1)?.id ?? null;
       }
 
       const mapped = posts.map((post) => {
