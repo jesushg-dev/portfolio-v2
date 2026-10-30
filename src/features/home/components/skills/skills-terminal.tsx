@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import { ArrowRightIcon, Rocket, TrendingUp } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -27,6 +27,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   const t = useTranslations("main.skills");
   const shouldReduceMotion = useReducedMotion();
   const searchRef = useRef<HTMLInputElement>(null);
+  const isInView = useInView(searchRef, { once: true });
 
   const [activeCategory, setActiveCategory] = useState<SkillCategoryId>("ai");
   const [search, setSearch] = useState("");
@@ -169,7 +170,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               >
                 {isActive && !shouldReduceMotion ? (
                   <motion.span
-                    layoutId="skills-terminal-tab"
+                    layoutId={isInView ? "skills-terminal-tab" : undefined}
                     className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5"
                     transition={{
                       type: "spring",
@@ -185,7 +186,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   )}
                 />
                 <span>{t(`tabs.${category.id}.title`)}</span>
-                <span className="text-muted-foreground font-mono text-xs opacity-70">
+                <span className="text-muted-foreground font-mono text-xs font-medium">
                   {counts[category.id]}
                 </span>
               </button>
@@ -208,7 +209,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
             /* Search Results: Flat list of chips */
             <motion.ul
               key={`search-${search}`}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
               className="flex flex-wrap gap-2.5"
@@ -240,7 +241,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
             /* Category View: Featured Cards Grid + Regular Chips */
             <motion.div
               key={activeCategory}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
               className="space-y-6"
@@ -258,11 +259,8 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                         className="group/feat border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 relative flex cursor-pointer flex-col rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs"
                       >
                         {skill.trend ? (
-                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-pink-500/30 bg-pink-500/15 px-2 py-0.5 text-[10px] font-semibold text-pink-400 backdrop-blur-xs">
-                            <TrendingUp
-                              className="size-2.5"
-                              aria-hidden="true"
-                            />
+                          <span className="border-primary/30 bg-primary/10 text-primary absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold backdrop-blur-xs">
+                            <TrendingUp className="size-3" aria-hidden="true" />
                             <span>{t("terminal.trend")}</span>
                           </span>
                         ) : null}

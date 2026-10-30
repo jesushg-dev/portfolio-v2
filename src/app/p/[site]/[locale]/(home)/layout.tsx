@@ -1,17 +1,13 @@
 import { type ReactNode } from "react";
 
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-
-export { generateMetadata } from "./metadata";
 
 import Layout from "@/components/app-layout";
 import { PageViewBeacon } from "@/features/analytics/components/page-view-beacon";
 import { PublicCvVisibleProvider } from "@/components/app-layout/public-cv-visible";
 import { ProcessNavPagesProvider } from "@/components/app-layout/process-nav-pages";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
-import DeferredTrpcProvider from "@/components/providers/deferred-trpc-provider";
+import PublicTrpcProvider from "@/components/providers/public-trpc-provider";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import { getCachedSiteBrand } from "@/lib/site-brand/get-cached-site-brand";
 import { locales, type Locale as AppLocale } from "@/i18n/config";
@@ -47,36 +43,24 @@ export default async function SiteLayout({
     locale: activeLocale,
   });
 
-  const allMessages = await getMessages({ locale: activeLocale });
-  const publicMessages = {
-    main: allMessages.main,
-    global: allMessages.global,
-    legal: allMessages.legal,
-    certification: allMessages.certification,
-    curriculum: allMessages.curriculum,
-    themeCustomizer: allMessages.themeCustomizer,
-  };
-
   return (
-    <DeferredTrpcProvider>
-      <NextIntlClientProvider messages={publicMessages}>
-        <NuqsAdapter>
-          {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
-          <PublicCvVisibleProvider visible={cvPublic}>
-            <ProcessNavPagesProvider pages={processNavPages}>
-              <Layout
-                cvPublic={cvPublic}
-                processNavPages={processNavPages}
-                siteBrand={siteBrand}
-              >
-                <PageViewBeacon />
-                {children}
-              </Layout>
-            </ProcessNavPagesProvider>
-          </PublicCvVisibleProvider>
-          {modal}
-        </NuqsAdapter>
-      </NextIntlClientProvider>
-    </DeferredTrpcProvider>
+    <PublicTrpcProvider>
+      <NuqsAdapter>
+        {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
+        <PublicCvVisibleProvider visible={cvPublic}>
+          <ProcessNavPagesProvider pages={processNavPages}>
+            <Layout
+              cvPublic={cvPublic}
+              processNavPages={processNavPages}
+              siteBrand={siteBrand}
+            >
+              <PageViewBeacon />
+              {children}
+            </Layout>
+          </ProcessNavPagesProvider>
+        </PublicCvVisibleProvider>
+        {modal}
+      </NuqsAdapter>
+    </PublicTrpcProvider>
   );
 }

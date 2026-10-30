@@ -35,13 +35,13 @@ export interface IPortfolioItemProps extends Omit<ProjectType, "csInfo"> {
   kindLabels: Record<string, string>;
   metaLabels?: ProjectMetaLabels;
   teaserLabels?: ProjectTeaserLabels;
-  priority?: boolean;
+  preload?: boolean;
 }
 
 const MAX_TECH = 5;
 
 const actionButtonClass =
-  "flex size-10 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs";
+  "flex size-11 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs";
 
 interface ProjectMetaLineProps {
   teamSize?: number | null;
@@ -208,7 +208,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   csInfo,
   metaLabels,
   teaserLabels,
-  priority = false,
+  preload = false,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
   const showGithub = !isPrivate && Boolean(githubUrl);
@@ -252,8 +252,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             src={image}
             alt={title}
             fill
-            priority={priority}
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            preload={preload}
+            sizes="(min-width: 96rem) 28rem, (min-width: 64rem) calc((100vw - 13rem) / 3), (min-width: 48rem) calc((100vw - 4.5rem) / 2), calc(100vw - 2rem)"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover/card:scale-105"
             onError={() => setImageFailed(true)}
           />

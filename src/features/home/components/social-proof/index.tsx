@@ -208,7 +208,7 @@ function SocialProofContent({
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTestimonial.id}
-                      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
+                      initial={false}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
                       transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
@@ -228,19 +228,16 @@ function SocialProofContent({
                           type="button"
                           onClick={() => setIsExpanded((prev) => !prev)}
                           aria-expanded={isExpanded}
-                          className="text-primary hover:text-primary/80 mt-2.5 inline-flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors sm:hidden"
+                          className="text-primary hover:text-primary/80 mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
                         >
                           <span>
                             {isExpanded ? t("readLess") : t("readMore")}
                           </span>
                           {isExpanded ? (
-                            <ChevronUp
-                              className="size-3.5"
-                              aria-hidden="true"
-                            />
+                            <ChevronUp className="size-4" aria-hidden="true" />
                           ) : (
                             <ChevronDown
-                              className="size-3.5"
+                              className="size-4"
                               aria-hidden="true"
                             />
                           )}
@@ -264,7 +261,7 @@ function SocialProofContent({
                             alt={activeTestimonial.author}
                             fill
                             className="object-cover"
-                            sizes="44px"
+                            sizes="2.75rem"
                           />
                         </div>
                       ) : (
@@ -291,7 +288,7 @@ function SocialProofContent({
                     {items.length > 1 ? (
                       <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
                         <div
-                          className="flex items-center gap-1.5"
+                          className="flex items-center gap-1"
                           aria-label="Pagination"
                         >
                           {items.map((_, idx) => (
@@ -303,22 +300,26 @@ function SocialProofContent({
                                 setIsExpanded(false);
                                 setCurrentIndex(idx);
                               }}
-                              className={cn(
-                                "h-1.5 cursor-pointer rounded-full transition-all duration-300",
-                                idx === currentIndex % items.length
-                                  ? "bg-primary w-6"
-                                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-1.5",
-                              )}
-                            />
+                              className="focus-visible:ring-ring flex size-11 cursor-pointer items-center justify-center rounded-full p-2 transition-transform focus-visible:ring-2 focus-visible:outline-none"
+                            >
+                              <span
+                                className={cn(
+                                  "h-1.5 rounded-full transition-all duration-300",
+                                  idx === currentIndex % items.length
+                                    ? "bg-primary w-6"
+                                    : "bg-muted-foreground/40 hover:bg-muted-foreground/60 w-1.5",
+                                )}
+                              />
+                            </button>
                           ))}
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                           <button
                             type="button"
                             aria-label="Previous testimonial"
                             onClick={handlePrev}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
                           >
                             ‹
                           </button>
@@ -326,7 +327,7 @@ function SocialProofContent({
                             type="button"
                             aria-label="Next testimonial"
                             onClick={handleNext}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
                           >
                             ›
                           </button>

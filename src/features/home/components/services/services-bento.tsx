@@ -107,7 +107,7 @@ function FrontendVisual({ service }: { service: ServiceItem }) {
               </span>
             ) : null}
             {metricText ? (
-              <span className="rounded-md bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-600">
+              <span className="rounded-md bg-emerald-500/15 px-2 py-1 text-xs font-bold text-emerald-700">
                 {metricText}
               </span>
             ) : null}
@@ -169,7 +169,7 @@ function BackendVisual({ service }: { service: ServiceItem }) {
           className="a-blink border-border/60 bg-card flex items-center justify-between rounded-lg border px-3 py-1.5 shadow-2xs"
         >
           <span>
-            <b className="font-bold text-emerald-600">{log.code}</b>{" "}
+            <b className="font-bold text-emerald-700">{log.code}</b>{" "}
             {log.method} {log.path}
           </span>
           {log.time ? (
@@ -222,24 +222,26 @@ function DevOpsVisual({ service }: { service: ServiceItem }) {
 
       {/* Traveling Dot bounded between Build and Deploy centers */}
       <div className="pointer-events-none absolute top-5 right-7 left-7 h-0.5 -translate-y-1/2 sm:right-9 sm:left-9">
-        <span className="a-travel bg-primary shadow-primary/60 ring-card absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-xs ring-2" />
+        <span className="a-travel absolute inset-0">
+          <span className="bg-primary shadow-primary/60 ring-card absolute top-1/2 left-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-xs ring-2" />
+        </span>
       </div>
 
-      <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
+      <div className="text-foreground relative flex flex-col items-center gap-2 text-xs font-semibold">
         <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Code2 className="size-4" aria-hidden="true" />
         </span>
         Build
       </div>
 
-      <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
+      <div className="text-foreground relative flex flex-col items-center gap-2 text-xs font-semibold">
         <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Check className="size-4" aria-hidden="true" />
         </span>
         {stage2 ?? "Test"}
       </div>
 
-      <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
+      <div className="text-foreground relative flex flex-col items-center gap-2 text-xs font-semibold">
         <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Terminal className="size-4" aria-hidden="true" />
         </span>
@@ -291,10 +293,12 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
       {/* Laser Sweep Scanner */}
-      <div className="a-sweep pointer-events-none absolute inset-x-0 flex flex-col items-center">
-        <div className="via-primary/15 h-10 w-full bg-gradient-to-b from-transparent to-transparent" />
-        <div className="via-primary/70 h-px w-full bg-gradient-to-r from-transparent to-transparent shadow-[0_0_8px_var(--primary)]" />
-        <div className="from-primary/15 h-10 w-full bg-gradient-to-b via-transparent to-transparent" />
+      <div className="a-sweep pointer-events-none absolute inset-0">
+        <div className="absolute inset-x-0 top-0 flex flex-col items-center">
+          <div className="via-primary/15 h-10 w-full bg-gradient-to-b from-transparent to-transparent" />
+          <div className="via-primary/70 h-px w-full bg-gradient-to-r from-transparent to-transparent shadow-[0_0_0.5rem_var(--primary)]" />
+          <div className="from-primary/15 h-10 w-full bg-gradient-to-b via-transparent to-transparent" />
+        </div>
       </div>
 
       <ShieldCheck
@@ -303,17 +307,17 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
         aria-hidden="true"
       />
       {badge3 ? (
-        <span className="border-border/60 bg-card absolute top-4 left-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute top-4 left-4 rounded-md border px-2 py-1 text-xs font-bold text-emerald-700 shadow-2xs">
           {badge3}
         </span>
       ) : null}
       {badge2 ? (
-        <span className="border-border/60 bg-card absolute top-10 right-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute top-10 right-4 rounded-md border px-2 py-1 text-xs font-bold text-emerald-700 shadow-2xs">
           {badge2}
         </span>
       ) : null}
       {badge1 ? (
-        <span className="border-border/60 bg-card absolute bottom-3 left-6 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute bottom-3 left-6 rounded-md border px-2 py-1 text-xs font-bold text-emerald-700 shadow-2xs">
           {badge1}
         </span>
       ) : null}
@@ -430,7 +434,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
   return (
     <motion.div
       variants={containerVariants}
-      initial={shouldReduceMotion ? false : "hidden"}
+      initial={false}
       whileInView={shouldReduceMotion ? undefined : "visible"}
       viewport={{ once: true, margin: "-80px" }}
       className="grid w-full gap-5 md:grid-cols-12"
@@ -445,7 +449,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
             <motion.article
               key={service.id}
               variants={itemVariants}
-              initial={shouldReduceMotion ? false : "hidden"}
+              initial={false}
               animate={shouldReduceMotion ? undefined : "visible"}
               exit={
                 shouldReduceMotion
