@@ -122,7 +122,7 @@ const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items, metrics }) => {
       <motion.ol
         variants={containerVariants}
         initial={false}
-        whileInView={shouldReduceMotion ? undefined : "visible"}
+        whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
         className="before:bg-border/20 relative space-y-2.5 before:absolute before:top-[2.375rem] before:bottom-[2.375rem] before:left-[2.375rem] before:w-px before:-translate-x-1/2 sm:before:top-[2.625rem] sm:before:bottom-[2.625rem] sm:before:left-[2.625rem]"
       >
@@ -146,7 +146,7 @@ const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items, metrics }) => {
                 {item.description}
               </p>
               {item.badge ? (
-                <span className="bg-primary/10 text-primary group-hover:bg-primary/15 mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-xs font-bold transition-colors">
+                <span className="border-border/80 bg-card text-foreground mt-3 inline-block shrink-0 rounded-full border px-3 py-1 text-sm font-semibold shadow-2xs">
                   {item.badge}
                 </span>
               ) : null}

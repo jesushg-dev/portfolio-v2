@@ -116,12 +116,12 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               className="size-2.5 rounded-full bg-emerald-400/80"
               aria-hidden="true"
             />
-            <span className="text-muted-foreground ml-2 font-mono text-xs">
+            <span className="text-muted-foreground ml-2 font-mono text-sm">
               expertise.json
             </span>
           </div>
 
-          <label className="border-border/40 bg-background/80 focus-within:border-primary flex items-center gap-2 rounded-xl border px-3 py-1.5 font-mono text-xs transition-colors sm:text-sm">
+          <label className="border-border/40 bg-background/80 focus-within:border-primary flex min-h-11 items-center gap-2 rounded-xl border px-3 py-1 font-mono text-sm transition-colors">
             <span className="text-primary font-bold">$</span>
             <input
               ref={searchRef}
@@ -131,9 +131,9 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               placeholder={t("terminal.searchPlaceholder")}
               aria-label={t("terminal.searchLabel")}
               autoComplete="off"
-              className="text-foreground placeholder:text-muted-foreground w-28 bg-transparent outline-none sm:w-36"
+              className="text-foreground placeholder:text-muted-foreground h-11 w-28 bg-transparent outline-none sm:w-36"
             />
-            <kbd className="border-border/40 text-muted-foreground rounded border px-1.5 text-[11px]">
+            <kbd className="border-border/40 text-muted-foreground rounded border px-1.5 text-sm">
               /
             </kbd>
           </label>
@@ -162,15 +162,15 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   setActiveCategory(category.id);
                 }}
                 className={cn(
-                  "focus-visible:ring-primary/40 relative flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 py-3 text-xs font-semibold whitespace-nowrap transition-all duration-150 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:px-4 sm:text-sm",
+                  "focus-visible:ring-primary/40 relative flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-150 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:px-4",
                   isActive
                     ? "text-foreground font-bold"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-t-lg",
                 )}
               >
-                {isActive && !shouldReduceMotion ? (
+                {isActive ? (
                   <motion.span
-                    layoutId={isInView ? "skills-terminal-tab" : undefined}
+                    layoutId="skills-terminal-tab"
                     className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5"
                     transition={{
                       type: "spring",
@@ -186,7 +186,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   )}
                 />
                 <span>{t(`tabs.${category.id}.title`)}</span>
-                <span className="text-muted-foreground font-mono text-xs font-medium">
+                <span className="text-muted-foreground font-mono text-sm font-medium">
                   {counts[category.id]}
                 </span>
               </button>
@@ -259,8 +259,8 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                         className="group/feat border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 relative flex cursor-pointer flex-col rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs"
                       >
                         {skill.trend ? (
-                          <span className="border-primary/30 bg-primary/10 text-primary absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold backdrop-blur-xs">
-                            <TrendingUp className="size-3" aria-hidden="true" />
+                          <span className="border-primary/30 bg-primary/10 text-primary absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold backdrop-blur-xs">
+                            <TrendingUp className="size-3.5" aria-hidden="true" />
                             <span>{t("terminal.trend")}</span>
                           </span>
                         ) : null}
@@ -273,7 +273,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                         <p className="text-foreground group-hover/feat:text-primary mt-4 text-sm font-bold tracking-tight transition-colors">
                           {skill.title}
                         </p>
-                        <p className="text-primary mt-0.5 text-xs font-semibold">
+                        <p className="text-primary mt-0.5 text-sm font-semibold">
                           {t("terminal.featured")}
                         </p>
                       </Link>
@@ -310,9 +310,9 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               ) : null}
 
               <div className="mt-6 flex justify-center">
-                <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium backdrop-blur-xs">
+                <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium backdrop-blur-xs">
                   <Rocket
-                    className="text-primary size-3.5"
+                    className="text-primary size-4"
                     aria-hidden="true"
                   />
                   <span>{t("terminal.updatedTechPill")}</span>

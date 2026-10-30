@@ -183,7 +183,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
 
                         {/* Title (Role) & Company Subtitle */}
                         <span className="min-w-0 flex-1">
-                          <time className="text-muted-foreground mb-1 block text-xs font-semibold tabular-nums md:hidden">
+                          <time className="text-muted-foreground mb-1 block text-sm font-semibold tabular-nums md:hidden">
                             {group.overallDates}
                           </time>
                           <span className="text-foreground block text-lg leading-snug font-bold tracking-tight">
@@ -194,9 +194,9 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                               · {group.company}
                             </span>
                             {isMultiRole ? (
-                              <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold">
+                              <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold">
                                 <TrendingUpIcon
-                                  className="size-3"
+                                  className="size-3.5"
                                   aria-hidden="true"
                                 />
                                 <span>{promotionLabel}</span>
@@ -259,7 +259,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                                       {displayChips.map((chip) => (
                                         <span
                                           key={chip}
-                                          className="border-primary/20 bg-primary/10 text-primary shrink-0 rounded-full border px-3 py-1 text-xs font-bold shadow-2xs"
+                                          className="border-primary/20 bg-primary/10 text-primary shrink-0 rounded-full border px-3 py-1 text-sm font-semibold shadow-2xs"
                                         >
                                           {chip}
                                         </span>
@@ -290,7 +290,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                                 {/* Previous Roles in Promotion Track */}
                                 {isMultiRole && previousRoles.length > 0 ? (
                                   <div className="border-border/25 mt-6 border-t pt-5">
-                                    <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
+                                    <p className="text-muted-foreground mb-3 text-sm font-semibold tracking-wider uppercase">
                                       {t("previousRole")}
                                     </p>
                                     <div className="space-y-5">
@@ -307,13 +307,13 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                                             <h4 className="text-foreground text-sm font-bold">
                                               {prevRole.role}
                                             </h4>
-                                            <time className="text-muted-foreground text-xs font-medium tabular-nums">
+                                            <time className="text-muted-foreground text-sm font-medium tabular-nums">
                                               {prevRole.dates}
                                             </time>
                                           </div>
                                           {prevRole.responsibilities.length >
                                           0 ? (
-                                            <ul className="text-muted-foreground mt-2.5 space-y-2 text-xs leading-relaxed">
+                                            <ul className="text-muted-foreground mt-2.5 space-y-2 text-sm leading-relaxed">
                                               {prevRole.responsibilities.map(
                                                 (resp, i) => (
                                                   <li

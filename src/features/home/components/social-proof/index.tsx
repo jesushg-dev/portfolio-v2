@@ -51,7 +51,7 @@ function AuthorName({
       href={linkedInUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-foreground hover:text-primary block text-base font-bold underline-offset-2 transition-colors hover:underline"
+      className="text-foreground hover:text-primary inline-flex min-h-11 items-center text-base font-bold underline-offset-2 transition-colors hover:underline"
     >
       {author}
     </a>
@@ -265,7 +265,7 @@ function SocialProofContent({
                           />
                         </div>
                       ) : (
-                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:size-11 sm:text-sm">
+                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold sm:size-11">
                           {initials}
                         </span>
                       )}
@@ -277,7 +277,7 @@ function SocialProofContent({
                           linkedInUrl={activeTestimonial.linkedInUrl}
                         />
                         {activeTestimonial.role ? (
-                          <span className="text-muted-foreground block text-xs leading-normal">
+                          <span className="text-muted-foreground block text-sm leading-normal">
                             {activeTestimonial.role}
                           </span>
                         ) : null}
@@ -340,7 +340,7 @@ function SocialProofContent({
                   <a
                     href="#contact"
                     id="hire-me-cta"
-                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-xs font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6 sm:text-sm"
+                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-sm font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6"
                   >
                     {t("cta")}
                     <span className="bg-primary-foreground text-primary flex size-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
@@ -364,7 +364,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData.engineersMentored}
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.engineersMentored.label")}
                 </p>
               </div>
@@ -395,7 +395,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData?.projectsCount ?? 19}+
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.projects.label")}
                 </p>
               </div>
@@ -440,7 +440,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData?.yearsExperience ?? 6}+
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.experience.label")}
                 </p>
               </div>
@@ -460,7 +460,7 @@ function SocialProofContent({
             </Link>
 
             {/* Note below cards */}
-            <p className="text-muted-foreground px-2 text-center text-xs">
+            <p className="text-muted-foreground px-2 text-center text-sm">
               {t("statsNote")}
             </p>
           </div>

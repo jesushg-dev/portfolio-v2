@@ -130,7 +130,7 @@ export function ProjectHighlights({ highlights }: { highlights: string[] }) {
         <li
           key={`${index}-${highlight}`}
           title={highlight}
-          className="bg-primary/10 text-primary max-w-full min-w-0 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
+          className="bg-primary/10 text-primary max-w-full min-w-0 rounded-full px-3 py-1.5 text-sm leading-none font-semibold"
         >
           <span className="truncate">{highlight}</span>
         </li>
@@ -154,7 +154,7 @@ export function ProjectTechRow({ skills }: ProjectTechRowProps) {
       {shownSkills.map((skill) => (
         <li
           key={skill.title}
-          className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-xs font-medium"
+          className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-sm font-medium"
         >
           <SkillIcon
             image={skill.image}
@@ -172,7 +172,7 @@ export function ProjectTechRow({ skills }: ProjectTechRowProps) {
             .slice(MAX_TECH)
             .map((s) => s.title)
             .join(", ")}
-          className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-xs font-semibold"
+          className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-sm font-semibold"
         >
           +{restCount}
         </li>
@@ -261,7 +261,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
 
         {/* Top Badges */}
         {kindLabel ? (
-          <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
+          <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-sm font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
             {kindLabel}
           </span>
         ) : null}
@@ -269,7 +269,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         {isPrivate ? (
           <span
             title={websiteUrl ? canSeeDemo : privateDescription}
-            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs"
+            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-sm font-bold tracking-wide uppercase shadow-xs"
           >
             {privateName}
           </span>
@@ -315,7 +315,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   params: { slug },
                 }}
                 aria-label={`${caseStudyLabel}: ${title}`}
-                className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
+                className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex min-h-11 items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
               >
                 <span>{caseStudyLabel}</span>
                 <ArrowUpRight
@@ -329,7 +329,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${sourceName}: ${title}`}
-                className="text-foreground hover:text-primary relative z-10 inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+                className="text-foreground hover:text-primary relative z-10 inline-flex min-h-11 items-center gap-2 text-sm font-semibold transition-colors"
               >
                 <AiFillGithub className="size-4" aria-hidden="true" />
                 <span>{sourceName}</span>
@@ -340,7 +340,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${urlName}: ${title}`}
-                className="text-primary hover:text-primary/80 relative z-10 inline-flex items-center gap-2 text-sm font-bold transition-colors"
+                className="text-primary hover:text-primary/80 relative z-10 inline-flex min-h-11 items-center gap-2 text-sm font-bold transition-colors"
               >
                 <span>{urlName}</span>
                 <ArrowUpRight className="size-4" aria-hidden="true" />

@@ -107,7 +107,7 @@ function FrontendVisual({ service }: { service: ServiceItem }) {
               </span>
             ) : null}
             {metricText ? (
-              <span className="rounded-md bg-emerald-500/15 px-2 py-1 text-xs font-bold text-emerald-700">
+              <span className="rounded-md bg-emerald-500/15 px-2 py-1 text-xs font-bold text-emerald-800">
                 {metricText}
               </span>
             ) : null}
@@ -169,7 +169,7 @@ function BackendVisual({ service }: { service: ServiceItem }) {
           className="a-blink border-border/60 bg-card flex items-center justify-between rounded-lg border px-3 py-1.5 shadow-2xs"
         >
           <span>
-            <b className="font-bold text-emerald-700">{log.code}</b>{" "}
+            <b className="font-bold text-emerald-800">{log.code}</b>{" "}
             {log.method} {log.path}
           </span>
           {log.time ? (
@@ -435,7 +435,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
     <motion.div
       variants={containerVariants}
       initial={false}
-      whileInView={shouldReduceMotion ? undefined : "visible"}
+      whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
       className="grid w-full gap-5 md:grid-cols-12"
     >
@@ -450,12 +450,8 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
               key={service.id}
               variants={itemVariants}
               initial={false}
-              animate={shouldReduceMotion ? undefined : "visible"}
-              exit={
-                shouldReduceMotion
-                  ? undefined
-                  : { opacity: 0, y: 16, transition: { duration: 0.25 } }
-              }
+              animate="visible"
+              exit={{ opacity: 0, y: 16, transition: { duration: 0.25 } }}
               onPointerMove={handlePointerMove}
               onPointerLeave={handlePointerLeave}
               className={cn(
@@ -463,8 +459,11 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
                 colSpanClass,
               )}
             >
-              {/* Top Interactive Micro-Visual */}
-              <div className={getVisualContainerClasses(visualType)}>
+              {/* Top Interactive Micro-Visual (decorative) */}
+              <div
+                className={getVisualContainerClasses(visualType)}
+                aria-hidden="true"
+              >
                 {visualType === "frontend" && (
                   <FrontendVisual service={service} />
                 )}
@@ -495,7 +494,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
                     {service.title}
                   </h3>
                   {service.badge ? (
-                    <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:block">
+                    <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:block">
                       {service.badge}
                     </span>
                   ) : null}
@@ -506,7 +505,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
                 </p>
 
                 {service.badge ? (
-                  <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:hidden">
+                  <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:hidden">
                     {service.badge}
                   </span>
                 ) : null}
