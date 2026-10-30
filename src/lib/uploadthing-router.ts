@@ -16,7 +16,7 @@ export const ourFileRouter = {
     })
     .onUploadComplete(({ metadata, file }) => ({
       userId: metadata.userId,
-      url: file.ufsUrl ?? file.url,
+      url: file.ufsUrl,
       key: file.key,
     })),
   resumeImporter: f({
@@ -36,7 +36,7 @@ export const ourFileRouter = {
     .onUploadComplete(({ metadata, file }) => {
       return {
         userId: metadata.userId,
-        url: file.ufsUrl ?? file.url,
+        url: file.ufsUrl,
         key: file.key,
         name: file.name,
       };

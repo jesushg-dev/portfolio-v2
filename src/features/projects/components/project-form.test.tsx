@@ -12,7 +12,7 @@ const mockInvalidate = jest.fn().mockResolvedValue(undefined);
 const mockRouterBack = jest.fn();
 const mockStartUpload = jest
   .fn()
-  .mockResolvedValue([{ url: "https://cdn.example.com/project-cover.jpg" }]);
+  .mockResolvedValue([{ ufsUrl: "https://cdn.example.com/project-cover.jpg" }]);
 jest.mock("@/lib/uploadthing", () => ({
   useUploadThing: () => ({ startUpload: mockStartUpload, isUploading: false }),
 }));
