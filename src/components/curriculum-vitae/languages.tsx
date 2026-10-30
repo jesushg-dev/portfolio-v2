@@ -15,7 +15,7 @@ function LanguageItem({
   return (
     <div>
       <h3 className="text-sm font-bold text-slate-900">{language.name}</h3>
-      <p className="text-sm text-slate-600">{language.level}</p>
+      <p className="text-sm text-slate-700">{language.level}</p>
     </div>
   );
 }

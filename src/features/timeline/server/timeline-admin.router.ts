@@ -1,3 +1,4 @@
+import { buildTimelineItemSearchConditions } from "../lib/timeline-list-search";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -26,6 +27,12 @@ const TimelineTranslationMapSchema = z.record(
   }),
 );
 
+const timelineRoleSchema = z.object({
+  title: z.string().min(1),
+  startDate: z.string().min(1),
+  endDate: z.string().optional().nullable(),
+});
+
 const timelineUpsertInput = z.object({
   organization: z.string().min(1),
   location: z.string().optional(),
@@ -34,10 +41,24 @@ const timelineUpsertInput = z.object({
   endDate: z.date().optional(),
   current: z.boolean().default(false),
   images: z.array(z.string().url()).optional(),
+  roles: z.array(timelineRoleSchema).optional(),
+  skillIds: z.array(z.string()).optional(),
   translations: TimelineTranslationMapSchema,
 });
 
 export const timelineAdminRouter = createTRPCRouter({
+  getCategories: protectedProcedure.query(async ({ ctx }) => {
+    const groups = await ctx.db.timelineItem.groupBy({
+      by: ["category"],
+      where: { userId: ctx.user.id },
+      orderBy: { category: "asc" },
+      _count: { _all: true },
+    });
+    return groups.map((group) => ({
+      value: group.category,
+      count: group._count._all,
+    }));
+  }),
   getMine: protectedProcedure
     .input(dataTableParamsSchema)
     .query(async ({ ctx, input }) => {
@@ -86,6 +107,9 @@ export const timelineAdminRouter = createTRPCRouter({
         };
       }
 
+      const search = extractStringFilter(input.filters, "search");
+      if (search) where.AND = buildTimelineItemSearchConditions(search);
+
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
@@ -95,6 +119,7 @@ export const timelineAdminRouter = createTRPCRouter({
           where,
           include: {
             TimelineItemTranslation: true,
+            TimelineItemSkill: { select: { skillId: true } },
           },
           orderBy,
           skip,
@@ -113,7 +138,7 @@ export const timelineAdminRouter = createTRPCRouter({
   createItem: protectedProcedure
     .input(timelineUpsertInput)
     .mutation(async ({ ctx, input }) => {
-      const { translations, images, ...rest } = input;
+      const { translations, images, roles, skillIds, ...rest } = input;
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
@@ -123,6 +148,7 @@ export const timelineAdminRouter = createTRPCRouter({
           ...rest,
           ...normalizeEmploymentDates(rest),
           images: images ?? [],
+          roles: roles ?? [],
           userId: ctx.user.id,
           TimelineItemTranslation: {
             create: translationMapEntries(translations).map((translation) => ({
@@ -131,9 +157,16 @@ export const timelineAdminRouter = createTRPCRouter({
               description: translation.description,
             })),
           },
+          TimelineItemSkill:
+            skillIds && skillIds.length > 0
+              ? {
+                  create: skillIds.map((skillId) => ({ skillId })),
+                }
+              : undefined,
         },
         include: {
           TimelineItemTranslation: true,
+          TimelineItemSkill: { select: { skillId: true } },
         },
       });
 
@@ -143,7 +176,7 @@ export const timelineAdminRouter = createTRPCRouter({
   updateItem: protectedProcedure
     .input(timelineUpsertInput.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, translations, images, ...data } = input;
+      const { id, translations, images, roles, skillIds, ...data } = input;
       const existing = await ctx.db.timelineItem.findUnique({ where: { id } });
 
       if (existing?.userId !== ctx.user.id) {
@@ -156,8 +189,23 @@ export const timelineAdminRouter = createTRPCRouter({
           ...data,
           ...normalizeEmploymentDates(data),
           ...(images !== undefined ? { images } : {}),
+          ...(roles !== undefined ? { roles } : {}),
         },
       });
+
+      if (skillIds !== undefined) {
+        await ctx.db.timelineItemSkill.deleteMany({
+          where: { timelineItemId: id },
+        });
+        if (skillIds.length > 0) {
+          await ctx.db.timelineItemSkill.createMany({
+            data: skillIds.map((skillId) => ({
+              timelineItemId: id,
+              skillId,
+            })),
+          });
+        }
+      }
 
       for (const translation of translationMapEntries(translations)) {
         const existingTrans = await ctx.db.timelineItemTranslation.findFirst({
@@ -195,6 +243,7 @@ export const timelineAdminRouter = createTRPCRouter({
         where: { id },
         include: {
           TimelineItemTranslation: true,
+          TimelineItemSkill: { select: { skillId: true } },
         },
       });
 

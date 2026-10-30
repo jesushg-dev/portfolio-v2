@@ -4,6 +4,7 @@ import { CvEmploymentTypeSchema } from "./employment-type";
 export const PARSER_VERSION = "v1";
 
 export const CvImportContactDraftSchema = z.object({
+  id: z.string().optional(),
   type: z.enum([
     "EMAIL",
     "PHONE",
@@ -20,17 +21,19 @@ export const CvImportContactDraftSchema = z.object({
 export const CvImportExperienceDraftSchema = z.object({
   id: z.string(),
   company: z.string().min(1),
+  companyLogoUrl: z.string().url().optional(),
   role: z.string().min(1),
   /** Employment type enum value (FULL_TIME, PART_TIME, etc.). */
   employmentType: CvEmploymentTypeSchema.optional(),
   location: z.string().optional(),
-  /** Short factual company/context blurb for ATS tailor (not printed on the CV). */
+  /** Factual company context displayed in both visual and ATS exports. */
   companyBlurb: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   current: z.boolean().optional(),
   /** Bullets shown on the public/printed CV. */
   responsibilities: z.array(z.string()),
+  responsibilityIds: z.array(z.string()).optional(),
   /** Complementary bullets hidden from the doc; available to the ATS tailor bank. */
   atsResponsibilities: z.array(z.string()).default([]),
 });
@@ -47,6 +50,7 @@ export const CvImportEducationDraftSchema = z.object({
 });
 
 export const CvImportSkillDraftSchema = z.object({
+  id: z.string().optional(),
   category: z.enum([
     "FRONTEND",
     "BACKEND",
@@ -62,11 +66,13 @@ export const CvImportSkillDraftSchema = z.object({
 });
 
 export const CvImportLanguageDraftSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1),
   level: z.string().min(1),
 });
 
 export const CvImportCertificationDraftSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(1),
   issuer: z.string().optional(),
   year: z.number().int().optional(),
@@ -78,6 +84,8 @@ export const CvImportDraftSchema = z.object({
     fullName: z.string().min(1),
     degree: z.string().optional(),
     summary: z.string().optional(),
+    photoUrl: z.string().url().optional(),
+    availability: z.string().optional(),
   }),
   experiences: z.array(CvImportExperienceDraftSchema),
   education: z.array(CvImportEducationDraftSchema),

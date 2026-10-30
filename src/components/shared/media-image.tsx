@@ -2,11 +2,11 @@ import Image, { type ImageProps } from "next/image";
 
 import { classifyMediaSrc } from "@/utils/tools/image";
 
-type MediaImageProps = Omit<ImageProps, "loader">;
+type MediaImageProps = Omit<ImageProps, "loader" | "priority">;
 
 /**
  * next/image wrapper for stored media (local path or absolute URL).
- * Remote URLs skip the optimizer so tenant CDNs are not rewritten.
+ * Cloudinary images use responsive optimization; other tenant CDNs stay direct.
  */
 export function MediaImage({
   src,
@@ -19,8 +19,14 @@ export function MediaImage({
   }
 
   const remote = classifyMediaSrc(src) === "remote-url";
+  const directRemote = remote && new URL(src).hostname !== "res.cloudinary.com";
 
   return (
-    <Image alt={alt} {...props} src={src} unoptimized={unoptimized ?? remote} />
+    <Image
+      alt={alt}
+      {...props}
+      src={src}
+      unoptimized={unoptimized ?? directRemote}
+    />
   );
 }

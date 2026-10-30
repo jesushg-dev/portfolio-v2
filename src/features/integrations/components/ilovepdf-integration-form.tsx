@@ -69,9 +69,7 @@ export function ILovePdfIntegrationForm({
       toast.success(t("ilovepdf.testSuccess"));
     } catch (err) {
       toast.error(
-        err instanceof Error
-          ? err.message
-          : t("ilovepdf.testFailed"),
+        err instanceof Error ? err.message : t("ilovepdf.testFailed"),
       );
     } finally {
       setIsTesting(false);
@@ -93,9 +91,7 @@ export function ILovePdfIntegrationForm({
           onSuccess();
         } catch (err) {
           toast.error(
-            err instanceof Error
-              ? err.message
-              : t("ilovepdf.saveFailed"),
+            err instanceof Error ? err.message : t("ilovepdf.saveFailed"),
           );
         }
       });

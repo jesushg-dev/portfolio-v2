@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Musa Ecommerce",
       "description": "Plataforma de comercio electrónico B2C orientada a la venta y distribución de productos agrícolas perecederos. Construida en Next.js con renderizado híbrido (SSR/ISR), sincronización de existencias en tiempo real, geolocalización de entregas y checkout optimizado.",
-      "hook": "E-Commerce B2C en Next.js & React · Sincronización de inventario en tiempo real · Entrega geolocalizada de perecederos",
-      "challenge": "El negocio requería un canal digital de alta disponibilidad capaz de gestionar inventario de alta rotación (perecederos), reglas por categoría y procesos de pago rápidos sin sobrecargar la infraestructura.",
-      "approach": "Diseñé la arquitectura frontend con Next.js, TypeScript y Tailwind CSS, integrando microservicios internos GraphQL/Nest.js. Implementé optimizaciones de renderizado y validaciones estrictas en el cliente.",
-      "outcome": "Lanzamiento exitoso del canal digital con 99.9% de precisión en sincronización de stock y una reducción del 35% en tiempos de respuesta frente al sistema heredado.",
       "caseStudy": {
         "chips": [
           "B2C Marketplace",
@@ -43,6 +39,7 @@
             "value": "Musa Markets (https://musa.markets)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "musa-admin",
         "context": "Musa Markets (https://musa.markets/) es un marketplace y supermercado digital orientado a productos frescos, perecederos y alimentos de alta demanda. La plataforma requería una experiencia de compra ágil, amigable y con visualización transparente de precios, ofertas del día y estado de inventario para compradores residenciales y minoristas.",
         "roleTitle": "Desarrollador Frontend Senior",
@@ -111,12 +108,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Visualización fidedigna de inventario perecedero con rotación diaria",
-          "Desempeño óptimo en dispositivos móviles con redes celulares 3G/4G",
-          "Integración desacoplada con el backend administrativo y GraphQL"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "El negocio requería un canal digital de alta disponibilidad capaz de gestionar inventario de alta rotación (perecederos), reglas por categoría y procesos de pago rápidos sin sobrecargar la infraestructura.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Visualización fidedigna de inventario perecedero con rotación diaria",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Desempeño óptimo en dispositivos móviles con redes celulares 3G/4G",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Integración desacoplada con el backend administrativo y GraphQL",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Diseñé la arquitectura frontend con Next.js, TypeScript y Tailwind CSS, integrando microservicios internos GraphQL/Nest.js. Implementé optimizaciones de renderizado y validaciones estrictas en el cliente.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "capabilities",
             "kind": "CARDS",
@@ -224,6 +273,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Lanzamiento exitoso del canal digital con 99.9% de precisión en sincronización de stock y una reducción del 35% en tiempos de respuesta frente al sistema heredado.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -232,10 +294,6 @@
       "locale": "en",
       "title": "Musa Ecommerce",
       "description": "B2C e-commerce storefront for selling and distributing fresh agricultural and perishable products. Built in Next.js with hybrid rendering (SSR/ISR), real-time stock synchronization, delivery zone routing, and frictionless mobile-first checkout.",
-      "hook": "B2C E-Commerce in Next.js & React · Real-time inventory synchronization · Geolocation-based delivery for perishables",
-      "challenge": "The business required a high-availability digital channel to handle fast-rotating perishable inventory, category-based rules, and frictionless checkout flows under high traffic.",
-      "approach": "Architected the frontend using Next.js, TypeScript, and Tailwind CSS, integrating internal GraphQL/Nest.js microservices. Implemented client-side performance optimizations and strict data validation.",
-      "outcome": "Successful launch of the online channel with 99.9% inventory sync accuracy and a 35% reduction in response latencies compared to the legacy system.",
       "caseStudy": {
         "chips": [
           "B2C Marketplace",
@@ -265,6 +323,7 @@
             "value": "Musa Markets (https://musa.markets)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "musa-admin",
         "context": "Musa Markets (https://musa.markets/) is an online marketplace dedicated to fresh produce, perishable groceries, and everyday household essentials. The platform demanded a responsive, intuitive shopping journey with transparent pricing, daily discounts, and real-time inventory visibility.",
         "roleTitle": "Senior Frontend Engineer",
@@ -333,12 +392,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Reliable real-time stock sync for perishable items with daily inventory turnover",
-          "Smooth performance on mid-tier mobile smartphones over 3G/4G cellular connections",
-          "Decoupled microservice architecture integrating GraphQL and admin management"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "The business required a high-availability digital channel to handle fast-rotating perishable inventory, category-based rules, and frictionless checkout flows under high traffic.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Reliable real-time stock sync for perishable items with daily inventory turnover",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Smooth performance on mid-tier mobile smartphones over 3G/4G cellular connections",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Decoupled microservice architecture integrating GraphQL and admin management",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Architected the frontend using Next.js, TypeScript, and Tailwind CSS, integrating internal GraphQL/Nest.js microservices. Implemented client-side performance optimizations and strict data validation.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "capabilities",
             "kind": "CARDS",
@@ -446,6 +557,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Successful launch of the online channel with 99.9% inventory sync accuracy and a 35% reduction in response latencies compared to the legacy system.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -454,10 +578,6 @@
       "locale": "nl",
       "title": "Musa Ecommerce",
       "description": "B2C e-commerceplatform voor de verkoop en distributie van verse agrarische producten. Gebouwd in Next.js met hybride rendering (SSR/ISR), realtime voorraadsynchronisatie, bezorgzone-routering en een mobielvriendelijke checkout.",
-      "hook": "B2C E-Commerce in Next.js & React · Realtime voorraadsynchronisatie · Geolocatie-levering voor bederfelijke waar",
-      "challenge": "Het bedrijf had een hoog-beschikbaar digitaal kanaal nodig voor snel roterende voorraad, categorie-regels en snelle checkout-processen.",
-      "approach": "Frontend-architectuur ontworpen met Next.js, TypeScript en Tailwind CSS, geïntegreerd met interne GraphQL/Nest.js microservices. Prestatie-optimalisaties en strikte validaties geïmplementeerd.",
-      "outcome": "Succesvolle lancering van het digitale kanaal met 99,9% voorraadnauwkeurigheid en 35% snellere responstijden vergeleken met het oude systeem.",
       "caseStudy": {
         "chips": [
           "B2C Marketplace",
@@ -487,6 +607,7 @@
             "value": "Musa Markets (https://musa.markets)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "musa-admin",
         "context": "Musa Markets (https://musa.markets/) is een digitale marktplaats voor verse levensmiddelen en dagelijkse boodschappen. Het platform vereist een overzichtelijke winkelervaring met actuele prijzen, dagdeals en realtime voorraadbeheer.",
         "roleTitle": "Senior Frontend Engineer",
@@ -555,12 +676,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Betrouwbare realtime voorraadsynchronisatie voor dagelijks roterende verswaren",
-          "Vloeiende werking op mobiele apparaten over mobiele 3G/4G-netwerken",
-          "Ontkoppelde microservice-architectuur met GraphQL en backend-beheer"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Het bedrijf had een hoog-beschikbaar digitaal kanaal nodig voor snel roterende voorraad, categorie-regels en snelle checkout-processen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Betrouwbare realtime voorraadsynchronisatie voor dagelijks roterende verswaren",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Vloeiende werking op mobiele apparaten over mobiele 3G/4G-netwerken",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Ontkoppelde microservice-architectuur met GraphQL en backend-beheer",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Frontend-architectuur ontworpen met Next.js, TypeScript en Tailwind CSS, geïntegreerd met interne GraphQL/Nest.js microservices. Prestatie-optimalisaties en strikte validaties geïmplementeerd.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "capabilities",
             "kind": "CARDS",
@@ -665,6 +838,19 @@
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Succesvolle lancering van het digitale kanaal met 99,9% voorraadnauwkeurigheid en 35% snellere responstijden vergeleken met het oude systeem.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

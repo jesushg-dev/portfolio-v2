@@ -46,8 +46,6 @@ test.describe("soft skills pagination", () => {
       rows: page.locator("table tbody tr"),
       filterTestId: "filter-title",
       toggleColumnTestId: "toggle-column-isVisible",
-      searchCellIndex: 1,
-      hiddenColumnCellIndex: 2,
       noResultsTerm: "NonExistentSoftSkillXYZ123",
     });
   });

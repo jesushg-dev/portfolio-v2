@@ -16,12 +16,21 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { DataTableCategoryChips } from "@/components/shared/data-table/data-table-category-chips";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
+import {
+  LanguageStatusBadge,
+  computeTranslationStatus,
+} from "@/components/shared/data-table/language-status-badge";
+import { DynamicIcon } from "@/components/shared/dynamic-icon";
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { getSortingStateParser } from "@/lib/parsers";
 import type { FilterItemSchema } from "@/lib/parsers";
+import { cn } from "@/lib/utils";
 
 type ServiceRow = RouterOutputs["servicesAdmin"]["getMine"]["data"][number];
 
@@ -38,6 +47,21 @@ interface ServicesListProps {
   totalCount: number;
 }
 
+const STACK_TYPE_STYLES: Record<string, string> = {
+  FRONTEND: "bg-sky-500/10 text-sky-500 border-sky-500/20",
+  BACKEND: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  DATABASE: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  DEVOPS: "bg-purple-500/10 text-purple-500 border-purple-500/20",
+  MOBILE: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  TOOLS: "bg-orange-500/10 text-orange-500 border-orange-500/20",
+  CYBERSECURITY: "bg-red-500/10 text-red-500 border-red-500/20",
+  AI: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
+  ARCHITECTURE: "bg-teal-500/10 text-teal-500 border-teal-500/20",
+  DATA: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
+  SOFTSKILLS: "bg-pink-500/10 text-pink-500 border-pink-500/20",
+  QUALITY_DELIVERY: "bg-lime-500/10 text-lime-500 border-lime-500/20",
+};
+
 export const ServicesList: FC<ServicesListProps> = ({
   initialServices,
   languages,
@@ -46,24 +70,28 @@ export const ServicesList: FC<ServicesListProps> = ({
   totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.services");
+  const tSearch = useTranslations("admin.dataTable.searchDialog");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<ServiceRow>());
 
-  const [titleFilter] = useQueryState("title");
-  const [typeFilter] = useQueryState("type");
+  const [searchFilter, setSearchFilter] = useQueryState("search");
+  const [typeFilter, setTypeFilter] = useQueryState("type");
+
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
-    if (titleFilter) {
+    if (searchFilter) {
       f.push({
-        id: "title",
-        value: titleFilter,
+        id: "search",
+        value: searchFilter,
         variant: "text",
         operator: "iLike",
-        filterId: "title",
+        filterId: "search",
       });
     }
     if (typeFilter) {
@@ -76,7 +104,7 @@ export const ServicesList: FC<ServicesListProps> = ({
       });
     }
     return f;
-  }, [titleFilter, typeFilter]);
+  }, [searchFilter, typeFilter]);
 
   const {
     data: { data: services, totalCount: trpcTotalCount } = {
@@ -99,7 +127,7 @@ export const ServicesList: FC<ServicesListProps> = ({
     api.skillsAdmin.getMine.useQuery({});
 
   const deleteService = api.servicesAdmin.deleteItem.useMutation();
-  const [isPending, startTransition] = useTransition();
+  const deleteManyServices = api.servicesAdmin.deleteMany.useMutation();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -108,7 +136,7 @@ export const ServicesList: FC<ServicesListProps> = ({
         try {
           await deleteService.mutateAsync({ id });
           toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.servicesAdmin.getMine.invalidate();
+          await utils.servicesAdmin.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -127,9 +155,80 @@ export const ServicesList: FC<ServicesListProps> = ({
     return map;
   }, [rawSkills]);
 
+  const { data: categoryCounts = [] } =
+    api.servicesAdmin.getCategories.useQuery();
+
+  const categories = useMemo(
+    () => [
+      {
+        value: "all",
+        label: t("categories.all"),
+        count: categoryCounts.reduce(
+          (total, category) => total + category.count,
+          0,
+        ),
+      },
+      ...categoryCounts
+        .filter((category) => category.value)
+        .map((category) => ({ ...category, label: category.value })),
+    ],
+    [categoryCounts, t],
+  );
+
+  const activeCategory = useMemo(() => {
+    return typeFilter ?? "all";
+  }, [typeFilter]);
+
+  const handleCategoryChange = useCallback(
+    (val: string) => {
+      void setPage(1);
+      if (val === "all") {
+        void setTypeFilter(null);
+      } else {
+        void setTypeFilter(val);
+      }
+    },
+    [setPage, setTypeFilter],
+  );
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      void setPage(1);
+      void setSearchFilter(value || null);
+    },
+    [setPage, setSearchFilter],
+  );
+
   const columns = useMemo<ColumnDef<AppTableFeatures, ServiceRow>[]>(() => {
     const field = createLocalizedFieldResolver(languages, locale);
     return [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            aria-label="Select all"
+            className="translate-y-0.5"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            aria-label="Select row"
+            className="translate-y-0.5"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+          />
+        ),
+        enableHiding: false,
+        enableSorting: false,
+        size: 40,
+      },
       {
         id: "title",
         accessorFn: (row) => field(row.translations, "title"),
@@ -144,16 +243,36 @@ export const ServicesList: FC<ServicesListProps> = ({
         enableSorting: false,
         enableColumnFilter: true,
         cell: ({ row }) => {
-          const tService = field.for(row.original.translations);
+          const service = row.original;
+          const tService = field.for(service.translations);
           const title = tService("title") || t("untitled");
           const description = tService("description") || t("noTranslation");
 
           return (
-            <div className="space-y-0.5">
-              <p className="text-foreground font-medium">{title}</p>
-              <p className="text-muted-foreground line-clamp-2 text-xs">
-                {description}
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 text-primary border-primary/20 flex size-9 shrink-0 items-center justify-center rounded-lg border">
+                <DynamicIcon name={service.icon} className="size-4" />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <p className="text-foreground text-sm leading-tight font-semibold">
+                    {title}
+                  </p>
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-1.5 py-0.5 text-[0.625rem] font-medium",
+                      service.isActive
+                        ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-500"
+                        : "bg-muted text-muted-foreground border-border border",
+                    )}
+                  >
+                    {service.isActive ? t("active") : t("inactive")}
+                  </span>
+                </div>
+                <p className="text-muted-foreground line-clamp-1 text-xs">
+                  {description}
+                </p>
+              </div>
             </div>
           );
         },
@@ -164,30 +283,70 @@ export const ServicesList: FC<ServicesListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnType")} />
         ),
-        meta: {
-          label: t("columnType"),
-          placeholder: "Search type...",
-          variant: "text",
+        enableColumnFilter: false,
+        cell: ({ row }) => {
+          const type = row.original.type;
+          if (!type)
+            return <span className="text-muted-foreground text-xs">-</span>;
+          const badgeStyle =
+            STACK_TYPE_STYLES[type] ??
+            "bg-muted text-muted-foreground border-border";
+          return (
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium tracking-wide",
+                badgeStyle,
+              )}
+            >
+              {type}
+            </span>
+          );
         },
-        enableColumnFilter: true,
-        cell: ({ row }) => (
-          <span className="text-muted-foreground text-xs tracking-wide uppercase">
-            {row.original.type ?? "-"}
-          </span>
-        ),
       },
       {
-        id: "isActive",
-        accessorFn: (row) => (row.isActive ? "1" : "0"),
+        id: "languages",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} label={t("columnActive")} />
+          <DataTableColumnHeader
+            column={column}
+            label={t("columnLanguages") || "Languages"}
+          />
         ),
-        enableSorting: false,
-        cell: ({ row }) => (
-          <span className="text-muted-foreground text-xs">
-            {row.original.isActive ? t("active") : t("inactive")}
-          </span>
-        ),
+        cell: ({ row }) => {
+          const service = row.original;
+          const translationsRecord = service.translations as
+            | Record<string, { title?: string; description?: string }>
+            | {
+                appLanguageId: string;
+                title?: string;
+                description?: string;
+              }[]
+            | undefined;
+
+          const statuses = languages.map((lang) => {
+            let tr: { title?: string; description?: string } | undefined;
+            if (Array.isArray(translationsRecord)) {
+              tr = translationsRecord.find(
+                (tItem) => tItem.appLanguageId === lang.id,
+              );
+            } else if (
+              translationsRecord &&
+              typeof translationsRecord === "object"
+            ) {
+              tr = translationsRecord[lang.id];
+            }
+            const status = computeTranslationStatus(tr, [
+              "title",
+              "description",
+            ]);
+            return {
+              code: lang.code,
+              name: lang.name,
+              status,
+            };
+          });
+
+          return <LanguageStatusBadge languages={statuses} />;
+        },
       },
       {
         id: "skills",
@@ -262,11 +421,57 @@ export const ServicesList: FC<ServicesListProps> = ({
     shallow: true,
   });
 
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+
+  const handleBulkDelete = useCallback(() => {
+    const ids = table
+      .getFilteredSelectedRowModel()
+      .rows.map((r) => r.original.id);
+    if (ids.length === 0) return;
+
+    const confirmMsg = t("bulk.deleteConfirm", { count: ids.length });
+    if (!window.confirm(confirmMsg)) return;
+
+    startTransition(async () => {
+      setIsBulkDeleting(true);
+      try {
+        await deleteManyServices.mutateAsync({ ids });
+        toast.success(t("bulk.deleteSuccess", { count: ids.length }));
+        table.resetRowSelection();
+        await utils.servicesAdmin.invalidate();
+      } catch {
+        toast.error(t("bulk.deleteError"));
+      } finally {
+        setIsBulkDeleting(false);
+      }
+    });
+  }, [deleteManyServices, t, table, utils]);
+
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full w-full max-w-full min-w-0 flex-col">
       <DataTableFetchingIndicator isFetching={isFetching} />
-      <DataTable table={table}>
-        <DataTableToolbar table={table}>
+      <DataTable
+        table={table}
+        bulkBar={
+          <DataTableBulkBar
+            selectedCount={selectedCount}
+            onClearSelection={() => table.resetRowSelection()}
+            onDeleteSelected={handleBulkDelete}
+            isDeleting={isBulkDeleting}
+            clearLabel={t("bulk.clear")}
+            deleteLabel={t("bulk.delete")}
+            selectedLabel={t("bulk.selected", { count: selectedCount })}
+          />
+        }
+      >
+        <DataTableToolbar
+          table={table}
+          search={{
+            value: searchFilter ?? "",
+            onChange: handleSearchChange,
+            description: tSearch("servicesHint"),
+          }}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="services" />
             <Link href="/admin/services/new" className={buttonVariants()}>
@@ -275,6 +480,12 @@ export const ServicesList: FC<ServicesListProps> = ({
             </Link>
           </div>
         </DataTableToolbar>
+
+        <DataTableCategoryChips
+          chips={categories}
+          value={activeCategory}
+          onChange={handleCategoryChange}
+        />
       </DataTable>
     </div>
   );

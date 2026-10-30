@@ -1,0 +1,896 @@
+{
+  "platform": "Windows, local build supplied and validated by the user",
+  "unit": "Uncompressed trace bytes; not Vercel storage",
+  "home": {
+    "route": "p/[site]/[locale]/(home)",
+    "bytes": 87582754,
+    "files": 367,
+    "cvAssets": [],
+    "pdfjs": [],
+    "missing": []
+  },
+  "publicMinMiB": 83.2461576461792,
+  "publicMaxMiB": 83.52542304992676,
+  "rows": [
+    {
+      "route": "_global-error",
+      "bytes": 1810652,
+      "files": 171,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "_not-found",
+      "bytes": 1938936,
+      "files": 176,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin",
+      "bytes": 86944209,
+      "files": 331,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)certifications/[id]/edit",
+      "bytes": 87149377,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)certifications/new",
+      "bytes": 87149253,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)credentials/[provider]",
+      "bytes": 87161478,
+      "files": 338,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)job-tracker/applications/[id]/edit",
+      "bytes": 87276391,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)job-tracker/applications/new",
+      "bytes": 87276289,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)job-tracker/companies/[id]/edit",
+      "bytes": 87120144,
+      "files": 339,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)job-tracker/companies/new",
+      "bytes": 87120004,
+      "files": 339,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)job-tracker/events/new",
+      "bytes": 87238700,
+      "files": 344,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)now/focuses/[id]/edit",
+      "bytes": 87103616,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)now/focuses/new",
+      "bytes": 87103519,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)projects/[id]/edit",
+      "bytes": 87223730,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)projects/new",
+      "bytes": 87223605,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)services/[id]/edit",
+      "bytes": 87159477,
+      "files": 347,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)services/new",
+      "bytes": 87159348,
+      "files": 347,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)skills/[id]/edit",
+      "bytes": 87141307,
+      "files": 344,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)skills/new",
+      "bytes": 87141174,
+      "files": 344,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)soft-skills/[id]/edit",
+      "bytes": 87149708,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)soft-skills/new",
+      "bytes": 87149579,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)soft-skills/settings",
+      "bytes": 87108548,
+      "files": 338,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)timeline/[id]/edit",
+      "bytes": 87135559,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)timeline/new",
+      "bytes": 87135428,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)uses/[id]/edit",
+      "bytes": 87105120,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/@modal/(.)uses/new",
+      "bytes": 87105162,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/certifications",
+      "bytes": 87403470,
+      "files": 348,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/certifications/[id]/edit",
+      "bytes": 87148802,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/certifications/new",
+      "bytes": 87148662,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/credentials",
+      "bytes": 86932483,
+      "files": 328,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/credentials/[provider]",
+      "bytes": 87146407,
+      "files": 336,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/cv",
+      "bytes": 87340076,
+      "files": 348,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker",
+      "bytes": 87581134,
+      "files": 351,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/applications/[id]",
+      "bytes": 88922364,
+      "files": 352,
+      "cvAssets": [],
+      "pdfjs": [
+        "../../../../../../../chunks/ssr/node_modules_unpdf_dist_index_mjs_1epliwdmogvhn._.js",
+        "../../../../../../../chunks/ssr/node_modules_unpdf_dist_index_mjs_1xenmlfcgsd94._.js",
+        "../../../../../../../chunks/ssr/node_modules_unpdf_dist_pdfjs_mjs_08_8tw4fjft8i._.js",
+        "../../../../../../../chunks/ssr/node_modules_unpdf_dist_pdfjs_mjs_0n5fxno8k2h4-._.js"
+      ],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/applications/[id]/edit",
+      "bytes": 87263433,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/applications/[id]/events/[eventId]",
+      "bytes": 87098239,
+      "files": 334,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/applications/new",
+      "bytes": 87263332,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/companies/[id]/edit",
+      "bytes": 87096701,
+      "files": 335,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/companies/new",
+      "bytes": 87096569,
+      "files": 335,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/job-tracker/events/new",
+      "bytes": 87215032,
+      "files": 339,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/now",
+      "bytes": 87305120,
+      "files": 357,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/now/focuses/[id]/edit",
+      "bytes": 87079878,
+      "files": 336,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/now/focuses/new",
+      "bytes": 87079771,
+      "files": 336,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/process-pages",
+      "bytes": 87392733,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/process-pages/[id]/edit",
+      "bytes": 87216820,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/process-pages/new",
+      "bytes": 87216716,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/profile",
+      "bytes": 87265092,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/profile/@tabs",
+      "bytes": 87265112,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/profile/@tabs/about",
+      "bytes": 87265506,
+      "files": 341,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/projects",
+      "bytes": 87404787,
+      "files": 349,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/projects/[id]/edit",
+      "bytes": 87223186,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/projects/new",
+      "bytes": 87223043,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/services",
+      "bytes": 87410227,
+      "files": 350,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/services/[id]/edit",
+      "bytes": 87158898,
+      "files": 347,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/services/new",
+      "bytes": 87158760,
+      "files": 347,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/settings",
+      "bytes": 87187783,
+      "files": 339,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/skills",
+      "bytes": 87399349,
+      "files": 347,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/skills/[id]/edit",
+      "bytes": 87117659,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/skills/new",
+      "bytes": 87117515,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/soft-skills",
+      "bytes": 87392664,
+      "files": 348,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/soft-skills/[id]/edit",
+      "bytes": 87125897,
+      "files": 341,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/soft-skills/new",
+      "bytes": 87125743,
+      "files": 341,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/soft-skills/settings",
+      "bytes": 87085795,
+      "files": 334,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/spotify",
+      "bytes": 86878621,
+      "files": 322,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/timeline",
+      "bytes": 87384214,
+      "files": 346,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/timeline/[id]/edit",
+      "bytes": 87111755,
+      "files": 338,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/timeline/new",
+      "bytes": 87111611,
+      "files": 338,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/uses",
+      "bytes": 87483590,
+      "files": 353,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/uses/[id]/edit",
+      "bytes": 87081659,
+      "files": 336,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(admin)/admin/uses/new",
+      "bytes": 87081696,
+      "files": 336,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(auth)/forgot-password",
+      "bytes": 87054441,
+      "files": 328,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(auth)/login",
+      "bytes": 87061268,
+      "files": 330,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(auth)/register",
+      "bytes": 87057628,
+      "files": 328,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(auth)/reset-password",
+      "bytes": 87056188,
+      "files": 329,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "[locale]/(auth)/two-factor",
+      "bytes": 86966488,
+      "files": 330,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/analytics/collect",
+      "bytes": 85354827,
+      "files": 256,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/auth/[...all]",
+      "bytes": 85348204,
+      "files": 255,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/cv/docx",
+      "bytes": 89703770,
+      "files": 425,
+      "cvAssets": [
+        "../../../../../../src/features/resume-engine/assets/cv-template-v2.docx",
+        "../../../../../../src/features/resume-engine/assets/cv-template-v2.pdf",
+        "../../../../../../src/features/resume-engine/assets/cv-template.docx",
+        "../../../../../../src/features/resume-engine/assets/cv-template.pdf"
+      ],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/cv/pdf",
+      "bytes": 90228012,
+      "files": 428,
+      "cvAssets": [
+        "../../../../../../src/features/resume-engine/assets/cv-template-v2.docx",
+        "../../../../../../src/features/resume-engine/assets/cv-template-v2.pdf",
+        "../../../../../../src/features/resume-engine/assets/cv-template.docx",
+        "../../../../../../src/features/resume-engine/assets/cv-template.pdf"
+      ],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/google-calendar/callback",
+      "bytes": 84239522,
+      "files": 243,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/lyrics",
+      "bytes": 1938706,
+      "files": 168,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/spotify/callback",
+      "bytes": 84239152,
+      "files": 243,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/trpc/[trpc]",
+      "bytes": 96437624,
+      "files": 460,
+      "cvAssets": [
+        "../../../../../../src/features/resume-engine/assets/cv-template-v2.docx",
+        "../../../../../../src/features/resume-engine/assets/cv-template-v2.pdf",
+        "../../../../../../src/features/resume-engine/assets/cv-template.docx",
+        "../../../../../../src/features/resume-engine/assets/cv-template.pdf"
+      ],
+      "pdfjs": [
+        "../../../../chunks/node_modules_unpdf_dist_index_mjs_0vlubic8i_jlg._.js",
+        "../../../../chunks/node_modules_unpdf_dist_pdfjs_mjs_0q0xcwlidq9hy._.js",
+        "../../../../chunks/node_modules_unpdf_dist_pdfjs_mjs_1x_yd33xerlin._.js"
+      ],
+      "missing": []
+    },
+    {
+      "route": "api/uploadthing",
+      "bytes": 85867153,
+      "files": 256,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "api/webhooks/resend/[userId]",
+      "bytes": 84268184,
+      "files": 240,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)",
+      "bytes": 87582754,
+      "files": 367,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/@modal/(.)schedule",
+      "bytes": 87308776,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/@modal/(.)skills/[slug]",
+      "bytes": 87346710,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/certificates/[[...slug]]",
+      "bytes": 87424753,
+      "files": 347,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/colophon",
+      "bytes": 87318626,
+      "files": 341,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/curriculum-vitae",
+      "bytes": 87561214,
+      "files": 355,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/now",
+      "bytes": 87530010,
+      "files": 352,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/privacy",
+      "bytes": 87294818,
+      "files": 339,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/process/[slug]",
+      "bytes": 87346242,
+      "files": 343,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/projects",
+      "bytes": 87372691,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/projects/[slug]",
+      "bytes": 87431080,
+      "files": 348,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/schedule",
+      "bytes": 87308768,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/skills/[slug]",
+      "bytes": 87353147,
+      "files": 345,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/stats",
+      "bytes": 87304658,
+      "files": 341,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/theme-customizer",
+      "bytes": 87315000,
+      "files": 340,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/timeline",
+      "bytes": 87346614,
+      "files": 342,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/(home)/uses",
+      "bytes": 87289923,
+      "files": 338,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/[locale]/cv-render",
+      "bytes": 86202755,
+      "files": 316,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/robots.txt",
+      "bytes": 84949571,
+      "files": 249,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "p/[site]/sitemap.xml",
+      "bytes": 84949551,
+      "files": 249,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "robots.txt",
+      "bytes": 1849895,
+      "files": 168,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    },
+    {
+      "route": "sitemap.xml",
+      "bytes": 84976521,
+      "files": 250,
+      "cvAssets": [],
+      "pdfjs": [],
+      "missing": []
+    }
+  ]
+}

@@ -25,7 +25,8 @@ export function mapDraftToLocalizedCv(draft: CvImportDraft): {
     header: {
       id: "draft-header",
       fullName: draft.header.fullName,
-      photoUrl: null,
+      photoUrl: draft.header.photoUrl ?? null,
+      availabilityBadge: draft.header.availability ?? null,
       backgroundImageUrl: null,
       degree: draft.header.degree ?? "",
       clientImageAlt: draft.header.fullName,
@@ -66,7 +67,7 @@ export function mapDraftToLocalizedCv(draft: CvImportDraft): {
     experiences: draft.experiences.map((exp, index) => ({
       id: exp.id || `exp-${index}`,
       company: exp.company,
-      companyLogoUrl: null,
+      companyLogoUrl: exp.companyLogoUrl ?? null,
       startDate: parseDraftDate(exp.startDate),
       endDate: parseDraftDate(exp.endDate),
       current: exp.current ?? false,
@@ -74,6 +75,7 @@ export function mapDraftToLocalizedCv(draft: CvImportDraft): {
       role: exp.role,
       location: exp.location ?? "",
       companyBlurb: exp.companyBlurb,
+      employmentType: exp.employmentType,
       responsibilities: exp.responsibilities.map((text, respIndex) => ({
         id: `${exp.id}-resp-${respIndex}`,
         order: respIndex,

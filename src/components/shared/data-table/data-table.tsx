@@ -16,11 +16,13 @@ import { type ComponentProps, type ReactNode } from "react";
 interface DataTableProps<TData extends RowData> extends ComponentProps<"div"> {
   table: ReactTable<AppTableFeatures, TData>;
   actionBar?: ReactNode;
+  bulkBar?: ReactNode;
 }
 
 export function DataTable<TData extends RowData>({
   table,
   actionBar,
+  bulkBar,
   children,
   className,
   ...props
@@ -28,12 +30,13 @@ export function DataTable<TData extends RowData>({
   return (
     <div
       className={cn(
-        "flex min-h-0 w-full flex-1 flex-col gap-2.5 overflow-hidden",
+        "flex min-h-0 w-full max-w-full min-w-0 flex-1 flex-col gap-2.5 overflow-hidden",
         className,
       )}
       {...props}
     >
       {children}
+      {bulkBar}
       <div className="bg-card text-card-foreground border-border min-h-0 flex-1 overflow-auto rounded-md border">
         <Table>
           <TableHeader>
@@ -71,6 +74,7 @@ export function DataTable<TData extends RowData>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
+                      data-column-id={cell.column.id}
                       style={{
                         ...getColumnPinningStyle({ column: cell.column }),
                         width:

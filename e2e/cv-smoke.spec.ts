@@ -4,6 +4,7 @@ import { ensurePortfolioSkills } from "./helpers/ensure-portfolio-skills";
 import {
   cleanupUserCv,
   fillCvContact,
+  fillCvHeader,
   goToCvEditor,
   openCvSection,
   portfolioCv,
@@ -23,12 +24,13 @@ test.describe("cv smoke", () => {
 
     await page.goto("/admin");
     await goToCvEditor(page);
+    await fillCvHeader(page, portfolioCv);
     await openCvSection(page, "contacts");
     await fillCvContact(page, contact);
 
     await expect(
       page
-        .locator("#cv-section-modal")
+        .locator("#cv-section-sheet")
         .getByText(contact.value, { exact: true })
         .first(),
     ).toBeVisible();

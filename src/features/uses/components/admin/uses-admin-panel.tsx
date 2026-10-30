@@ -60,7 +60,10 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
       }}
       className="flex min-h-0 flex-1 flex-col gap-6"
     >
-      <TabsList aria-label={t("tabsLabel")}>
+      <TabsList
+        aria-label={t("tabsLabel")}
+        className="max-w-full overflow-x-auto overflow-y-hidden"
+      >
         <TabsTrigger value="EVERYDAY" className="gap-1.5">
           <HiOutlineCollection className="size-4" />
           {t("tabs.everyday")}
@@ -85,6 +88,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
           initialItems={lists.EVERYDAY.data}
           pageCount={lists.EVERYDAY.pageCount}
           totalCount={lists.EVERYDAY.totalCount}
+          languages={languages}
         />
       </TabsContent>
       <TabsContent value="SOFTWARE" className="min-h-0 flex-1">
@@ -93,6 +97,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
           initialItems={lists.SOFTWARE.data}
           pageCount={lists.SOFTWARE.pageCount}
           totalCount={lists.SOFTWARE.totalCount}
+          languages={languages}
         />
       </TabsContent>
       <TabsContent value="BROWSER" className="min-h-0 flex-1">
@@ -101,6 +106,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
           initialItems={lists.BROWSER.data}
           pageCount={lists.BROWSER.pageCount}
           totalCount={lists.BROWSER.totalCount}
+          languages={languages}
         />
       </TabsContent>
       <TabsContent value="SETTINGS" className="min-h-0 flex-1">

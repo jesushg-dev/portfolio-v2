@@ -15,10 +15,6 @@
       "locale": "es",
       "title": "Kwh Monitor",
       "description": "Aplicación móvil Android nativa para el monitoreo y proyección de facturas de consumo eléctrico doméstico. Permite registrar lecturas de medidores físicos fuera de línea con SQLite, graficar tendencias de gasto y consultar en tiempo real las tarifas y subsidios del INE.",
-      "hook": "App Móvil Android (Java) · Monitoreo y proyección de consumo eléctrico · Conexión a Kwh Monitor API y cálculo de subsidios INE",
-      "challenge": "Las familias carecían de visibilidad del monto acumulado de su factura hasta que llegaba el recibo en papel, perdiendo subsidios estatales por pequeños excesos de lectura sin previo aviso.",
-      "approach": "Desarrollé una app nativa en Java con base de datos local SQLite para registro de lecturas offline, gráficos interactivos de consumo y sincronización asíncrona con Kwh Monitor API para cálculo de facturas.",
-      "outcome": "Proyección precisa del costo del recibo en tiempo real, alertas tempranas para no sobrepasar el umbral de subsidio (150 kWh) y miles de lecturas registradas con fluidez.",
       "caseStudy": {
         "chips": [
           "Android Nativo",
@@ -50,6 +46,7 @@
             "value": "Gestor-de-Consumo-Eletrico (https://github.com/jess232017/Gestor-de-Consumo-Eletrico)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service",
         "context": "Kwh Monitor es una aplicación móvil Android nativa diseñada para que los usuarios residenciales lleven un control riguroso de su consumo eléctrico doméstico. Permite ingresar lecturas periódicas directamente del medidor físico, visualizar la curva de gasto diario y mensual, calcular el monto proyectado de la factura antes de la fecha de corte mediante integración con el microservicio Kwh Monitor API, y recibir alertas preventivas para proteger los subsidios energéticos nacionales.",
         "roleTitle": "Desarrollador Móvil Android & Diseñador de Solución",
@@ -118,12 +115,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Funcionamiento fluido en smartphones Android de gama baja y media comunes en el mercado nicaragüense.",
-          "Capacidad total de operar fuera de línea y sincronizar proyecciones cuando haya conectividad.",
-          "Cálculo exacto conforme al pliego tarifario regulado para evitar discrepancias con la factura oficial."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Las familias carecían de visibilidad del monto acumulado de su factura hasta que llegaba el recibo en papel, perdiendo subsidios estatales por pequeños excesos de lectura sin previo aviso.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Funcionamiento fluido en smartphones Android de gama baja y media comunes en el mercado nicaragüense.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Capacidad total de operar fuera de línea y sincronizar proyecciones cuando haya conectividad.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Cálculo exacto conforme al pliego tarifario regulado para evitar discrepancias con la factura oficial.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Desarrollé una app nativa en Java con base de datos local SQLite para registro de lecturas offline, gráficos interactivos de consumo y sincronización asíncrona con Kwh Monitor API para cálculo de facturas.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "kwh-app-modules",
             "kind": "CARDS",
@@ -221,6 +270,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Proyección precisa del costo del recibo en tiempo real, alertas tempranas para no sobrepasar el umbral de subsidio (150 kWh) y miles de lecturas registradas con fluidez.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -229,10 +291,6 @@
       "locale": "en",
       "title": "Kwh Monitor",
       "description": "Native Android mobile app for monitoring household power usage and forecasting electricity bills. Enables offline power meter logging with SQLite, interactive usage trend charts, and real-time calculation of official INE tariffs and national subsidies.",
-      "hook": "Native Android App (Java) · Electricity consumption tracking & bill forecasting · Integration with Kwh Monitor API & INE tariffs",
-      "challenge": "Households had no visibility into their accumulating electricity costs until receiving their monthly paper bill, frequently losing government subsidies due to unforeseen consumption spikes.",
-      "approach": "Built a native Android app in Java featuring offline SQLite storage for meter logs, interactive energy consumption charts, and async communication with Kwh Monitor API for exact bill calculation.",
-      "outcome": "Real-time utility bill forecasting, proactive alerts before exceeding the 150 kWh national subsidy ceiling, and reliable logging across thousands of residential entries.",
       "caseStudy": {
         "chips": [
           "Native Android",
@@ -264,6 +322,7 @@
             "value": "Gestor-de-Consumo-Eletrico (https://github.com/jess232017/Gestor-de-Consumo-Eletrico)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service",
         "context": "Kwh Monitor is a native Java Android application built to empower residential utility consumers with granular control over their household power consumption. It allows users to log physical electric meter values, track daily and monthly usage curves, project upcoming utility bills before the billing cycle cutoff date using Kwh Monitor API, and receive notifications to safeguard subsidized rates.",
         "roleTitle": "Android Mobile Developer & Solution Designer",
@@ -332,12 +391,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Smooth performance on low-to-mid range Android devices common in Central American markets.",
-          "Complete offline operational capability with seamless calculation sync once internet is re-established.",
-          "Precise mathematical alignment with official regulatory tariff formulas to ensure bill accuracy."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Households had no visibility into their accumulating electricity costs until receiving their monthly paper bill, frequently losing government subsidies due to unforeseen consumption spikes.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Smooth performance on low-to-mid range Android devices common in Central American markets.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Complete offline operational capability with seamless calculation sync once internet is re-established.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Precise mathematical alignment with official regulatory tariff formulas to ensure bill accuracy.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Built a native Android app in Java featuring offline SQLite storage for meter logs, interactive energy consumption charts, and async communication with Kwh Monitor API for exact bill calculation.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "kwh-app-modules",
             "kind": "CARDS",
@@ -435,6 +546,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Real-time utility bill forecasting, proactive alerts before exceeding the 150 kWh national subsidy ceiling, and reliable logging across thousands of residential entries.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -443,10 +567,6 @@
       "locale": "nl",
       "title": "Kwh Monitor",
       "description": "Native Android-app voor het monitoren van stroomverbruik en het ramen van energiefacturen. Biedt offline meterstandenregistratie met SQLite, interactieve verbruiksgrafieken en realtime berekening van officiële INE-tarieven en overheidssubsidies.",
-      "hook": "Mobiele Android-app (Java) · Elektriciteitsverbruik monitoren & factuurprognose · Integratie met Kwh Monitor API & INE-tarieven",
-      "challenge": "Gezinnen hadden geen inzicht in hun opgebouwde elektriciteitskosten tot de maandelijkse papieren factuur arriveerde, waardoor energiesubsidies ongemerkt verloren gingen.",
-      "approach": "Ontwikkelde een native Android-app in Java met offline SQLite-opslag voor meterstanden, interactieve energiegrafieken en synchronisatie met Kwh Monitor API voor factuurberekeningen.",
-      "outcome": "Realtime prognose van energiekosten, vroegtijdige waarschuwingen voor het 150 kWh subsidieplafond en betrouwbare registratie over duizenden metingen.",
       "caseStudy": {
         "chips": [
           "Native Android",
@@ -478,6 +598,7 @@
             "value": "Gestor-de-Consumo-Eletrico (https://github.com/jess232017/Gestor-de-Consumo-Eletrico)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service",
         "context": "Kwh Monitor is een native Java Android-app waarmee particuliere consumenten grip houden op hun huishoudelijk stroomverbruik. Gebruikers voeren periodiek meterstanden in, volgen dagelijkse en maandelijkse verbruikscurves, berekenen vooraf de energiefactuur via de Kwh Monitor API en ontvangen meldingen om overheidssubsidies te behouden.",
         "roleTitle": "Android Ontwikkelaar & Oplossingsarchitect",
@@ -546,12 +667,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Vloeiende werking op budget- en midrange Android-telefoons gangbaar in Midden-Amerika.",
-          "Volledige offline werking met automatische synchronisatie zodra er weer verbinding is.",
-          "Exacte berekening conform de gereguleerde tarieven om afwijkingen van de officiële factuur te voorkomen."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Gezinnen hadden geen inzicht in hun opgebouwde elektriciteitskosten tot de maandelijkse papieren factuur arriveerde, waardoor energiesubsidies ongemerkt verloren gingen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Vloeiende werking op budget- en midrange Android-telefoons gangbaar in Midden-Amerika.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Volledige offline werking met automatische synchronisatie zodra er weer verbinding is.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Exacte berekening conform de gereguleerde tarieven om afwijkingen van de officiële factuur te voorkomen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwikkelde een native Android-app in Java met offline SQLite-opslag voor meterstanden, interactieve energiegrafieken en synchronisatie met Kwh Monitor API voor factuurberekeningen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "kwh-app-modules",
             "kind": "CARDS",
@@ -646,6 +819,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Realtime prognose van energiekosten, vroegtijdige waarschuwingen voor het 150 kWh subsidieplafond en betrouwbare registratie over duizenden metingen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

@@ -1,6 +1,6 @@
 export { generateMetadata } from "../../../../projects/[id]/edit/metadata";
 import { getTranslations } from "next-intl/server";
-import { PageDialogWrapper } from "@/components/shared/page-container";
+import { PageSheetWrapper } from "@/components/shared/page-container";
 import { ProjectForm } from "@/features/projects/components/project-form";
 import { getProjectEditPageData } from "@/features/projects/server/project-queries";
 
@@ -19,12 +19,12 @@ export default async function EditProjectModal({
   const { editorDto, languages } = pageData;
 
   return (
-    <PageDialogWrapper title={t("edit")} description={t("editDescription")}>
+    <PageSheetWrapper title={t("edit")} description={t("editDescription")}>
       <ProjectForm
         key={editorDto.id}
         initialData={editorDto}
         languages={languages}
       />
-    </PageDialogWrapper>
+    </PageSheetWrapper>
   );
 }

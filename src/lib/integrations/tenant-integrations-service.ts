@@ -12,6 +12,7 @@ export interface ResendIntegrationConfig {
   fromEmail?: string;
   /** Optional HTML email signature appended to outbound application emails. */
   emailSignatureHtml?: string;
+  webhookSecret?: string;
   /** Maps template names (e.g. cv-delivery-en) to Resend Template UUIDs */
   templates?: Record<string, string>;
 }
@@ -41,7 +42,13 @@ export interface ILovePdfIntegrationConfig {
   secretKey: string;
 }
 
+export interface GitHubIntegrationConfig {
+  accessToken: string;
+  login: string;
+}
+
 export interface IntegrationConfigMap {
+  github: GitHubIntegrationConfig;
   resend: ResendIntegrationConfig;
   spotify: SpotifyIntegrationConfig;
   uploadthing: UploadThingIntegrationConfig;

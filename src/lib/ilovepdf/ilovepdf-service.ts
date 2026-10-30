@@ -73,13 +73,16 @@ export async function testILovePdfConnection(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const token = generateILovePdfToken(publicKey, secretKey);
-    const response = await fetch("https://api.ilovepdf.com/v1/start/officepdf", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await fetch(
+      "https://api.ilovepdf.com/v1/start/officepdf",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
       },
-      cache: "no-store",
-    });
+    );
 
     if (!response.ok) {
       const errorJson = (await response.json().catch(() => null)) as {

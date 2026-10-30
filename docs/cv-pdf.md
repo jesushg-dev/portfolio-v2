@@ -72,6 +72,7 @@ flowchart TB
 ### Resume Engine Tailor Export
 
 When tailoring a resume (either in Studio or via uploaded resume):
+
 1. The engine generates the tailored Word document buffer.
 2. If the user has iLovePDF configured (`TenantIntegration` `ilovepdf`), it automatically converts the DOCX buffer to PDF via `convertDocxToPdfForTenant`.
 3. Both DOCX and PDF formats are stored and attached to the target Job Application in Job Tracker.

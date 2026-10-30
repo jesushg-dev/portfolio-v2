@@ -11,8 +11,6 @@ import {
 interface ITabContext {
   tabId: string;
   tabCount: number;
-  minimal?: boolean;
-  variant?: "primary" | "secondary";
   vertical: boolean;
   currentTab: number;
   setCurrentTab: (value: number) => void;
@@ -25,10 +23,8 @@ const TabContext = createContext<ITabContext | undefined>(undefined);
 interface ITabContextProviderProps {
   tabId: string;
   tabCount: number;
-  minimal: boolean;
   children: ReactNode;
   vertical: boolean;
-  variant: "primary" | "secondary";
   currentTab: number;
   setCurrentTab: (value: number) => void;
   registerTab: (index: number, node: HTMLElement | null) => void;
@@ -38,8 +34,6 @@ interface ITabContextProviderProps {
 const TabContextProvider = ({
   tabId,
   tabCount,
-  variant,
-  minimal,
   children,
   currentTab,
   vertical,
@@ -52,8 +46,6 @@ const TabContextProvider = ({
       vertical,
       currentTab,
       setCurrentTab,
-      minimal,
-      variant,
       tabId,
       tabCount,
       registerTab,
@@ -61,13 +53,11 @@ const TabContextProvider = ({
     }),
     [
       currentTab,
-      minimal,
       onActivePointerDown,
       registerTab,
       setCurrentTab,
       tabId,
       tabCount,
-      variant,
       vertical,
     ],
   );

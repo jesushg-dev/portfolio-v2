@@ -1,3 +1,9 @@
+jest.mock("@/features/resume-engine/lib/ai/tailor-resume-prompt", () => ({
+  buildTailoredResumePrompt: jest.fn(),
+}));
+jest.mock("@/features/resume-engine/lib/ai/tailor-resume", () => ({
+  tailorResumeDocument: jest.fn(),
+}));
 jest.mock("@/features/resume-engine/lib/ai/extract-structured", () => ({
   extractStructuredResume: jest.fn(),
 }));
@@ -7,35 +13,17 @@ jest.mock("@/features/resume-engine/lib/import-persist", () => ({
 jest.mock("@/features/cv/lib/load-cv-structured-draft", () => ({
   loadCvStructuredDraft: jest.fn(),
 }));
-jest.mock("@/features/resume-engine/lib/ai/tailor-docx", () => ({
-  tailorDocxResume: jest.fn(),
-}));
 jest.mock("@/features/resume-engine/lib/finalize-tailor-export", () => ({
-  finalizeDocxTailorExport: jest.fn(),
-  finalizeUploadTailorExport: jest.fn(),
+  finalizeTailoredResume: jest.fn(),
 }));
 jest.mock("@/lib/uploadthing/tenant-uploadthing", () => ({
   UploadThingNotConfiguredError: class UploadThingNotConfiguredError extends Error {},
 }));
 jest.mock("@/features/resume-engine/lib/fetch-upload-docx", () => ({
-  fetchUploadForTailor: jest.fn(),
   fetchUploadDocxSections: jest.fn(),
 }));
-jest.mock("@/features/resume-engine/lib/resolve-tailor-base-draft", () => ({
-  resolveTailorBaseDraft: jest.fn(),
-}));
-jest.mock("@/features/cv/lib/load-cv-template-docx", () => ({
-  DEFAULT_CV_TEMPLATE_VERSION: "v2",
-  loadCvTemplateForTailor: jest.fn(),
-  loadCvTemplatePdfBuffer: jest.fn(),
-}));
-jest.mock("@/features/resume-engine/lib/pdf/parse-pdf-for-tailor", () => ({
-  parsePdfForTailor: jest.fn(),
-}));
 jest.mock("@/features/resume-engine/lib/ai/prompt-package", () => ({
-  buildDocxTailorPromptPackage: jest.fn(),
   buildImportPromptPackage: jest.fn(),
-  buildStudioDocxTailorPromptPackage: jest.fn(),
 }));
 jest.mock("@/features/resume-engine/lib/ai/tailor-job-context", () => ({
   loadTailorJobContext: jest.fn(),
@@ -45,9 +33,6 @@ jest.mock("@/features/resume-engine/lib/ai/providers", () => ({
   getDefaultAiProvider: jest.fn(),
   loadTenantAiCredentials: jest.fn(),
 }));
-jest.mock("@/features/resume-engine/lib/classify-polished-resume", () => ({
-  classifyPolishedResumeFile: jest.fn(),
-}));
 jest.mock("@/features/resume-engine/lib/parse-pdf-for-import", () => ({
   isPdfUpload: jest.fn(),
 }));
@@ -55,7 +40,9 @@ jest.mock("@/features/resume-engine/lib/docx/generate-from-structured", () => ({
   generateDocxFromStructured: jest.fn(),
 }));
 jest.mock("@/lib/ilovepdf/tenant-ilovepdf", () => ({
-  convertDocxToPdfForTenant: jest.fn().mockResolvedValue(Buffer.from("%PDF-mock")),
+  convertDocxToPdfForTenant: jest
+    .fn()
+    .mockResolvedValue(Buffer.from("%PDF-mock")),
   isTenantILovePdfConfigured: jest.fn().mockResolvedValue(true),
   ILovePdfNotConfiguredError: class ILovePdfNotConfiguredError extends Error {},
 }));
@@ -64,6 +51,11 @@ jest.mock("@/lib/uploadthing/upload-buffer", () => ({
 }));
 
 import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persist";
+import { finalizeTailoredResume } from "@/features/resume-engine/lib/finalize-tailor-export";
+import {
+  resumeFixture,
+  resumeResponseFixture,
+} from "@/features/resume-engine/lib/tailored-resume.fixture";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { fetchUploadDocxSections } from "@/features/resume-engine/lib/fetch-upload-docx";
 import { buildImportPromptPackage } from "@/features/resume-engine/lib/ai/prompt-package";
@@ -216,7 +208,7 @@ describe("resumeEngineAdminRouter", () => {
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
-  it("returns tailor page data with studio draft and uploads", async () => {
+  it("returns tailor page data with only CMS content", async () => {
     const caller = createRouterCaller(
       resumeEngineAdminRouter,
       createTrpcTestContext({ db: createDb() }),
@@ -227,7 +219,64 @@ describe("resumeEngineAdminRouter", () => {
       fullName: "Ada Lovelace",
       experienceCount: 0,
     });
-    expect(page.uploads).toHaveLength(1);
+    expect(page).not.toHaveProperty("uploads");
     expect(page.application).toBeNull();
+  });
+  it("rejects external sources and the old manual JSON contract", async () => {
+    const caller = createRouterCaller(
+      resumeEngineAdminRouter,
+      createTrpcTestContext({ db: createDb() }),
+    );
+    const input = {
+      templateVersion: "v2" as const,
+      jobDescription: "A role developing React applications.",
+    };
+    await expect(
+      caller.getTailorPrompt({
+        ...input,
+        sourceType: "upload",
+        uploadId: "up-1",
+      } as never),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(
+      caller.tailorResumeManual({
+        ...input,
+        rawJson: JSON.stringify({ detectedLocale: "en", edits: [] }),
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+  it("validates the manual document before persisting it", async () => {
+    jest
+      .mocked(loadCvStructuredDraft)
+      .mockImplementation((_db, _user, options) =>
+        Promise.resolve(resumeFixture(options?.locale ?? "en")),
+      );
+    const caller = createRouterCaller(
+      resumeEngineAdminRouter,
+      createTrpcTestContext({ db: createDb() }),
+    );
+    const response = resumeResponseFixture(resumeFixture("en"), "v2");
+    await caller.tailorResumeManual({
+      templateVersion: "v2",
+      targetLocale: "en",
+      jobDescription: "Buscamos desarrollador de aplicaciones React.",
+      rawJson: JSON.stringify(response),
+    });
+    const persisted = jest.mocked(finalizeTailoredResume).mock.calls.at(-1)!;
+    expect(persisted[1]).toBe(MOCK_OWNER_USER.id);
+    expect(persisted[2].aiProvider).toBe("manual");
+    expect(persisted[2].document).toMatchObject({
+      schemaVersion: 1,
+      locale: "en",
+      templateId: "v2",
+    });
+    await expect(
+      caller.tailorResumeManual({
+        templateVersion: "v2",
+        targetLocale: "en",
+        jobDescription: "Buscamos desarrollador de aplicaciones React.",
+        rawJson: JSON.stringify({ ...response, fields: [] }),
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 });

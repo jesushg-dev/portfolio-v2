@@ -3,6 +3,7 @@ import type {
   ApplicationEmail,
   ApplicationEvent,
   Company,
+  Prisma,
 } from "@prisma/client";
 import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor-dto";
 import { mapCompanyToEditorDto } from "@/features/job-tracker/lib/company-editor-dto";
@@ -73,22 +74,29 @@ type ApplicationWithCompanyAndEvents = ApplicationWithCompany & {
 };
 
 export const applicationListInclude = {
-  company: true,
+  company: true as const,
   events: {
-    select: { scheduledDate: true, completedAt: true },
+    select: { scheduledDate: true as const, completedAt: true as const },
   },
   emails: {
-    where: { sentAt: { not: null } },
+    where: {
+      sentAt: { not: null },
+      OR: [
+        { recipientKind: "COMPANY" },
+        { recipientKind: null },
+        { recipientKind: { isSet: false } },
+      ],
+    },
     select: {
-      id: true,
-      sentAt: true,
-      openCount: true,
-      firstOpenedAt: true,
-      lastOpenedAt: true,
-      trackingEnabled: true,
+      id: true as const,
+      sentAt: true as const,
+      openCount: true as const,
+      firstOpenedAt: true as const,
+      lastOpenedAt: true as const,
+      trackingEnabled: true as const,
     },
   },
-} as const;
+} satisfies Prisma.ApplicationInclude;
 
 export function mapApplicationToEditorDto(
   application: Application,

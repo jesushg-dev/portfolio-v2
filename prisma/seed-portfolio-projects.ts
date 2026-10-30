@@ -32,10 +32,6 @@ export interface PortfolioProjectSeed {
     locale: "es" | "en" | "nl";
     title: string;
     description: string;
-    hook?: string;
-    challenge?: string;
-    approach?: string;
-    outcome?: string;
     caseStudy?: unknown;
   }[];
   skillKeys: string[];
@@ -115,10 +111,6 @@ export async function seedPortfolioProjects(
             data: project.translations.map((translation) => ({
               title: translation.title,
               description: translation.description,
-              hook: translation.hook ?? null,
-              challenge: translation.challenge ?? null,
-              approach: translation.approach ?? null,
-              outcome: translation.outcome ?? null,
               caseStudy: translation.caseStudy
                 ? (caseStudyDtoToWrite(
                     CaseStudyContentSchema.parse(translation.caseStudy),

@@ -3,11 +3,6 @@ import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { createHash } from "node:crypto";
 
-import {
-  createEmailOpenTrackingToken,
-  hashEmailOpenTrackingToken,
-} from "@/features/job-tracker/lib/email-open-tracking";
-import { getServerBaseUrl } from "@/lib/url/get-base-url";
 import { locales } from "@/i18n/config";
 import { assertNonEmptyUserId } from "@/lib/admin/get-authenticated-user-id";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -47,6 +42,10 @@ import {
   updateApplicationEventOnGoogleCalendar,
 } from "@/lib/google-calendar/sync";
 import { getGoogleCalendarConnectionForUser } from "@/lib/google-calendar/connection";
+import {
+  getOpenJobSearch,
+  startNewJobSearch,
+} from "@/features/job-tracker/server/active-job-search";
 
 const ApplicationStatusSchema = z.enum([
   "APPLIED",
@@ -157,6 +156,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
     .input(dataTableParamsSchema)
     .query(async ({ ctx, input }) => {
       const userId = ctx.user.id;
+      const search = await getOpenJobSearch(ctx.db, userId);
+      if (!search) return { data: [], pageCount: 1, totalCount: 0 };
       const skip =
         input.page && input.perPage
           ? (input.page - 1) * input.perPage
@@ -164,6 +165,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       const take = input.perPage ?? undefined;
 
       const where = buildApplicationWhere(userId, input.filters);
+      where.jobSearchId = search.id;
       const orderBy = buildApplicationOrderBy(input.sort);
 
       const [applications, totalCount] = await Promise.all([
@@ -221,6 +223,11 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           orderBy,
           skip,
           take,
+          include: {
+            _count: {
+              select: { applications: true },
+            },
+          },
         }),
         ctx.db.company.count({ where }),
       ]);
@@ -234,14 +241,18 @@ export const jobTrackerAdminRouter = createTRPCRouter({
 
   getDashboardStats: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.user.id;
+    const search = await getOpenJobSearch(ctx.db, userId);
+    const where = search
+      ? { userId, jobSearchId: search.id }
+      : { id: { in: [] } };
 
     const [totalApplications, totalCompanies, statusCounts] = await Promise.all(
       [
-        ctx.db.application.count({ where: { userId } }),
+        ctx.db.application.count({ where }),
         ctx.db.company.count({ where: { userId } }),
         ctx.db.application.groupBy({
           by: ["status"],
-          where: { userId },
+          where,
           _count: true,
         }),
       ],
@@ -265,9 +276,12 @@ export const jobTrackerAdminRouter = createTRPCRouter({
   getUpcomingEvents: protectedProcedure
     .input(z.object({ limit: z.number().min(1).max(20).default(5) }))
     .query(async ({ ctx, input }) => {
+      const search = await getOpenJobSearch(ctx.db, ctx.user.id);
+      if (!search) return [];
       const events = await ctx.db.applicationEvent.findMany({
         where: {
           userId: ctx.user.id,
+          application: { is: { jobSearchId: search.id } },
           completed: false,
           scheduledDate: { gt: new Date() },
         },
@@ -387,9 +401,36 @@ export const jobTrackerAdminRouter = createTRPCRouter({
   deleteCompany: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const appCount = await ctx.db.application.count({
+        where: { companyId: input.id, userId: ctx.user.id },
+      });
+      if (appCount > 0) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "COMPANY_HAS_APPLICATIONS",
+        });
+      }
       return ctx.db.company.delete({
         where: { id: input.id, userId: ctx.user.id },
       });
+    }),
+
+  deleteManyCompanies: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()).min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const appCount = await ctx.db.application.count({
+        where: { companyId: { in: input.ids }, userId: ctx.user.id },
+      });
+      if (appCount > 0) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "COMPANY_HAS_APPLICATIONS",
+        });
+      }
+      const result = await ctx.db.company.deleteMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+      });
+      return { count: result.count };
     }),
 
   importFromUrl: protectedProcedure
@@ -418,6 +459,68 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }
     }),
 
+  closeJobSearch: protectedProcedure
+    .input(
+      z.object({
+        outcome: z.enum(["HIRED", "PAUSED", "WITHDRAWN"]),
+        hiredApplicationId: z.string().optional(),
+        notes: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const search = await getOpenJobSearch(ctx.db, ctx.user.id);
+      if (!search)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No open job search",
+        });
+      if (input.outcome === "HIRED") {
+        const hired = input.hiredApplicationId
+          ? await ctx.db.application.findFirst({
+              where: {
+                id: input.hiredApplicationId,
+                userId: ctx.user.id,
+                jobSearchId: search.id,
+                status: "HIRED",
+              },
+              select: { id: true },
+            })
+          : null;
+        if (!hired)
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "A hired application from this search is required",
+          });
+      } else if (input.hiredApplicationId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only hired searches may reference an application",
+        });
+      }
+      return ctx.db.jobSearch.update({
+        where: { id: search.id, userId: ctx.user.id, status: "OPEN" },
+        data: {
+          status: "CLOSED",
+          endedAt: new Date(),
+          outcome: input.outcome,
+          hiredApplicationId: input.hiredApplicationId,
+          notes: input.notes,
+        },
+      });
+    }),
+
+  startJobSearch: protectedProcedure
+    .input(z.object({ name: z.string().trim().min(1).max(120).optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const result = await startNewJobSearch(ctx.db, ctx.user.id, input.name);
+      if (!result.created)
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "A job search is already open",
+        });
+      return result.search;
+    }),
+
   createApplication: protectedProcedure
     .input(
       z.object({
@@ -433,11 +536,14 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const search = await getOpenJobSearch(ctx.db, ctx.user.id, true);
+      if (!search) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const application = await ctx.db.application.create({
         data: {
           ...input,
           jobUrl: input.jobUrl === "" ? undefined : input.jobUrl,
           userId: ctx.user.id,
+          jobSearchId: search.id,
         },
       });
       return mapApplicationToEditorDto(application);
@@ -480,8 +586,14 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const search = await getOpenJobSearch(ctx.db, ctx.user.id);
+      if (!search) return { count: 0 };
       const result = await ctx.db.application.updateMany({
-        where: { id: { in: input.ids }, userId: ctx.user.id },
+        where: {
+          id: { in: input.ids },
+          userId: ctx.user.id,
+          jobSearchId: search.id,
+        },
         data: {
           status: input.status,
           ...(input.status === "GHOSTED"
@@ -501,8 +613,14 @@ export const jobTrackerAdminRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const snoozedUntil = ghostNudgeSnoozeUntil(input.days);
+      const search = await getOpenJobSearch(ctx.db, ctx.user.id);
+      if (!search) return { count: 0, snoozedUntil };
       const result = await ctx.db.application.updateMany({
-        where: { id: { in: input.ids }, userId: ctx.user.id },
+        where: {
+          id: { in: input.ids },
+          userId: ctx.user.id,
+          jobSearchId: search.id,
+        },
         data: { ghostNudgeSnoozedUntil: snoozedUntil },
       });
       return { count: result.count, snoozedUntil };
@@ -551,6 +669,25 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const search = await getOpenJobSearch(ctx.db, ctx.user.id);
+      if (!search)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No open job search",
+        });
+      const application = await ctx.db.application.findFirst({
+        where: {
+          id: input.applicationId,
+          userId: ctx.user.id,
+          jobSearchId: search.id,
+        },
+        select: { id: true },
+      });
+      if (!application)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Active application not found",
+        });
       const event = await ctx.db.applicationEvent.create({
         data: {
           ...input,
@@ -936,7 +1073,6 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         subject: z.string().trim().min(1).max(200),
         body: z.string().trim().min(1).max(8000),
         recipientName: z.string().trim().max(120).optional(),
-        trackOpens: z.boolean().default(false),
         sendCopy: z.boolean().default(true),
         locale: z.enum(locales).default("en"),
         /** Optional override; when set, this file is attached instead of application.cvFile. */
@@ -991,9 +1127,9 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       );
       const rawCandidateEmail = candidateContactEmail ?? ctx.user.email;
       const copyRecipientEmail = rawCandidateEmail
-        ? parseReplyToAddress(rawCandidateEmail)?.match(
-            /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,
-          )?.[0]?.toLowerCase() ?? ctx.user.email?.toLowerCase()
+        ? (parseReplyToAddress(rawCandidateEmail)
+            ?.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0]
+            ?.toLowerCase() ?? ctx.user.email?.toLowerCase())
         : ctx.user.email?.toLowerCase();
 
       const fileResponse = await fetch(attachmentUrl, {
@@ -1006,10 +1142,17 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         });
       }
       const fileBuffer = Buffer.from(await fileResponse.arrayBuffer());
+      if (fileBuffer.subarray(0, 5).toString("ascii") !== "%PDF-") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "Only PDF CV attachments can be sent. Export your corrected document as PDF before sending.",
+        });
+      }
       const filename =
         input.attachmentName?.trim() ??
         application.cvFile?.name?.trim() ??
-        `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.docx`;
+        `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.pdf`;
 
       const toEmail = input.toEmail.toLowerCase();
       const bodyText = input.body;
@@ -1022,14 +1165,11 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         "sha256",
       )
         .update(
-          `${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}|${input.trackOpens}|${input.locale}`,
+          `${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}|${input.locale}`,
         )
         .digest("hex")
         .slice(0, 24)}`;
 
-      const trackingToken = input.trackOpens
-        ? createEmailOpenTrackingToken(idempotencyKey)
-        : null;
       const emailRecord = await ctx.db.applicationEmail.upsert({
         where: { idempotencyKey },
         create: {
@@ -1038,22 +1178,16 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           recipientEmail: toEmail,
           subject: input.subject,
           attachmentName: filename,
-          trackingEnabled: input.trackOpens,
-          trackingTokenHash: trackingToken
-            ? hashEmailOpenTrackingToken(trackingToken)
-            : undefined,
+          trackingEnabled: Boolean(resendConfig?.webhookSecret),
+          trackingSource: "RESEND",
+          recipientKind: "COMPANY",
           idempotencyKey,
         },
         update: {},
       });
-      const trackingPixelUrl =
-        emailRecord.trackingEnabled && trackingToken
-          ? `${getServerBaseUrl()}/api/job-tracker/email-open?token=${trackingToken}`
-          : undefined;
       const bodyHtml = buildApplicationEmailHtml(
         bodyText,
         resendConfig?.emailSignatureHtml,
-        trackingPixelUrl,
       );
 
       const { data, error } = await emailClient.resend.emails.send(
@@ -1064,6 +1198,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           subject: input.subject,
           text: bodyText,
           html: bodyHtml,
+          tags: [{ name: "application_email_id", value: emailRecord.id }],
           attachments: [
             {
               filename,
@@ -1081,6 +1216,19 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         });
       }
 
+      if (!data?.id)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Resend did not return a message identifier",
+        });
+      await ctx.db.applicationEmail.update({
+        where: { id: emailRecord.id },
+        data: {
+          providerMessageId: data.id,
+          sentAt: emailRecord.sentAt ?? new Date(),
+        },
+      });
+
       let copySent = false;
       if (
         input.sendCopy &&
@@ -1090,11 +1238,25 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         const copyHtml = buildApplicationEmailHtml(
           bodyText,
           resendConfig?.emailSignatureHtml,
-          undefined,
         );
         const copyIdempotencyKey = `copy/${idempotencyKey}`;
+        const copyRecord = await ctx.db.applicationEmail.upsert({
+          where: { idempotencyKey: copyIdempotencyKey },
+          create: {
+            applicationId: application.id,
+            userId: ctx.user.id,
+            recipientEmail: copyRecipientEmail,
+            subject: input.subject,
+            attachmentName: filename,
+            trackingSource: "RESEND",
+            recipientKind: "COPY",
+            trackingEnabled: Boolean(resendConfig?.webhookSecret),
+            idempotencyKey: copyIdempotencyKey,
+          },
+          update: {},
+        });
         try {
-          await emailClient.resend.emails.send(
+          const copyResult = await emailClient.resend.emails.send(
             {
               from: emailClient.fromEmail,
               to: copyRecipientEmail,
@@ -1102,6 +1264,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
               subject: input.subject,
               text: bodyText,
               html: copyHtml,
+              tags: [{ name: "application_email_id", value: copyRecord.id }],
               attachments: [
                 {
                   filename,
@@ -1111,17 +1274,19 @@ export const jobTrackerAdminRouter = createTRPCRouter({
             },
             { idempotencyKey: copyIdempotencyKey },
           );
+          if (copyResult.error || !copyResult.data?.id)
+            throw new Error(copyResult.error?.message ?? "Copy send failed");
+          await ctx.db.applicationEmail.update({
+            where: { id: copyRecord.id },
+            data: {
+              providerMessageId: copyResult.data.id,
+              sentAt: copyRecord.sentAt ?? new Date(),
+            },
+          });
           copySent = true;
         } catch (copyError) {
           console.error("Failed to send applicant copy email:", copyError);
         }
-      }
-
-      if (!emailRecord.sentAt) {
-        await ctx.db.applicationEmail.update({
-          where: { id: emailRecord.id },
-          data: { sentAt: new Date() },
-        });
       }
 
       await ctx.db.applicationEvent.create({
@@ -1165,6 +1330,10 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           recipientEmail: true,
           subject: true,
           attachmentName: true,
+          deliveryStatus: true,
+          deliveredAt: true,
+          trackingSource: true,
+          recipientKind: true,
           trackingEnabled: true,
           openCount: true,
           firstOpenedAt: true,
@@ -1206,6 +1375,11 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         where: {
           userId,
           sentAt: { not: null },
+          OR: [
+            { recipientKind: "COMPANY" },
+            { recipientKind: null },
+            { recipientKind: { isSet: false } },
+          ],
         },
         select: {
           id: true,
@@ -1248,7 +1422,14 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }),
       ctx.db.applicationEmailOpen.count({
         where: {
-          email: { userId },
+          email: {
+            userId,
+            OR: [
+              { recipientKind: "COMPANY" },
+              { recipientKind: null },
+              { recipientKind: { isSet: false } },
+            ],
+          },
           openedAt: { gte: since24h },
         },
       }),
@@ -1357,7 +1538,6 @@ function escapeHtml(value: string): string {
 function buildApplicationEmailHtml(
   bodyText: string,
   signatureHtml?: string | null,
-  trackingPixelUrl?: string,
 ): string {
   const paragraphs = bodyText
     .replace(/\r\n?/g, "\n")
@@ -1376,12 +1556,9 @@ function buildApplicationEmailHtml(
     .join("");
 
   const signature = signatureHtml?.trim();
-  const pixel = trackingPixelUrl
-    ? `<img src="${escapeHtml(trackingPixelUrl)}" width="1" height="1" border="0" alt="" style="display:none !important;width:1px !important;height:1px !important;max-height:0 !important;max-width:0 !important;opacity:0 !important;overflow:hidden !important;mso-hide:all;" />`
-    : "";
-  if (!signature) return `${paragraphs}${pixel}`;
+  if (!signature) return paragraphs;
 
-  return `${paragraphs}<div style="margin-top:1.75rem;">${signature}</div>${pixel}`;
+  return `${paragraphs}<div style="margin-top:1.75rem;">${signature}</div>`;
 }
 
 /** Resend accepts `email@x.com` or `Name <email@x.com>` only. */

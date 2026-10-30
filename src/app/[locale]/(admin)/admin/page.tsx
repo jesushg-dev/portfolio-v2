@@ -66,13 +66,13 @@ const DashboardPage: FC = async () => {
   ]);
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-start justify-between gap-4">
+    <div className="space-y-10">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
+          <h1 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
             {t("welcomeTitle")}
           </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
+          <p className="text-muted-foreground mt-2 max-w-xl text-sm">
             {t("welcomeSubtitle")}
           </p>
         </div>
@@ -90,9 +90,14 @@ const DashboardPage: FC = async () => {
               service.ServiceTranslation.find(
                 (row) => row.language.code === locale,
               ) ?? service.ServiceTranslation[0];
+            const trimmedTitle = translation?.title?.trim();
+            const title =
+              trimmedTitle && trimmedTitle.length > 0
+                ? trimmedTitle
+                : service.type;
             return {
               id: service.id,
-              title: translation?.title?.trim() || service.type,
+              title,
               type: service.type,
               isActive: service.isActive,
               featured: service.featured,

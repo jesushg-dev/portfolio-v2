@@ -26,7 +26,9 @@ const ServicesPage: FC<Props> = async ({ params, searchParams }) => {
   return (
     <div className="flex h-full flex-col gap-6">
       <div className="shrink-0">
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <h1 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
+          {t("title")}
+        </h1>
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
       <div className="min-h-0 flex-1">

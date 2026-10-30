@@ -51,6 +51,8 @@ function emitPinnedChange() {
 interface SidebarContextProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  mobileOpen: boolean;
+  setMobileOpen: Dispatch<SetStateAction<boolean>>;
   animate: boolean;
   pinned: boolean;
   setPinned: (pinned: boolean) => void;
@@ -80,6 +82,7 @@ export const SidebarProvider = ({
   animate?: boolean;
 }) => {
   const [openState, setOpenState] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pinned = useSyncExternalStore(
     subscribePinned,
     getPinnedSnapshot,
@@ -104,7 +107,15 @@ export const SidebarProvider = ({
 
   return (
     <SidebarContext.Provider
-      value={{ open, setOpen, animate, pinned, setPinned }}
+      value={{
+        open,
+        setOpen,
+        mobileOpen,
+        setMobileOpen,
+        animate,
+        pinned,
+        setPinned,
+      }}
     >
       {children}
     </SidebarContext.Provider>
@@ -211,7 +222,7 @@ export const MobileSidebar = ({
   actions,
   ...props
 }: ComponentProps<"div"> & { brand?: ReactNode; actions?: ReactNode }) => {
-  const { open, setOpen } = useSidebar();
+  const { mobileOpen: open, setMobileOpen: setOpen } = useSidebar();
   const t = useTranslations("global.header");
 
   return (
@@ -222,9 +233,7 @@ export const MobileSidebar = ({
         )}
         {...props}
       >
-        <div className="flex min-w-0 items-center gap-2">{brand}</div>
-        <div className="flex shrink-0 items-center gap-2">
-          {actions}
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <button
             type="button"
             aria-expanded={open}
@@ -235,7 +244,9 @@ export const MobileSidebar = ({
           >
             <Menu className="size-5" aria-hidden />
           </button>
+          <div className="min-w-0 flex-1">{brand}</div>
         </div>
+        <div className="flex shrink-0 items-center gap-2">{actions}</div>
         <AnimatePresence>
           {open && (
             <motion.div
@@ -283,11 +294,12 @@ export const SidebarLink = ({
   className?: string;
   props?: LinkProps;
 }) => {
-  const { open, animate, pinned } = useSidebar();
-  const showLabel = !animate || open || pinned;
+  const { open, mobileOpen, setMobileOpen, animate, pinned } = useSidebar();
+  const showLabel = mobileOpen || !animate || open || pinned;
   return (
     <Link
       href={link.href}
+      onNavigate={() => setMobileOpen(false)}
       className={cn(
         "group/sidebar flex items-center justify-start gap-3 rounded-lg px-2 py-2 transition-colors",
         link.active

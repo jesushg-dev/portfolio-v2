@@ -1,5 +1,5 @@
-jest.mock("@/lib/tenant/resolve", () => ({
-  resolveTenant: jest.fn(),
+jest.mock("@/lib/public-site/tenant", () => ({
+  resolvePublicTenant: jest.fn(),
 }));
 
 jest.mock("@/server/db", () => ({
@@ -9,7 +9,7 @@ jest.mock("@/server/db", () => ({
   },
 }));
 
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
 import { db } from "@/server/db";
 import { getUsesPageData } from "./uses-public";
 
@@ -19,12 +19,12 @@ describe("getUsesPageData", () => {
   });
 
   it("returns null without a tenant", async () => {
-    jest.mocked(resolveTenant).mockResolvedValue(null);
+    jest.mocked(resolvePublicTenant).mockResolvedValue(null);
     await expect(getUsesPageData("en")).resolves.toBeNull();
   });
 
   it("groups items and maps workspace tags for visible software", async () => {
-    jest.mocked(resolveTenant).mockResolvedValue({
+    jest.mocked(resolvePublicTenant).mockResolvedValue({
       userId: "user-1",
       username: "ada",
       defaultLocale: "en",

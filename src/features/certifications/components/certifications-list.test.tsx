@@ -17,7 +17,7 @@ jest.mock("nuqs", () => {
   };
   return {
     useQueryState: (key: string) => [
-      key === "title" ? "AWS" : key === "company" ? "Amazon" : null,
+      key === "search" ? "AWS" : key === "company" ? "Amazon" : null,
       jest.fn(),
     ],
     useQueryStates: () => [{}, jest.fn()],
@@ -37,7 +37,7 @@ jest.mock("@/lib/parsers", () => ({
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      certificationsAdmin: { getMine: { invalidate: jest.fn() } },
+      certificationsAdmin: { invalidate: jest.fn() },
     }),
     skillsAdmin: {
       getMine: {
@@ -45,6 +45,14 @@ jest.mock("@/trpc/react", () => ({
       },
     },
     certificationsAdmin: {
+      getCategories: {
+        useQuery: () => ({
+          data: [
+            { value: "Amazon", count: 1 },
+            { value: "Google", count: 1 },
+          ],
+        }),
+      },
       getMine: {
         useQuery: () => ({
           data: {
@@ -80,6 +88,11 @@ jest.mock("@/trpc/react", () => ({
       deleteItem: {
         useMutation: () => ({ mutateAsync: mockDelete }),
       },
+      deleteMany: {
+        useMutation: () => ({
+          mutateAsync: jest.fn().mockResolvedValue({ count: 1 }),
+        }),
+      },
     },
   },
 }));
@@ -106,7 +119,7 @@ describe("CertificationsList", () => {
     renderWithIntl(<CertificationsList {...defaultProps} />);
 
     expect(screen.getByText("AWS Certified")).toBeInTheDocument();
-    expect(screen.getByText("Amazon")).toBeInTheDocument();
+    expect(screen.getAllByText("Amazon").length).toBeGreaterThanOrEqual(1);
   });
 
   it("renders skill titles for certifications that have skills", () => {
@@ -125,4 +138,26 @@ describe("CertificationsList", () => {
       expect(mockDelete).toHaveBeenCalled();
     });
   }, 30000);
+
+  it("renders category chips using canonical pill tabs", () => {
+    renderWithIntl(<CertificationsList {...defaultProps} />);
+    expect(screen.getByRole("tab", { name: /all/i })).toBeInTheDocument();
+  });
+
+  it("shows bulk bar when rows are selected", () => {
+    renderWithIntl(<CertificationsList {...defaultProps} />);
+
+    const selectAllCheckbox = screen.getByRole("checkbox", {
+      name: /select all/i,
+    });
+    fireEvent.click(selectAllCheckbox);
+
+    expect(screen.getAllByText(/selected/i).length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByRole("button", { name: /clear selection/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /delete selected/i }),
+    ).toBeInTheDocument();
+  });
 });

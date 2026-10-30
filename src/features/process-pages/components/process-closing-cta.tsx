@@ -4,13 +4,13 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
-  useReducedMotion,
   useSpring,
 } from "motion/react";
 import { useEffect, useRef, type MouseEvent } from "react";
 
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   processDarkBandClass,
@@ -33,7 +33,7 @@ export function ProcessClosingCta({
   description,
   ctaLabel,
 }: ProcessClosingCtaProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);

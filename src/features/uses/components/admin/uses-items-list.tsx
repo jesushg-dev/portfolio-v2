@@ -1,19 +1,23 @@
-"use client";
-
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import type { UsesItemType } from "@prisma/client";
+import type { AppLanguage, UsesItemType } from "@prisma/client";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { DataTable } from "@/components/shared/data-table/data-table";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
+import {
+  computeTranslationStatus,
+  LanguageStatusBadge,
+} from "@/components/shared/data-table/language-status-badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useDataTable } from "@/hooks/use-data-table";
 import type { AppTableFeatures } from "@/lib/app-table-features";
 import { getSortingStateParser } from "@/lib/parsers";
@@ -27,6 +31,7 @@ interface UsesItemsListProps {
   initialItems: UsesItemRow[];
   pageCount: number;
   totalCount: number;
+  languages?: AppLanguage[];
 }
 
 export const UsesItemsList: FC<UsesItemsListProps> = ({
@@ -34,6 +39,7 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
   initialItems,
   pageCount: initialPageCount,
   totalCount: initialTotalCount,
+  languages,
 }) => {
   const t = useTranslations("admin.uses");
   const utils = api.useUtils();
@@ -82,6 +88,7 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
   );
 
   const deleteItem = api.usesAdmin.deleteItem.useMutation();
+  const deleteMany = api.usesAdmin.deleteMany.useMutation();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -101,8 +108,51 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
     [deleteItem, utils, t],
   );
 
+  const handleBulkDelete = useCallback(
+    (selectedRows: UsesItemRow[]) => {
+      const ids = selectedRows.map((r) => r.id);
+      if (ids.length === 0) return;
+      startTransition(async () => {
+        try {
+          await deleteMany.mutateAsync({ ids });
+          await utils.usesAdmin.getMine.invalidate();
+          toast.success(t("bulkDeleteSuccess"));
+        } catch {
+          toast.error(t("bulkDeleteFailed"));
+        }
+      });
+    },
+    [deleteMany, utils, t],
+  );
+
   const columns = useMemo<ColumnDef<AppTableFeatures, UsesItemRow>[]>(
     () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label={t("selectAll")}
+            className="translate-y-0.5"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label={t("selectRow")}
+            className="translate-y-0.5"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
       {
         accessorKey: "order",
         header: ({ column }) => (
@@ -134,6 +184,30 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
           </span>
         ),
       },
+      ...(languages && languages.length > 0
+        ? [
+            {
+              id: "languages",
+              header: t("columns.languages"),
+              cell: ({ row }: { row: { original: UsesItemRow } }) => {
+                const statuses = languages.map((lang) => {
+                  const trans = row.original.translations[lang.id];
+                  return {
+                    code: lang.code,
+                    name: lang.name,
+                    status: computeTranslationStatus(
+                      trans,
+                      type === "EVERYDAY"
+                        ? ["title", "description"]
+                        : ["title"],
+                    ),
+                  };
+                });
+                return <LanguageStatusBadge languages={statuses} />;
+              },
+            },
+          ]
+        : []),
       {
         id: "actions",
         cell: ({ row }) => {
@@ -164,13 +238,14 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
         },
       },
     ],
-    [t, deletingId, isPending, handleDelete],
+    [t, deletingId, isPending, handleDelete, languages, type],
   );
 
   const { table } = useDataTable({
     data: items ?? [],
     columns,
     rowCount: trpcTotalCount ?? initialTotalCount,
+    enableRowSelection: true,
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
@@ -197,6 +272,11 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table} />
+        <DataTableBulkBar
+          table={table}
+          onDeleteSelected={handleBulkDelete}
+          isDeleting={isPending}
+        />
       </DataTable>
     </div>
   );

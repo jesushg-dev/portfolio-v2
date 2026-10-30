@@ -14,6 +14,7 @@ interface SeedProject {
   slug?: string;
   githubUrl?: string;
   websiteUrl?: string;
+  caseStudyEnabled?: boolean;
   skillKeys?: string[];
   translations: { locale: string; caseStudy?: unknown }[];
 }
@@ -48,7 +49,8 @@ describe("project case studies in the seed", () => {
         byLocale[translation.locale] = parsed.data;
       }
 
-      if (Object.keys(byLocale).length === 0) continue;
+      if (Object.keys(byLocale).length === 0 || !project.caseStudyEnabled)
+        continue;
 
       for (const locale of locales) {
         if (!byLocale[locale]) {
@@ -128,11 +130,9 @@ describe("project case studies in the seed", () => {
       (section) => section.key === "data-model",
     );
     expect(dataSection?.lead).toContain(
-      "the case-study page reads four translated fields (hook, challenge, approach, outcome)",
+      "reads all narrative content from structured CaseStudyContent sections",
     );
-    expect(dataSection?.code).not.toMatch(
-      /^\s*caseStudy\s+CaseStudyContent\?/m,
-    );
+    expect(dataSection?.code).toMatch(/^\s*caseStudy\s+CaseStudyContent\?/m);
 
     const designSection = english.sections.find(
       (section) => section.key === "design-system",

@@ -1,10 +1,8 @@
+import { readResumeSnapshot } from "@/features/resume-engine/lib/tailored-resume-document";
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "@prisma/client";
 
-import {
-  CvImportDraftSchema,
-  type CvImportDraft,
-} from "@/features/cv/lib/cv-import-draft";
+import { type CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import {
   parseMatchAnalysis,
@@ -76,10 +74,10 @@ export async function resolveInterviewPrepContext(
   });
 
   const snapshot = latestExport
-    ? CvImportDraftSchema.safeParse(latestExport.structuredSnapshot)
+    ? readResumeSnapshot(latestExport.structuredSnapshot)
     : null;
 
-  let draft: CvImportDraft | null = snapshot?.success ? snapshot.data : null;
+  let draft: CvImportDraft | null = snapshot;
   let source: "export" | "studio" = draft ? "export" : "studio";
 
   if (!draft) {

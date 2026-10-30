@@ -1,5 +1,6 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { cn } from "@/lib/utils";
@@ -7,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
 import AboutTerminalLazy from "./about-terminal-lazy";
 
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
 
@@ -47,10 +48,13 @@ function formatAboutParagraph(paragraph: string): React.ReactNode {
 }
 
 const About: FC = async () => {
-  const t = await getTranslations("main.about");
-  const locale = await getLocale();
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.about",
+  });
+  const locale = await getPublicLocale();
 
-  const tenant = await resolveTenant();
+  const tenant = await resolvePublicTenant();
 
   const [aboutData, terminalData, timelineItems] = await Promise.all([
     tenant && isLocale(locale)

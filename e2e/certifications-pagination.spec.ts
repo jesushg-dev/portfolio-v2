@@ -45,9 +45,8 @@ test.describe("certifications pagination", () => {
       page,
       rows: page.locator("table tbody tr"),
       filterTestId: "filter-company",
+      searchDialog: true,
       toggleColumnTestId: "toggle-column-company",
-      searchCellIndex: 1,
-      hiddenColumnCellIndex: 1,
       noResultsTerm: "NonExistentCompanyXYZ123",
     });
   });

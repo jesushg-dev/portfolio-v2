@@ -37,14 +37,15 @@ const settings = {
   timezone: "UTC",
   githubUsername: null,
   statusEmoji: "🚀",
+  readingCoverUrl: "",
+  watchedCoverUrl: "",
   readingTitle: null,
   readingAuthors: null,
   readingProgress: 0,
   watchedTitle: null,
   watchedRating: 0,
-  githubRepo: null,
-  githubHref: null,
   photoUrls: [],
+  statusSchedule: [],
   NowSettingsTranslation: [],
 };
 const focus = {
@@ -78,7 +79,7 @@ describe("now-queries", () => {
   it("returns a focus create DTO and edit DTO", async () => {
     jest.spyOn(db.nowFocus, "findUnique").mockResolvedValue(focus as never);
     const created = await getNowFocusCreatePageData();
-    expect(created.initialData.order).toBe(0);
+    expect(created.initialData.translations).toBeDefined();
 
     const editor = await getNowFocusEditPageData("focus-1");
     expect(editor.editorDto.id).toBe("focus-1");

@@ -18,7 +18,6 @@ import {
 } from "@/components/shared/office-document-preview";
 import { isPdfResumeFile } from "@/features/resume-engine/lib/parse-pdf-for-import";
 import { TailoredAtsPreview } from "@/features/resume-engine/components/tailored-ats-preview";
-import { ResumeMatchChecklist } from "@/features/resume-engine/components/resume-match-checklist";
 import { ResumeAtsCheckerSummary } from "@/features/resume-engine/components/resume-ats-checker-summary";
 import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
 import { api } from "@/trpc/react";
@@ -39,6 +38,7 @@ interface ResumeTailorPreviewPanelProps {
   onPdfGenerated?: (pdfUrl: string) => void;
   actions?: ReactNode;
   belowToolbar?: ReactNode;
+  onImprove?: () => void;
 }
 
 function firstNonEmpty(
@@ -81,6 +81,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
   onPdfGenerated,
   actions,
   belowToolbar,
+  onImprove,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [localPdfUrl, setLocalPdfUrl] = useState<string | null>(null);
@@ -100,22 +101,18 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
   const hasWord = Boolean(wordUrl);
   const hasPdf = Boolean(pdfUrl);
 
-  const generatePdfMutation = api.resumeEngineAdmin.generateTailoredPdf.useMutation({
-    onSuccess: (data) => {
-      setLocalPdfUrl(data.pdfDownloadUrl);
-      onPdfGenerated?.(data.pdfDownloadUrl);
-      toast.success(t("tailorPdfSuccess"));
-    },
-    onError: (err) => {
-      toast.error(err.message || t("tailorPdfFailed"));
-    },
-  });
+  const generatePdfMutation =
+    api.resumeEngineAdmin.generateTailoredPdf.useMutation({
+      onSuccess: (data) => {
+        setLocalPdfUrl(data.pdfDownloadUrl);
+        onPdfGenerated?.(data.pdfDownloadUrl);
+        toast.success(t("tailorPdfSuccess"));
+      },
+      onError: (err) => {
+        toast.error(err.message || t("tailorPdfFailed"));
+      },
+    });
 
-  const noteItems =
-    matchNotes
-      ?.split(/\n+/)
-      .map((line) => line.replace(/^[-•*]\s*/, "").trim())
-      .filter(Boolean) ?? [];
   const hasMatch = Boolean(
     aiScore != null ||
     (matchNotes != null && matchNotes.length > 0) ||
@@ -192,7 +189,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       : `${fileName.replace(/\.[^/.]+$/, "")}.pdf`
     : "tailored-cv.pdf";
 
-    const handleGeneratePdf = async (autoDownload = false) => {
+  const handleGeneratePdf = async (autoDownload = false) => {
     if (!exportId || generatePdfMutation.isPending) return;
     try {
       const res = await generatePdfMutation.mutateAsync({ exportId });
@@ -328,7 +325,10 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
                   }}
                 >
                   {generatePdfMutation.isPending ? (
-                    <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+                    <Loader2
+                      className="mr-1.5 size-3.5 animate-spin"
+                      aria-hidden
+                    />
                   ) : (
                     <Download className="mr-1.5 size-3.5" aria-hidden />
                   )}
@@ -368,8 +368,10 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       {hasMatch ? (
         <ResumeAtsCheckerSummary
           aiScore={aiScore}
-          matchNotes={matchNotes}
+          key={mode === "match" ? "expanded" : "collapsed"}
+          expanded={mode === "match"}
           matchAnalysis={matchAnalysis}
+          onImprove={onImprove}
         />
       ) : null}
 
@@ -385,8 +387,8 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       ) : null}
 
       {mode === "pdf" && !pdfUrl ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border p-8 text-center bg-card">
-          <p className="text-sm text-muted-foreground max-w-md">
+        <div className="border-border bg-card flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-8 text-center">
+          <p className="text-muted-foreground max-w-md text-sm">
             {t("tailorPdfOnDemandNotice")}
           </p>
           <Button
@@ -407,23 +409,6 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
 
       {mode === "ats" && hasAts ? (
         <TailoredAtsPreview snapshot={structuredSnapshot} />
-      ) : null}
-
-      {mode === "match" && hasMatch ? (
-        <div className="space-y-4">
-          {noteItems.length > 0 ? (
-            <ul className="text-muted-foreground list-disc space-y-1 pl-4 text-sm">
-              {noteItems.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          ) : matchNotes ? (
-            <p className="text-muted-foreground text-sm">{matchNotes}</p>
-          ) : null}
-          {matchAnalysis ? (
-            <ResumeMatchChecklist analysis={matchAnalysis} />
-          ) : null}
-        </div>
       ) : null}
     </div>
   );

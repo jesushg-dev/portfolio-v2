@@ -9,9 +9,7 @@ describe("TabContextProvider and useTabContext", () => {
       <TabContextProvider
         tabId="test-tab-id"
         tabCount={3}
-        minimal={true}
         vertical={false}
-        variant="primary"
         currentTab={1}
         setCurrentTab={setCurrentTab}
         registerTab={jest.fn()}
@@ -25,8 +23,6 @@ describe("TabContextProvider and useTabContext", () => {
 
     expect(result.current.tabId).toBe("test-tab-id");
     expect(result.current.tabCount).toBe(3);
-    expect(result.current.minimal).toBe(true);
-    expect(result.current.variant).toBe("primary");
     expect(result.current.currentTab).toBe(1);
 
     result.current.setCurrentTab(2);

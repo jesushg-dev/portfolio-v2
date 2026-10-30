@@ -2,7 +2,7 @@
 
 import { useState, useCallback, type FC, type PointerEvent } from "react";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
-import { ArrowUpRight, Zap } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { MediaImage } from "@/components/shared/media-image";
 import { Link } from "@/i18n/routing";
@@ -13,15 +13,15 @@ import { ProjectCoverMockup } from "./project-cover-mockup";
 
 export interface ProjectMetaLabels {
   solo: string;
-  formatTeam: (count: number) => string;
+  team: string;
   now: string;
   statuses: Record<string, string>;
 }
 
 export interface ProjectTeaserLabels {
-  formatDecisions: (count: number) => string;
+  decisions: string;
   layers: string;
-  formatMetrics: (count: number) => string;
+  metrics: string;
 }
 
 export interface IPortfolioItemProps extends Omit<ProjectType, "csInfo"> {
@@ -35,13 +35,13 @@ export interface IPortfolioItemProps extends Omit<ProjectType, "csInfo"> {
   kindLabels: Record<string, string>;
   metaLabels?: ProjectMetaLabels;
   teaserLabels?: ProjectTeaserLabels;
-  priority?: boolean;
+  preload?: boolean;
 }
 
 const MAX_TECH = 5;
 
 const actionButtonClass =
-  "flex size-10 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs";
+  "flex size-11 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs";
 
 interface ProjectMetaLineProps {
   teamSize?: number | null;
@@ -63,9 +63,7 @@ export function ProjectMetaLine({
   const parts: string[] = [];
 
   if (typeof teamSize === "number" && teamSize > 0) {
-    parts.push(
-      teamSize === 1 ? metaLabels.solo : metaLabels.formatTeam(teamSize),
-    );
+    parts.push(teamSize === 1 ? metaLabels.solo : metaLabels.team);
   }
 
   if (startedAt) {
@@ -105,13 +103,13 @@ export function ProjectTeaserLine({
   const parts: string[] = [];
 
   if (csInfo.decisions > 0) {
-    parts.push(teaserLabels.formatDecisions(csInfo.decisions));
+    parts.push(teaserLabels.decisions);
   }
   if (csInfo.layers) {
     parts.push(teaserLabels.layers);
   }
   if (csInfo.metrics > 0) {
-    parts.push(teaserLabels.formatMetrics(csInfo.metrics));
+    parts.push(teaserLabels.metrics);
   }
 
   if (parts.length === 0) return null;
@@ -124,32 +122,17 @@ export function ProjectTeaserLine({
   );
 }
 
-interface ProjectResultsProps {
-  hook?: string | null;
-}
-
-export function ProjectResults({ hook }: ProjectResultsProps) {
-  if (!hook) return null;
-
-  const parts = hook
-    .split("·")
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  if (parts.length === 0) return null;
-
+export function ProjectHighlights({ highlights }: { highlights: string[] }) {
+  if (highlights.length === 0) return null;
   return (
-    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Key results">
-      {parts.map((part, index) => (
+    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Project highlights">
+      {highlights.map((highlight, index) => (
         <li
-          key={part}
-          title={part}
-          className="bg-primary/10 text-primary inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
+          key={`${index}-${highlight}`}
+          title={highlight}
+          className="bg-primary/10 text-primary max-w-full min-w-0 rounded-full px-3 py-1.5 text-sm leading-none font-semibold"
         >
-          {index === 0 ? (
-            <Zap className="size-3.5 shrink-0" aria-hidden="true" />
-          ) : null}
-          <span className="truncate">{part}</span>
+          <span className="truncate">{highlight}</span>
         </li>
       ))}
     </ul>
@@ -171,7 +154,7 @@ export function ProjectTechRow({ skills }: ProjectTechRowProps) {
       {shownSkills.map((skill) => (
         <li
           key={skill.title}
-          className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-xs font-medium"
+          className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-sm font-medium"
         >
           <SkillIcon
             image={skill.image}
@@ -189,7 +172,7 @@ export function ProjectTechRow({ skills }: ProjectTechRowProps) {
             .slice(MAX_TECH)
             .map((s) => s.title)
             .join(", ")}
-          className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-xs font-semibold"
+          className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-sm font-semibold"
         >
           +{restCount}
         </li>
@@ -205,7 +188,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   githubUrl,
   websiteUrl,
   description,
-  hook,
+  highlights = [],
   kind,
   type,
   isPrivate = false,
@@ -225,7 +208,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   csInfo,
   metaLabels,
   teaserLabels,
-  priority = false,
+  preload = false,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
   const showGithub = !isPrivate && Boolean(githubUrl);
@@ -269,8 +252,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             src={image}
             alt={title}
             fill
-            priority={priority}
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            preload={preload}
+            sizes="(min-width: 96rem) 28rem, (min-width: 64rem) calc((100vw - 13rem) / 3), (min-width: 48rem) calc((100vw - 4.5rem) / 2), calc(100vw - 2rem)"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover/card:scale-105"
             onError={() => setImageFailed(true)}
           />
@@ -278,7 +261,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
 
         {/* Top Badges */}
         {kindLabel ? (
-          <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
+          <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-sm font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
             {kindLabel}
           </span>
         ) : null}
@@ -286,7 +269,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         {isPrivate ? (
           <span
             title={websiteUrl ? canSeeDemo : privateDescription}
-            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs"
+            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-sm font-bold tracking-wide uppercase shadow-xs"
           >
             {privateName}
           </span>
@@ -310,8 +293,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
           metaLabels={metaLabels}
         />
 
-        <ProjectResults hook={hook} />
-
+        <ProjectHighlights highlights={highlights} />
         <p className="text-muted-foreground mt-4 line-clamp-3 text-sm leading-relaxed whitespace-pre-line">
           {description}
         </p>
@@ -333,7 +315,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   params: { slug },
                 }}
                 aria-label={`${caseStudyLabel}: ${title}`}
-                className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
+                className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex min-h-11 items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
               >
                 <span>{caseStudyLabel}</span>
                 <ArrowUpRight
@@ -347,7 +329,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${sourceName}: ${title}`}
-                className="text-foreground hover:text-primary relative z-10 inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+                className="text-foreground hover:text-primary relative z-10 inline-flex min-h-11 items-center gap-2 text-sm font-semibold transition-colors"
               >
                 <AiFillGithub className="size-4" aria-hidden="true" />
                 <span>{sourceName}</span>
@@ -358,7 +340,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${urlName}: ${title}`}
-                className="text-primary hover:text-primary/80 relative z-10 inline-flex items-center gap-2 text-sm font-bold transition-colors"
+                className="text-primary hover:text-primary/80 relative z-10 inline-flex min-h-11 items-center gap-2 text-sm font-bold transition-colors"
               >
                 <span>{urlName}</span>
                 <ArrowUpRight className="size-4" aria-hidden="true" />

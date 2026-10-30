@@ -15,12 +15,17 @@ const isLocalTarget =
 const webServer = isLocalTarget
   ? process.env.CI
     ? {
-        command: "pnpm build && pnpm start",
+        command:
+          process.env.E2E_PREBUILT === "1"
+            ? "pnpm start"
+            : "pnpm build && pnpm start",
         url: "http://127.0.0.1:3000",
-        timeout: 180_000,
+        timeout: process.env.E2E_PREBUILT === "1" ? 180_000 : 600_000,
+        stdout: "pipe" as const,
+        stderr: "pipe" as const,
       }
     : {
-        command: "pnpm dev",
+        command: process.platform === "win32" ? "pnpm.cmd dev" : "pnpm dev",
         url: "http://127.0.0.1:3000",
         reuseExistingServer: true,
         timeout: 120_000,
@@ -37,11 +42,15 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  // Next dev writes its prerender manifest as routes are requested.
+  // Keep local requests serial to avoid concurrent manifest writes.
   workers: process.env.E2E_WORKERS
     ? Number.parseInt(process.env.E2E_WORKERS, 10)
     : process.env.CI
       ? 2
-      : 4,
+      : isLocalTarget
+        ? 1
+        : 4,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   timeout: 60_000,
   expect: {
@@ -58,6 +67,14 @@ export default defineConfig({
     video: "on",
   },
   projects: [
+    {
+      name: "public-seo",
+      testMatch: "**/home-seo.spec.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+        javaScriptEnabled: false,
+      },
+    },
     {
       name: "setup",
       testMatch: /auth\.setup\.ts/,

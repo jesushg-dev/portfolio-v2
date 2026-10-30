@@ -3,8 +3,8 @@
 import {
   useCallback,
   useMemo,
-  useRef,
   useState,
+  useSyncExternalStore,
   useTransition,
   type FC,
 } from "react";
@@ -21,6 +21,7 @@ import {
   Mail,
   MailOpen,
   MapPin,
+  MoreHorizontal,
   Pencil,
   Sparkles,
   Trash2,
@@ -30,26 +31,42 @@ import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/routing";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
 import { ApplicationEmailHistory } from "@/features/job-tracker/components/application-email-history";
 import { ApplicationEmailDialog } from "@/features/job-tracker/components/application-email-panel";
+import { ApplicationNextStepBanner } from "@/features/job-tracker/components/application-next-step-banner";
+import { ApplicationProcessPath } from "@/features/job-tracker/components/application-process-path";
+import { ApplicationEventResultDialog } from "@/features/job-tracker/components/application-event-result-dialog";
 import { ApplicationCoverLetterDialog } from "@/features/job-tracker/components/application-cover-letter-panel";
 import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
 import type { ApplicationDetail } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
-import { statusVariants } from "@/features/job-tracker/lib/constants";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
-import { isSuggestedGhost } from "@/features/job-tracker/lib/stale-application";
+import { Checkbox } from "@/components/ui/checkbox";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
+import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
+import {
+  cleanImportedJobDescription,
+  getApplicationDetailNotices,
+  splitHighlightedDescription,
+  type DetailNotice,
+} from "@/features/job-tracker/lib/application-detail-content";
 
 type RightPanelTab = "timeline" | "tailor" | "emails";
 
@@ -58,25 +75,85 @@ interface ApplicationDetailViewProps {
   locale: Locale;
   /** Optional deep-link target for a workspace tab. */
   defaultTab?: "details" | RightPanelTab;
+  viewerId?: string;
+  viewerEmail?: string;
+  matchAnalysis?: CvMatchAnalysis | null;
+  resumeTitle?: string | null;
+  canCloseSearch?: boolean;
 }
 
 const DESCRIPTION_COLLAPSE_CHARS = 480;
+const STATUS_OPTIONS: Record<ApplicationDetail["status"], true> = {
+  APPLIED: true,
+  INTERVIEW: true,
+  OFFER: true,
+  GHOSTED: true,
+  REJECTED: true,
+  HIRED: true,
+};
+
+function subscribeStorage(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  return () => window.removeEventListener("storage", onStoreChange);
+}
+
+function getStoredNoticesRaw(key: string): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return sessionStorage.getItem(key) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function getServerEmptyString() {
+  return "";
+}
+
+function parseResolvedNotices(raw: string): DetailNotice[] {
+  if (!raw) return [];
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (value): value is DetailNotice =>
+        value === "resume-title" ||
+        value === "missing-details" ||
+        value === "self-email",
+    );
+  } catch {
+    return [];
+  }
+}
+
+function getStoredHighlight(key: string): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    return localStorage.getItem(key) !== "false";
+  } catch {
+    return true;
+  }
+}
+
+function getServerTrue() {
+  return true;
+}
 
 export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   application,
   locale,
   defaultTab = "details",
+  viewerId = "",
+  viewerEmail = "",
+  matchAnalysis = null,
+  resumeTitle = null,
+  canCloseSearch = false,
 }) => {
   const t = useTranslations("admin.jobTracker");
   const router = useRouter();
   const utils = api.useUtils();
 
-  const hasGeneratedCv = Boolean(application.cvFile?.url);
-  const hasPendingEvents = application.events.some((e) => !e.completed);
-  const hasAlerts = isSuggestedGhost(application) || hasPendingEvents;
-  const shouldPrioritizeTailor = !hasAlerts && !hasGeneratedCv;
-
-  const rightTabs = useMemo(() => {
+  const rightTabs = (() => {
     const timelineTabItem = {
       id: "timeline" as const,
       icon: Clock,
@@ -92,10 +169,8 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
       icon: MailOpen,
       labelKey: "detail.emailTab" as const,
     };
-    return shouldPrioritizeTailor
-      ? [tailorTabItem, timelineTabItem, emailTabItem]
-      : [timelineTabItem, tailorTabItem, emailTabItem];
-  }, [shouldPrioritizeTailor]);
+    return [tailorTabItem, timelineTabItem, emailTabItem];
+  })();
 
   const [rightTab, setRightTab] = useState<RightPanelTab>(() => {
     if (
@@ -105,7 +180,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
     ) {
       return defaultTab;
     }
-    return shouldPrioritizeTailor ? "tailor" : "timeline";
+    return "tailor";
   });
   const [mobileTab, setMobileTab] = useState<"details" | RightPanelTab>(() => {
     if (
@@ -115,15 +190,103 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
     ) {
       return defaultTab;
     }
-    return shouldPrioritizeTailor ? "tailor" : "details";
+    return "details";
   });
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isCloseSearchOpen, setIsCloseSearchOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [isCoverLetterOpen, setIsCoverLetterOpen] = useState(false);
+  const [resultEventId, setResultEventId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const rightPanelRef = useRef<HTMLDivElement>(null);
   const dateFnsLocale = getDateFnsLocale(locale);
+  const notices = getApplicationDetailNotices(
+    application,
+    resumeTitle,
+    viewerEmail,
+  );
+  const noticeStorageKey = `job-tracker:resolved-notices:${application.id}`;
+  const storedNoticesRaw = useSyncExternalStore(
+    subscribeStorage,
+    () => getStoredNoticesRaw(noticeStorageKey),
+    getServerEmptyString,
+  );
+  const storedNotices = useMemo(
+    () => parseResolvedNotices(storedNoticesRaw),
+    [storedNoticesRaw],
+  );
+  const [manuallyResolved, setManuallyResolved] = useState<DetailNotice[]>([]);
+  const [prevNoticeKey, setPrevNoticeKey] = useState(noticeStorageKey);
+  if (prevNoticeKey !== noticeStorageKey) {
+    setPrevNoticeKey(noticeStorageKey);
+    setManuallyResolved([]);
+  }
+
+  const resolvedNotices = useMemo(() => {
+    return Array.from(new Set([...storedNotices, ...manuallyResolved]));
+  }, [storedNotices, manuallyResolved]);
+
+  const pendingNotices = notices.filter(
+    (notice) => !resolvedNotices.includes(notice),
+  );
+  const resolveNotice = (notice: DetailNotice) => {
+    setManuallyResolved((prev) =>
+      prev.includes(notice) ? prev : [...prev, notice],
+    );
+    try {
+      const next = Array.from(new Set([...resolvedNotices, notice]));
+      sessionStorage.setItem(noticeStorageKey, JSON.stringify(next));
+    } catch {
+      // ignore
+    }
+  };
   const deleteApplication = api.jobTrackerAdmin.deleteApplication.useMutation();
+  const updateStatus =
+    api.jobTrackerAdmin.updateApplicationStatus.useMutation();
+  const snoozeGhost = api.jobTrackerAdmin.snoozeGhostNudge.useMutation();
+  const closeSearch = api.jobTrackerAdmin.closeJobSearch.useMutation();
+  const emailHistory = api.jobTrackerAdmin.getApplicationEmailHistory.useQuery({
+    applicationId: application.id,
+  });
+  const companyEmails = (emailHistory.data ?? []).filter(
+    (email) =>
+      email.sentAt &&
+      email.recipientKind !== "COPY" &&
+      email.recipientEmail.trim().toLowerCase() !==
+        viewerEmail.trim().toLowerCase(),
+  );
+  const pendingCount = application.events.filter(
+    (event) => !event.completed,
+  ).length;
+  const emailCount =
+    emailHistory.data?.length ?? application.emailSummary?.totalSent ?? 0;
+
+  const selectTab = useCallback(
+    (tab: "details" | RightPanelTab) => {
+      setMobileTab(tab);
+      if (tab !== "details") setRightTab(tab);
+      router.replace(
+        {
+          pathname: "/admin/job-tracker/applications/[id]",
+          params: { id: application.id },
+          query: { tab },
+        },
+        { scroll: false },
+      );
+    },
+    [application.id, router],
+  );
+
+  const changeStatus = useCallback(
+    async (status: ApplicationDetail["status"]) => {
+      try {
+        await updateStatus.mutateAsync({ id: application.id, status });
+        router.refresh();
+      } catch {
+        toast.error(t("detail.statusUpdateError"));
+      }
+    },
+    [application.id, router, t, updateStatus],
+  );
 
   const handleDelete = useCallback(() => {
     startTransition(async () => {
@@ -164,9 +327,29 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             <span className="text-muted-foreground text-sm">
               {application.company.name}
             </span>
-            <Badge variant={statusVariants[application.status]}>
-              {t(`status.${application.status}`)}
-            </Badge>
+            <Select
+              value={application.status}
+              onValueChange={(value) => {
+                if (value && value in STATUS_OPTIONS) {
+                  void changeStatus(value);
+                }
+              }}
+            >
+              <SelectTrigger
+                aria-label={t("detail.statusLabel")}
+                disabled={updateStatus.isPending}
+                className="h-8 w-auto min-w-32"
+              >
+                <SelectValue>{t(`status.${application.status}`)}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(STATUS_OPTIONS).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {t(`status.${status as ApplicationDetail["status"]}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -186,123 +369,142 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
               {t("detail.viewJobPosting")}
             </a>
           ) : null}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setIsEmailOpen(true)}
-          >
+          <Button type="button" size="sm" onClick={() => setIsEmailOpen(true)}>
             <Mail className="mr-1.5 size-3.5" aria-hidden />
             {t("email.openButton")}
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            render={
-              <Link
-                href={{
-                  pathname: "/admin/job-tracker/applications/[id]/edit",
-                  params: { id: application.id },
-                }}
-              />
-            }
-          >
-            <Pencil className="mr-1.5 size-3.5" aria-hidden />
-            {t("detail.editApplicationButton")}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={isPending}
-            onClick={() => setIsConfirmOpen(true)}
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-          >
-            {isPending ? (
-              <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
-            ) : (
-              <Trash2 className="mr-1.5 size-3.5" aria-hidden />
-            )}
-            {t("detail.deleteApplicationButton")}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  aria-label={t("detail.moreActions")}
+                >
+                  <MoreHorizontal className="size-4" aria-hidden />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push({
+                    pathname: "/admin/job-tracker/applications/[id]/edit",
+                    params: { id: application.id },
+                  })
+                }
+              >
+                <Pencil aria-hidden /> {t("detail.editApplicationButton")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                variant="destructive"
+                disabled={isPending}
+                onClick={() => setIsConfirmOpen(true)}
+              >
+                {isPending ? (
+                  <Loader2 className="animate-spin" aria-hidden />
+                ) : (
+                  <Trash2 aria-hidden />
+                )}
+                {t("detail.deleteApplicationButton")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {/* Mobile view (< lg): segmented tabs for Details, Timeline, Tailor CV */}
+      <ApplicationNextStepBanner
+        application={application}
+        hasSentCv={companyEmails.length > 0}
+        onOpenEmail={() => setIsEmailOpen(true)}
+        onOpenTimeline={() => selectTab("timeline")}
+        onOpenTailor={() => selectTab("tailor")}
+        onMarkRejected={() => void changeStatus("REJECTED")}
+        onSnoozeGhost={() => {
+          void snoozeGhost
+            .mutateAsync({ ids: [application.id], days: 7 })
+            .then(() => router.refresh())
+            .catch(() => toast.error(t("nextStep.snoozeError")));
+        }}
+        onCloseSearch={
+          canCloseSearch && application.status === "HIRED"
+            ? () => setIsCloseSearchOpen(true)
+            : undefined
+        }
+        pending={updateStatus.isPending || snoozeGhost.isPending}
+        noticeCount={
+          pendingNotices.length +
+          Number(
+            cleanImportedJobDescription(application.description) !==
+              application.description.trim(),
+          )
+        }
+        onCompleteEvent={setResultEventId}
+      />
+
+      <ApplicationProcessPath
+        application={application}
+        locale={locale}
+        onCompleteEvent={setResultEventId}
+      />
+
+      {/* Mobile application sections */}
       <div className="flex flex-col gap-4 lg:hidden">
-        <nav
-          aria-label={t("detail.tabsNavAria")}
-          className="border-border bg-muted/40 grid grid-cols-4 rounded-xl border p-1"
+        <Tabs
+          value={mobileTab}
+          onValueChange={(value) =>
+            selectTab(value as "details" | RightPanelTab)
+          }
         >
-          <button
-            type="button"
-            aria-pressed={mobileTab === "details"}
-            onClick={() => setMobileTab("details")}
-            className={cn(
-              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
-              mobileTab === "details"
-                ? "bg-card text-foreground font-semibold shadow-xs"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            <FileText className="size-3.5" aria-hidden />
-            <span>{t("detail.detailsTab")}</span>
-          </button>
-          <button
-            type="button"
-            aria-pressed={mobileTab === "timeline"}
-            onClick={() => {
-              setMobileTab("timeline");
-              setRightTab("timeline");
-            }}
-            className={cn(
-              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
-              mobileTab === "timeline"
-                ? "bg-card text-foreground font-semibold shadow-xs"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            <Clock className="size-3.5" aria-hidden />
-            <span>{t("detail.timelineTab")}</span>
-          </button>
-          <button
-            type="button"
-            aria-pressed={mobileTab === "emails"}
-            onClick={() => setMobileTab("emails")}
-            className={cn(
-              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
-              mobileTab === "emails"
-                ? "bg-card text-foreground font-semibold shadow-xs"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            <MailOpen className="size-3.5" aria-hidden />
-            <span>{t("detail.emailTab")}</span>
-          </button>
-          <button
-            type="button"
-            aria-pressed={mobileTab === "tailor"}
-            onClick={() => {
-              setMobileTab("tailor");
-              setRightTab("tailor");
-            }}
-            className={cn(
-              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
-              mobileTab === "tailor"
-                ? "bg-card text-foreground font-semibold shadow-xs"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            <Sparkles className="size-3.5" aria-hidden />
-            <span>{t("detail.tailorTab")}</span>
-          </button>
-        </nav>
+          <nav aria-label={t("detail.tabsNavAria")}>
+            <TabsList variant="line" className="w-full overflow-x-auto">
+              <TabsTrigger value="details" className="flex-1 text-xs">
+                <FileText aria-hidden />
+                {t("detail.detailsTab")}
+              </TabsTrigger>
+              <TabsTrigger value="timeline" className="flex-1 text-xs">
+                <Clock aria-hidden />
+                {t("detail.timelineTab")}
+                {pendingCount > 0 ? (
+                  <span
+                    aria-hidden
+                    className="bg-primary/10 rounded-full px-1.5"
+                  >
+                    {pendingCount}
+                  </span>
+                ) : null}
+              </TabsTrigger>
+              <TabsTrigger value="emails" className="flex-1 text-xs">
+                <MailOpen aria-hidden />
+                {t("detail.emailTab")}
+                {emailCount > 0 ? (
+                  <span
+                    aria-hidden
+                    className="bg-primary/10 rounded-full px-1.5"
+                  >
+                    {emailCount}
+                  </span>
+                ) : null}
+              </TabsTrigger>
+              <TabsTrigger value="tailor" className="flex-1 text-xs">
+                <Sparkles aria-hidden />
+                {t("detail.tailorTab")}
+              </TabsTrigger>
+            </TabsList>
+          </nav>
+        </Tabs>
 
         {mobileTab === "details" && (
           <ApplicationDetailsPanel
             application={application}
             appliedLabel={appliedLabel}
             onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
+            onOpenTailor={() => selectTab("tailor")}
+            viewerId={viewerId}
+            matchAnalysis={matchAnalysis}
+            notices={pendingNotices}
+            onResolveNotice={resolveNotice}
             t={t}
           />
         )}
@@ -314,6 +516,8 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
               locale={locale}
               variant="embedded"
               activityHint={t("detail.timelineActivityHint")}
+              onCompleteEvent={setResultEventId}
+              sentEmails={companyEmails}
             />
           </section>
         )}
@@ -323,6 +527,8 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             <ApplicationEmailHistory
               applicationId={application.id}
               locale={locale}
+              viewerEmail={viewerEmail}
+              onOpenEmail={() => setIsEmailOpen(true)}
             />
           </section>
         )}
@@ -330,43 +536,47 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         {mobileTab === "tailor" && (
           <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
             <ResumeTailorWorkflow
+              key={application.cvFile?.url ?? application.id}
               applicationId={application.id}
               embedded
               existingCvFile={application.cvFile}
+              onSendCv={() => setIsEmailOpen(true)}
             />
           </section>
         )}
       </div>
 
-      {/* Desktop view (>= lg): resizable horizontal panels */}
-      <div className="hidden lg:block">
-        <ResizablePanelGroup
-          orientation="horizontal"
-          className="min-h-[36rem] lg:h-[calc(100dvh-8.5rem)]"
-        >
-          <ResizablePanel defaultSize="42%" minSize="30%" className="min-w-0">
-            <ApplicationDetailsPanel
-              application={application}
-              appliedLabel={appliedLabel}
-              onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
-              t={t}
-            />
-          </ResizablePanel>
+      <div className="hidden items-start gap-4 lg:grid lg:grid-cols-[minmax(21.25rem,5fr)_7fr]">
+        <div className="sticky top-4 max-h-[calc(100dvh-2rem)] min-w-0 overflow-y-auto">
+          <ApplicationDetailsPanel
+            application={application}
+            appliedLabel={appliedLabel}
+            onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
+            onOpenTailor={() => selectTab("tailor")}
+            viewerId={viewerId}
+            matchAnalysis={matchAnalysis}
+            notices={pendingNotices}
+            onResolveNotice={resolveNotice}
+            t={t}
+          />
+        </div>
 
-          <ResizableHandle withHandle className="mx-1" />
-
-          <ResizablePanel defaultSize="58%" minSize="36%" className="min-w-0">
-            <ApplicationWorkspacePanel
-              application={application}
-              locale={locale}
-              rightTab={rightTab}
-              setRightTab={setRightTab}
-              rightTabs={rightTabs}
-              rightPanelRef={rightPanelRef}
-              t={t}
-            />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        <div className="min-w-0">
+          <ApplicationWorkspacePanel
+            application={application}
+            locale={locale}
+            rightTab={rightTab}
+            setRightTab={(tab) => selectTab(tab)}
+            rightTabs={rightTabs}
+            onCompleteEvent={setResultEventId}
+            sentEmails={companyEmails}
+            viewerEmail={viewerEmail}
+            onOpenEmail={() => setIsEmailOpen(true)}
+            pendingCount={pendingCount}
+            emailCount={emailCount}
+            t={t}
+          />
+        </div>
       </div>
 
       <ApplicationEmailDialog
@@ -376,6 +586,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         hasCvFile={Boolean(application.cvFile?.url)}
         cvFileName={application.cvFile?.name}
         locale={locale}
+        viewerEmail={viewerEmail}
       />
 
       <ApplicationCoverLetterDialog
@@ -384,6 +595,12 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         applicationId={application.id}
         initialSubject={application.coverLetterSubject}
         initialBody={application.coverLetterBody}
+      />
+
+      <ApplicationEventResultDialog
+        applicationId={application.id}
+        eventId={resultEventId}
+        onClose={() => setResultEventId(null)}
       />
 
       <ConfirmDialog
@@ -397,6 +614,27 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         isPending={isPending}
         onConfirm={handleDelete}
       />
+      <ConfirmDialog
+        open={isCloseSearchOpen}
+        onOpenChange={setIsCloseSearchOpen}
+        title={t("nextStep.closeSearch")}
+        description={t("nextStep.closeSearchConfirm")}
+        cancelLabel={t("detail.deleteCancel")}
+        confirmLabel={t("nextStep.closeSearch")}
+        isPending={closeSearch.isPending}
+        onConfirm={() => {
+          void closeSearch
+            .mutateAsync({
+              outcome: "HIRED",
+              hiredApplicationId: application.id,
+            })
+            .then(() => {
+              setIsCloseSearchOpen(false);
+              router.refresh();
+            })
+            .catch(() => toast.error(t("nextStep.closeSearchError")));
+        }}
+      />
     </div>
   );
 };
@@ -405,15 +643,44 @@ function ApplicationDetailsPanel({
   application,
   appliedLabel,
   onOpenCoverLetter,
+  onOpenTailor,
+  viewerId,
+  matchAnalysis,
+  notices,
+  onResolveNotice,
   t,
 }: {
   application: ApplicationDetail;
   appliedLabel: string;
   onOpenCoverLetter: () => void;
+  onOpenTailor: () => void;
+  viewerId: string;
+  matchAnalysis: CvMatchAnalysis | null;
+  notices: DetailNotice[];
+  onResolveNotice: (notice: DetailNotice) => void;
   t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
 }) {
+  const router = useRouter();
+  const updateApplication = api.jobTrackerAdmin.updateApplication.useMutation();
+  const cleanedDescription = cleanImportedJobDescription(
+    application.description,
+  );
+
+  const cleanDescription = async () => {
+    try {
+      await updateApplication.mutateAsync({
+        id: application.id,
+        description: cleanedDescription,
+      });
+      router.refresh();
+    } catch {
+      toast.error(t("detail.cleanError"));
+    }
+  };
+
   return (
-    <section className="border-border bg-card h-full space-y-5 overflow-y-auto rounded-xl border p-4 shadow-sm sm:p-5">
+    <section className="border-border bg-card space-y-5 rounded-xl border p-4 shadow-sm sm:p-5">
+      <h2 className="text-base font-semibold">{t("detail.vacancyTitle")}</h2>
       <dl className="grid gap-4 sm:grid-cols-2">
         <DetailField label={t("detail.applied")} value={appliedLabel} />
         <DetailField
@@ -463,6 +730,14 @@ function ApplicationDetailsPanel({
           </div>
         ) : null}
       </dl>
+
+      <ApplicationDetailNotices
+        application={application}
+        notices={notices.filter((notice) => notice !== "self-email")}
+        onResolveNotice={onResolveNotice}
+        onOpenTailor={onOpenTailor}
+        t={t}
+      />
 
       <div className="border-border border-t pt-5">
         <div className="mb-3 flex items-center justify-between">
@@ -535,6 +810,14 @@ function ApplicationDetailsPanel({
         </div>
       </div>
 
+      <ApplicationDetailNotices
+        application={application}
+        notices={notices.filter((notice) => notice === "self-email")}
+        onResolveNotice={onResolveNotice}
+        onOpenTailor={onOpenTailor}
+        t={t}
+      />
+
       {application.notes.trim() ? (
         <div className="border-border border-t pt-5">
           <h2 className="text-foreground mb-2 text-sm font-semibold">
@@ -584,14 +867,34 @@ function ApplicationDetailsPanel({
       </div>
 
       <div className="border-border border-t pt-5">
-        <header className="mb-3 flex items-center gap-2">
-          <FileText className="text-muted-foreground size-4" aria-hidden />
-          <h2 className="text-sm font-semibold">
-            {t("detail.jobDescription")}
-          </h2>
+        <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <FileText className="text-muted-foreground size-4" aria-hidden />
+            <h2 className="text-sm font-semibold">
+              {t("detail.jobDescription")}
+            </h2>
+          </div>
+          {cleanedDescription !== application.description.trim() ? (
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={updateApplication.isPending}
+              onClick={() => void cleanDescription()}
+            >
+              {t("detail.cleanText")}
+            </Button>
+          ) : null}
         </header>
+        {cleanedDescription !== application.description.trim() ? (
+          <p className="border-border bg-muted text-foreground rounded-lg border p-3 text-sm">
+            {t("detail.importArtifacts")}
+          </p>
+        ) : null}
         <CollapsibleJobDescription
           description={application.description}
+          analysis={matchAnalysis}
+          viewerId={viewerId}
+          t={t}
           emptyLabel={t("detail.noDescription")}
           showMoreLabel={t("detail.showFullDescription")}
           showLessLabel={t("detail.hideFullDescription")}
@@ -601,13 +904,86 @@ function ApplicationDetailsPanel({
   );
 }
 
+function ApplicationDetailNotices({
+  application,
+  notices,
+  onOpenTailor,
+  onResolveNotice,
+  t,
+}: {
+  application: ApplicationDetail;
+  notices: DetailNotice[];
+  onOpenTailor: () => void;
+  onResolveNotice: (notice: DetailNotice) => void;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
+}) {
+  if (notices.length === 0) return null;
+
+  return (
+    <div className="space-y-2" aria-label={t("detail.noticesTitle")}>
+      {notices.map((notice) => (
+        <div
+          key={notice}
+          className="border-border bg-muted text-foreground flex flex-wrap items-center justify-between gap-3 rounded-lg border p-3"
+        >
+          <p className="min-w-0 flex-1 text-sm">
+            {t(`detail.notice.${notice}`)}
+          </p>
+          <div className="flex items-center gap-2">
+            {notice === "resume-title" ? (
+              <Button size="sm" variant="outline" onClick={onOpenTailor}>
+                {t("detail.review")}
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                variant="outline"
+                render={
+                  <Link
+                    href={
+                      notice === "self-email"
+                        ? {
+                            pathname: "/admin/job-tracker/companies/[id]/edit",
+                            params: { id: application.company.id },
+                          }
+                        : {
+                            pathname:
+                              "/admin/job-tracker/applications/[id]/edit",
+                            params: { id: application.id },
+                          }
+                    }
+                  />
+                }
+              >
+                {t("detail.review")}
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onResolveNotice(notice)}
+            >
+              {t("detail.resolved")}
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ApplicationWorkspacePanel({
   application,
   locale,
   rightTab,
   setRightTab,
   rightTabs,
-  rightPanelRef,
+  onCompleteEvent,
+  sentEmails,
+  viewerEmail,
+  onOpenEmail,
+  pendingCount,
+  emailCount,
   t,
 }: {
   application: ApplicationDetail;
@@ -619,65 +995,83 @@ function ApplicationWorkspacePanel({
     icon: typeof Clock;
     labelKey: "detail.timelineTab" | "detail.tailorTab" | "detail.emailTab";
   }[];
-  rightPanelRef: React.RefObject<HTMLDivElement | null>;
+  onCompleteEvent: (eventId: string) => void;
+  sentEmails: {
+    id: string;
+    recipientEmail: string;
+    sentAt: Date | null;
+    subject: string;
+  }[];
+  viewerEmail: string;
+  onOpenEmail: () => void;
+  pendingCount: number;
+  emailCount: number;
   t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
 }) {
   return (
-    <section className="border-border bg-card flex h-full flex-col overflow-hidden rounded-xl border shadow-sm">
-      <nav
-        aria-label={t("detail.tabsNavAria")}
-        className="bg-muted/30 flex shrink-0 overflow-hidden rounded-t-xl"
+    <section className="border-border bg-card flex min-h-[36rem] flex-col rounded-xl border shadow-sm">
+      <Tabs
+        value={rightTab}
+        onValueChange={(value) => setRightTab(value as RightPanelTab)}
       >
-        {rightTabs.map(({ id, icon: Icon, labelKey }) => {
-          const isActive = rightTab === id;
-          return (
-            <button
-              key={id}
-              type="button"
-              aria-pressed={isActive}
-              className={cn(
-                "flex flex-1 items-center justify-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "border-primary text-primary bg-card font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
-              )}
-              onClick={() => setRightTab(id)}
-            >
-              <Icon className="size-4" aria-hidden />
-              {t(labelKey)}
-            </button>
-          );
-        })}
-      </nav>
+        <nav aria-label={t("detail.tabsNavAria")}>
+          <TabsList
+            variant="line"
+            className="border-border w-full overflow-x-auto border-b"
+          >
+            {rightTabs.map(({ id, icon: Icon, labelKey }) => (
+              <TabsTrigger key={id} value={id}>
+                <Icon className="size-4" aria-hidden />
+                {t(labelKey)}
+                {id === "timeline" && pendingCount > 0 ? (
+                  <span
+                    aria-hidden
+                    className="bg-primary/10 rounded-full px-1.5 text-xs"
+                  >
+                    {pendingCount}
+                  </span>
+                ) : null}
+                {id === "emails" && emailCount > 0 ? (
+                  <span
+                    aria-hidden
+                    className="bg-primary/10 rounded-full px-1.5 text-xs"
+                  >
+                    {emailCount}
+                  </span>
+                ) : null}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </nav>
+      </Tabs>
 
       <div className="relative min-h-0 flex-1">
-        <div
-          ref={rightPanelRef}
-          role="tabpanel"
-          className="h-full overflow-y-auto p-4 sm:p-5"
-        >
+        <div role="tabpanel" className="p-4 sm:p-5">
           {rightTab === "timeline" ? (
             <ApplicationTimeline
               application={application}
               locale={locale}
               variant="embedded"
               activityHint={t("detail.timelineActivityHint")}
+              onCompleteEvent={onCompleteEvent}
+              sentEmails={sentEmails}
             />
           ) : rightTab === "emails" ? (
             <ApplicationEmailHistory
               applicationId={application.id}
               locale={locale}
+              viewerEmail={viewerEmail}
+              onOpenEmail={onOpenEmail}
             />
           ) : (
             <ResumeTailorWorkflow
+              key={application.cvFile?.url ?? application.id}
               applicationId={application.id}
               embedded
               existingCvFile={application.cvFile}
+              onSendCv={onOpenEmail}
             />
           )}
-        </div>
-        <div className="pointer-events-none absolute right-3 bottom-3 z-20">
-          <ScrollToTop containerRef={rightPanelRef} />
         </div>
       </div>
     </section>
@@ -697,18 +1091,40 @@ function DetailField({ label, value }: { label: string; value: string }) {
 
 function CollapsibleJobDescription({
   description,
+  analysis,
+  viewerId,
+  t,
   emptyLabel,
   showMoreLabel,
   showLessLabel,
 }: {
   description: string;
+  analysis: CvMatchAnalysis | null;
+  viewerId: string;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
   emptyLabel: string;
   showMoreLabel: string;
   showLessLabel: string;
 }) {
   const trimmed = description.trim();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+  const preferenceKey = `job-tracker:highlight:${viewerId}`;
+  const [userHighlighted, setUserHighlighted] = useState<boolean | null>(null);
+  const [prevViewerId, setPrevViewerId] = useState(viewerId);
+  if (prevViewerId !== viewerId) {
+    setPrevViewerId(viewerId);
+    setUserHighlighted(null);
+  }
+  const storedHighlighted = useSyncExternalStore(
+    subscribeStorage,
+    () => getStoredHighlight(preferenceKey),
+    getServerTrue,
+  );
+  const highlighted = userHighlighted ?? storedHighlighted;
   const canCollapse = trimmed.length > DESCRIPTION_COLLAPSE_CHARS;
+  const parts = highlighted
+    ? splitHighlightedDescription(trimmed, analysis)
+    : [{ text: trimmed }];
 
   if (!trimmed) {
     return <p className="text-muted-foreground text-sm">{emptyLabel}</p>;
@@ -716,13 +1132,52 @@ function CollapsibleJobDescription({
 
   return (
     <div>
+      <label className="mb-3 flex cursor-pointer items-center gap-2 text-xs">
+        <Checkbox
+          checked={highlighted}
+          onCheckedChange={(checked) => {
+            const next = checked === true;
+            setUserHighlighted(next);
+            try {
+              localStorage.setItem(preferenceKey, String(next));
+            } catch {
+              // ignore
+            }
+          }}
+        />
+        {t("detail.highlightMatches")}
+      </label>
+      {highlighted ? (
+        <p className="text-muted-foreground mb-2 text-xs">
+          {t("detail.legend.present")} · {t("detail.legend.partial")}
+          {analysis ? ` · ${t("detail.legend.missing")}` : null}
+        </p>
+      ) : null}
       <div
         className={cn(
           "text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap",
           !expanded && canCollapse && "max-h-40 overflow-hidden",
         )}
       >
-        {trimmed}
+        {parts.map((part, index) =>
+          part.status ? (
+            <mark
+              key={index}
+              title={t(`detail.legend.${part.status}`)}
+              className={cn(
+                "rounded-sm px-0.5 underline decoration-dashed underline-offset-2",
+                part.status === "present" && "bg-primary/15 text-foreground",
+                part.status === "partial" && "bg-warning/15 text-foreground",
+                part.status === "missing" &&
+                  "bg-destructive/15 text-foreground decoration-wavy",
+              )}
+            >
+              {part.text}
+            </mark>
+          ) : (
+            <span key={index}>{part.text}</span>
+          ),
+        )}
       </div>
       {canCollapse ? (
         <Button

@@ -1,8 +1,8 @@
+import { readResumeSnapshot } from "@/features/resume-engine/lib/tailored-resume-document";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { CvImportDraftSchema } from "@/features/cv/lib/cv-import-draft";
 import {
   formatZodParseError,
   parseAiJsonResponse,
@@ -116,15 +116,15 @@ export const interviewPrepAdminRouter = createTRPCRouter({
       ]);
 
       const snapshot = latestExport
-        ? CvImportDraftSchema.safeParse(latestExport.structuredSnapshot)
+        ? readResumeSnapshot(latestExport.structuredSnapshot)
         : null;
 
       const exportJd = latestExport?.jobDescription?.trim();
       const appJd = application.description?.trim();
       const jd = exportJd && exportJd.length > 0 ? exportJd : (appJd ?? "");
 
-      const snapshotSkills = snapshot?.success
-        ? snapshot.data.skills.flatMap((s) => s.items)
+      const snapshotSkills = snapshot
+        ? snapshot.skills.flatMap((s) => s.items)
         : [];
       const matchKeywords = latestExport?.matchAnalysis
         ? (parseMatchAnalysis(latestExport.matchAnalysis)?.keywords ?? []).map(
@@ -140,7 +140,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
         position: application.position,
         companyName: application.company.name,
         hasJobDescription: jdLength >= 20,
-        hasTailoredSnapshot: Boolean(snapshot?.success),
+        hasTailoredSnapshot: Boolean(snapshot),
         suggestedTools,
         event: {
           id: event.id,

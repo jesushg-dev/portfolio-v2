@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Tienda API: E-Commerce GraphQL",
       "description": "API backend modular para e-commerce desarrollada con Clean Architecture en Node.js y TypeScript. Implementa esquemas GraphQL con Apollo Server, resolvers fuertemente tipados, autenticación JWT, pool de conexiones MySQL con Objection.js/Knex y contenedorización en Docker.",
-      "hook": "Clean Architecture en Node.js & TypeScript · Apollo Server GraphQL · Pool MySQL con Objection.js & Docker",
-      "challenge": "Diseñar e implementar un backend transaccional de alto rendimiento para tienda en línea, con operaciones concurrentes de pedidos, catálogos multi-unidad y control de permisos granulares.",
-      "approach": "Arquitectura modular por capas con Express, Apollo Server y TypeScript. Esquemas GraphQL con tipado estricto (GraphQL Code Generator), capa ORM con Objection.js/Knex sobre MySQL y seguridad con GraphQL Shield y JWT.",
-      "outcome": "Eliminación del over-fetching en clientes web y móviles, tiempos de respuesta sub-20ms en consultas de pedidos e inventario y despacho confiable de transacciones.",
       "caseStudy": {
         "chips": [
           "E-Commerce Backend",
@@ -44,6 +40,7 @@
             "value": "m-server (https://github.com/Jesus-Hernandez23/m-server)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "covid19",
         "context": "El servidor backend de comercio electrónico (m-server) es la columna vertebral de datos para la plataforma digital. Diseñado desde cero con Apollo Server y TypeScript, centraliza la lógica de negocio para pedidos, productos, clientes, créditos y facturación, exponiendo una API GraphQL fuertemente tipada con esquemas modulares y autorización granular.",
         "roleTitle": "Desarrollador Backend Senior",
@@ -112,12 +109,51 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Evitar problemas de sobre-obtención (over-fetching) y consultas N+1 en relaciones complejas de pedidos y productos.",
-          "Garantizar transacciones ACID consistentes en MySQL durante picos concurrentes de compra.",
-          "Documentación viva autogenerada mediante introspección y compatibilidad con Apollo Studio Explorer."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Diseñar e implementar un backend transaccional de alto rendimiento para tienda en línea, con operaciones concurrentes de pedidos, catálogos multi-unidad y control de permisos granulares.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Evitar problemas de sobre-obtención (over-fetching) y consultas N+1 en relaciones complejas de pedidos y productos.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Garantizar transacciones ACID consistentes en MySQL durante picos concurrentes de compra.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Documentación viva autogenerada mediante introspección y compatibilidad con Apollo Studio Explorer.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "api-capabilities",
             "kind": "CARDS",
@@ -167,7 +203,7 @@
             "kind": "LAYERS",
             "eyebrow": "Arquitectura Técnica",
             "title": "Estructura por Capas Desacopladas de m-server",
-            "lead": "Separación clara de responsabilidades para máxima mantenibilidad y extensibilidad.",
+            "lead": "Separación clara de responsabilidades para máxima mantenibilidad y extensibilidad.\n\nArquitectura modular por capas con Express, Apollo Server y TypeScript. Esquemas GraphQL con tipado estricto (GraphQL Code Generator), capa ORM con Objection.js/Knex sobre MySQL y seguridad con GraphQL Shield y JWT.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -249,6 +285,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Eliminación del over-fetching en clientes web y móviles, tiempos de respuesta sub-20ms en consultas de pedidos e inventario y despacho confiable de transacciones.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -257,10 +306,6 @@
       "locale": "en",
       "title": "Store API: E-Commerce GraphQL",
       "description": "Modular e-commerce backend API engineered with Clean Architecture in Node.js and TypeScript. Features typed GraphQL schemas via Apollo Server, JWT authentication, MySQL connection pooling with Objection.js/Knex, and Docker containerization.",
-      "hook": "Clean Architecture in Node.js & TypeScript · Apollo Server GraphQL · MySQL connection pool with Objection.js & Docker",
-      "challenge": "Architect and implement a high-performance e-commerce backend handling concurrent order workflows, multi-tiered product catalogs, and fine-grained authorization.",
-      "approach": "Layered modular architecture using Express, Apollo Server, and TypeScript. Implemented strict GraphQL schemas with Code Generator, Objection.js/Knex ORM over MySQL, and security via GraphQL Shield and JWT.",
-      "outcome": "Eliminated network payload bloat across web and mobile clients, achieved sub-20ms latency on complex order/inventory queries, and ensured reliable order fulfillment.",
       "caseStudy": {
         "chips": [
           "E-Commerce Backend",
@@ -291,6 +336,7 @@
             "value": "m-server (https://github.com/Jesus-Hernandez23/m-server)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "covid19",
         "context": "The e-commerce backend server (m-server) serves as the core data backbone for the digital store. Built from scratch with Apollo Server and TypeScript, it centralizes business logic for orders, products, clients, credits, and invoicing, exposing a strictly-typed GraphQL API with modular schemas and fine-grained authorization.",
         "roleTitle": "Senior Backend Developer",
@@ -359,12 +405,51 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Eliminate over-fetching and prevent N+1 query bottlenecks across complex order and product relations.",
-          "Ensure consistent ACID transaction handling in MySQL during high-concurrency flash purchase spikes.",
-          "Maintain live self-updating documentation via introspection and full Apollo Studio Explorer compatibility."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Architect and implement a high-performance e-commerce backend handling concurrent order workflows, multi-tiered product catalogs, and fine-grained authorization.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Eliminate over-fetching and prevent N+1 query bottlenecks across complex order and product relations.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Ensure consistent ACID transaction handling in MySQL during high-concurrency flash purchase spikes.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Maintain live self-updating documentation via introspection and full Apollo Studio Explorer compatibility.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "api-capabilities",
             "kind": "CARDS",
@@ -414,7 +499,7 @@
             "kind": "LAYERS",
             "eyebrow": "Technical Architecture",
             "title": "Decoupled Layered Architecture of m-server",
-            "lead": "Strict separation of concerns maximizing maintainability and operational stability.",
+            "lead": "Strict separation of concerns maximizing maintainability and operational stability.\n\nLayered modular architecture using Express, Apollo Server, and TypeScript. Implemented strict GraphQL schemas with Code Generator, Objection.js/Knex ORM over MySQL, and security via GraphQL Shield and JWT.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -496,6 +581,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Eliminated network payload bloat across web and mobile clients, achieved sub-20ms latency on complex order/inventory queries, and ensured reliable order fulfillment.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -504,10 +602,6 @@
       "locale": "nl",
       "title": "Store API: E-Commerce GraphQL",
       "description": "Modulaire e-commerce backend-API ontworpen volgens Clean Architecture in Node.js en TypeScript. Bevat getypeerde GraphQL-schema's via Apollo Server, JWT-authenticatie, MySQL-connectiepooling met Objection.js/Knex en Docker-containerisatie.",
-      "hook": "Clean Architecture in Node.js & TypeScript · Apollo Server GraphQL · MySQL connectiepool met Objection.js & Docker",
-      "challenge": "Ontwikkelen van een krachtige e-commerce backend voor gelijktijdige bestellingen, productcatalogi en fijnmazige autorisatie.",
-      "approach": "Gelaagde modulaire architectuur met Express, Apollo Server en TypeScript. GraphQL-schema's met Code Generator, Objection.js/Knex ORM op MySQL en GraphQL Shield met JWT.",
-      "outcome": "Geen over-fetching meer op web en mobiel, sub-20ms responstijden bij complexe queries en betrouwbare orderverwerking.",
       "caseStudy": {
         "chips": [
           "E-Commerce Backend",
@@ -538,6 +632,7 @@
             "value": "m-server (https://github.com/Jesus-Hernandez23/m-server)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "covid19",
         "context": "De e-commerce backendserver (m-server) fungeert als de centrale databackbone voor de digitale winkel. Ontworpen met Apollo Server en TypeScript, centraliseert het de bedrijfslogica voor bestellingen, producten, klanten, kredieten en facturatie via een strikt getypeerde GraphQL API.",
         "roleTitle": "Senior Backend Ontwikkelaar",
@@ -606,12 +701,51 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Over-fetching en N+1 queryproblemen elimineren bij complexe product- en bestelrelaties.",
-          "ACID-transacties in MySQL waarborgen tijdens gelijktijdige winkelpieken.",
-          "Zelfactualiserende documentatie via introspectie en Apollo Studio Explorer."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Ontwikkelen van een krachtige e-commerce backend voor gelijktijdige bestellingen, productcatalogi en fijnmazige autorisatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Over-fetching en N+1 queryproblemen elimineren bij complexe product- en bestelrelaties.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "ACID-transacties in MySQL waarborgen tijdens gelijktijdige winkelpieken.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Zelfactualiserende documentatie via introspectie en Apollo Studio Explorer.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "api-capabilities",
             "kind": "CARDS",
@@ -661,7 +795,7 @@
             "kind": "LAYERS",
             "eyebrow": "Technische Architectuur",
             "title": "Ontkoppelde Gelaagde Architectuur van m-server",
-            "lead": "Duidelijke scheiding van verantwoordelijkheden voor maximale onderhoudbaarheid.",
+            "lead": "Duidelijke scheiding van verantwoordelijkheden voor maximale onderhoudbaarheid.\n\nGelaagde modulaire architectuur met Express, Apollo Server en TypeScript. GraphQL-schema's met Code Generator, Objection.js/Knex ORM op MySQL en GraphQL Shield met JWT.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -740,6 +874,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Geen over-fetching meer op web en mobiel, sub-20ms responstijden bij complexe queries en betrouwbare orderverwerking.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

@@ -9,10 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DynamicIcon } from "@/components/shared/dynamic-icon";
-import {
-  getIconOptions,
-  type IconPreset,
-} from "@/lib/icons/icon-registry";
+import { getIconOptions, type IconPreset } from "@/lib/icons/icon-registry";
 import { cn } from "@/lib/utils";
 
 export interface UniversalIconPickerProps {

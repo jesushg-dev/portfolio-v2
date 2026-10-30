@@ -10,7 +10,7 @@ export function ILovePdfIntegrationGuide() {
   return (
     <aside className="bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-5">
       <div className="flex items-center gap-2">
-        <div className="bg-red-500/10 text-red-500 flex size-7 items-center justify-center rounded-lg">
+        <div className="flex size-7 items-center justify-center rounded-lg bg-red-500/10 text-red-500">
           <FileText className="size-4" aria-hidden />
         </div>
         <h3 className="text-foreground text-sm font-semibold">

@@ -12,18 +12,22 @@ interface UploadThingRouteHandlers {
 
 async function createTenantRouteHandler(
   req: Request,
-): Promise<UploadThingRouteHandlers> {
+): Promise<UploadThingRouteHandlers | Response> {
   const session = await auth.api.getSession({ headers: req.headers });
   const userId = session?.user?.id;
 
   if (typeof userId !== "string" || userId.length === 0) {
-    throw new Error("Unauthorized");
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const client = await getTenantUploadThingClient(userId);
   if (!client) {
-    throw new Error(
-      "UploadThing is not configured. Connect it in Admin → Credentials first.",
+    return Response.json(
+      {
+        error:
+          "UploadThing is not configured. Connect it in Admin → Credentials first.",
+      },
+      { status: 503 },
     );
   }
 
@@ -34,11 +38,13 @@ async function createTenantRouteHandler(
 }
 
 export async function GET(req: Request): Promise<Response> {
-  const { GET: handleGet } = await createTenantRouteHandler(req);
-  return handleGet(req);
+  const handler = await createTenantRouteHandler(req);
+  if (handler instanceof Response) return handler;
+  return handler.GET(req);
 }
 
 export async function POST(req: Request): Promise<Response> {
-  const { POST: handlePost } = await createTenantRouteHandler(req);
-  return handlePost(req);
+  const handler = await createTenantRouteHandler(req);
+  if (handler instanceof Response) return handler;
+  return handler.POST(req);
 }

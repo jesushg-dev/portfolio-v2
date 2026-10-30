@@ -105,7 +105,9 @@ Do not create custom icon dropdowns, inline string-based icon selects (`<Select>
 <Select onValueChange={field.onChange} value={field.value}>
   <SelectContent>
     {["code", "server", "smartphone"].map((name) => (
-      <SelectItem key={name} value={name}>{name}</SelectItem>
+      <SelectItem key={name} value={name}>
+        {name}
+      </SelectItem>
     ))}
   </SelectContent>
 </Select>
@@ -136,7 +138,7 @@ import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
       />
     </FormItem>
   )}
-/>
+/>;
 ```
 
 2. **For Dynamic Rendering from Database / String Keys (`DynamicIcon` / `resolveIcon`):**
@@ -148,7 +150,7 @@ import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
 import { DynamicIcon } from "@/components/shared/dynamic-icon";
 import { resolveIcon } from "@/lib/icons/icon-registry";
 
-<DynamicIcon name={service.icon} className="size-6 text-primary" />
+<DynamicIcon name={service.icon} className="text-primary size-6" />;
 ```
 
 ---
@@ -1145,4 +1147,4 @@ Every translatable model (`*Translation`) in `prisma/schema/main.prisma` MUST st
 4. **Modular Project Files (`prisma/data/projects/<slug>.json`)**:
    - Projects live in individual files under `prisma/data/projects/<slug>.json` (1 file per project as a single object).
    - Monolithic `portfolio-projects.json` is obsolete and forbidden.
-   - Clear separation: Card metadata (`title`, short `description`, `skills`, distinct metric `hook`) vs. Case Study content (`sections`, `architecture`, `decisions`). Do NOT repeat the card description word-for-word in `context`.
+   - Clear separation: Card metadata (`title`, short `description`, `skills`) vs. Case Study content (`tldr`, `sections`, `architecture`, `decisions`). Card highlights derive from `caseStudy.tldr`. Do NOT repeat the card description word-for-word in `context`.

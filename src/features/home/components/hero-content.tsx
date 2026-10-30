@@ -1,3 +1,4 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -29,7 +30,10 @@ export default async function HeroContent({
   stats,
   showCvLink = true,
 }: HeroContentProps) {
-  const t = await getTranslations("main.heroMain");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.heroMain",
+  });
   const { fullName, heroSubtitle, heroTagline, heroSummary } = heroData;
 
   const nameParts = fullName.split(" ");
@@ -80,7 +84,7 @@ export default async function HeroContent({
           <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
             {stats.yearsExperience}+
           </dd>
-          <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+          <dt className="text-muted-foreground mt-1 text-sm font-medium">
             {t("yearsExperience")}
           </dt>
         </div>
@@ -88,7 +92,7 @@ export default async function HeroContent({
           <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
             {stats.projectsCount}+
           </dd>
-          <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+          <dt className="text-muted-foreground mt-1 text-sm font-medium">
             {t("projectsDelivered")}
           </dt>
         </div>
@@ -96,7 +100,7 @@ export default async function HeroContent({
           <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
             {stats.engineersMentored ?? 6}
           </dd>
-          <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+          <dt className="text-muted-foreground mt-1 text-sm font-medium">
             {t("engineersLed")}
           </dt>
         </div>

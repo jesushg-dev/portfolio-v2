@@ -1,0 +1,4 @@
+Contact: mailto:jess232016@gmail.com
+Expires: 2027-10-01T00:00:00Z
+Preferred-Languages: es, en
+Canonical: https://www.jesushg.com/.well-known/security.txt

@@ -45,25 +45,16 @@ const UsesFilterTabs: FC<UsesFilterTabsProps> = ({
     <div className="mb-2 flex w-full justify-center px-2 sm:px-0">
       <Tab
         tabId="uses-filter"
-        minimal
         currentTab={value}
         setCurrentTab={onChange}
         ariaLabel={ariaLabel}
-        className="bg-muted/50 border-border z-20 inline-flex max-w-full items-center justify-center gap-1 rounded-2xl border p-1"
+        className="z-20 max-w-full"
       >
-        <TabItem icon={HiOutlineEye} title={labels.all} description="" />
-        <TabItem
-          icon={HiOutlineCollection}
-          title={labels.everyday}
-          description=""
-        />
-        <TabItem
-          icon={HiOutlineDesktopComputer}
-          title={labels.software}
-          description=""
-        />
-        <TabItem icon={HiOutlineGlobe} title={labels.browser} description="" />
-        <TabItem icon={HiOutlineCode} title={labels.coding} description="" />
+        <TabItem icon={HiOutlineEye} title={labels.all} />
+        <TabItem icon={HiOutlineCollection} title={labels.everyday} />
+        <TabItem icon={HiOutlineDesktopComputer} title={labels.software} />
+        <TabItem icon={HiOutlineGlobe} title={labels.browser} />
+        <TabItem icon={HiOutlineCode} title={labels.coding} />
       </Tab>
     </div>
   );

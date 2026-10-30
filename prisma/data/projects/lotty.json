@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Lotty",
       "description": "Portal web interactivo en React para la consulta y análisis en tiempo real de los sorteos oficiales de Loto Nicaragua. Cuenta con estadísticas de números frecuentes, historial de jugadas diarias, diseño responsive con Bootstrap y visualización inmediata de resultados.",
-      "hook": "Portal Web en React · Consulta de sorteos oficiales en tiempo real · Estadísticas de números frecuentes y diseño responsive",
-      "challenge": "Construir una aplicación web ligera y accesible para consultar los sorteos diarios y el histórico de resultados de la lotería nacional (La Diaria, Fechas, Jugá 3, Premia 2) sin fricción en conexiones móviles lentas.",
-      "approach": "Diseñé una SPA interactiva en React con Bootstrap para una interfaz limpia, modularicé las vistas por modalidad de juego mediante HashRouter para compatibilidad universal en Vercel, y optimicé el consumo de datos para carga instantánea de números ganadores.",
-      "outcome": "Una plataforma ágil con consulta de sorteos en vivo a las 11:00 AM, 03:00 PM y 09:00 PM, historial categorizado por juego y experiencia 100% responsiva para usuarios móviles.",
       "caseStudy": {
         "chips": ["Lotería Nacional", "Frontend", "Resultados en Vivo"],
         "facts": [
@@ -38,6 +34,7 @@
             "value": "Ene 2022 – Jun 2022"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "rick-and-morty",
         "context": "Aplicación web orientada a brindar a los usuarios una forma rápida, clara y visualmente agradable de verificar los números ganadores y las combinaciones de la lotería en Nicaragua.",
         "roleTitle": "Desarrollador Frontend en solitario",
@@ -106,12 +103,51 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Carga instantánea en conexiones móviles de baja velocidad",
-          "Compatibilidad con despliegues en Vercel sin servidor dinámico",
-          "Diseño visual de alto contraste y legibilidad para números ganadores"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Construir una aplicación web ligera y accesible para consultar los sorteos diarios y el histórico de resultados de la lotería nacional (La Diaria, Fechas, Jugá 3, Premia 2) sin fricción en conexiones móviles lentas.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Carga instantánea en conexiones móviles de baja velocidad",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Compatibilidad con despliegues en Vercel sin servidor dinámico",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Diseño visual de alto contraste y legibilidad para números ganadores",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "capabilities",
             "kind": "CARDS",
@@ -205,7 +241,7 @@
             "kind": "LAYERS",
             "eyebrow": "Arquitectura",
             "title": "Capas de la Aplicación",
-            "lead": "Organización modular del frontend para desacoplar presentación de los datos de sorteo.",
+            "lead": "Organización modular del frontend para desacoplar presentación de los datos de sorteo.\n\nDiseñé una SPA interactiva en React con Bootstrap para una interfaz limpia, modularicé las vistas por modalidad de juego mediante HashRouter para compatibilidad universal en Vercel, y optimicé el consumo de datos para carga instantánea de números ganadores.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -277,6 +313,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Una plataforma ágil con consulta de sorteos en vivo a las 11:00 AM, 03:00 PM y 09:00 PM, historial categorizado por juego y experiencia 100% responsiva para usuarios móviles.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -285,10 +334,6 @@
       "locale": "en",
       "title": "Lotty",
       "description": "Interactive React web portal for real-time tracking and statistical analysis of official Nicaraguan lottery draws. Features frequently drawn number analytics, daily draw archives, responsive Bootstrap UI, and instant winning number lookups.",
-      "hook": "React Web Portal · Real-time official lottery draw verification · Number frequency statistics & responsive UI",
-      "challenge": "Build a fast, lightweight, and accessible web application to consult daily lottery draws and historical winning records in Nicaragua (La Diaria, Fechas, Juga 3, Premia 2) over variable mobile network speeds.",
-      "approach": "Engineered an interactive React SPA with Bootstrap for clean responsive styling, organized game modalities using HashRouter for universal Vercel static hosting compatibility, and structured data modules for instant result rendering.",
-      "outcome": "An agile platform offering live draw verification across all three official daily timeslots (11:00 AM, 03:00 PM, 09:00 PM), categorized historical draw logs, and a 100% responsive mobile layout.",
       "caseStudy": {
         "chips": ["National Lottery", "Frontend", "Live Draws"],
         "facts": [
@@ -313,6 +358,7 @@
             "value": "Jan 2022 – Jun 2022"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "rick-and-morty",
         "context": "A web application crafted to give users a fast, clear, and visually appealing way to check winning lottery numbers and game results in Nicaragua.",
         "roleTitle": "Solo Frontend Developer",
@@ -381,12 +427,51 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Instant loading on low-bandwidth cellular networks",
-          "Zero-backend Vercel static deployment compatibility",
-          "High-contrast visual design for rapid number readability"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Build a fast, lightweight, and accessible web application to consult daily lottery draws and historical winning records in Nicaragua (La Diaria, Fechas, Juga 3, Premia 2) over variable mobile network speeds.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Instant loading on low-bandwidth cellular networks",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Zero-backend Vercel static deployment compatibility",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "High-contrast visual design for rapid number readability",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "capabilities",
             "kind": "CARDS",
@@ -480,7 +565,7 @@
             "kind": "LAYERS",
             "eyebrow": "Architecture",
             "title": "Application Layers",
-            "lead": "Modular frontend organization separating presentation from lottery data processing.",
+            "lead": "Modular frontend organization separating presentation from lottery data processing.\n\nEngineered an interactive React SPA with Bootstrap for clean responsive styling, organized game modalities using HashRouter for universal Vercel static hosting compatibility, and structured data modules for instant result rendering.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -552,6 +637,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "An agile platform offering live draw verification across all three official daily timeslots (11:00 AM, 03:00 PM, 09:00 PM), categorized historical draw logs, and a 100% responsive mobile layout.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -560,10 +658,6 @@
       "locale": "nl",
       "title": "Lotty",
       "description": "Interactief React-webportaal voor realtime uitslagen en statistische analyse van de officiële Nicaraguaanse loterij. Bevat frequentie-analyses van getallen, dagelijkse trekkingsarchieven, responsieve Bootstrap UI en directe verificatie.",
-      "hook": "React Webportaal · Realtime officiële loterijuitslagen raadplegen · Getalfrequentie-statistieken & responsieve UI",
-      "challenge": "Bouw een snelle, lichte en toegankelijke webapplicatie om dagelijkse trekkingen en historische uitslagen van de Nicaraguaanse loterij (La Diaria, Fechas, Juga 3, Premia 2) te bekijken over mobiele verbindingen.",
-      "approach": "Een interactieve React SPA met Bootstrap voor overzichtelijke opmaak, spelvormen georganiseerd met HashRouter voor compatibiliteit met statische hosting op Vercel en snelle nummerweergave.",
-      "outcome": "Een responsief platform met live trekkingen om 11:00 uur, 15:00 uur en 21:00 uur, gecategoriseerde uitslagen en een vlotte mobiele weergave.",
       "caseStudy": {
         "chips": ["Nationale Loterij", "Frontend", "Live Uitslagen"],
         "facts": [
@@ -588,6 +682,7 @@
             "value": "Jan 2022 – Jun 2022"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "rick-and-morty",
         "context": "Een webapplicatie ontworpen om gebruikers snel en eenvoudig toegang te geven tot winnende getallen en trekkingsresultaten van de loterij in Nicaragua.",
         "roleTitle": "Solo Frontend Ontwikkelaar",
@@ -656,12 +751,51 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Directe laadtijd op trage mobiele netwerken",
-          "Volledig statische Vercel-compatibiliteit zonder serverprocessen",
-          "Contrastrijk ontwerp voor directe leesbaarheid van getallen"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Bouw een snelle, lichte en toegankelijke webapplicatie om dagelijkse trekkingen en historische uitslagen van de Nicaraguaanse loterij (La Diaria, Fechas, Juga 3, Premia 2) te bekijken over mobiele verbindingen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Directe laadtijd op trage mobiele netwerken",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Volledig statische Vercel-compatibiliteit zonder serverprocessen",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Contrastrijk ontwerp voor directe leesbaarheid van getallen",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "capabilities",
             "kind": "CARDS",
@@ -755,7 +889,7 @@
             "kind": "LAYERS",
             "eyebrow": "Architectuur",
             "title": "Applicatielagen",
-            "lead": "Modulaire opzet die de presentatie scheidt van trekkingsgegevens.",
+            "lead": "Modulaire opzet die de presentatie scheidt van trekkingsgegevens.\n\nEen interactieve React SPA met Bootstrap voor overzichtelijke opmaak, spelvormen georganiseerd met HashRouter voor compatibiliteit met statische hosting op Vercel en snelle nummerweergave.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -824,6 +958,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Een responsief platform met live trekkingen om 11:00 uur, 15:00 uur en 21:00 uur, gecategoriseerde uitslagen en een vlotte mobiele weergave.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

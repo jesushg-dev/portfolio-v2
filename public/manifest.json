@@ -1,10 +1,10 @@
 {
   "display": "standalone",
-  "theme_color": "#05f",
-  "background_color": "#05f",
+  "theme_color": "#171b24",
+  "background_color": "#171b24",
   "scope": "/",
   "start_url": "/",
-  "short_name": "Portfolio JHG",
+  "short_name": "JH",
   "name": "Portfolio Jes\u00fas Hern\u00e1ndez",
   "description": "Hola, soy Jes\u00fas Hern\u00e1ndez un apasionado de la programaci\u00f3n y el desarrollo web, me gusta d\u00eda a d\u00eda aprender y mejorar mis habilidades, me especializo en tecnolog\u00edas frontend, sin embargo siempre estoy dispuesto a adaptarme a nuevos lenguajes, bibliotecas y frameworks.",
   "icons": [

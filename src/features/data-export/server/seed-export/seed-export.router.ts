@@ -1,4 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { nowSettingsEditorInclude } from "@/features/now/lib/now-editor-dto";
 
 import {
   SEED_EXPORT_FILENAMES,
@@ -171,7 +172,7 @@ export const seedExportRouter = createTRPCRouter({
     const [settings, focuses, languages] = await Promise.all([
       ctx.db.nowSettings.findUnique({
         where: { userId: ctx.user.id },
-        include: { NowSettingsTranslation: true },
+        include: nowSettingsEditorInclude,
       }),
       ctx.db.nowFocus.findMany({
         where: { userId: ctx.user.id },
@@ -282,7 +283,7 @@ export const seedExportRouter = createTRPCRouter({
       }),
       ctx.db.nowSettings.findUnique({
         where: { userId },
-        include: { NowSettingsTranslation: true },
+        include: nowSettingsEditorInclude,
       }),
       ctx.db.nowFocus.findMany({
         where: { userId },

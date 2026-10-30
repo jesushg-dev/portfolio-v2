@@ -95,7 +95,6 @@ export default function ProjectSnapshot({
         {gallery && gallery.length > 1 ? (
           <div className="mb-3 px-1">
             <Tab
-              minimal
               currentTab={activeScreenIndex}
               setCurrentTab={setActiveScreenIndex}
               ariaLabel="Screens Gallery"
@@ -107,7 +106,6 @@ export default function ProjectSnapshot({
                   index={idx}
                   icon={resolveIcon(item.icon, LayoutGrid)}
                   title={item.title}
-                  description={item.description}
                 />
               ))}
             </Tab>

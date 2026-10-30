@@ -14,6 +14,18 @@ if (typeof document !== "undefined" && !document.elementFromPoint) {
   document.elementFromPoint = () => null;
 }
 
+if (typeof Element !== "undefined" && !Element.prototype.getAnimations) {
+  Element.prototype.getAnimations = () => [];
+}
+
+if (
+  typeof window !== "undefined" &&
+  typeof window.PointerEvent === "undefined"
+) {
+  window.PointerEvent =
+    class PointerEvent extends MouseEvent {} as unknown as typeof PointerEvent;
+}
+
 if (typeof window !== "undefined" && !window.matchMedia) {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -50,6 +62,40 @@ if (typeof globalThis.Response === "undefined") {
   } as unknown as typeof Response;
 }
 
+if (typeof globalThis.Request === "undefined") {
+  globalThis.Request = class PolyfillRequest {
+    url: string;
+    method: string;
+    headers: Headers;
+    body?: unknown;
+    constructor(
+      input: string | { url: string },
+      init?: { method?: string; headers?: HeadersInit; body?: unknown },
+    ) {
+      this.url = typeof input === "string" ? input : input.url;
+      this.method = init?.method ?? "GET";
+      this.headers = new Headers(init?.headers);
+      this.body = init?.body;
+    }
+
+    clone() {
+      return new PolyfillRequest(this.url, {
+        method: this.method,
+        headers: this.headers,
+        body: this.body,
+      });
+    }
+  } as unknown as typeof Request;
+}
+
+if (typeof globalThis.fetch === "undefined") {
+  globalThis.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    status: 200,
+    json: () => Promise.resolve({}),
+  }) as unknown as typeof fetch;
+}
+
 import enMessages from "../../messages/en.json";
 
 const mockMotionPropKeys = new Set([
@@ -81,7 +127,7 @@ const mockNextImagePropKeys = new Set([
   "fill",
   "loader",
   "placeholder",
-  "priority",
+  "preload",
   "quality",
   "sizes",
   "unoptimized",
@@ -150,6 +196,11 @@ jest.mock("next-intl", () => {
       return translate;
     },
     useLocale: () => "en",
+    useFormatter: () => ({
+      number: (value: number) => String(value),
+      dateTime: (date: Date) =>
+        date instanceof Date ? date.toLocaleDateString() : String(date),
+    }),
     NextIntlClientProvider: ({ children }: { children: ReactNode }) => children,
   };
 });
@@ -225,6 +276,7 @@ jest.mock("motion/react", () => {
     useSpring: (v: unknown) => v,
     useTransform: (v: unknown) => v,
     useReducedMotion: () => false,
+    useInView: () => false,
     useDragControls: () => ({
       start: jest.fn(),
     }),
@@ -249,7 +301,6 @@ jest.mock("next-intl/server", () => {
 
   return {
     getTranslations: jest.fn(() => Promise.resolve(createMockTranslator())),
-    setRequestLocale: jest.fn(),
   };
 });
 
@@ -279,6 +330,20 @@ jest.mock("@t3-oss/env-nextjs", () => ({
 
 jest.mock("next/headers", () => ({
   headers: jest.fn(() => Promise.resolve(new Headers())),
+}));
+
+jest.mock(
+  "next/root-params",
+  () => ({
+    locale: jest.fn(() => Promise.resolve("en")),
+    site: jest.fn(() => Promise.resolve("primary")),
+  }),
+  { virtual: true },
+);
+
+jest.mock("next/cache", () => ({
+  revalidateTag: jest.fn(),
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
 }));
 
 jest.mock("@/lib/auth", () => ({

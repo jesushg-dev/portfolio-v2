@@ -75,9 +75,7 @@ describe("Certification", () => {
       isFetching: false,
       fetchNextPage: jest.fn(),
     });
-    const { container } = renderWithIntl(
-      <Certification slug={undefined} />,
-    );
+    const { container } = renderWithIntl(<Certification slug={undefined} />);
     expect(container.querySelector(".react-loading-skeleton")).toBeTruthy();
   });
 

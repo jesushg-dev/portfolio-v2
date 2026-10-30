@@ -1,7 +1,7 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { UsesAdminPanel } from "@/features/uses/components/admin/uses-admin-panel";
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
@@ -17,7 +17,6 @@ interface Props {
 
 const UsesAdminPage: FC<Props> = async ({ params, searchParams }) => {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const tabParam = typeof search.tab === "string" ? search.tab : "EVERYDAY";
   const initialTab =
@@ -29,7 +28,7 @@ const UsesAdminPage: FC<Props> = async ({ params, searchParams }) => {
       : "EVERYDAY";
 
   const [t, everyday, software, browser, settingsPage] = await Promise.all([
-    getTranslations("admin.uses"),
+    getTranslations({ locale: locale as Locale, namespace: "admin.uses" }),
     getUserUsesItemsWithLanguages({
       page: 1,
       perPage: 50,

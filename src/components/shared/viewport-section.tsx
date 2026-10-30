@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { useTrpcDeferredReady } from "@/components/providers/deferred-trpc-provider";
+import { usePublicWidgetsReady } from "@/components/providers/public-trpc-provider";
 
 interface ViewportSectionProps {
   children: ReactNode;
@@ -33,7 +33,7 @@ export default function ViewportSection({
 }: ViewportSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const trpcReady = useTrpcDeferredReady();
+  const trpcReady = usePublicWidgetsReady();
   const canMountChildren = isVisible && (!requiresTrpc || trpcReady);
 
   useEffect(() => {

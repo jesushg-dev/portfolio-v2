@@ -22,13 +22,11 @@ import { cn } from "@/lib/utils";
 import { useTabIndicatorDrag } from "./use-tab-indicator-drag";
 
 interface ITabProps {
-  minimal?: boolean;
   vertical?: boolean;
   currentTab?: number;
   setCurrentTab?: (value: number) => void;
   children?: ReactNode;
   className?: string;
-  variant?: "primary" | "secondary";
   tabId?: string;
   ariaLabel: string;
 }
@@ -40,10 +38,8 @@ const Tab: FC<ITabProps> = ({
   },
   className,
   tabId = "",
-  minimal = false,
   currentTab = 0,
   vertical = false,
-  variant = "primary",
   ariaLabel,
 }) => {
   const tabItems = useMemo(() => {
@@ -69,6 +65,7 @@ const Tab: FC<ITabProps> = ({
     onActivePointerDown,
     indicatorProps,
     isDragging,
+    isVisible,
     glow,
   } = useTabIndicatorDrag({
     currentTab,
@@ -82,7 +79,7 @@ const Tab: FC<ITabProps> = ({
   const edgeScrollRafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (vertical) return;
+    if (vertical || !isVisible) return;
     const scroller = scrollContainerRef.current;
     if (!scroller) return;
 
@@ -110,7 +107,7 @@ const Tab: FC<ITabProps> = ({
       scroller.removeEventListener("scroll", updateScrollEdges);
       window.removeEventListener("resize", updateScrollEdges);
     };
-  }, [scrollContainerRef, tabItems.length, vertical]);
+  }, [isVisible, scrollContainerRef, tabItems.length, vertical]);
 
   // Velocity-driven scroll: scroll follows the direction and speed the cursor
   // moves toward the overflow edge — like a mobile swipe translating to content movement.
@@ -240,7 +237,7 @@ const Tab: FC<ITabProps> = ({
       listEl.removeEventListener("pointercancel", handlePointerCancel);
       listEl.removeEventListener("selectstart", handleSelectStart);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollContainerRef, vertical]);
 
   if (tabItems.length !== Children.count(children)) {
@@ -255,7 +252,9 @@ const Tab: FC<ITabProps> = ({
   const maskStyle = useMemo(() => {
     if (vertical || (!canScrollLeft && !canScrollRight)) return undefined;
 
-    const leftStop = canScrollLeft ? "transparent, black 1.75rem" : "black 0px";
+    const leftStop = canScrollLeft
+      ? "transparent, black 1.75rem"
+      : "black 0rem";
     const rightStop = canScrollRight
       ? "black calc(100% - 1.75rem), transparent 100%"
       : "black 100%";
@@ -271,8 +270,6 @@ const Tab: FC<ITabProps> = ({
     <TabContextProvider
       tabId={tabId}
       tabCount={tabItems.length}
-      minimal={minimal}
-      variant={variant}
       vertical={vertical}
       currentTab={currentTab}
       setCurrentTab={handleTabChange}
@@ -286,7 +283,7 @@ const Tab: FC<ITabProps> = ({
           aria-label={ariaLabel}
           data-dragging={isDragging ? "" : undefined}
           className={cn(
-            "relative overflow-visible select-none",
+            "bg-background border-border text-foreground relative inline-flex max-w-full items-center justify-center gap-1 overflow-visible rounded-full border p-1 select-none",
             className,
             "overflow-visible",
           )}
@@ -309,7 +306,10 @@ const Tab: FC<ITabProps> = ({
           </motion.div>
           {/* Mask wrapper: isolates mask-image from the scroll container so pointer
               events are not blocked on the edge zones by the transparent gradient */}
-          <div style={maskStyle} className="relative z-10 w-full max-w-full min-w-0">
+          <div
+            style={maskStyle}
+            className="relative z-10 w-full max-w-full min-w-0"
+          >
             <div
               ref={scrollContainerRef}
               className={cn(

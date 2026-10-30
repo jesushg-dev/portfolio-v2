@@ -1,6 +1,6 @@
 export { generateMetadata } from "../../../../certifications/[id]/edit/metadata";
 import { getTranslations } from "next-intl/server";
-import { PageDialogWrapper } from "@/components/shared/page-container";
+import { PageSheetWrapper } from "@/components/shared/page-container";
 import { CertificationForm } from "@/features/certifications/components/certification-form";
 import { getCertificationEditPageData } from "@/features/certifications/server/certification-queries";
 
@@ -19,12 +19,16 @@ export default async function EditCertificationModal({
   const { editorDto, languages } = pageData;
 
   return (
-    <PageDialogWrapper title={t("edit")} description={t("editDescription")}>
+    <PageSheetWrapper
+      title={t("edit")}
+      description={t("editDescription")}
+      fallbackUrl="/admin/certifications"
+    >
       <CertificationForm
         key={editorDto.id}
         initialData={editorDto}
         languages={languages}
       />
-    </PageDialogWrapper>
+    </PageSheetWrapper>
   );
 }

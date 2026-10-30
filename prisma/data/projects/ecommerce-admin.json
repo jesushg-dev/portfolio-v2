@@ -15,10 +15,6 @@
       "locale": "es",
       "title": "Tienda Admin",
       "description": "Consola de administración web para e-commerce que centraliza el catálogo de productos, control de inventario multivariante y flujo de pedidos en tiempo real. Desarrollada como SPA en React y Redux con diseño responsive en Material-UI y despliegue continuo en Netlify.",
-      "hook": "Consola Administrativa E-Commerce en React & Redux · Catálogo de productos, pedidos y stock con Material-UI · Demo en vivo",
-      "challenge": "Diseñar un back-office web ágil con estado global centralizado para gestionar cientos de productos, órdenes de compra y cambios de estado en tiempo real sin latencia visual.",
-      "approach": "Implementé una SPA modular en React con arquitectura Redux para flujo unidireccional de datos, Material-UI (MUI) para componentes consistentes y despliegue continuo en Netlify.",
-      "outcome": "Consola de administración con tiempo de carga casi instantáneo (Lighthouse 95+), gestión fluida de pedidos y catálogo, y demo pública interactiva en producción.",
       "caseStudy": {
         "chips": [
           "React SPA",
@@ -50,6 +46,7 @@
             "value": "https://tiendajs-admin.netlify.app/"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "kwh-monitor",
         "context": "Tienda Admin es un panel de control administrativo (back-office) diseñado para propietarios y operadores de tiendas online. Permite supervisar en un único tablero interactivo la recepción de órdenes, el cambio de estados de envío (Pendiente, En Preparación, Despachado, Entregado), la administración de stock con advertencias de nivel crítico y el mantenimiento del catálogo de productos con carga de imágenes y descripción enriquecida.",
         "roleTitle": "Desarrollador Frontend React & Arquitecto SPA",
@@ -118,12 +115,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Actualización reactiva inmediata en la UI ante cualquier cambio de estado de pedido sin recargar la página.",
-          "Consumo eficiente de memoria en el navegador al renderizar listas extensas de productos en tablas paginadas.",
-          "Diseño 100% responsivo para permitir la gestión desde smartphones de administradores en ruta."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Diseñar un back-office web ágil con estado global centralizado para gestionar cientos de productos, órdenes de compra y cambios de estado en tiempo real sin latencia visual.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Actualización reactiva inmediata en la UI ante cualquier cambio de estado de pedido sin recargar la página.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Consumo eficiente de memoria en el navegador al renderizar listas extensas de productos en tablas paginadas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Diseño 100% responsivo para permitir la gestión desde smartphones de administradores en ruta.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Implementé una SPA modular en React con arquitectura Redux para flujo unidireccional de datos, Material-UI (MUI) para componentes consistentes y despliegue continuo en Netlify.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "admin-modules",
             "kind": "CARDS",
@@ -221,6 +270,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Consola de administración con tiempo de carga casi instantáneo (Lighthouse 95+), gestión fluida de pedidos y catálogo, y demo pública interactiva en producción.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -229,10 +291,6 @@
       "locale": "en",
       "title": "Store Admin",
       "description": "Web administration console for e-commerce centralizing product catalogs, multi-variant inventory tracking, and real-time order fulfillment pipelines. Engineered as a modular React and Redux SPA with Material-UI design and continuous Netlify delivery.",
-      "hook": "E-Commerce Admin Dashboard in React & Redux · Product catalog, order fulfillment & inventory with Material-UI · Live demo",
-      "challenge": "Design an agile web back-office with centralized global state to manage hundreds of products, customer orders, and status transitions in real time without UI lag.",
-      "approach": "Engineered a modular React SPA leveraging Redux for predictable unidirectional data flow, Material-UI (MUI) for consistent component ergonomics, and Netlify for continuous delivery.",
-      "outcome": "High-performance administration console with 95+ Lighthouse score, seamless product/order management, and an interactive live public demo.",
       "caseStudy": {
         "chips": [
           "React SPA",
@@ -264,6 +322,7 @@
             "value": "https://tiendajs-admin.netlify.app/"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "kwh-monitor",
         "context": "Store Admin is an e-commerce back-office management dashboard created for online shop owners. It unifies order intake, fulfillment stage updates (Pending, Processing, Shipped, Delivered), real-time inventory tracking with low-stock warnings, and complete product catalog editing with photo uploads and rich descriptions into a single interactive screen.",
         "roleTitle": "Frontend React Developer & SPA Architect",
@@ -332,12 +391,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Immediate reactive UI feedback on order status transitions without full-page reloads.",
-          "Efficient browser memory consumption when rendering large product lists in paginated tables.",
-          "100% responsive design enabling on-the-go shop administration from mobile smartphones."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Design an agile web back-office with centralized global state to manage hundreds of products, customer orders, and status transitions in real time without UI lag.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Immediate reactive UI feedback on order status transitions without full-page reloads.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Efficient browser memory consumption when rendering large product lists in paginated tables.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "100% responsive design enabling on-the-go shop administration from mobile smartphones.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Engineered a modular React SPA leveraging Redux for predictable unidirectional data flow, Material-UI (MUI) for consistent component ergonomics, and Netlify for continuous delivery.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "admin-modules",
             "kind": "CARDS",
@@ -435,6 +546,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "High-performance administration console with 95+ Lighthouse score, seamless product/order management, and an interactive live public demo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -443,10 +567,6 @@
       "locale": "nl",
       "title": "Store Admin",
       "description": "Webgebaseerd e-commerce beheerdersdashboard dat productcatalogi, voorraadbeheer van varianten en realtime orderverwerking centraliseert. Ontwikkeld als React en Redux SPA met Material-UI en continue Netlify-implementatie.",
-      "hook": "E-Commerce Beheerdersdashboard in React & Redux · Catalogus-, bestelling- en voorraadbeheer met Material-UI · Live demo",
-      "challenge": "Ontwerp een wendbaar webgebaseerd beheerpaneel met centrale status om honderden producten, bestellingen en statuswijzigingen realtime te beheren zonder visuele vertraging.",
-      "approach": "Ontwikkelde een modulaire React SPA met Redux voor voorspelbare datastromen, Material-UI (MUI) voor consistente componenten en continue implementatie op Netlify.",
-      "outcome": "Hoogwaardige beheerconsole met 95+ Lighthouse-score, soepel product- en orderbeheer en een interactieve publieke live demo.",
       "caseStudy": {
         "chips": [
           "React SPA",
@@ -478,6 +598,7 @@
             "value": "https://tiendajs-admin.netlify.app/"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "kwh-monitor",
         "context": "Store Admin is een online e-commerce dashboard ontworpen voor winkeliers en webshopeigenaren. Het verenigt orderontvangst, logistieke statusovergangen (In Behandeling, Verwerkt, Verzonden, Bezorgd), voorraadbewaking met waarschuwingen en productcatalogusbeheer in één gebruiksvriendelijke interface.",
         "roleTitle": "Frontend React Ontwikkelaar & SPA Architect",
@@ -546,12 +667,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Directe reactieve statusupdates in de interface zonder volledige herlading van de pagina.",
-          "Efficiënt browsergeheugengebruik bij het tonen van uitgebreide tabellen met honderden artikelen.",
-          "100% responsief ontwerp voor eenvoudig mobiel beheer door winkeliers onderweg."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Ontwerp een wendbaar webgebaseerd beheerpaneel met centrale status om honderden producten, bestellingen en statuswijzigingen realtime te beheren zonder visuele vertraging.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Directe reactieve statusupdates in de interface zonder volledige herlading van de pagina.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Efficiënt browsergeheugengebruik bij het tonen van uitgebreide tabellen met honderden artikelen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "100% responsief ontwerp voor eenvoudig mobiel beheer door winkeliers onderweg.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwikkelde een modulaire React SPA met Redux voor voorspelbare datastromen, Material-UI (MUI) voor consistente componenten en continue implementatie op Netlify.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "admin-modules",
             "kind": "CARDS",
@@ -646,6 +819,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Hoogwaardige beheerconsole met 95+ Lighthouse-score, soepel product- en orderbeheer en een interactieve publieke live demo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

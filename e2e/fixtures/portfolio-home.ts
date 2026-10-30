@@ -20,8 +20,8 @@ export interface PortfolioHomeTerminalStepFixture {
 
 export interface PortfolioHomeFixture {
   backgroundImageUrl: string;
-  heroSummary: LocalizedFixture;
-  heroTitles: LocalizedFixture[];
+  heroSubtitle: LocalizedFixture;
+  heroTagline: LocalizedFixture;
   terminal: {
     username: string;
     typingSpeed: number;
@@ -30,15 +30,6 @@ export interface PortfolioHomeFixture {
   };
 }
 
-export const portfolioHome = (() => {
-  const data = JSON.parse(
-    readFileSync(fixturePath, "utf8"),
-  ) as Partial<PortfolioHomeFixture> & {
-    heroSubtitle?: LocalizedFixture;
-  };
-  return {
-    ...data,
-    heroTitles:
-      data.heroTitles ?? (data.heroSubtitle ? [data.heroSubtitle] : []),
-  } as PortfolioHomeFixture;
-})();
+export const portfolioHome = JSON.parse(
+  readFileSync(fixturePath, "utf8"),
+) as PortfolioHomeFixture;

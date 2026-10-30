@@ -30,7 +30,7 @@ console.log(
 
 const homeManifest = path.join(
   process.cwd(),
-  ".next/server/app/[locale]/(home)/page/build-manifest.json",
+  ".next/server/app/p/[site]/[locale]/(home)/page/build-manifest.json",
 );
 
 if (fs.existsSync(homeManifest)) {

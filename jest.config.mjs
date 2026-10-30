@@ -30,7 +30,6 @@ const config = {
     "!src/lib/google-calendar/api.ts",
     "!src/lib/integrations/resend-tenant-publisher.ts",
     "!src/utils/services/spotify.ts",
-    "!src/features/resume-engine/lib/ai/tailor-docx.ts",
     "!src/features/resume-engine/lib/docx/**",
     "!src/features/resume-engine/lib/generate-pdf-from-docx.ts",
     "!src/features/cv/lib/generate-cv-pdf-from-preview.ts",
@@ -48,7 +47,8 @@ export default async function createCustomJestConfig() {
   const makeConfig = createJestConfig(config);
   const finalConfig = await makeConfig();
   finalConfig.transformIgnorePatterns = [
-    "/node_modules/(?!(@tanstack/react-table|@tanstack/table-core|@tanstack/react-store|@tanstack/store|superjson|copy-anything|is-what|@stepperize/react)/)",
+    // Transform the real ESM package through Next's SWC, including pnpm store paths.
+    "/node_modules/(?!\\.pnpm/|(@tanstack/react-table|@tanstack/table-core|@tanstack/react-store|@tanstack/store|superjson|copy-anything|is-what|@stepperize/react|@toon-format/toon)/)",
   ];
   return finalConfig;
 }

@@ -114,7 +114,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               height={256}
               draggable={false}
               className="pointer-events-none size-full rounded-[0.5rem] object-cover shadow-md select-none"
-              priority
+              preload
             />
           </div>
 

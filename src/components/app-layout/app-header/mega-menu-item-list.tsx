@@ -110,7 +110,7 @@ export const MegaMenuItemList: FC<MegaMenuItemListProps> = ({
             role="tab"
             aria-selected={isActive}
             href={item.href}
-            onClick={onNavigate}
+            onNavigate={onNavigate}
             onMouseEnter={() => onSelectIndex(index)}
             onFocus={() => onSelectIndex(index)}
             onKeyDown={(e) => handleKeyDown(e, index)}

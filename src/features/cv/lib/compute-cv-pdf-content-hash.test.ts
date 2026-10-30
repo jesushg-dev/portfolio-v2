@@ -7,7 +7,6 @@ const baseSnapshot: CvPreviewSnapshot = {
     degree: "BSc Computer Science",
     photoUrl: null,
     backgroundImageUrl: null,
-    heroSummary: "Backend engineer",
     clientImageAlt: "",
   },
   aboutMeText: "About me",
@@ -50,5 +49,16 @@ describe("computeCvPdfContentHash", () => {
     const paginated = computeCvPdfContentHash(baseSnapshot, true);
 
     expect(paginated).not.toBe(continuous);
+  });
+
+  it("changes when design changes", () => {
+    const defaultDesign = computeCvPdfContentHash(
+      baseSnapshot,
+      false,
+      "default",
+    );
+    const atsDesign = computeCvPdfContentHash(baseSnapshot, false, "ats");
+
+    expect(atsDesign).not.toBe(defaultDesign);
   });
 });

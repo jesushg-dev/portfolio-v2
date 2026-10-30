@@ -1,4 +1,15 @@
-import { loadCvStructuredDraft } from "./load-cv-structured-draft";
+import {
+  certificationYear,
+  loadCvStructuredDraft,
+} from "./load-cv-structured-draft";
+
+it.each([
+  [2024, 2024],
+  [1688191200000, 2023],
+  [null, undefined],
+] as const)("normalizes certificate date %s to year %s", (value, expected) =>
+  expect(certificationYear(value)).toBe(expected),
+);
 
 const languages = [
   { id: "lang-en", code: "en" },
@@ -34,7 +45,7 @@ describe("loadCvStructuredDraft", () => {
             {
               appLanguageId: "lang-en",
               degree: "Math",
-              heroSummary: "Builder",
+              heroSummary: "Public hero copy that must never enter the CV",
             },
           ],
         }),
@@ -42,7 +53,11 @@ describe("loadCvStructuredDraft", () => {
       profile: {
         findUnique: jest.fn().mockResolvedValue({ defaultLocale: "en" }),
       },
-      cvAboutMe: { findUnique: jest.fn() },
+      cvAboutMe: {
+        findUnique: jest.fn().mockResolvedValue({
+          translations: [{ appLanguageId: "lang-en", aboutMe: "Builder" }],
+        }),
+      },
       cvExperience: {
         findMany: jest.fn().mockResolvedValue([
           {
@@ -61,12 +76,14 @@ describe("loadCvStructuredDraft", () => {
             ],
             responsibilities: [
               {
+                id: "achievement-visible",
                 atsOnly: false,
                 translations: [
                   { appLanguageId: "lang-en", text: "Shipped UI" },
                 ],
               },
               {
+                id: "achievement-additional",
                 atsOnly: true,
                 translations: [{ appLanguageId: "lang-en", text: "ATS only" }],
               },
@@ -93,9 +110,19 @@ describe("loadCvStructuredDraft", () => {
         ]),
       },
       cvTechnicalSkill: {
-        findMany: jest
-          .fn()
-          .mockResolvedValue([{ category: "FRONTEND", items: ["React"] }]),
+        findMany: jest.fn().mockResolvedValue([
+          {
+            id: "group-1",
+            category: "FRONTEND",
+            order: 0,
+            selections: [
+              {
+                skillId: "skill-react",
+                skill: { userId: "user-1", title: "React" },
+              },
+            ],
+          },
+        ]),
       },
       cvContact: {
         findMany: jest
@@ -134,10 +161,25 @@ describe("loadCvStructuredDraft", () => {
     expect(draft?.experiences[0]?.employmentType).toBe("FULL_TIME");
     expect(draft?.education[0]?.degreeName).toBe("BSc");
     expect(draft?.certifications[0]?.title).toBe("Solutions Architect");
-    expect(draft?.skills).toEqual([{ category: "FRONTEND", items: ["React"] }]);
+    expect(draft?.skills).toEqual([
+      { id: "group-1", category: "FRONTEND", items: ["React"] },
+    ]);
+    const tailored = await loadCvStructuredDraft(db as never, "user-1", {
+      locale: "en",
+      evidenceScope: "all",
+    });
+    expect(tailored?.experiences[0].responsibilities).toEqual([
+      "Shipped UI",
+      "ATS only",
+    ]);
+    expect(tailored?.experiences[0].responsibilityIds).toEqual([
+      "achievement-visible",
+      "achievement-additional",
+    ]);
+    expect(tailored?.experiences[0].atsResponsibilities).toEqual([]);
   });
 
-  it("populates draft.skills from portfolio skills (db.skill)", async () => {
+  it("does not automatically include unselected portfolio skills", async () => {
     const db = {
       appLanguage: {
         findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
@@ -171,10 +213,6 @@ describe("loadCvStructuredDraft", () => {
       locale: "en",
     });
 
-    expect(draft?.skills).toEqual([
-      { category: "FRONTEND", items: ["React"] },
-      { category: "BACKEND", items: ["Node.js"] },
-      { category: "DATABASE", items: ["PostgreSQL"] },
-    ]);
+    expect(draft?.skills).toEqual([]);
   });
 });

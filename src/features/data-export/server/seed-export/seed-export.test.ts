@@ -97,10 +97,6 @@ function hydrateProjects(seeds: ProjectSeedRecord[]): ProjectExportRow[] {
       appLanguageId: translation.locale,
       title: translation.title,
       description: translation.description,
-      hook: translation.hook ?? null,
-      challenge: translation.challenge ?? null,
-      approach: translation.approach ?? null,
-      outcome: translation.outcome ?? null,
       caseStudy: translation.caseStudy ?? null,
     })),
     ProjectSkill: seed.skillKeys.map((key) => ({
@@ -255,20 +251,28 @@ function hydrateNow(): {
       timezone: settings.timezone,
       githubUsername: settings.githubUsername,
       statusEmoji: settings.statusEmoji,
+      statusSchedule: settings.statusSchedule.map((slot) => ({
+        startMinute: slot.startMinute,
+        endMinute: slot.endMinute,
+        weekdays: slot.weekdays,
+        emoji: slot.emoji,
+        translations: (["en", "es", "nl"] as const).map((locale) => ({
+          appLanguageId: locale,
+          body: slot.body[locale] ?? "",
+        })),
+      })),
+      readingCoverUrl: settings.readingCoverUrl,
+      watchedCoverUrl: settings.watchedCoverUrl,
       readingTitle: settings.readingTitle,
       readingAuthors: settings.readingAuthors,
       readingProgress: settings.readingProgress,
       watchedTitle: settings.watchedTitle,
       watchedRating: settings.watchedRating,
-      githubRepo: settings.githubRepo,
-      githubHref: settings.githubHref,
       photoUrls: settings.photoUrls,
       NowSettingsTranslation: (["en", "es", "nl"] as const).map((locale) => ({
         appLanguageId: locale,
         statusBody: settings.statusBody[locale] ?? "",
         statusRelative: settings.statusRelative[locale] ?? "",
-        githubBody: settings.githubBody[locale] ?? "",
-        githubRelative: settings.githubRelative[locale] ?? "",
       })),
     },
     focuses: nowCatalog.focuses.map((focus) => ({
@@ -359,6 +363,74 @@ describe("seed export serializers", () => {
       skillKeyByTitle,
     );
     expect(exported).toEqual(expectedProjects(projectsCatalog));
+  });
+
+  it("exports canonical content with an empty gallery", () => {
+    const [project] = hydrateProjects(projectsCatalog);
+    project.ProjectTranslation = [
+      {
+        appLanguageId: "en",
+        title: "Project",
+        description: "Description",
+        caseStudy: { context: "Case study context", gallery: [] },
+      },
+    ];
+
+    const [exported] = serializeProjects(
+      [project],
+      languages,
+      buildSkillKeyByTitle(skillsCatalog),
+    );
+    const [translation] = exported.translations;
+    expect(translation.caseStudy).toHaveProperty(
+      "context",
+      "Case study context",
+    );
+    expect(translation.caseStudy?.gallery).toEqual([]);
+  });
+
+  it("preserves narrative sections and gallery entries", () => {
+    const [project] = hydrateProjects(projectsCatalog);
+    const gallery = [
+      {
+        title: "Preview",
+        description: "Project preview",
+        image: "/projects/preview.jpg",
+        icon: "layout",
+      },
+    ];
+    project.ProjectTranslation = [
+      {
+        appLanguageId: "en",
+        title: "Project",
+        description: "Description",
+        caseStudy: {
+          gallery,
+          sections: [
+            {
+              key: "approach",
+              kind: "CARDS",
+              title: "Approach",
+              lead: "Important design choice",
+            },
+          ],
+        },
+      },
+    ];
+
+    const [exported] = serializeProjects(
+      [project],
+      languages,
+      buildSkillKeyByTitle(skillsCatalog),
+    );
+    expect(exported.translations).toHaveLength(1);
+    expect(exported.translations[0]).toMatchObject({
+      locale: "en",
+      caseStudy: {
+        gallery,
+        sections: [{ key: "approach", lead: "Important design choice" }],
+      },
+    });
   });
 
   it("round-trips services", () => {

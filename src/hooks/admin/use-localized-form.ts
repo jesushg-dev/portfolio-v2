@@ -26,7 +26,7 @@ export interface UseLocalizedFormOptions<TFormValues extends FieldValues> {
   resourceId?: string;
   primaryLanguageCode?: string;
   translationsField?: keyof TFormValues & string;
-  /** Translation row keys used for GlobalLanguageSelector completeness dots. */
+  /** Translation row keys used for language completeness. */
   completenessFields?: string[];
   /** Translation row keys copied by `copyFieldsFromPrimary`. */
   copyFields?: string[];
@@ -99,6 +99,30 @@ export function useLocalizedForm<
     [completenessFields, languages, watchedTranslations],
   );
 
+  const languageProgress = useMemo(
+    () =>
+      languages.map((language) => {
+        const row = watchedTranslations?.[language.id];
+        const keys = completenessFields.length
+          ? completenessFields
+          : Object.keys(row ?? {});
+        const completedCount = keys.filter((key) => {
+          const value = row?.[key];
+          return typeof value === "string" && value.trim().length > 0;
+        }).length;
+        return {
+          id: language.id,
+          name: language.name ?? language.code,
+          code: language.code,
+          isBase: language.id === primaryLang?.id,
+          hasContent: completedCount > 0,
+          completedCount,
+          totalCount: keys.length,
+        };
+      }),
+    [languages, watchedTranslations, completenessFields, primaryLang],
+  );
+
   const copyFieldsFromPrimary = useCallback(
     (targetLangId: string) => {
       if (copyFields.length === 0 || !primaryLang) return;
@@ -126,6 +150,7 @@ export function useLocalizedForm<
     setActiveLangId,
     activeLang,
     statusByLangId,
+    languageProgress,
     copyFieldsFromPrimary,
     isFormLoading: form.formState.isLoading,
   };

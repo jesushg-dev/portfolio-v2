@@ -22,6 +22,7 @@ export interface LocalizedCvData {
     backgroundImageUrl: string | null;
     degree: string;
     clientImageAlt: string;
+    availabilityBadge?: string | null;
   } | null;
   profile?: {
     displayName: string | null;
@@ -101,7 +102,7 @@ export interface LocalizedCvData {
 }
 
 export function mapCvDataToLocalized(
-  data: CvData,
+  data: Omit<CvData, "portfolioUrl">,
   appLanguages: LanguageRef[],
   locale: Locale,
 ): LocalizedCvData {

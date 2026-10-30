@@ -39,8 +39,8 @@ jest.mock("@/lib/parsers", () => {
   };
 });
 
-jest.mock("@/features/soft-skills/lib/soft-skill-icons", () => ({
-  resolveSoftSkillIcon: () => () => <svg data-testid="mock-icon" />,
+jest.mock("@/components/shared/dynamic-icon", () => ({
+  DynamicIcon: () => <svg data-testid="mock-icon" />,
 }));
 
 const mockGetMineQuery = jest.fn<unknown, []>();
@@ -57,6 +57,11 @@ jest.mock("@/trpc/react", () => ({
     softSkillsAdmin: {
       getMine: { useQuery: () => mockGetMineQuery() },
       deleteItem: { useMutation: () => mockDeleteMutation() },
+      deleteMany: {
+        useMutation: () => ({
+          mutateAsync: jest.fn().mockResolvedValue({ count: 1 }),
+        }),
+      },
     },
   },
 }));

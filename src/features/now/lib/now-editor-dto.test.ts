@@ -23,13 +23,12 @@ const settings = {
   timezone: "UTC",
   githubUsername: null,
   statusEmoji: null,
+  statusSchedule: [],
   readingTitle: null,
   readingAuthors: null,
   readingProgress: null,
   watchedTitle: null,
   watchedRating: null,
-  githubRepo: null,
-  githubHref: null,
   photoUrls: null,
   userId: "user-1",
   createdAt: new Date(),
@@ -39,12 +38,11 @@ const settings = {
       appLanguageId: "lang-en",
       statusBody: "Shipping",
       statusRelative: "this week",
-      githubBody: "Open source",
-      githubRelative: "today",
     },
   ],
 } as unknown as NowSettings & {
   NowSettingsTranslation: NowSettingsTranslation[];
+  statusSchedule: [];
 };
 
 const focus = {
@@ -72,6 +70,6 @@ describe("now editor dto", () => {
     expect(buildEmptyNowSettingsDto(languages).timezone).toBe(
       "America/Mexico_City",
     );
-    expect(buildEmptyNowFocusCreateDto(languages).order).toBe(0);
+    expect(buildEmptyNowFocusCreateDto(languages).translations).toBeDefined();
   });
 });

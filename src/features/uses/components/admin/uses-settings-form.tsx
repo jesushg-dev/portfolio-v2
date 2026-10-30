@@ -22,7 +22,7 @@ import {
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import { LocalizedFormLanguageBar } from "@/components/admin/shared/localized-form-language-bar";
 import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
 import {
   buildEmptyUsesClarificationDto,
@@ -94,7 +94,7 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
     defaultValues: initialData,
   });
 
-  const { activeLangId, setActiveLangId } = useLocalizedForm({
+  const { languageProgress, activeLangId, setActiveLangId } = useLocalizedForm({
     languages,
     form,
     buildDefaultValues: () => initialData,
@@ -155,11 +155,10 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
   return (
     <Form {...form}>
       <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
-        <GlobalLanguageSelector
-          languages={languages}
+        <LocalizedFormLanguageBar
+          languages={languageProgress}
           activeLangId={activeLangId}
-          onLangChange={setActiveLangId}
-          buttonIdPrefix="uses-settings"
+          onSelectLang={setActiveLangId}
         />
         <FormContent>
           <FormSection title={t("sectionMedia")}>

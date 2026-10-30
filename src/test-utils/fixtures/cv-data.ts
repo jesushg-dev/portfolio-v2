@@ -125,6 +125,7 @@ export const mockCvHeader = {
 };
 
 export const mockCvPreviewData = {
+  portfolioUrl: "https://www.jesushg.com",
   header: mockCvHeader,
   profile: {
     id: "profile-1",

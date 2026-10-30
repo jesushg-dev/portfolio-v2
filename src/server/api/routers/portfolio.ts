@@ -69,8 +69,8 @@ interface ProjectRecordForList {
   ProjectTranslation: {
     title?: string;
     description?: string;
-    hook?: string | null;
     caseStudy?: {
+      tldr?: { title?: string | null; value?: string | null }[];
       sections?: { kind?: string; items?: unknown[] }[];
       facts?: unknown[];
     } | null;
@@ -116,7 +116,11 @@ function formatProjectListItem(project: ProjectRecordForList) {
     kind: project.kind ?? "PERSONAL",
     slug: project.slug,
     caseStudyEnabled: project.caseStudyEnabled,
-    hook: translation?.hook ?? null,
+    highlights:
+      cs?.tldr
+        ?.map((item) => (item.value?.trim() ? item.value : (item.title ?? "")))
+        .filter(Boolean)
+        .slice(0, 3) ?? [],
     status: project.status ?? null,
     startedAt: toIsoOrNull(project.startedAt),
     endedAt: toIsoOrNull(project.endedAt),
@@ -619,7 +623,7 @@ export const portfolioRouter = createTRPCRouter({
 
       const [languages, header, profile] = await Promise.all([
         ctx.db.appLanguage.findMany(),
-        ctx.db.cvHeader.findUnique({
+        ctx.db.portfolioHeader.findUnique({
           where: { userId: tenantUserId },
           include: { translations: true },
         }),
@@ -746,11 +750,11 @@ export const portfolioRouter = createTRPCRouter({
       const languages = await ctx.db.appLanguage.findMany();
 
       const [aboutMe, terminal] = await Promise.all([
-        ctx.db.cvAboutMe.findUnique({
+        ctx.db.portfolioHeader.findUnique({
           where: { userId: tenantUserId },
           include: { translations: true },
         }),
-        ctx.db.cvTerminal.findUnique({
+        ctx.db.portfolioTerminal.findUnique({
           where: { userId: tenantUserId },
           include: { steps: true },
         }),
@@ -758,7 +762,7 @@ export const portfolioRouter = createTRPCRouter({
 
       const aboutText = createLocalizedFieldResolver(languages, input.locale)(
         aboutMe?.translations ?? [],
-        "aboutMe",
+        "portfolioAbout",
       );
 
       return {
@@ -1030,10 +1034,6 @@ export const portfolioRouter = createTRPCRouter({
         teamSize: project.teamSize,
         title: translation.title,
         description: translation.description,
-        hook: translation.hook,
-        challenge: translation.challenge,
-        approach: translation.approach,
-        outcome: translation.outcome,
         caseStudy: caseStudyRowToDto(translation.caseStudy ?? null),
         skills,
       };
@@ -1076,7 +1076,7 @@ export const portfolioRouter = createTRPCRouter({
             slug: project.slug,
             title: translation.title,
             image: project.image,
-            summary: translation.hook ?? translation.description,
+            summary: translation.description,
             nextProjectSlug: translation.caseStudy?.nextProjectSlug ?? null,
           };
         })
@@ -1119,5 +1119,86 @@ export const portfolioRouter = createTRPCRouter({
       }
 
       return sequentialNext;
+    }),
+
+  getShowcasePortfolios: publicProcedure
+    .input(
+      z
+        .object({
+          locale: LanguageCode.optional().default("en"),
+        })
+        .optional(),
+    )
+    .query(async ({ input, ctx }) => {
+      const locale = input?.locale ?? "en";
+      const [languages, profiles] = await Promise.all([
+        ctx.db.appLanguage.findMany(),
+        ctx.db.profile.findMany({
+          where: { isPublished: true },
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            logoInitials: true,
+            customDomain: true,
+            userId: true,
+          },
+          take: 12,
+        }),
+      ]);
+
+      if (profiles.length === 0) {
+        return [];
+      }
+
+      const userIds = profiles.map((p) => p.userId);
+      const headers = await ctx.db.portfolioHeader.findMany({
+        where: { userId: { in: userIds } },
+        include: { translations: true },
+      });
+
+      const headerByUserId = new Map(headers.map((h) => [h.userId, h]));
+
+      return profiles
+        .filter((p) => Boolean(p.username))
+        .map((p) => {
+          const header = headerByUserId.get(p.userId);
+          const t = header
+            ? createLocalizedFieldResolver(languages, locale).for(
+                header.translations ?? [],
+              )
+            : null;
+
+          const subtitle = t?.("heroSubtitle")?.trim();
+          const tagline = t?.("heroTagline")?.trim();
+          const role =
+            subtitle && subtitle.length > 0
+              ? subtitle
+              : tagline && tagline.length > 0
+                ? tagline
+                : null;
+
+          const trimmedInitials = p.logoInitials?.trim();
+          const trimmedDisplayName = p.displayName?.trim();
+          const initials =
+            trimmedInitials && trimmedInitials.length > 0
+              ? trimmedInitials
+              : trimmedDisplayName && trimmedDisplayName.length > 0
+                ? trimmedDisplayName
+                    .split(/\s+/)
+                    .slice(0, 2)
+                    .map((part) => part[0]?.toUpperCase())
+                    .join("")
+                : p.username.slice(0, 2).toUpperCase();
+
+          return {
+            id: p.id,
+            username: p.username,
+            displayName: p.displayName,
+            subdomain: p.customDomain ?? p.username,
+            initials,
+            role,
+          };
+        });
     }),
 });

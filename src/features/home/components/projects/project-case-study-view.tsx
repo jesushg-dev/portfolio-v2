@@ -79,7 +79,7 @@ export default function ProjectCaseStudyView({
             {project.title}
           </h1>
           <p className="text-muted-foreground mt-5 max-w-2xl text-lg leading-relaxed sm:text-xl sm:leading-8">
-            {project.description ?? project.hook}
+            {project.description}
           </p>
         </header>
 
@@ -94,7 +94,6 @@ export default function ProjectCaseStudyView({
                 entry={section}
                 index={index}
                 content={content}
-                challenge={project.challenge}
                 shortOnTimeSections={shortOnTimeSections}
               />
             ))}
@@ -161,15 +160,6 @@ function buildCaseStudyPageSections(
       kind: "ROLE",
     });
   }
-  if (project.challenge || content.constraints.length > 0) {
-    entries.push({
-      key: "challenge",
-      eyebrow: t("caseStudy.challengeEyebrow"),
-      title: t("caseStudy.challenge"),
-      navTitle: navTitles.challenge ?? "",
-      kind: "CHALLENGE",
-    });
-  }
   for (let index = 0; index < content.sections.length; index += 1) {
     const section = content.sections[index];
     if (!section) continue;
@@ -189,9 +179,6 @@ function buildCaseStudyPageSections(
       kind: "CONTENT",
       section,
       ...(relatedSection ? { relatedSection } : {}),
-      ...(section.key === "results"
-        ? { introText: project.outcome ?? "" }
-        : {}),
     });
     if (relatedSection) index += 1;
   }

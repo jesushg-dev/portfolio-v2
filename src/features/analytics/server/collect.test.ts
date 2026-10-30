@@ -104,6 +104,22 @@ describe("handleAnalyticsCollect", () => {
     );
     expect(response.status).toBe(204);
     expect(upsertSpy).not.toHaveBeenCalled();
+    expect(response.headers.get("set-cookie")).toContain(
+      "portfolio-analytics-owner=1",
+    );
+  });
+
+  it("skips later anonymous visits from the owner's browser", async () => {
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
+    const response = await handleAnalyticsCollect(
+      collectRequest(
+        { path: "/stats", isNewVisit: true },
+        { cookie: "other=1; portfolio-analytics-owner=1" },
+      ),
+    );
+    expect(response.status).toBe(204);
+    expect(upsertSpy).not.toHaveBeenCalled();
+    expect(auth.api.getSession).not.toHaveBeenCalled();
   });
 
   it("increments pageviews for a public visit", async () => {

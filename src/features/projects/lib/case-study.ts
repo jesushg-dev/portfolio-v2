@@ -117,7 +117,6 @@ export const CaseStudyContentSchema = z
     roleIntro: text,
     tldr: z.array(CaseStudyItemSchema).default([]),
     responsibilities: z.array(CaseStudyItemSchema).default([]),
-    constraints: textList,
     sections: z.array(CaseStudySectionSchema).default([]),
   })
   .superRefine((content, ctx) => {
@@ -202,14 +201,12 @@ export interface CaseStudyContentRow {
   chips?: string[] | null;
   facts?: CaseStudyFactDTO[] | null;
   gallery?: CaseStudyGalleryItemRow[] | null;
-  stack?: string[] | null;
   nextProjectSlug?: string | null;
   context?: string | null;
   roleTitle?: string | null;
   roleIntro?: string | null;
   tldr?: CaseStudyItemRow[] | null;
   responsibilities?: CaseStudyItemRow[] | null;
-  constraints?: string[] | null;
   sections?: CaseStudySectionRow[] | null;
 }
 
@@ -224,7 +221,6 @@ export function buildEmptyCaseStudy(): CaseStudyContentDTO {
     roleIntro: "",
     tldr: [],
     responsibilities: [],
-    constraints: [],
     sections: [],
   };
 }
@@ -264,7 +260,6 @@ export function caseStudyRowToDto(
     roleIntro: row.roleIntro ?? "",
     tldr: (row.tldr ?? []).map(itemRowToDto),
     responsibilities: (row.responsibilities ?? []).map(itemRowToDto),
-    constraints: row.constraints ?? [],
     sections: (row.sections ?? []).map((section) => {
       const kind = section.kind as CaseStudySectionKind;
       return {
@@ -338,7 +333,6 @@ export function caseStudyDtoToWrite(
     roleIntro: dto.roleIntro || null,
     tldr: dto.tldr.map(itemToWrite),
     responsibilities: dto.responsibilities.map(itemToWrite),
-    constraints: dto.constraints,
     sections: dto.sections.map(sectionToWrite),
   };
 }
@@ -354,7 +348,6 @@ export function isCaseStudyEmpty(dto: CaseStudyContentDTO): boolean {
     dto.roleIntro === "" &&
     dto.tldr.length === 0 &&
     dto.responsibilities.length === 0 &&
-    dto.constraints.length === 0 &&
     dto.sections.length === 0
   );
 }
@@ -453,10 +446,6 @@ export function auditCaseStudyParity(
       if (!referenceSections.has(key)) {
         issues.push({ locale, path: `sections.${key}`, problem: "extra" });
       }
-    }
-
-    if (reference.constraints.length !== content.constraints.length) {
-      issues.push({ locale, path: "constraints", problem: "missing" });
     }
 
     if (reference.gallery.length !== content.gallery.length) {

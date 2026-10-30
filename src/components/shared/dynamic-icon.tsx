@@ -2,7 +2,10 @@ import { createElement, type FC, type SVGProps } from "react";
 import { resolveIcon, type IconComponent } from "@/lib/icons/icon-registry";
 import { cn } from "@/lib/utils";
 
-export interface DynamicIconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {
+export interface DynamicIconProps extends Omit<
+  SVGProps<SVGSVGElement>,
+  "name"
+> {
   name?: string | null;
   fallback?: IconComponent;
   size?: number | string;

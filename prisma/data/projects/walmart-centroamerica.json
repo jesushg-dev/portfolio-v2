@@ -29,10 +29,6 @@
       "locale": "es",
       "title": "Walmart Centroamérica: Plataforma Móvil Multi-Formato",
       "description": "Plataforma móvil empresarial de retail y e-commerce omnicanal para el ecosistema de Walmart Centroamérica y sus diversos formatos comerciales: hipermercados Walmart, bodegas de descuento (Maxi Palí, Maxi Despensa) y supermercados (Masxmenos, La Despensa de Don Juan, Paiz), atendiendo a millones de usuarios en 5 países con arquitectura Flutter, Dart y VTEX IO.",
-      "hook": "Multi-formato: Walmart, Maxi Palí, Masxmenos · 5 países · Flutter & VTEX · -40% MTTR",
-      "challenge": "Diseñar y orquestar una experiencia móvil omnicanal unificada y resiliente para múltiples formatos comerciales con propuestas de valor dispares (hipermercados Walmart, bodegas de descuento como Maxi Palí y supermercados como Masxmenos y La Despensa de Don Juan) en 5 países centroamericanos, sobre un stack heterogéneo (arquitectura Flutter multi-banner y microservicios VTEX IO), superando cuellos de botella en checkout, largos ciclos de regresión de 7 días y la sincronización en tiempo real de políticas de precio, inventario y facturación por tienda.",
-      "approach": "Desarrollé una arquitectura modular multi-banner con contratos GraphQL sobre VTEX IO que aísla la lógica de identidad visual, catálogos segmentados y facturación electrónica; diseñé flujos críticos de checkout y búsqueda predictiva adaptados a las particularidades de cada formato (desde compras masivas en Maxi Palí hasta surtidos de conveniencia en Masxmenos y Walmart); reduje el retrabajo técnico en un ~25% mediante spikes arquitectónicos e introduje pruebas automatizadas con Playwright (+30% cobertura) y unit tests que comprimieron los ciclos de regresión de 7 a 4 días.",
-      "outcome": "Reducción del MTTR en un ~40% en producción mediante análisis estructurado de causa raíz, disminución de regresiones a 4 días, ~25% menos retrabajo en squads de ingeniería y una experiencia de compra móvil altamente confiable y escalable para millones de clientes a lo largo de todas las marcas y formatos comerciales del grupo en Centroamérica.",
       "caseStudy": {
         "chips": [
           "Multi-Banner Retail",
@@ -40,32 +36,6 @@
           "Flutter & Mobile",
           "VTEX IO",
           "En producción"
-        ],
-        "gallery": [
-          {
-            "title": "Multi-Marca",
-            "description": "Walmart, Maxi Palí y Masxmenos",
-            "image": "/projects/walmart-centroamerica.jpg",
-            "icon": "smartphone"
-          },
-          {
-            "title": "Maxi Palí",
-            "description": "Formato bodega y ahorro en grande",
-            "image": "/projects/walmart-maxipali.jpg",
-            "icon": "bag"
-          },
-          {
-            "title": "Masxmenos",
-            "description": "Supermercado premium y frescos",
-            "image": "/projects/walmart-masxmenos.jpg",
-            "icon": "store"
-          },
-          {
-            "title": "Checkout & Pickup",
-            "description": "Facturación electrónica y entrega",
-            "image": "/projects/walmart-checkout.jpg",
-            "icon": "truck"
-          }
         ],
         "facts": [
           {
@@ -97,6 +67,32 @@
             "key": "client",
             "label": "Cliente corporativo",
             "value": "Walmart México y Centroamérica"
+          }
+        ],
+        "gallery": [
+          {
+            "title": "Multi-Marca",
+            "description": "Walmart, Maxi Palí y Masxmenos",
+            "image": "/projects/walmart-centroamerica.jpg",
+            "icon": "smartphone"
+          },
+          {
+            "title": "Maxi Palí",
+            "description": "Formato bodega y ahorro en grande",
+            "image": "/projects/walmart-maxipali.jpg",
+            "icon": "bag"
+          },
+          {
+            "title": "Masxmenos",
+            "description": "Supermercado premium y frescos",
+            "image": "/projects/walmart-masxmenos.jpg",
+            "icon": "store"
+          },
+          {
+            "title": "Checkout & Pickup",
+            "description": "Facturación electrónica y entrega",
+            "image": "/projects/walmart-checkout.jpg",
+            "icon": "truck"
           }
         ],
         "nextProjectSlug": "ofilegal",
@@ -187,15 +183,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Coexistencia multi-formato: Manejo unificado de propuestas comerciales dispares (Everyday Low Price en Maxi Palí vs. surtido y marcas premium en Masxmenos y Walmart)",
-          "Cumplimiento tributario y fiscal heterogéneo: Facturación electrónica y normativas fiscales distintas en Costa Rica, Guatemala, El Salvador, Honduras y Nicaragua",
-          "Interoperabilidad de tecnologías híbridas: Coexistencia fluida entre módulos en Flutter (BLoC), inyección de temas dinámicos multi-marca y microservicios en VTEX IO",
-          "Resiliencia ante picos de demanda masiva: Soporte continuo durante eventos comerciales (Cyber, Black Friday, días de quincena y promociones de bodegas)",
-          "Compatibilidad amplia en dispositivos móviles: Desempeño óptimo en smartphones de gama baja, media y alta con conexiones de red variables (3G/4G/5G)",
-          "Tolerancia cero a inconsistencias transaccionales en pagos y sincronización de stock por tienda física"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Diseñar y orquestar una experiencia móvil omnicanal unificada y resiliente para múltiples formatos comerciales con propuestas de valor dispares (hipermercados Walmart, bodegas de descuento como Maxi Palí y supermercados como Masxmenos y La Despensa de Don Juan) en 5 países centroamericanos, sobre un stack heterogéneo (arquitectura Flutter multi-banner y microservicios VTEX IO), superando cuellos de botella en checkout, largos ciclos de regresión de 7 días y la sincronización en tiempo real de políticas de precio, inventario y facturación por tienda.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Coexistencia multi-formato: Manejo unificado de propuestas comerciales dispares (Everyday Low Price en Maxi Palí vs. surtido y marcas premium en Masxmenos y Walmart)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Cumplimiento tributario y fiscal heterogéneo: Facturación electrónica y normativas fiscales distintas en Costa Rica, Guatemala, El Salvador, Honduras y Nicaragua",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Interoperabilidad de tecnologías híbridas: Coexistencia fluida entre módulos en Flutter (BLoC), inyección de temas dinámicos multi-marca y microservicios en VTEX IO",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Resiliencia ante picos de demanda masiva: Soporte continuo durante eventos comerciales (Cyber, Black Friday, días de quincena y promociones de bodegas)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Compatibilidad amplia en dispositivos móviles: Desempeño óptimo en smartphones de gama baja, media y alta con conexiones de red variables (3G/4G/5G)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Tolerancia cero a inconsistencias transaccionales en pagos y sincronización de stock por tienda física",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -408,7 +470,7 @@
             "kind": "LAYERS",
             "eyebrow": "Topología de la solución",
             "title": "Arquitectura en capas y ecosistema móvil multi-banner",
-            "lead": "Estructura multicapa diseñada para alta concurrencia, soporte de múltiples marcas comerciales y velocidad de entrega.",
+            "lead": "Estructura multicapa diseñada para alta concurrencia, soporte de múltiples marcas comerciales y velocidad de entrega.\n\nDesarrollé una arquitectura modular multi-banner con contratos GraphQL sobre VTEX IO que aísla la lógica de identidad visual, catálogos segmentados y facturación electrónica; diseñé flujos críticos de checkout y búsqueda predictiva adaptados a las particularidades de cada formato (desde compras masivas en Maxi Palí hasta surtidos de conveniencia en Masxmenos y Walmart); reduje el retrabajo técnico en un ~25% mediante spikes arquitectónicos e introduje pruebas automatizadas con Playwright (+30% cobertura) y unit tests que comprimieron los ciclos de regresión de 7 a 4 días.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -519,7 +581,7 @@
             "kind": "CARDS",
             "eyebrow": "Logros obtenidos",
             "title": "Impacto comercial y técnico en la región",
-            "lead": "Transformación de la experiencia digital de compras para millones de familias centroamericanas en todos los formatos del grupo.",
+            "lead": "Transformación de la experiencia digital de compras para millones de familias centroamericanas en todos los formatos del grupo.\n\nReducción del MTTR en un ~40% en producción mediante análisis estructurado de causa raíz, disminución de regresiones a 4 días, ~25% menos retrabajo en squads de ingeniería y una experiencia de compra móvil altamente confiable y escalable para millones de clientes a lo largo de todas las marcas y formatos comerciales del grupo en Centroamérica.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -565,10 +627,6 @@
       "locale": "en",
       "title": "Walmart Central America: Multi-Banner Mobile Platform",
       "description": "Enterprise-scale omnichannel retail and e-commerce mobile platform powering the Walmart Central America ecosystem across all retail banners: Walmart hypermarkets, discount warehouse bodegas (Maxi Palí, Maxi Despensa), and supermarkets (Masxmenos, La Despensa de Don Juan, Paiz), serving millions of shoppers across 5 countries with Flutter, Dart, and VTEX IO.",
-      "hook": "Multi-banner: Walmart, Maxi Palí, Masxmenos · 5 countries · Flutter & VTEX · -40% MTTR",
-      "challenge": "Architect and orchestrate a unified, resilient omnichannel mobile experience across distinct retail formats with diverse commercial value propositions (Walmart hypermarkets, discount warehouse bodegas like Maxi Palí, and supermarkets like Masxmenos and La Despensa de Don Juan) across 5 Central American countries over a heterogeneous stack (Flutter, Dart, and VTEX IO microservices), resolving checkout bottlenecks, lengthy 7-day manual regression cycles, and real-time store-level price/inventory synchronization.",
-      "approach": "Engineered a modular, multi-banner architecture with GraphQL contracts on VTEX IO that decouples visual identity, segmented catalogs, and fiscal invoicing; designed mission-critical checkout and predictive search flows tailored to each retail banner's purchasing patterns (from bulk grocery runs at Maxi Palí to curated convenience orders at Masxmenos and Walmart); reduced engineering rework by ~25% via system spikes; and instituted Playwright E2E automation (+30% coverage) and unit testing suites compressing regression cycles from 7 to 4 days.",
-      "outcome": "Slashing production MTTR by ~40% via systematic root-cause mitigation, compressing release regression to 4 days, reducing squad rework by ~25%, and delivering a rock-solid, scalable shopping journey for millions of mobile customers across all group retail banners in Central America.",
       "caseStudy": {
         "chips": [
           "Multi-Banner Retail",
@@ -576,32 +634,6 @@
           "Flutter & Mobile",
           "VTEX IO",
           "In Production"
-        ],
-        "gallery": [
-          {
-            "title": "Multi-Banner",
-            "description": "Walmart, Maxi Palí & Masxmenos",
-            "image": "/projects/walmart-centroamerica.jpg",
-            "icon": "smartphone"
-          },
-          {
-            "title": "Maxi Palí",
-            "description": "Discount bodega & bulk savings",
-            "image": "/projects/walmart-maxipali.jpg",
-            "icon": "bag"
-          },
-          {
-            "title": "Masxmenos",
-            "description": "Supermarket & fresh groceries",
-            "image": "/projects/walmart-masxmenos.jpg",
-            "icon": "store"
-          },
-          {
-            "title": "Checkout & Pickup",
-            "description": "Electronic billing & store pickup",
-            "image": "/projects/walmart-checkout.jpg",
-            "icon": "truck"
-          }
         ],
         "facts": [
           {
@@ -633,6 +665,32 @@
             "key": "client",
             "label": "Enterprise Client",
             "value": "Walmart Mexico & Central America"
+          }
+        ],
+        "gallery": [
+          {
+            "title": "Multi-Banner",
+            "description": "Walmart, Maxi Palí & Masxmenos",
+            "image": "/projects/walmart-centroamerica.jpg",
+            "icon": "smartphone"
+          },
+          {
+            "title": "Maxi Palí",
+            "description": "Discount bodega & bulk savings",
+            "image": "/projects/walmart-maxipali.jpg",
+            "icon": "bag"
+          },
+          {
+            "title": "Masxmenos",
+            "description": "Supermarket & fresh groceries",
+            "image": "/projects/walmart-masxmenos.jpg",
+            "icon": "store"
+          },
+          {
+            "title": "Checkout & Pickup",
+            "description": "Electronic billing & store pickup",
+            "image": "/projects/walmart-checkout.jpg",
+            "icon": "truck"
           }
         ],
         "nextProjectSlug": "ofilegal",
@@ -723,15 +781,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Multi-banner coexistence: Harmonizing disparate commercial models (Everyday Low Price at Maxi Palí vs. premium assortment at Masxmenos and Walmart)",
-          "Multi-country regulatory compliance: Disparate fiscal and electronic tax invoicing standards across Costa Rica, Guatemala, El Salvador, Honduras, and Nicaragua",
-          "Hybrid tech stack interoperability: Clean communication between modular Flutter BLoC packages, dynamic multi-banner design tokens, and VTEX IO microservices",
-          "High-concurrency resilience: Uncompromising stability during peak commercial spikes (Cyber Days, Black Friday, payday rushes, bodega promotions)",
-          "Broad device compatibility: Fluid performance across a wide spectrum of entry-level, mid-tier, and flagship Android/iOS smartphones over volatile mobile networks",
-          "Zero tolerance for financial transaction discrepancies or store-level inventory allocation drift"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Architect and orchestrate a unified, resilient omnichannel mobile experience across distinct retail formats with diverse commercial value propositions (Walmart hypermarkets, discount warehouse bodegas like Maxi Palí, and supermarkets like Masxmenos and La Despensa de Don Juan) across 5 Central American countries over a heterogeneous stack (Flutter, Dart, and VTEX IO microservices), resolving checkout bottlenecks, lengthy 7-day manual regression cycles, and real-time store-level price/inventory synchronization.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Multi-banner coexistence: Harmonizing disparate commercial models (Everyday Low Price at Maxi Palí vs. premium assortment at Masxmenos and Walmart)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Multi-country regulatory compliance: Disparate fiscal and electronic tax invoicing standards across Costa Rica, Guatemala, El Salvador, Honduras, and Nicaragua",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Hybrid tech stack interoperability: Clean communication between modular Flutter BLoC packages, dynamic multi-banner design tokens, and VTEX IO microservices",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "High-concurrency resilience: Uncompromising stability during peak commercial spikes (Cyber Days, Black Friday, payday rushes, bodega promotions)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Broad device compatibility: Fluid performance across a wide spectrum of entry-level, mid-tier, and flagship Android/iOS smartphones over volatile mobile networks",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Zero tolerance for financial transaction discrepancies or store-level inventory allocation drift",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -944,7 +1068,7 @@
             "kind": "LAYERS",
             "eyebrow": "Solution Topology",
             "title": "Layered architecture and multi-banner mobile ecosystem",
-            "lead": "Multi-tier enterprise architecture built for high concurrency, multi-brand support, and delivery velocity.",
+            "lead": "Multi-tier enterprise architecture built for high concurrency, multi-brand support, and delivery velocity.\n\nEngineered a modular, multi-banner architecture with GraphQL contracts on VTEX IO that decouples visual identity, segmented catalogs, and fiscal invoicing; designed mission-critical checkout and predictive search flows tailored to each retail banner's purchasing patterns (from bulk grocery runs at Maxi Palí to curated convenience orders at Masxmenos and Walmart); reduced engineering rework by ~25% via system spikes; and instituted Playwright E2E automation (+30% coverage) and unit testing suites compressing regression cycles from 7 to 4 days.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1055,7 +1179,7 @@
             "kind": "CARDS",
             "eyebrow": "Key Outcomes",
             "title": "Regional commercial and technical impact",
-            "lead": "Transforming the digital shopping experience for millions of Central American families across all group retail brands.",
+            "lead": "Transforming the digital shopping experience for millions of Central American families across all group retail brands.\n\nSlashing production MTTR by ~40% via systematic root-cause mitigation, compressing release regression to 4 days, reducing squad rework by ~25%, and delivering a rock-solid, scalable shopping journey for millions of mobile customers across all group retail banners in Central America.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1101,10 +1225,6 @@
       "locale": "nl",
       "title": "Walmart Midden-Amerika: Multi-Format Mobiel Platform",
       "description": "Grootschalig mobiel retail- en e-commerceplatform voor het Walmart Midden-Amerika ecosysteem en zijn diverse winkelformules: Walmart-hypermarkten, discountbodega's (Maxi Palí, Maxi Despensa) en supermarkten (Masxmenos, La Despensa de Don Juan, Paiz), die miljoenen shoppers bedienen in 5 landen met Flutter, Dart en VTEX IO.",
-      "hook": "Multi-format: Walmart, Maxi Palí, Masxmenos · 5 landen · Flutter & VTEX · -40% MTTR",
-      "challenge": "Het ontwerpen en orkestreren van een veerkrachtige, uniforme omnichannel mobiele winkelervaring voor uiteenlopende winkelformules (Walmart hypermarkten, discountbodega's zoals Maxi Palí en supermarkten zoals Masxmenos en La Despensa de Don Juan) in 5 Midden-Amerikaanse landen op een heterogene stack (Flutter, Dart en VTEX IO-microservices), met aanpak van checkout-knelpunten, langdurige regressiecycli van 7 dagen en realtime winkelspecifieke prijs- en voorraadsynchronisatie.",
-      "approach": "Ontwikkelde een modulaire multi-format architectuur met GraphQL-contracten op VTEX IO die merkinsignes, gesegmenteerde catalogi en fiscale facturatie isoleert; ontwierp checkout- en zoekflows afgestemd op elke formule (van bulkinkopen bij Maxi Palí tot gemakswinkelen bij Masxmenos en Walmart); verminderde herwerk met 25% via systeemspikes; en introduceerde Playwright-tests (+30% dekking) en unit-tests die regressiecycli verkortten van 7 naar 4 dagen.",
-      "outcome": "Een MTTR-reductie van ~40% bij productie-incidenten via snelle root-cause analyse, verkorting van regressietests naar 4 dagen, ~25% minder herwerk in engineering teams en een uiterst betrouwbare, schaalbare mobiele winkelervaring voor miljoenen klanten binnen alle winkelformules van de groep in Midden-Amerika.",
       "caseStudy": {
         "chips": [
           "Multi-Banner Retail",
@@ -1112,32 +1232,6 @@
           "Flutter & Mobiel",
           "VTEX IO",
           "In Productie"
-        ],
-        "gallery": [
-          {
-            "title": "Multi-Format",
-            "description": "Walmart, Maxi Palí en Masxmenos",
-            "image": "/projects/walmart-centroamerica.jpg",
-            "icon": "smartphone"
-          },
-          {
-            "title": "Maxi Palí",
-            "description": "Discountbodega & bulkbesparingen",
-            "image": "/projects/walmart-maxipali.jpg",
-            "icon": "bag"
-          },
-          {
-            "title": "Masxmenos",
-            "description": "Supermarkt & verswaren",
-            "image": "/projects/walmart-masxmenos.jpg",
-            "icon": "store"
-          },
-          {
-            "title": "Checkout & Pickup",
-            "description": "Elektronische facturatie & afhalen",
-            "image": "/projects/walmart-checkout.jpg",
-            "icon": "truck"
-          }
         ],
         "facts": [
           {
@@ -1169,6 +1263,32 @@
             "key": "client",
             "label": "Zakelijke klant",
             "value": "Walmart Mexico & Midden-Amerika"
+          }
+        ],
+        "gallery": [
+          {
+            "title": "Multi-Format",
+            "description": "Walmart, Maxi Palí en Masxmenos",
+            "image": "/projects/walmart-centroamerica.jpg",
+            "icon": "smartphone"
+          },
+          {
+            "title": "Maxi Palí",
+            "description": "Discountbodega & bulkbesparingen",
+            "image": "/projects/walmart-maxipali.jpg",
+            "icon": "bag"
+          },
+          {
+            "title": "Masxmenos",
+            "description": "Supermarkt & verswaren",
+            "image": "/projects/walmart-masxmenos.jpg",
+            "icon": "store"
+          },
+          {
+            "title": "Checkout & Pickup",
+            "description": "Elektronische facturatie & afhalen",
+            "image": "/projects/walmart-checkout.jpg",
+            "icon": "truck"
           }
         ],
         "nextProjectSlug": "ofilegal",
@@ -1259,15 +1379,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Multi-format co-existentie: Harmoniseren van uiteenlopende commerciële formules (Everyday Low Price bij Maxi Palí vs. premium assortiment bij Masxmenos en Walmart)",
-          "Complexe fiscale regelgeving: Verschillende normen voor elektronische facturatie in Costa Rica, Guatemala, El Salvador, Honduras en Nicaragua",
-          "Hybride techstack-integratie: Naadloze interactie tussen modulaire Flutter BLoC packages, dynamische multi-banner tokens en VTEX IO microservices",
-          "Hoge schaalbaarheid tijdens piekmomenten: Continue stabiliteit tijdens grote commerciële evenementen (Cyber Days, Black Friday, seizoensacties en bodegapromoties)",
-          "Brede apparaatcompatibiliteit: Vloeiende prestaties op uiteenlopende Android- en iOS-apparaten onder wisselende netwerkomstandigheden (3G/4G/5G)",
-          "Nultolerantie voor fouten in betalingsverwerking en realtime voorraadbeheer per fysieke winkel"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Het ontwerpen en orkestreren van een veerkrachtige, uniforme omnichannel mobiele winkelervaring voor uiteenlopende winkelformules (Walmart hypermarkten, discountbodega's zoals Maxi Palí en supermarkten zoals Masxmenos en La Despensa de Don Juan) in 5 Midden-Amerikaanse landen op een heterogene stack (Flutter, Dart en VTEX IO-microservices), met aanpak van checkout-knelpunten, langdurige regressiecycli van 7 dagen en realtime winkelspecifieke prijs- en voorraadsynchronisatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Multi-format co-existentie: Harmoniseren van uiteenlopende commerciële formules (Everyday Low Price bij Maxi Palí vs. premium assortiment bij Masxmenos en Walmart)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Complexe fiscale regelgeving: Verschillende normen voor elektronische facturatie in Costa Rica, Guatemala, El Salvador, Honduras en Nicaragua",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Hybride techstack-integratie: Naadloze interactie tussen modulaire Flutter BLoC packages, dynamische multi-banner tokens en VTEX IO microservices",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Hoge schaalbaarheid tijdens piekmomenten: Continue stabiliteit tijdens grote commerciële evenementen (Cyber Days, Black Friday, seizoensacties en bodegapromoties)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Brede apparaatcompatibiliteit: Vloeiende prestaties op uiteenlopende Android- en iOS-apparaten onder wisselende netwerkomstandigheden (3G/4G/5G)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Nultolerantie voor fouten in betalingsverwerking en realtime voorraadbeheer per fysieke winkel",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -1480,7 +1666,7 @@
             "kind": "LAYERS",
             "eyebrow": "Systeembouw",
             "title": "Gelaagde architectuur en multi-banner mobiel ecosysteem",
-            "lead": "Meerlaagse bedrijfsarchitectuur ontworpen voor hoge gelijktijdigheid, ondersteuning van meerdere winkelmerken en ontwikkelsnelheid.",
+            "lead": "Meerlaagse bedrijfsarchitectuur ontworpen voor hoge gelijktijdigheid, ondersteuning van meerdere winkelmerken en ontwikkelsnelheid.\n\nOntwikkelde een modulaire multi-format architectuur met GraphQL-contracten op VTEX IO die merkinsignes, gesegmenteerde catalogi en fiscale facturatie isoleert; ontwierp checkout- en zoekflows afgestemd op elke formule (van bulkinkopen bij Maxi Palí tot gemakswinkelen bij Masxmenos en Walmart); verminderde herwerk met 25% via systeemspikes; en introduceerde Playwright-tests (+30% dekking) en unit-tests die regressiecycli verkortten van 7 naar 4 dagen.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1591,7 +1777,7 @@
             "kind": "CARDS",
             "eyebrow": "Belangrijkste Resultaten",
             "title": "Regionale commerciële en technische impact",
-            "lead": "Transformatie van de digitale winkelervaring voor miljoenen gezinnen in Midden-Amerika over alle winkelmerken van de groep.",
+            "lead": "Transformatie van de digitale winkelervaring voor miljoenen gezinnen in Midden-Amerika over alle winkelmerken van de groep.\n\nEen MTTR-reductie van ~40% bij productie-incidenten via snelle root-cause analyse, verkorting van regressietests naar 4 dagen, ~25% minder herwerk in engineering teams en een uiterst betrouwbare, schaalbare mobiele winkelervaring voor miljoenen klanten binnen alle winkelformules van de groep in Midden-Amerika.",
             "code": "",
             "codeLabel": "",
             "items": [

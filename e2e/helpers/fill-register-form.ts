@@ -109,6 +109,43 @@ export function buildRegisterOwnerInput(workerIndex = 0): RegisterOwnerInput {
   };
 }
 
+/** Retry throttled test logins according to the production Retry-After header. */
+export async function submitSignInRequest(page: Page): Promise<Response> {
+  let response: Response | undefined;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const signInResponse = page.waitForResponse(
+      (candidate) =>
+        candidate.url().includes("/api/auth/sign-in/email") &&
+        candidate.request().method() === "POST",
+      { timeout: 30_000 },
+    );
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    response = await signInResponse;
+    if (response.status() !== 429) break;
+    if (attempt === 1)
+      throw new Error("Sign-in remains rate limited after Retry-After");
+    const seconds = Number(response.headers()["retry-after"] ?? "60");
+    await new Promise((resolve) =>
+      setTimeout(resolve, (Math.min(60, Math.max(1, seconds)) + 1) * 1000),
+    );
+  }
+  if (!response) throw new Error("Sign-in returned no response");
+  return response;
+}
+
+export async function fillSignInCredentials(
+  page: Page,
+  email: string,
+  password: string,
+): Promise<void> {
+  const emailInput = page.locator("#login-email:visible");
+  const passwordInput = page.locator("#login-password:visible");
+  await expect(emailInput).toHaveCount(1);
+  await expect(passwordInput).toHaveCount(1);
+  await emailInput.fill(email);
+  await passwordInput.fill(password);
+}
+
 export async function signInOwner(
   page: Page,
   email: string,
@@ -124,20 +161,12 @@ export async function signInOwner(
   }
 
   await expect(
-    page.getByRole("heading", { name: "Welcome back!" }),
+    page.getByRole("heading", { name: "Welcome back, developer" }),
   ).toBeVisible({ timeout: 15_000 });
 
-  await page.locator("#login-email").fill(email);
-  await page.locator("#login-password").fill(password);
+  await fillSignInCredentials(page, email, password);
 
-  const signInResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/auth/sign-in/email") &&
-      response.request().method() === "POST",
-    { timeout: 30_000 },
-  );
-  await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  const response = await signInResponse;
+  const response = await submitSignInRequest(page);
 
   try {
     await parseSignInResponse(response);
@@ -148,10 +177,34 @@ export async function signInOwner(
   try {
     await expectAdminDashboard(page, 30_000);
     return true;
-  } catch {
+  } catch (dashboardError) {
+    const sessionResponse = await page
+      .context()
+      .request.get(new URL("/api/auth/get-session", page.url()).href);
+    if (!sessionResponse.ok()) {
+      throw new Error(
+        `Session verification failed with HTTP ${sessionResponse.status()} after sign-in`,
+        { cause: dashboardError },
+      );
+    }
+    const session: unknown = await sessionResponse.json();
+    if (
+      session &&
+      typeof session === "object" &&
+      "user" in session &&
+      session.user &&
+      "session" in session &&
+      session.session
+    ) {
+      throw new Error(
+        `Sign-in succeeded and the browser session is valid, but the admin dashboard did not render (${new URL(page.url()).pathname}). Check the server logs for a page/data error.`,
+        { cause: dashboardError },
+      );
+    }
     throw new Error(
-      "Sign-in API succeeded but the session cookie was not applied. " +
-        "Ensure the app origin matches E2E_BASE_URL (e.g. http://localhost:3000).",
+      "Sign-in API succeeded but no authenticated session was available. " +
+        "Check session cookies and BETTER_AUTH_URL versus E2E_BASE_URL.",
+      { cause: dashboardError },
     );
   }
 }
@@ -227,7 +280,7 @@ export async function ensureOwnerAccount(
   } catch (error) {
     if (
       error instanceof Error &&
-      error.message.includes("session cookie was not applied")
+      /session|dashboard did not render|rate limited/i.test(error.message)
     ) {
       throw error;
     }

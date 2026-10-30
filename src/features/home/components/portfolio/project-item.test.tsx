@@ -46,16 +46,16 @@ describe("PortfolioItem", () => {
     kindLabels: { PROFESSIONAL: "Professional" },
     metaLabels: {
       solo: "Solo",
-      formatTeam: (count: number) => `Team of ${count}`,
+      team: "Team of 4",
       now: "present",
       statuses: {
         IN_PRODUCTION: "In production",
       },
     },
     teaserLabels: {
-      formatDecisions: (count: number) => `${count} technical decisions`,
+      decisions: "8 technical decisions",
       layers: "Architecture",
-      formatMetrics: (count: number) => `${count} metrics`,
+      metrics: "4 metrics",
     },
   } as unknown as Parameters<typeof PortfolioItem>[0];
 
@@ -94,16 +94,15 @@ describe("PortfolioItem", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders key result chips when hook is provided", () => {
+  it("renders highlights derived from the structured case-study summary", () => {
     renderWithIntl(
       <PortfolioItem
         {...defaultProps}
-        hook="-45% latency · Clean Architecture"
+        highlights={["45% faster", "100 users"]}
       />,
     );
-
-    expect(screen.getByText("-45% latency")).toBeInTheDocument();
-    expect(screen.getByText("Clean Architecture")).toBeInTheDocument();
+    expect(screen.getByText("45% faster")).toBeInTheDocument();
+    expect(screen.getByText("100 users")).toBeInTheDocument();
   });
 
   it("renders case study teaser when csInfo is present", () => {

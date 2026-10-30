@@ -18,7 +18,6 @@ export interface CvPreviewSnapshotData {
     degree: string;
     photoUrl: string | null;
     backgroundImageUrl: string | null;
-    heroSummary: string;
     clientImageAlt: string;
   };
   aboutMeText: string | null;
@@ -151,7 +150,6 @@ export async function loadCvPreviewSnapshot(
   const headerT = field.for(header.translations);
 
   const aboutMeText = resolveCvAboutPreviewText(
-    headerT("heroSummary"),
     aboutMe ? field(aboutMe.translations, "aboutMe") : null,
   );
 
@@ -161,7 +159,6 @@ export async function loadCvPreviewSnapshot(
       degree: headerT("degree"),
       photoUrl: header.photoUrl,
       backgroundImageUrl: header.backgroundImageUrl,
-      heroSummary: headerT("heroSummary"),
       clientImageAlt: headerT("clientImageAlt"),
     },
     aboutMeText: aboutMeText ?? null,
@@ -204,7 +201,7 @@ export async function loadCvPreviewSnapshot(
     }),
     technicalSkills: technicalSkills.map((skill) => ({
       category: skill.category,
-      items: [...skill.items].sort(),
+      items: skill.items,
       order: skill.order,
     })),
     experiences: experiences.map((experience) => {

@@ -1,3 +1,4 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ArrowUp, Heart } from "lucide-react";
@@ -13,12 +14,14 @@ import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
 import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
-import { LinkPreviewLazy } from "@/components/ui/link-preview-lazy";
+import { LinkPreview } from "@/components/ui/link-preview";
 import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
-import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
-import type { SiteBrand } from "@/lib/site-brand/site-brand";
+import {
+  getBrandAccessibleLabel,
+  type SiteBrand,
+} from "@/lib/site-brand/site-brand";
 import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
@@ -45,14 +48,14 @@ function FooterPreviewLink({
   href,
   label,
   soonLabel,
-  live,
+  soon = false,
 }: {
   href: "/uses" | "/now" | "/colophon" | "/stats";
   label: string;
   soonLabel: string;
-  live: boolean;
+  soon?: boolean;
 }) {
-  if (!live) {
+  if (soon) {
     return (
       <span
         className={`${footerLinkClassName} cursor-default gap-2 opacity-85`}
@@ -66,13 +69,9 @@ function FooterPreviewLink({
   }
 
   return (
-    <LinkPreviewLazy
-      url={href}
-      imageAlt={label}
-      className={footerLinkClassName}
-    >
+    <LinkPreview url={href} imageAlt={label} className={footerLinkClassName}>
       {label}
-    </LinkPreviewLazy>
+    </LinkPreview>
   );
 }
 
@@ -85,7 +84,10 @@ const Footer = async ({
   processNavPages?: ProcessNavPage[];
   siteBrand: SiteBrand;
 }) => {
-  const t = await getTranslations("global.footer");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "global.footer",
+  });
   const year = new Date().getFullYear();
 
   const data = await api.contact.getPublic();
@@ -116,8 +118,10 @@ const Footer = async ({
           <div className="space-y-4">
             <Link
               href="/"
-              aria-label={t("homeLogo", { brand: siteBrand.label })}
-              className="group text-primary-foreground inline-flex min-h-11 items-center text-2xl font-extrabold tracking-tight"
+              aria-label={t("homeLogo", {
+                brand: getBrandAccessibleLabel(siteBrand),
+              })}
+              className="group text-primary-foreground inline-flex min-h-11 min-w-11 items-center justify-center text-2xl font-extrabold tracking-tight"
             >
               <SiteBrandMark
                 brand={siteBrand}
@@ -160,36 +164,46 @@ const Footer = async ({
               </h3>
               <ul className="space-y-2.5">
                 <li>
-                  <LinkPreviewLazy
+                  <LinkPreview
+                    url="/projects"
+                    imageSrc={FOOTER_LINK_PREVIEWS.projects}
+                    imageAlt={t("sections.portfolio.projects")}
+                    className={footerLinkClassName}
+                  >
+                    {t("sections.portfolio.projects")}
+                  </LinkPreview>
+                </li>
+                <li>
+                  <LinkPreview
                     url="/certificates"
                     imageSrc={FOOTER_LINK_PREVIEWS.certificates}
                     imageAlt={t("sections.portfolio.certificates")}
                     className={footerLinkClassName}
                   >
                     {t("sections.portfolio.certificates")}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                 </li>
                 {cvPublic ? (
                   <li>
-                    <LinkPreviewLazy
+                    <LinkPreview
                       url="/curriculum-vitae"
                       imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
                       imageAlt={t("sections.portfolio.curriculum")}
                       className={footerLinkClassName}
                     >
                       {t("sections.portfolio.curriculum")}
-                    </LinkPreviewLazy>
+                    </LinkPreview>
                   </li>
                 ) : null}
                 <li>
-                  <LinkPreviewLazy
+                  <LinkPreview
                     url="/timeline"
                     imageSrc={FOOTER_LINK_PREVIEWS.timeline}
                     imageAlt={t("sections.portfolio.timeline")}
                     className={footerLinkClassName}
                   >
                     {t("sections.portfolio.timeline")}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                 </li>
               </ul>
             </nav>
@@ -200,14 +214,14 @@ const Footer = async ({
               </h3>
               <ul className="space-y-2.5">
                 <li className="flex items-center gap-2">
-                  <LinkPreviewLazy
+                  <LinkPreview
                     url="/register?next=/admin/cv"
                     imageSrc={FOOTER_LINK_PREVIEWS.cvGenerator}
                     imageAlt={t("sections.miscellaneous.cvGenerator")}
                     className={footerLinkClassName}
                   >
                     {t("sections.miscellaneous.cvGenerator")}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                   <span className="rounded-full bg-white/15 px-2.5 py-1 text-sm font-semibold text-white">
                     {t("beta")}
                   </span>
@@ -230,13 +244,13 @@ const Footer = async ({
             <ul className="space-y-2.5">
               {processNavPages.map((page) => (
                 <li key={page.id}>
-                  <LinkPreviewLazy
+                  <LinkPreview
                     url={`/process/${page.slug}`}
                     imageAlt={page.menuTitle.trim() || page.slug}
                     className={footerLinkClassName}
                   >
                     {page.menuTitle.trim() || page.slug}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                 </li>
               ))}
               <li>
@@ -244,7 +258,7 @@ const Footer = async ({
                   href="/uses"
                   label={t("sections.process.uses")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.uses}
+                  soon={true}
                 />
               </li>
               <li>
@@ -252,7 +266,6 @@ const Footer = async ({
                   href="/now"
                   label={t("sections.process.now")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.now}
                 />
               </li>
               <li>
@@ -260,7 +273,6 @@ const Footer = async ({
                   href="/stats"
                   label={t("sections.process.stats")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.stats}
                 />
               </li>
               <li>
@@ -268,7 +280,6 @@ const Footer = async ({
                   href="/colophon"
                   label={t("sections.process.colophon")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.colophon}
                 />
               </li>
             </ul>

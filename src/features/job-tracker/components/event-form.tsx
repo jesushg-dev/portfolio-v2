@@ -119,7 +119,7 @@ const EventFormFlow: FC<EventFormProps> = ({
   locale,
 }) => {
   const t = useTranslations("admin.forms.jobTrackerEvent");
-  const stepper = eventCreateStepper.useStepper();
+  const stepper = eventCreateStepper.useStepperContext();
   const hideApplicationSelect = Boolean(initialData.applicationId);
   const linkedApplication = applications.find(
     (app) => app.id === initialData.applicationId,
@@ -205,7 +205,7 @@ function WhatStep({
   initialApplicationId: string;
 }) {
   const t = useTranslations("admin.forms.jobTrackerEvent");
-  const stepper = eventCreateStepper.useStepper();
+  const stepper = eventCreateStepper.useStepperContext();
   const router = useRouter();
   const schema = useMemo(
     () =>
@@ -253,7 +253,7 @@ function WhatStep({
 
   const onSubmit = form.handleSubmit(async (data) => {
     const moved = await stepper.next({ data });
-    if (moved) stepper.setComplete("what");
+    if (moved.accepted) stepper.setComplete("what");
   });
 
   const goBack = () => {
@@ -398,7 +398,7 @@ function WhatStep({
 
 function WhenStep({ locale }: { locale: Locale }) {
   const t = useTranslations("admin.forms.jobTrackerEvent");
-  const stepper = eventCreateStepper.useStepper();
+  const stepper = eventCreateStepper.useStepperContext();
   const dateFnsLocale = getDateFnsLocale(locale);
   const schema = useMemo(
     () =>
@@ -420,7 +420,7 @@ function WhenStep({ locale }: { locale: Locale }) {
 
   const onSubmit = form.handleSubmit(async (data) => {
     const moved = await stepper.next({ data });
-    if (moved) stepper.setComplete("when");
+    if (moved.accepted) stepper.setComplete("when");
   });
 
   return (
@@ -579,7 +579,7 @@ function WhenStep({ locale }: { locale: Locale }) {
 
 function WhereStep() {
   const t = useTranslations("admin.forms.jobTrackerEvent");
-  const stepper = eventCreateStepper.useStepper();
+  const stepper = eventCreateStepper.useStepperContext();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);

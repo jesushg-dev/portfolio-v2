@@ -35,7 +35,7 @@ model ResumeExport {
   uploadThingKey String
   mimeType       String @default("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
-  sourceType         String // "studio" | "upload"
+  sourceType         String // New exports: "studio". Historical "upload" provenance remains readable.
   sourceUploadId     String? @db.ObjectId
   tailoredFor        String?
   jobDescription     String?

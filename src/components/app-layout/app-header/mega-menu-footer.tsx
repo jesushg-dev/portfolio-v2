@@ -41,7 +41,7 @@ export const MegaMenuFooter: FC<MegaMenuFooterProps> = ({
       <div className="flex items-center gap-2">
         <Link
           href="/schedule"
-          onClick={onNavigate}
+          onNavigate={onNavigate}
           className={cn(
             buttonVariants({ variant: "outline", size: "sm" }),
             "h-9 gap-1.5 rounded-full px-4 text-xs font-medium sm:text-sm",
@@ -52,7 +52,7 @@ export const MegaMenuFooter: FC<MegaMenuFooterProps> = ({
         </Link>
         <Link
           href={homeSectionHref("contact")}
-          onClick={onNavigate}
+          onNavigate={onNavigate}
           className={cn(
             buttonVariants({ variant: "default", size: "sm" }),
             "h-9 gap-1.5 rounded-full px-4 text-xs font-medium sm:text-sm",

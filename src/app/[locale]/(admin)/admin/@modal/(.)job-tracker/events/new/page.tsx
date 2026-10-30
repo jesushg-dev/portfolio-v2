@@ -5,6 +5,7 @@ import type { Locale } from "@/i18n/config";
 import { PageDialogWrapper } from "@/components/shared/page-container";
 import { EventForm } from "@/features/job-tracker/components/event-form";
 import { getEventCreatePageData } from "@/features/job-tracker/server/job-tracker-queries";
+import type { EventType } from "@/features/job-tracker/types";
 
 export default async function NewEventModal({
   params,
@@ -16,10 +17,14 @@ export default async function NewEventModal({
   const [{ locale }, search] = await Promise.all([params, searchParams]);
   const applicationId =
     typeof search.applicationId === "string" ? search.applicationId : undefined;
+  const eventType =
+    search.type === "FOLLOW_UP" || search.type === "INTERVIEW"
+      ? (search.type as EventType)
+      : undefined;
 
   const [t, { initialData, applications }] = await Promise.all([
     getTranslations("admin.jobTracker"),
-    getEventCreatePageData(applicationId),
+    getEventCreatePageData(applicationId, eventType),
   ]);
 
   return (

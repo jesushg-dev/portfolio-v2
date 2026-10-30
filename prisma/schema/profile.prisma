@@ -1,0 +1,28 @@
+// ============================================================================
+// TENANT / PROFILE
+// ============================================================================
+
+model Profile {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @unique @db.ObjectId
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username         String   @unique
+  displayName      String?
+  /// Text logo shown in the public header/footer when no logoImageUrl is set.
+  logoInitials     String?
+  /// Optional image logo URL. When set, takes precedence over logoInitials.
+  logoImageUrl     String?
+  defaultLocale    String   @default("en")
+  isPrimary        Boolean  @default(false)
+  isPublished      Boolean  @default(false)
+  /// Optional custom domain. Not @unique: MongoDB unique indexes only allow
+  /// one null, which breaks multi-user signup. Enforce uniqueness in app code
+  /// when a domain is actually set.
+  customDomain     String?
+  /// City or place shown on the Let's Talk map (geocoded on save).
+  mapLocationLabel String?
+  mapLatitude      Float?
+  mapLongitude     Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

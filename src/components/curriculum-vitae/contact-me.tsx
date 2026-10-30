@@ -53,7 +53,7 @@ function ContactItem({
   const href = buildHref(contact.type, contact.value);
   const linkClassName =
     variant === "header"
-      ? "inline-flex items-center gap-1.5 text-white hover:underline text-sm"
+      ? "inline-flex min-h-11 items-center gap-1.5 text-white print:min-h-0 hover:underline text-sm"
       : "relative z-10 inline-flex min-h-11 items-center gap-1 py-0 text-[#1a1a1a] hover:underline";
   const iconClassName =
     variant === "header" ? "size-4 shrink-0 text-white" : "size-3 shrink-0";

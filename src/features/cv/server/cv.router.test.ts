@@ -54,7 +54,6 @@ function emptyCvDb() {
     cvHeaderTranslation: translationTable(),
     cvAboutMe: ownedCrud("about-1"),
     cvAboutMeTranslation: translationTable(),
-    cvTerminal: ownedCrud("term-1"),
     cvContact: ownedCrud("c1", { type: "EMAIL", value: "a@b.com" }),
     cvEducation: ownedCrud("edu-1", { institution: "UNI" }),
     cvEducationTranslation: translationTable(),
@@ -104,13 +103,28 @@ function emptyCvDb() {
           cvContact: { deleteMany: jest.fn() },
           cvEducation: { deleteMany: jest.fn() },
           cvLanguage: { deleteMany: jest.fn() },
-          cvTechnicalSkill: { deleteMany: jest.fn() },
+          cvTechnicalSkill: {
+            deleteMany: jest.fn(),
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockResolvedValue({ id: "skill-1" }),
+            update: jest.fn().mockResolvedValue({ id: "skill-1" }),
+          },
+          skill: {
+            findMany: jest
+              .fn()
+              .mockImplementation((args: { where: { id: { in: string[] } } }) =>
+                Promise.resolve(args.where.id.in.map((id) => ({ id }))),
+              ),
+          },
+          cvTechnicalSkillSelection: {
+            updateMany: jest.fn(),
+            upsert: jest.fn(),
+          },
           cvSoftSkill: { deleteMany: jest.fn() },
           cvAdditionalInfo: { deleteMany: jest.fn() },
           cvPersonalReference: { deleteMany: jest.fn() },
           cvHeader: { deleteMany: jest.fn() },
           cvAboutMe: { deleteMany: jest.fn() },
-          cvTerminal: { deleteMany: jest.fn() },
           cvPdfLink: { deleteMany: jest.fn() },
         };
         return (ops as (tx: typeof txObj) => Promise<unknown>)(txObj);
@@ -155,13 +169,26 @@ describe("cvRouter", () => {
     expect(result.header).toBeNull();
   });
 
+  it("resolves the portfolio URL on the server for the CV editor", async () => {
+    const db = emptyCvDb();
+    db.profile.findUnique.mockResolvedValue({
+      userId: MOCK_OWNER_USER.id,
+      username: "ada",
+      isPrimary: false,
+      customDomain: "cv.example.com",
+    });
+    const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));
+    expect((await caller.getMine()).portfolioUrl).toBe(
+      "https://cv.example.com",
+    );
+  });
+
   it("upserts a header and creates translations", async () => {
     const db = emptyCvDb();
     const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));
     const header = await caller.upsertHeader({
       fullName: "Ada Lovelace",
       degree: { "lang-en": { text: "Math" } },
-      heroSummary: { "lang-en": { text: "Builder" } },
     });
     expect(header.fullName).toBe("Ada");
     expect(db.cvHeaderTranslation.create).toHaveBeenCalled();
@@ -231,13 +258,13 @@ describe("cvRouter", () => {
     const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));
     await caller.createTechnicalSkill({
       category: "FRONTEND",
-      items: ["React"],
+      skillIds: ["000000000000000000000001"],
       order: 0,
     });
     await caller.updateTechnicalSkill({
       id: "skill-1",
       category: "FRONTEND",
-      items: ["React", "Next.js"],
+      skillIds: ["000000000000000000000001", "000000000000000000000002"],
       order: 1,
     });
     await expect(

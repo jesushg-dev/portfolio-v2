@@ -5,11 +5,14 @@ packages:
 overrides:
   "@types/react": "19.2.18"
   "@types/react-dom": "19.2.7"
+  proxy-addr: ">=2.0.8"
+  source-map-js: ">=1.2.2"
   # Transitive advisories (pnpm audit). None of these packages are used directly:
   # mysql2 (better-auth optional driver), effect/valibot (@hookform/resolvers
   # optional peers), deepmerge-ts (@prisma/config).
   mysql2: ">=3.23.1"
-  effect: ">=3.20.0"
+  # Prisma and UploadThing depend on Effect 3 APIs removed in Effect 4.
+  effect: ">=3.20.0 <4"
   valibot: ">=1.4.2"
   deepmerge-ts: ">=8.0.0"
   # nwsapi 2.2.25+ (jsdom's selector engine) recurses forever on `:modal` /
@@ -20,10 +23,14 @@ overrides:
 
 allowBuilds:
   "@parcel/watcher": true
+  "@google/genai": true
   "@prisma/client": true
   "@prisma/engines": true
   "@swc/core": true
   "@tsparticles/engine": true
+  esbuild: true
+  "msgpackr-extract": true
   prisma: true
+  protobufjs: true
   sharp: true
   unrs-resolver: true

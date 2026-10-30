@@ -1,4 +1,9 @@
-import type { Project, ProjectSkill, ProjectTranslation } from "@prisma/client";
+import type {
+  CertificateProject,
+  Project,
+  ProjectSkill,
+  ProjectTranslation,
+} from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
@@ -15,19 +20,10 @@ import {
 export interface ProjectTranslationFields {
   title: string;
   description: string;
-  hook: string;
-  challenge: string;
-  approach: string;
-  outcome: string;
+  caseStudy: CaseStudyContentDTO;
 }
 
-export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields> &
-  Record<
-    string,
-    ProjectTranslationFields & {
-      caseStudy: CaseStudyContentDTO;
-    }
-  >;
+export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields>;
 
 export interface ProjectEditorDTO {
   id: string;
@@ -37,6 +33,7 @@ export interface ProjectEditorDTO {
   websiteUrl: string;
   isPrivate: boolean;
   skillIds: string[];
+  certificateIds: string[];
   order: number;
   kind: Project["kind"];
   slug: string;
@@ -53,16 +50,13 @@ export type ProjectCreateFormDTO = Omit<ProjectEditorDTO, "id">;
 const emptyProjectTranslationFields = {
   title: "",
   description: "",
-  hook: "",
-  challenge: "",
-  approach: "",
-  outcome: "",
   caseStudy: buildEmptyCaseStudy(),
 };
 
 type ProjectWithRelations = Project & {
-  ProjectTranslation: ProjectTranslation[];
-  ProjectSkill: ProjectSkill[];
+  ProjectTranslation?: ProjectTranslation[];
+  ProjectSkill?: ProjectSkill[];
+  CertificateProject?: CertificateProject[];
 };
 
 export function mapProjectToEditorDto(
@@ -74,10 +68,6 @@ export function mapProjectToEditorDto(
       appLanguageId: translation.appLanguageId,
       title: translation.title,
       description: translation.description,
-      hook: translation.hook ?? "",
-      challenge: translation.challenge ?? "",
-      approach: translation.approach ?? "",
-      outcome: translation.outcome ?? "",
       caseStudy: caseStudyRowToDto(translation.caseStudy ?? null),
     })) ?? [];
 
@@ -89,6 +79,8 @@ export function mapProjectToEditorDto(
     websiteUrl: project.websiteUrl ?? "",
     isPrivate: project.isPrivate,
     skillIds: project.ProjectSkill?.map((entry) => entry.skillId) ?? [],
+    certificateIds:
+      project.CertificateProject?.map((entry) => entry.certificationId) ?? [],
     order: project.order ?? 0,
     kind: project.kind ?? "PERSONAL",
     slug: project.slug ?? "",
@@ -124,6 +116,7 @@ export function buildEmptyProjectCreateDto(
     websiteUrl: "",
     isPrivate: false,
     skillIds: [],
+    certificateIds: [],
     order: 0,
     kind: "PERSONAL",
     slug: "",

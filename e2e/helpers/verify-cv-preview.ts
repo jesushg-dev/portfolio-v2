@@ -18,25 +18,26 @@ function localizedText(
   return text[locale];
 }
 
-/** Matches `education.tsx` — institution and location share one line. */
+/** Institution and city share one line; location metadata follows the separator. */
 function educationInstitutionLine(
   education: PortfolioCvEducationFixture,
   locale: CvPreviewLocale,
 ): string {
   const location = education.location
-    ? localizedText(education.location, locale)
+    ? localizedText(education.location, locale).split("|")[0]?.trim()
     : "";
   return location
-    ? `${education.institution} | ${location}`
+    ? `${education.institution} · ${location}`
     : education.institution;
 }
 
-/** Matches list items in `soft-skills.tsx` / `additional-information.tsx`. */
+/** Soft skill labels end with a single period. */
 function localizedListItem(
   text: LocalizedFixture,
   locale: CvPreviewLocale,
 ): string {
-  return `${localizedText(text, locale)}.`;
+  const label = localizedText(text, locale);
+  return label.endsWith(".") ? label : `${label}.`;
 }
 
 export function cvPreviewRoot(page: Page, rootId: CvPreviewRootId): Locator {
@@ -91,12 +92,14 @@ export async function expectCvPreviewContent(
   const root = cvPreviewRoot(page, rootId);
 
   await expect(
-    root.getByText(portfolioCv.header.fullName, { exact: true }),
-  ).toBeVisible();
-  await expect(
     root.getByRole("heading", {
       level: 1,
-      name: localizedText(portfolioCv.header.degree, locale),
+      name: portfolioCv.header.fullName,
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    root.getByText(localizedText(portfolioCv.header.degree, locale), {
       exact: true,
     }),
   ).toBeVisible();
@@ -157,7 +160,7 @@ export async function expectCvPreviewContent(
 
   for (const additional of portfolioCv.additionalInformation) {
     await expect(
-      root.getByText(localizedListItem(additional.text, locale), {
+      root.getByText(localizedText(additional.text, locale), {
         exact: true,
       }),
     ).toBeVisible();

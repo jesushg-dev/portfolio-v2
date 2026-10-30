@@ -204,7 +204,7 @@ renderWithIntl(ui as ReactElement);
 
 Mock server-only dependencies in the test file:
 
-- `next-intl/server` → `getTranslations`, `setRequestLocale`
+- `next-intl/server` → `getTranslations`
 - `@/server/db` → Prisma client methods
 - `@/lib/tenant/resolve` → `resolveTenant`
 - `@/i18n/routing` → `Link`

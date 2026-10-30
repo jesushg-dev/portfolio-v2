@@ -9,16 +9,12 @@ export function toSkillSlug(title: string): string {
     .replace(/^-|-$/g, "");
 }
 
-async function getSkillPickerRoot(page: Page): Promise<Locator> {
-  const inItemModal = page.locator("#cv-item-modal #skill-picker");
-  if (await inItemModal.isVisible()) {
-    return inItemModal;
-  }
-  return page.locator("#skill-picker").first();
+function getSkillPickerRoot(page: Page): Locator {
+  return page.locator("#skill-picker:visible");
 }
 
 async function resetSkillPickerFilters(page: Page): Promise<void> {
-  const picker = await getSkillPickerRoot(page);
+  const picker = getSkillPickerRoot(page);
   await picker.locator("#skill-picker-search").waitFor({ state: "visible" });
 
   const allTypesButton = picker
@@ -77,7 +73,7 @@ function skillTileByTitle(picker: Locator, title: string): Locator {
 /** Wait until skill tiles are rendered in the picker grid. */
 export async function waitForSkillPickerReady(page: Page): Promise<void> {
   await resetSkillPickerFilters(page);
-  const picker = await getSkillPickerRoot(page);
+  const picker = getSkillPickerRoot(page);
   await picker.scrollIntoViewIfNeeded();
   await picker
     .locator("#skill-picker-grid [id^='skill-picker-']")
@@ -93,7 +89,7 @@ export async function selectSkillsInPicker(
   if (skillKeys.length === 0) return;
 
   await waitForSkillPickerReady(page);
-  const picker = await getSkillPickerRoot(page);
+  const picker = getSkillPickerRoot(page);
 
   for (const skillKey of skillKeys) {
     const skill = skillsByKey[skillKey];

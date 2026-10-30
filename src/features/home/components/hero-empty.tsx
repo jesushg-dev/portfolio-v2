@@ -1,9 +1,13 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
 import { User } from "lucide-react";
 
 const HeroEmpty: FC = async () => {
-  const t = await getTranslations("main.heroMain.empty");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.heroMain.empty",
+  });
 
   return (
     <section

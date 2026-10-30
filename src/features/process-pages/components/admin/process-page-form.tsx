@@ -55,7 +55,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import { LocalizedFormLanguageBar } from "@/components/admin/shared/localized-form-language-bar";
 import {
   translationMapSchema,
   resolvePrimaryLanguage,
@@ -159,7 +159,7 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
     mode: "onBlur",
   });
 
-  const { activeLangId, setActiveLangId, statusByLangId } = useLocalizedForm({
+  const { languageProgress, activeLangId, setActiveLangId } = useLocalizedForm({
     languages,
     form,
     buildDefaultValues: () => initialData,
@@ -308,12 +308,10 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
             </p>
             <p className="text-muted-foreground text-xs">{t("designerHint")}</p>
           </div>
-          <GlobalLanguageSelector
-            languages={languages}
+          <LocalizedFormLanguageBar
+            languages={languageProgress}
             activeLangId={activeLangId}
-            onLangChange={setActiveLangId}
-            buttonIdPrefix="process-page"
-            statusByLangId={statusByLangId}
+            onSelectLang={setActiveLangId}
           />
           <div className="flex gap-2">
             <Button

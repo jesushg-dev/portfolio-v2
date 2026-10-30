@@ -51,7 +51,7 @@ function AuthorName({
       href={linkedInUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-foreground hover:text-primary block text-base font-bold underline-offset-2 transition-colors hover:underline"
+      className="text-foreground hover:text-primary inline-flex min-h-11 items-center text-base font-bold underline-offset-2 transition-colors hover:underline"
     >
       {author}
     </a>
@@ -208,7 +208,7 @@ function SocialProofContent({
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTestimonial.id}
-                      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
+                      initial={false}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
                       transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
@@ -228,19 +228,16 @@ function SocialProofContent({
                           type="button"
                           onClick={() => setIsExpanded((prev) => !prev)}
                           aria-expanded={isExpanded}
-                          className="text-primary hover:text-primary/80 mt-2.5 inline-flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors sm:hidden"
+                          className="text-primary hover:text-primary/80 mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
                         >
                           <span>
                             {isExpanded ? t("readLess") : t("readMore")}
                           </span>
                           {isExpanded ? (
-                            <ChevronUp
-                              className="size-3.5"
-                              aria-hidden="true"
-                            />
+                            <ChevronUp className="size-4" aria-hidden="true" />
                           ) : (
                             <ChevronDown
-                              className="size-3.5"
+                              className="size-4"
                               aria-hidden="true"
                             />
                           )}
@@ -255,7 +252,7 @@ function SocialProofContent({
                   {/* Figcaption with Author Info & Slider Controls */}
                   <figcaption className="border-border/60 relative mt-6 flex flex-col gap-3.5 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
                     {/* Author & Avatar (Full role, wraps naturally without clipping) */}
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex min-w-0 items-center gap-3">
                       {/* Avatar */}
                       {activeTestimonial.avatarUrl ? (
                         <div className="border-border/60 relative size-10 shrink-0 overflow-hidden rounded-full border shadow-xs sm:size-11">
@@ -264,11 +261,11 @@ function SocialProofContent({
                             alt={activeTestimonial.author}
                             fill
                             className="object-cover"
-                            sizes="44px"
+                            sizes="2.75rem"
                           />
                         </div>
                       ) : (
-                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:size-11 sm:text-sm">
+                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold sm:size-11">
                           {initials}
                         </span>
                       )}
@@ -280,7 +277,7 @@ function SocialProofContent({
                           linkedInUrl={activeTestimonial.linkedInUrl}
                         />
                         {activeTestimonial.role ? (
-                          <span className="text-muted-foreground block text-xs leading-normal">
+                          <span className="text-muted-foreground block text-sm leading-normal">
                             {activeTestimonial.role}
                           </span>
                         ) : null}
@@ -289,9 +286,9 @@ function SocialProofContent({
 
                     {/* Slider Controls */}
                     {items.length > 1 ? (
-                      <div className="flex items-center justify-between gap-3 shrink-0 sm:justify-end">
+                      <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
                         <div
-                          className="flex items-center gap-1.5"
+                          className="flex items-center gap-1"
                           aria-label="Pagination"
                         >
                           {items.map((_, idx) => (
@@ -303,22 +300,26 @@ function SocialProofContent({
                                 setIsExpanded(false);
                                 setCurrentIndex(idx);
                               }}
-                              className={cn(
-                                "h-1.5 cursor-pointer rounded-full transition-all duration-300",
-                                idx === currentIndex % items.length
-                                  ? "bg-primary w-6"
-                                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-1.5",
-                              )}
-                            />
+                              className="focus-visible:ring-ring flex size-11 cursor-pointer items-center justify-center rounded-full p-2 transition-transform focus-visible:ring-2 focus-visible:outline-none"
+                            >
+                              <span
+                                className={cn(
+                                  "h-1.5 rounded-full transition-all duration-300",
+                                  idx === currentIndex % items.length
+                                    ? "bg-primary w-6"
+                                    : "bg-muted-foreground/40 hover:bg-muted-foreground/60 w-1.5",
+                                )}
+                              />
+                            </button>
                           ))}
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                           <button
                             type="button"
                             aria-label="Previous testimonial"
                             onClick={handlePrev}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
                           >
                             ‹
                           </button>
@@ -326,7 +327,7 @@ function SocialProofContent({
                             type="button"
                             aria-label="Next testimonial"
                             onClick={handleNext}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
                           >
                             ›
                           </button>
@@ -339,7 +340,7 @@ function SocialProofContent({
                   <a
                     href="#contact"
                     id="hire-me-cta"
-                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-xs font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6 sm:text-sm"
+                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-sm font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6"
                   >
                     {t("cta")}
                     <span className="bg-primary-foreground text-primary flex size-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
@@ -363,7 +364,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData.engineersMentored}
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.engineersMentored.label")}
                 </p>
               </div>
@@ -394,7 +395,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData?.projectsCount ?? 19}+
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.projects.label")}
                 </p>
               </div>
@@ -439,7 +440,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData?.yearsExperience ?? 6}+
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.experience.label")}
                 </p>
               </div>
@@ -459,7 +460,7 @@ function SocialProofContent({
             </Link>
 
             {/* Note below cards */}
-            <p className="text-muted-foreground px-2 text-center text-xs">
+            <p className="text-muted-foreground px-2 text-center text-sm">
               {t("statsNote")}
             </p>
           </div>

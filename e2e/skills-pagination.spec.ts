@@ -36,9 +36,8 @@ test.describe("skills pagination", () => {
       page,
       rows: page.locator("table tbody tr"),
       filterTestId: "filter-title",
+      searchDialog: true,
       toggleColumnTestId: "toggle-column-type",
-      searchCellIndex: 1,
-      hiddenColumnCellIndex: 2,
       noResultsTerm: "NonExistentSkillXYZ123",
     });
   });

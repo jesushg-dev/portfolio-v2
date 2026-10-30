@@ -19,7 +19,6 @@ import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
-
 interface CvPageActionsProps {
   fullName: string;
   canSendByEmail: boolean;
@@ -91,7 +90,8 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
 
   const handleToggleEmail = useCallback(() => {
     setEmailOpen((open) => !open);
-  }, []);  const handleSubmit = useCallback(
+  }, []);
+  const handleSubmit = useCallback(
     (values: EmailInput) => {
       startTransition(async () => {
         try {
@@ -121,7 +121,10 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
-          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full gap-2")}
+          className={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            "min-h-11 gap-2 rounded-full",
+          )}
         >
           <Home className="size-4 shrink-0" aria-hidden="true" />
           <span>{goBackLabel}</span>
@@ -138,7 +141,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               onClick={handleDownloadClick}
               className={cn(
                 buttonVariants({ variant: "default", size: "lg" }),
-                "rounded-full gap-2 shadow-sm hover:-translate-y-0.5",
+                "min-h-11 gap-2 rounded-full shadow-sm hover:-translate-y-0.5",
               )}
               aria-busy={isDownloading}
             >
@@ -159,7 +162,10 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               id="mail"
               type="button"
               onClick={handleToggleEmail}
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full gap-2")}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "min-h-11 gap-2 rounded-full",
+              )}
               aria-expanded={emailOpen}
               aria-controls="cv-email-panel"
             >

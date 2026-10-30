@@ -6,6 +6,51 @@ import TabItem from "./tab-item";
 const DummyIcon = () => <svg data-testid="dummy-icon" />;
 
 describe("Tab & TabItem components", () => {
+  it("does not measure tabs while their strip is outside the viewport", () => {
+    const previousObserver = global.IntersectionObserver;
+    const observe = jest.fn();
+    global.IntersectionObserver = jest.fn(() => ({
+      observe,
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+      takeRecords: () => [],
+      root: null,
+      rootMargin: "",
+      thresholds: [],
+    })) as unknown as typeof IntersectionObserver;
+    const geometry = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect");
+
+    try {
+      const { unmount } = render(
+        <Tab ariaLabel="Offscreen measured tabs" currentTab={0}>
+          <TabItem icon={DummyIcon} title="All" />
+          <TabItem icon={DummyIcon} title="Frontend" />
+        </Tab>,
+      );
+
+      expect(observe).toHaveBeenCalled();
+      expect(geometry).not.toHaveBeenCalled();
+      unmount();
+    } finally {
+      geometry.mockRestore();
+      global.IntersectionObserver = previousObserver;
+    }
+  });
+
+  it("does not scroll page ancestors when measuring the initial active tab", () => {
+    const scrollIntoView = jest.spyOn(Element.prototype, "scrollIntoView");
+    scrollIntoView.mockClear();
+
+    render(
+      <Tab ariaLabel="Offscreen portfolio tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="All projects" />
+        <TabItem icon={DummyIcon} title="Frontend" />
+      </Tab>,
+    );
+
+    expect(scrollIntoView).not.toHaveBeenCalled();
+  });
+
   it("renders tab items and handles tab switching", () => {
     const setCurrentTab = jest.fn();
     render(
@@ -15,8 +60,8 @@ describe("Tab & TabItem components", () => {
         setCurrentTab={setCurrentTab}
         tabId="test-tabs"
       >
-        <TabItem icon={DummyIcon} title="Tab 1" description="First tab desc" />
-        <TabItem icon={DummyIcon} title="Tab 2" description="Second tab desc" />
+        <TabItem icon={DummyIcon} title="Tab 1" />
+        <TabItem icon={DummyIcon} title="Tab 2" />
       </Tab>,
     );
 
@@ -34,26 +79,23 @@ describe("Tab & TabItem components", () => {
     expect(setCurrentTab).toHaveBeenCalledWith(1);
   });
 
-  it("renders minimal and secondary variant layout", () => {
+  it("renders the canonical pill layout", () => {
     render(
-      <Tab
-        ariaLabel="Minimal tabs"
-        currentTab={0}
-        minimal={true}
-        variant="secondary"
-      >
-        <TabItem icon={DummyIcon} title="Min Tab 1" description="Desc 1" />
+      <Tab ariaLabel="Pill tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="Min Tab 1" />
       </Tab>,
     );
 
     expect(screen.getByText("Min Tab 1")).toBeInTheDocument();
-    expect(screen.queryByText("Desc 1")).toBeNull();
+    expect(screen.getByRole("tab", { name: /Min Tab 1/ })).toHaveClass(
+      "rounded-full",
+    );
   });
 
-  it("stacks the icon above the label on minimal tabs", () => {
+  it("stacks the icon above the label on narrow screens", () => {
     render(
-      <Tab ariaLabel="Stacked tabs" currentTab={0} minimal>
-        <TabItem icon={DummyIcon} title="All" description="" />
+      <Tab ariaLabel="Stacked tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="All" />
       </Tab>,
     );
 
@@ -62,10 +104,10 @@ describe("Tab & TabItem components", () => {
     expect(tab.firstElementChild?.className).toContain("flex-col");
   });
 
-  it("gives minimal tab items a mobile min-width on the measured wrapper", () => {
+  it("gives pill tab items a mobile min-width on the measured wrapper", () => {
     render(
-      <Tab ariaLabel="Sized tabs" currentTab={0} minimal>
-        <TabItem icon={DummyIcon} title="All" description="" />
+      <Tab ariaLabel="Sized tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="All" />
       </Tab>,
     );
 
@@ -73,17 +115,6 @@ describe("Tab & TabItem components", () => {
     expect(tab.parentElement?.className).toContain("min-w-18");
     expect(tab.parentElement?.className).toContain("sm:min-w-0");
     expect(tab.className).toContain("w-full");
-  });
-
-  it("keeps non-minimal tabs in a horizontal row", () => {
-    render(
-      <Tab ariaLabel="Full tabs" currentTab={0}>
-        <TabItem icon={DummyIcon} title="Overview" description="Details" />
-      </Tab>,
-    );
-
-    const tab = screen.getByRole("tab", { name: /Overview/ });
-    expect(tab.className).not.toContain("flex-col");
   });
 
   it("handles pointer down and pointer up on active tab cleanly without getting stuck", () => {
@@ -95,8 +126,8 @@ describe("Tab & TabItem components", () => {
         setCurrentTab={setCurrentTab}
         tabId="test-tabs"
       >
-        <TabItem icon={DummyIcon} title="Active Tab" description="Desc 1" />
-        <TabItem icon={DummyIcon} title="Other Tab" description="Desc 2" />
+        <TabItem icon={DummyIcon} title="Active Tab" />
+        <TabItem icon={DummyIcon} title="Other Tab" />
       </Tab>,
     );
 

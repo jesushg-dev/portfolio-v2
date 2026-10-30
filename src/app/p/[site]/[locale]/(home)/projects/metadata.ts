@@ -1,0 +1,25 @@
+import { buildPublicAlternates } from "@/lib/public-site/metadata";
+import type { Metadata } from "next";
+import type { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: "main.portfolio",
+  });
+
+  return {
+    alternates: await buildPublicAlternates(
+      locale as import("@/i18n/config").Locale,
+      "/projects",
+    ),
+    title: t("catalog.pageTitle"),
+    description: t("catalog.pageSubtitle"),
+  };
+}

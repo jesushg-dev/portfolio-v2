@@ -19,6 +19,9 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -152,7 +155,6 @@
   /* ========== Background Images ========== */
   --background-image-windows-11: url("https://res.cloudinary.com/js-media/image/upload/v1690086146/portfolio/win11/screensaver_spul4s.webp");
   --background-image-hero-skills: url("https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/1947484_ehwya0.webp");
-  --background-image-hero-contact: url("https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3239480_nnfqfm.webp");
 
   --shadow-icon: 0px 10px 10px rgba(0, 0, 0, 0.1);
 
@@ -199,9 +201,20 @@
     --accent: var(--color-secondary-100);
     --accent-foreground: var(--color-primaryText-500);
     --destructive: #dc2626;
+    --success: #047857;
+    --positive: #4d7c0f;
+    --warning: #a16207;
     --border: var(--color-divider-50);
     --input: var(--color-divider-50);
     --ring: var(--color-primary-400);
+  }
+
+  [data-theme="main-dark"],
+  [data-theme="orange-dark"],
+  [data-theme="christmas-dark"] {
+    --success: #34d399;
+    --positive: #a3e635;
+    --warning: #fbbf24;
   }
 
   *,
@@ -1211,10 +1224,12 @@ video::-webkit-media-controls {
 @keyframes bento-ring {
   0%,
   100% {
-    box-shadow: 0 0 0 0 transparent;
+    opacity: 0;
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 22%, transparent);
+    opacity: 1;
+    transform: scale(1.08);
   }
 }
 
@@ -1222,13 +1237,11 @@ video::-webkit-media-controls {
   0%,
   70%,
   100% {
-    border-color: color-mix(in srgb, var(--border) 40%, transparent);
-    background-color: var(--card);
+    opacity: 0;
   }
   15%,
   50% {
-    border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
-    background-color: color-mix(in srgb, var(--primary) 8.5%, var(--card));
+    opacity: 1;
   }
 }
 
@@ -1244,26 +1257,26 @@ video::-webkit-media-controls {
 
 @keyframes bento-travel {
   0% {
-    left: 0%;
+    transform: translateX(0);
     opacity: 0;
   }
   4% {
     opacity: 1;
   }
   92% {
-    left: 100%;
+    transform: translateX(100%);
     opacity: 1;
   }
   97%,
   100% {
-    left: 100%;
+    transform: translateX(100%);
     opacity: 0;
   }
 }
 
 @keyframes bento-sweep {
   0% {
-    top: -20%;
+    transform: translateY(-20%);
     opacity: 0;
   }
   10% {
@@ -1273,17 +1286,37 @@ video::-webkit-media-controls {
     opacity: 1;
   }
   100% {
-    top: 105%;
+    transform: translateY(105%);
     opacity: 0;
   }
 }
 
-.a-ring {
-  animation: bento-ring 2.4s ease-in-out infinite;
+.a-ring,
+.a-blink {
+  position: relative;
 }
 
-.a-blink {
+.a-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--primary) 22%, transparent);
+  animation: bento-ring 2.4s ease-in-out infinite;
+  animation-delay: inherit;
+}
+
+.a-blink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 0.0625rem solid color-mix(in srgb, var(--primary) 28%, var(--border));
+  background: color-mix(in srgb, var(--primary) 8.5%, transparent);
   animation: bento-blink 4.5s ease-in-out infinite;
+  animation-delay: inherit;
 }
 
 .a-float {
@@ -1296,6 +1329,14 @@ video::-webkit-media-controls {
 
 .a-sweep {
   animation: bento-sweep 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-ring::after,
+  .a-blink::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
 }
 
 @keyframes bento-pop {

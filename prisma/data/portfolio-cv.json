@@ -2,9 +2,9 @@
   "header": {
     "fullName": "Jesús Enmanuel Hernández González",
     "degree": {
-      "es": "Senior Fullstack Developer",
-      "en": "Senior Fullstack Developer",
-      "nl": "Senior Fullstack Developer"
+      "es": "Senior Software Engineer · Ingeniero en Computación",
+      "en": "Senior Software Engineer · Computer Engineer",
+      "nl": "Senior Software Engineer · Computertechnisch Ingenieur"
     },
     "clientImageAlt": {
       "es": "Foto de Jesús Hernández",
@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Ingeniero en Computación y Senior Fullstack Developer con 6+ años de experiencia construyendo aplicaciones web y móviles para productos empresariales y plataformas de alto volumen. Especializado en React, TypeScript, Next.js y .NET, con experiencia en APIs, integración de sistemas, arquitectura frontend, CI/CD y optimización de rendimiento. He trabajado en productos para Walmart Global Tech y Claro, liderando iniciativas técnicas, modernizando sistemas y resolviendo incidentes críticos en producción.",
-    "en": "Computer Engineer and Senior Fullstack Developer with 6+ years of experience building web and mobile applications for enterprise products and high-volume platforms. Specialized in React, TypeScript, Next.js, and .NET, with expertise in APIs, systems integration, frontend architecture, CI/CD, and performance optimization. Shipped high-impact products for Walmart Global Tech and Claro, leading technical initiatives, modernizing legacy systems, and resolving critical production incidents.",
-    "nl": "Computer Engineer en Senior Fullstack Developer met 6+ jaar ervaring in het bouwen van web- en mobiele applicaties voor enterprise producten en platformen met hoog volume. Gespecialiseerd in React, TypeScript, Next.js en .NET, met expertise in API's, systeemintegratie, frontend architectuur, CI/CD en prestatie-optimalisatie. Gewerkt aan producten voor Walmart Global Tech en Claro, technische initiatieven geleid, legacy systemen gemoderniseerd en kritieke productie-incidenten opgelost."
+    "es": "Ingeniero en Computación y desarrollador fullstack con más de 6 años de experiencia en aplicaciones web y móviles. Experiencia con React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET y bases de datos SQL/NoSQL. He desarrollado soluciones para Walmart Global Tech y Claro, con foco en integración de APIs, calidad de software, CI/CD y resolución de incidentes de producción.",
+    "en": "Computer Engineer and fullstack developer with 6+ years of experience building web and mobile applications. Experienced with React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET and SQL/NoSQL databases. Delivered solutions for Walmart Global Tech and Claro, focusing on API integration, software quality, CI/CD and production incident resolution.",
+    "nl": "Computertechnisch ingenieur en fullstackontwikkelaar met meer dan 6 jaar ervaring met web- en mobiele applicaties. Ervaring met React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET en SQL/NoSQL-databases. Oplossingen geleverd voor Walmart Global Tech en Claro, met focus op API-integratie, softwarekwaliteit, CI/CD en productie-incidenten."
   },
   "contacts": [
     {
@@ -401,9 +401,9 @@
         },
         {
           "text": {
-            "es": "Diseñé la arquitectura frontend e integraciones, definiendo una librería de componentes y estándares adoptados en toda la organización.",
-            "en": "Architected frontend systems and integrations, defining a component library and development standards adopted organization-wide.",
-            "nl": "Frontend-systemen en integraties ontworpen, inclusief een componentenbibliotheek en standaarden die organisatiebreed zijn overgenomen."
+            "es": "Diseñé la arquitectura frontend e integraciones para 5+ proyectos, definiendo una librería de componentes y estándares adoptados en toda la organización.",
+            "en": "Architected frontend systems and integrations for 5+ projects, defining a component library and development standards adopted organization-wide.",
+            "nl": "Frontend-systemen en integraties ontworpen voor 5+ projecten, inclusief een componentenbibliotheek en standaarden die organisatiebreed zijn overgenomen."
           },
           "order": 2,
           "atsOnly": false
@@ -511,15 +511,6 @@
             "nl": "Scrum-praktijken toegepast voor agile leveringen van hoge kwaliteit."
           },
           "order": 3,
-          "atsOnly": true
-        },
-        {
-          "text": {
-            "es": "Dirigí la arquitectura frontend y de integración para 5+ proyectos; definí librería de componentes y estándares adoptados por la organización.",
-            "en": "Led frontend & integration architecture for 5+ projects; defined component library and standards adopted org-wide.",
-            "nl": "Frontend- & integratiearchitectuur geleid voor 5+ projecten; componentbibliotheek en standaarden org-breed overgenomen."
-          },
-          "order": 4,
           "atsOnly": true
         }
       ],

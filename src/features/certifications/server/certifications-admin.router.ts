@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { extractStringFilter } from "@/lib/admin/filter-utils";
+import { buildCertificationListWhere } from "../lib/certification-list-filters";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -35,6 +35,19 @@ const certificationUpsertInput = z.object({
 });
 
 export const certificationsAdminRouter = createTRPCRouter({
+  getCategories: protectedProcedure.query(async ({ ctx }) => {
+    const groups = await ctx.db.certification.groupBy({
+      by: ["company"],
+      where: { userId: ctx.user.id },
+      orderBy: { company: "asc" },
+      _count: { _all: true },
+    });
+
+    return groups.map((group) => ({
+      value: group.company,
+      count: group._count._all,
+    }));
+  }),
   getMine: protectedProcedure
     .input(dataTableParamsSchema)
     .query(async ({ ctx, input }) => {
@@ -55,20 +68,7 @@ export const certificationsAdminRouter = createTRPCRouter({
           orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
       }
 
-      const where: Prisma.CertificationWhereInput = { userId: ctx.user.id };
-      const titleVal = extractStringFilter(input.filters, "title");
-      if (titleVal) {
-        where.CertificationTranslation = {
-          some: {
-            title: { contains: titleVal, mode: "insensitive" },
-          },
-        };
-      }
-
-      const companyVal = extractStringFilter(input.filters, "company");
-      if (companyVal) {
-        where.company = { contains: companyVal, mode: "insensitive" };
-      }
+      const where = buildCertificationListWhere(ctx.user.id, input.filters);
 
       const [certifications, totalCount, languages] = await Promise.all([
         ctx.db.certification.findMany({
@@ -199,6 +199,33 @@ export const certificationsAdminRouter = createTRPCRouter({
           where: { certificationId: input.id },
         });
         return tx.certification.delete({ where: { id: input.id } });
+      });
+    }),
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      if (input.ids.length === 0) return { count: 0 };
+      const items = await ctx.db.certification.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.certificateSkill.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        await tx.certificateProject.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        await tx.certificateService.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        await tx.certificationTranslation.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        return tx.certification.deleteMany({ where: { id: { in: ids } } });
       });
     }),
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {

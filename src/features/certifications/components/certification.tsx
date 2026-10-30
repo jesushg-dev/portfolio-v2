@@ -50,11 +50,7 @@ const Certification: FC<ICertificationProps> = ({
     if (initialCertificates && initialCertificates.length > 0) {
       return initialCertificates;
     }
-    return (
-      data?.pages.flatMap(
-        (page) => (page.certificates ?? []),
-      ) ?? []
-    );
+    return data?.pages.flatMap((page) => page.certificates ?? []) ?? [];
   }, [data, initialCertificates]);
 
   if (isLoading && allCertificates.length === 0) {

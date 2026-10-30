@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Tech Service API",
       "description": "API REST desarrollada en PHP y MySQL para la gestión integral de órdenes de reparación y soporte técnico en campo. Provee autenticación por roles para técnicos y clientes, control transaccional de estados de trabajo, almacenamiento seguro de firmas digitales y adjuntos fotográficos.",
-      "hook": "API REST en PHP & MySQL · Ciclo de vida y estados de reparación de hardware · Almacenamiento seguro de firmas digitales y fotos",
-      "challenge": "Digitalizar la gestión de reparaciones en talleres de hardware para eliminar boletas manuales en papel y asegurar evidencia fotográfica de averías.",
-      "approach": "Construí una API REST en PHP y MySQL con patrón MVC nativo, capa PDO segura, subida multipart de fotos y endpoints de consulta rápida.",
-      "outcome": "Trazabilidad 100% digital de órdenes de reparación, erradicación de papeleo manual y reducción del 60% en tiempos de consulta para clientes.",
       "caseStudy": {
         "chips": [
           "API REST Modular",
@@ -45,6 +41,7 @@
             "value": "Api_TechService (https://github.com/jesushg-dev/Api_TechService)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service",
         "context": "TechService API es el motor backend concebido para digitalizar las operaciones diarias de talleres de servicio técnico y reparación de dispositivos electrónicos. Centraliza el ciclo de vida de los equipos desde su recepción en mostrador, diagnóstico técnico inicial, catálogo de repuestos por categoría, asignación a técnicos especialistas y archivo de evidencias fotográficas de averías para evitar discrepancias con clientes.",
         "roleTitle": "Desarrollador Backend PHP / MySQL",
@@ -113,12 +110,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Respuestas JSON ligeras consumibles directamente por clientes móviles Android.",
-          "Operación confiable en servidores compartidos económicos con Apache y MySQL sin dependencias complejas.",
-          "Sanitización estricta de nombres y tipos MIME de imágenes para evitar vulnerabilidades."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Digitalizar la gestión de reparaciones en talleres de hardware para eliminar boletas manuales en papel y asegurar evidencia fotográfica de averías.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Respuestas JSON ligeras consumibles directamente por clientes móviles Android.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Operación confiable en servidores compartidos económicos con Apache y MySQL sin dependencias complejas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Sanitización estricta de nombres y tipos MIME de imágenes para evitar vulnerabilidades.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Construí una API REST en PHP y MySQL con patrón MVC nativo, capa PDO segura, subida multipart de fotos y endpoints de consulta rápida.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "ts-modules",
             "kind": "CARDS",
@@ -250,6 +299,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Trazabilidad 100% digital de órdenes de reparación, erradicación de papeleo manual y reducción del 60% en tiempos de consulta para clientes.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -258,10 +320,6 @@
       "locale": "en",
       "title": "Tech Service API",
       "description": "RESTful API built with PHP and MySQL for end-to-end management of hardware repair orders and field technical support. Delivers role-based auth for technicians and clients, transactional order state transitions, secure digital signature storage, and photographic uploads.",
-      "hook": "REST API in PHP & MySQL · Hardware repair lifecycle & work order states · Secure digital signature & photo attachment storage",
-      "challenge": "Digitize hardware workshop repair tracking to eliminate manual paper logs and secure photographic evidence of device damage.",
-      "approach": "Built a native PHP and MySQL REST API using MVC architecture, secure PDO queries, multipart photo uploading, and fast query endpoints.",
-      "outcome": "100% digital service order tracking, elimination of paper logs, and 60% faster turnaround times for customer status queries.",
       "caseStudy": {
         "chips": [
           "Modular REST API",
@@ -293,6 +351,7 @@
             "value": "Api_TechService (https://github.com/jesushg-dev/Api_TechService)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service",
         "context": "TechService API is the backend engine built to digitize daily repair operations for tech service shops and electronics repair centers. It coordinates device intake, preliminary diagnostic observations, spare parts catalogs, technician dispatching, and photographic evidence archiving for damaged equipment.",
         "roleTitle": "PHP / MySQL Backend Developer",
@@ -361,12 +420,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Lightweight JSON payloads directly consumable by native Android mobile clients.",
-          "Reliable operation on low-cost shared hosting with Apache and MySQL without external dependencies.",
-          "Strict file name sanitization and MIME-type verification for uploaded photos."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Digitize hardware workshop repair tracking to eliminate manual paper logs and secure photographic evidence of device damage.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Lightweight JSON payloads directly consumable by native Android mobile clients.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Reliable operation on low-cost shared hosting with Apache and MySQL without external dependencies.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strict file name sanitization and MIME-type verification for uploaded photos.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Built a native PHP and MySQL REST API using MVC architecture, secure PDO queries, multipart photo uploading, and fast query endpoints.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "ts-modules",
             "kind": "CARDS",
@@ -498,6 +609,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "100% digital service order tracking, elimination of paper logs, and 60% faster turnaround times for customer status queries.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -506,10 +630,6 @@
       "locale": "nl",
       "title": "Tech Service API",
       "description": "RESTful API ontwikkeld in PHP en MySQL voor integraal beheer van reparatieorders en technische buitendienst. Biedt rolgebaseerde authenticatie, transactionele statusovergangen, veilige opslag van digitale handtekeningen en fotobijlagen.",
-      "hook": "REST API in PHP & MySQL · Levenscyclus en reparatiestatussen van hardware · Veilige opslag van digitale handtekeningen en foto's",
-      "challenge": "Digitaliseer reparatieprocessen in hardwarewerkplaatsen om papieren bonnen te vervangen en fotografisch bewijs vast te leggen.",
-      "approach": "Bouwde een PHP en MySQL REST API met een eigen MVC-patroon, veilige PDO-laag, multipart-fotouploads en snelle query-endpoints.",
-      "outcome": "100% digitale opvolging van reparaties, uitbanning van papierwerk en 60% snellere responstijden bij klantvragen.",
       "caseStudy": {
         "chips": [
           "Modulaire REST API",
@@ -541,6 +661,7 @@
             "value": "Api_TechService (https://github.com/jesushg-dev/Api_TechService)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service",
         "context": "TechService API is de backend-engine ontworpen om de dagelijkse werkzaamheden van technische reparatiewerkplaatsen te digitaliseren. Het beheert apparaatinname, voorlopige diagnoses, catalogi van reserveonderdelen, toewijzing aan technici en het archiveren van fotobewijs.",
         "roleTitle": "PHP / MySQL Backend Ontwikkelaar",
@@ -609,12 +730,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Lichtgewicht JSON-payloads direct bruikbaar voor mobiele Android-clients.",
-          "Betrouwbare werking op voordelige shared hosting met Apache en MySQL zonder externe afhankelijkheden.",
-          "Strikte bestandsnaamsanitatie en MIME-typeverificatie voor geüploade foto's."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Digitaliseer reparatieprocessen in hardwarewerkplaatsen om papieren bonnen te vervangen en fotografisch bewijs vast te leggen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Lichtgewicht JSON-payloads direct bruikbaar voor mobiele Android-clients.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Betrouwbare werking op voordelige shared hosting met Apache en MySQL zonder externe afhankelijkheden.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strikte bestandsnaamsanitatie en MIME-typeverificatie voor geüploade foto's.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Bouwde een PHP en MySQL REST API met een eigen MVC-patroon, veilige PDO-laag, multipart-fotouploads en snelle query-endpoints.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "ts-modules",
             "kind": "CARDS",
@@ -743,6 +916,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "100% digitale opvolging van reparaties, uitbanning van papierwerk en 60% snellere responstijden bij klantvragen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

@@ -43,18 +43,16 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
     <div className="flex min-h-0 flex-col gap-3 overflow-hidden">
       <Tab
         tabId="skill-modal"
-        minimal
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         ariaLabel={t("tabsAriaLabel")}
-        className="bg-muted/50 border-border z-20 inline-flex w-full max-w-full shrink-0 items-center justify-center gap-1 rounded-2xl border p-1"
+        className="z-20 w-full max-w-full shrink-0"
       >
         {tabs.map((tab) => (
           <TabItem
             key={tab.id}
             icon={TAB_ICONS[tab.id] ?? HiOutlineCode}
             title={`${tab.label} (${tab.count})`}
-            description=""
           />
         ))}
       </Tab>

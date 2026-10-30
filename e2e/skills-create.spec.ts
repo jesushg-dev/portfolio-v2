@@ -22,7 +22,7 @@ test.describe("skills create", () => {
     await ensureAppLanguages();
 
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(testInfo.workerIndex),
+      storageState: getWorkerAuthFile(testInfo.parallelIndex),
     });
     const page = await context.newPage();
     await cleanupUserSkills(page);

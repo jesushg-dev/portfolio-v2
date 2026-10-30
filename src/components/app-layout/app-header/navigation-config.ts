@@ -19,7 +19,6 @@ import {
 
 import { resolveProcessPageIcon } from "@/lib/process-pages/process-page-icons";
 import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
-import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 
 export type StaticNavPath =
   | "/projects"
@@ -95,7 +94,7 @@ export const PROCESS_STATIC_ITEMS: NavItem[] = [
     id: "stats",
     href: "/stats",
     icon: BarChart3,
-    comingSoon: !PUBLIC_PAGE_LIVE.stats,
+    comingSoon: false,
     chips: ["Analytics", "Performance", "Demographics"],
     stat: { value: "Live", label: "site telemetry" },
   },
@@ -104,7 +103,7 @@ export const PROCESS_STATIC_ITEMS: NavItem[] = [
     id: "colophon",
     href: "/colophon",
     icon: ScrollText,
-    comingSoon: !PUBLIC_PAGE_LIVE.colophon,
+    comingSoon: false,
     chips: ["Next.js 15", "Tailwind CSS", "TypeScript", "Performance"],
     stat: { value: "v2.0", label: "portfolio build" },
   },
@@ -113,7 +112,7 @@ export const PROCESS_STATIC_ITEMS: NavItem[] = [
     id: "uses",
     href: "/uses",
     icon: MonitorSmartphone,
-    comingSoon: !PUBLIC_PAGE_LIVE.uses,
+    comingSoon: true,
     chips: ["Hardware", "Workstation", "Dev tools", "Terminal"],
     stat: { value: "Daily", label: "developer tools" },
   },
@@ -122,7 +121,7 @@ export const PROCESS_STATIC_ITEMS: NavItem[] = [
     id: "now",
     href: "/now",
     icon: Radio,
-    comingSoon: !PUBLIC_PAGE_LIVE.now,
+    comingSoon: false,
     chips: ["Current focus", "Reading", "Active projects"],
     stat: { value: "Live", label: "current status" },
   },

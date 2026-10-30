@@ -5,9 +5,11 @@ import type { CvPreviewSnapshot } from "@/features/cv/lib/load-cv-preview-snapsh
 export function computeCvPdfContentHash(
   snapshot: CvPreviewSnapshot,
   paginatePages: boolean,
+  design?: string,
 ): string {
   const payload = JSON.stringify({
-    version: "v2-ats-name",
+    version: "v3-visual-template-v2",
+    design: design ?? "default",
     paginatePages,
     snapshot,
   });

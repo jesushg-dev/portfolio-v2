@@ -187,6 +187,9 @@ export async function prefetchTrackLyrics(
 
   const fetchPromise = (async () => {
     try {
+      if (typeof fetch === "undefined") {
+        return;
+      }
       const res = await fetch(buildLyricsUrl(request));
 
       if (res.status === 404) {

@@ -10,28 +10,172 @@
       "locale": "es",
       "title": "Telo Business: Terminal POS & Cobros Cripto",
       "description": "Aplicación móvil B2B orientada a comercios y empresas para la aceptación y gestión de cobros en criptomonedas (mPOS). Desarrollada en React Native, Redux y WebSockets para Android e iOS, permite a los negocios generar facturas dinámicas con códigos QR en USDT, BTC y Telo Coin, recibir confirmaciones de pago instantáneas mediante eventos de socket (NOTIFY_INVOICE_PAYMENT), administrar colaboradores con roles restringidos para cajeros y geolocalizar sucursales comerciales en mapas interactivos con Mapbox GL.",
-      "hook": "App Móvil React Native · Terminal POS Cripto B2B · Cobros QR en Tiempo Real & Mapbox GL",
-      "challenge": "Digitalizar la recepción de cobros en criptomonedas en puntos de venta físicos eliminando los tiempos de espera de confirmación en mostrador y asegurando trazabilidad por sucursal y empleado.",
-      "approach": "Desarrollé una terminal de cobro móvil con React Native conectada a WebSockets bidireccionales con Socket.IO para confirmación instantánea de facturas, generación dinámica de QR por monto/moneda, control de permisos granulares para colaboradores y renderizado de mapas con Mapbox.",
-      "outcome": "Cobros presenciales instantáneos en criptomonedas, actualización automática de libros contables de comercios y despliegue exitoso para comercios afiliados al ecosistema Telo."
+      "caseStudy": {
+        "chips": [],
+        "facts": [],
+        "gallery": [],
+        "nextProjectSlug": "",
+        "context": "",
+        "roleTitle": "",
+        "roleIntro": "",
+        "tldr": [],
+        "responsibilities": [],
+        "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Digitalizar la recepción de cobros en criptomonedas en puntos de venta físicos eliminando los tiempos de espera de confirmación en mostrador y asegurando trazabilidad por sucursal y empleado.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Desarrollé una terminal de cobro móvil con React Native conectada a WebSockets bidireccionales con Socket.IO para confirmación instantánea de facturas, generación dinámica de QR por monto/moneda, control de permisos granulares para colaboradores y renderizado de mapas con Mapbox.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Cobros presenciales instantáneos en criptomonedas, actualización automática de libros contables de comercios y despliegue exitoso para comercios afiliados al ecosistema Telo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Telo Business: Crypto POS & Merchant App",
       "description": "B2B mobile application designed for merchants and enterprises to accept and manage cryptocurrency payments at the point of sale (mPOS). Built with React Native, Redux, and WebSockets for Android and iOS, it allows businesses to generate dynamic QR invoice checkouts in USDT, BTC, and Telo Coin, receive real-time payment confirmations via socket events (NOTIFY_INVOICE_PAYMENT), manage cashier/collaborator permissions, and display store branches on interactive Mapbox GL maps.",
-      "hook": "React Native Mobile App · B2B Crypto POS Terminal · Real-Time QR Checkouts & Mapbox GL",
-      "challenge": "Digitalizing in-store cryptocurrency checkout for retail merchants, eliminating counter waiting times for transaction confirmations and ensuring role-based access for multi-user staff.",
-      "approach": "Engineered a mobile crypto POS in React Native backed by Socket.IO WebSockets for instantaneous invoice payment confirmations, dynamic QR invoice rendering, collaborator role controls, and geolocation via Mapbox.",
-      "outcome": "Frictionless in-person crypto checkouts with zero counter delays, automated ledger balance updates, and reliable multi-branch merchant management."
+      "caseStudy": {
+        "chips": [],
+        "facts": [],
+        "gallery": [],
+        "nextProjectSlug": "",
+        "context": "",
+        "roleTitle": "",
+        "roleIntro": "",
+        "tldr": [],
+        "responsibilities": [],
+        "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Digitalizing in-store cryptocurrency checkout for retail merchants, eliminating counter waiting times for transaction confirmations and ensuring role-based access for multi-user staff.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Engineered a mobile crypto POS in React Native backed by Socket.IO WebSockets for instantaneous invoice payment confirmations, dynamic QR invoice rendering, collaborator role controls, and geolocation via Mapbox.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Frictionless in-person crypto checkouts with zero counter delays, automated ledger balance updates, and reliable multi-branch merchant management.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Telo Business: Crypto POS & Winkel App",
       "description": "B2B mobiele applicatie voor winkeliers en bedrijven om cryptocurrency-betalingen te accepteren en beheren aan het verkooppunt (mPOS). Gebouwd met React Native, Redux en WebSockets voor Android en iOS, stelt bedrijven in staat dynamische QR-facturen te genereren in USDT, BTC en Telo Coin, realtime betalingsbevestigingen te ontvangen (NOTIFY_INVOICE_PAYMENT), personeelsrechten te beheren en winkellocaties weer te geven via Mapbox GL.",
-      "hook": "Mobiele React Native-app · B2B Crypto POS · Realtime QR-facturatie & Mapbox GL",
-      "challenge": "Het digitaliseren van fysieke crypto-betalingen voor retailers zonder wachttijden aan de kassa en met veilige rolgebaseerde toegang voor winkelpersoneel.",
-      "approach": "Ontwierp een mobiele kassa-app in React Native met Socket.IO voor directe betalingsbevestigingen, dynamische QR-code-generatie, medewerkersbeheer en Mapbox-kaartintegratie.",
-      "outcome": "Directe betalingsverwerking aan de kassa, automatische saldo-updates voor winkeliers en betrouwbaar beheer voor aangesloten bedrijven."
+      "caseStudy": {
+        "chips": [],
+        "facts": [],
+        "gallery": [],
+        "nextProjectSlug": "",
+        "context": "",
+        "roleTitle": "",
+        "roleIntro": "",
+        "tldr": [],
+        "responsibilities": [],
+        "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Het digitaliseren van fysieke crypto-betalingen voor retailers zonder wachttijden aan de kassa en met veilige rolgebaseerde toegang voor winkelpersoneel.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwierp een mobiele kassa-app in React Native met Socket.IO voor directe betalingsbevestigingen, dynamische QR-code-generatie, medewerkersbeheer en Mapbox-kaartintegratie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Directe betalingsverwerking aan de kassa, automatische saldo-updates voor winkeliers en betrouwbaar beheer voor aangesloten bedrijven.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
   ],
   "skillKeys": [

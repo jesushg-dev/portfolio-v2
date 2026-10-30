@@ -30,4 +30,3 @@ export function redirectToAdmin(locale: Locale): Promise<never> {
     locale,
   });
 }
-

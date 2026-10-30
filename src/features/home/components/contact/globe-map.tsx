@@ -5,13 +5,6 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
-import type { Topology, GeometryCollection } from "topojson-specification";
-import type {
-  FeatureCollection,
-  Feature,
-  Geometry,
-  GeoJsonProperties,
-} from "geojson";
 import { useTranslations } from "next-intl";
 import {
   Globe,
@@ -35,7 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type GeoFeature = Feature<Geometry, GeoJsonProperties>;
+export type GeoFeature = d3.GeoPermissibleObjects;
 
 interface LocationPoint {
   lat: number;
@@ -353,13 +346,13 @@ export function GlobeMap({
         const response = await fetch(
           "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
         );
-        const world = (await response.json()) as Topology<{
-          countries: GeometryCollection;
-        }>;
+        const world = (await response.json()) as {
+          objects: { countries: unknown };
+        };
         const collection = feature(
-          world,
-          world.objects.countries,
-        ) as FeatureCollection<Geometry, GeoJsonProperties>;
+          world as never,
+          world.objects.countries as never,
+        ) as unknown as { features: GeoFeature[] };
         setWorldData(collection.features);
       } catch {
         setWorldData([

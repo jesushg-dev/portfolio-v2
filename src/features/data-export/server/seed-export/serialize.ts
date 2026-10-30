@@ -99,10 +99,6 @@ export interface ProjectExportRow {
   ProjectTranslation: (TranslationRow & {
     title: string;
     description: string;
-    hook: string | null;
-    challenge: string | null;
-    approach: string | null;
-    outcome: string | null;
     caseStudy?: CaseStudyContentRow | null;
   })[];
   ProjectSkill: { Skill: { title: string } }[];
@@ -216,19 +212,24 @@ export interface NowSettingsExportRow {
   timezone: string;
   githubUsername: string | null;
   statusEmoji: string | null;
+  statusSchedule: {
+    startMinute: number;
+    endMinute: number;
+    weekdays: number[];
+    emoji: string;
+    translations: (TranslationRow & { body: string })[];
+  }[];
+  readingCoverUrl: string | null;
+  watchedCoverUrl: string | null;
   readingTitle: string | null;
   readingAuthors: string | null;
   readingProgress: number;
   watchedTitle: string | null;
   watchedRating: number;
-  githubRepo: string | null;
-  githubHref: string | null;
   photoUrls: string[];
   NowSettingsTranslation: (TranslationRow & {
     statusBody: string;
     statusRelative: string;
-    githubBody: string;
-    githubRelative: string;
   })[];
 }
 
@@ -353,23 +354,6 @@ function resolveProjectKey(
   return uniqueKey(toPascalKey(enTitle || "Project"), used);
 }
 
-function optionalCaseStudyFields(row: {
-  hook: string | null;
-  challenge: string | null;
-  approach: string | null;
-  outcome: string | null;
-}): Pick<
-  ProjectSeedRecord["translations"][number],
-  "hook" | "challenge" | "approach" | "outcome"
-> {
-  const hook = row.hook?.trim() ?? "";
-  const challenge = row.challenge?.trim() ?? "";
-  const approach = row.approach?.trim() ?? "";
-  const outcome = row.outcome?.trim() ?? "";
-  if (!hook && !challenge && !approach && !outcome) return {};
-  return { hook, challenge, approach, outcome };
-}
-
 export function serializeProjects(
   projects: ProjectExportRow[],
   languages: LanguageRef[],
@@ -404,7 +388,6 @@ export function serializeProjects(
             locale,
             title: row.title,
             description: row.description,
-            ...optionalCaseStudyFields(row),
             ...(isCaseStudyEmpty(caseStudy) ? {} : { caseStudy }),
           };
         },
@@ -817,13 +800,28 @@ export function serializeNow(
       timezone: settings?.timezone ?? "America/Mexico_City",
       githubUsername: emptyToBlank(settings?.githubUsername),
       statusEmoji: emptyToBlank(settings?.statusEmoji) || "🚀",
+      statusSchedule: [...(settings?.statusSchedule ?? [])]
+        .sort((left, right) => left.startMinute - right.startMinute)
+        .map((slot) => ({
+          startMinute: slot.startMinute,
+          endMinute: slot.endMinute,
+          weekdays: [...slot.weekdays],
+          emoji: slot.emoji,
+          body: localeMapFromRows(
+            slot.translations,
+            languages,
+            (row) => row.body,
+            undefined,
+            { includeEmpty: true },
+          ),
+        })),
+      readingCoverUrl: emptyToBlank(settings?.readingCoverUrl),
+      watchedCoverUrl: emptyToBlank(settings?.watchedCoverUrl),
       readingTitle: emptyToBlank(settings?.readingTitle),
       readingAuthors: emptyToBlank(settings?.readingAuthors),
       readingProgress: settings?.readingProgress ?? 0,
       watchedTitle: emptyToBlank(settings?.watchedTitle),
       watchedRating: settings?.watchedRating ?? 0,
-      githubRepo: emptyToBlank(settings?.githubRepo),
-      githubHref: emptyToBlank(settings?.githubHref),
       photoUrls: settings?.photoUrls ?? [],
       statusBody: localeMapFromRows(
         settings?.NowSettingsTranslation ?? [],
@@ -836,20 +834,6 @@ export function serializeNow(
         settings?.NowSettingsTranslation ?? [],
         languages,
         (row) => row.statusRelative,
-        undefined,
-        { includeEmpty: true },
-      ),
-      githubBody: localeMapFromRows(
-        settings?.NowSettingsTranslation ?? [],
-        languages,
-        (row) => row.githubBody,
-        undefined,
-        { includeEmpty: true },
-      ),
-      githubRelative: localeMapFromRows(
-        settings?.NowSettingsTranslation ?? [],
-        languages,
-        (row) => row.githubRelative,
         undefined,
         { includeEmpty: true },
       ),

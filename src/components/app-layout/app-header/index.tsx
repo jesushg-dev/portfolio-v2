@@ -6,7 +6,10 @@ import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import type { SiteBrand } from "@/lib/site-brand/site-brand";
+import {
+  getBrandAccessibleLabel,
+  type SiteBrand,
+} from "@/lib/site-brand/site-brand";
 import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 
 import DesktopNav from "./desktop-nav";
@@ -115,12 +118,17 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
           <div className="flex w-full items-center justify-between gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6">
             <Link
               href="/"
-              aria-label={t("homeLogo", { brand: siteBrand.label })}
-              className="group text-primary z-10 inline-flex h-11 min-h-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
+              aria-label={t("homeLogo", {
+                brand: getBrandAccessibleLabel(siteBrand),
+              })}
+              className="group text-primary z-10 inline-flex h-11 min-h-11 min-w-11 shrink-0 items-center justify-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
             >
               <SiteBrandMark
                 brand={siteBrand}
-                dotClassName="text-primary/50 group-hover:text-primary"
+                className={
+                  siteBrand.mode === "monogram" ? "text-foreground" : undefined
+                }
+                dotClassName="text-primary group-hover:text-primary/80"
               />
             </Link>
 

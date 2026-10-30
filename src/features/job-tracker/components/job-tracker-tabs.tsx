@@ -7,6 +7,7 @@ import {
   Calendar,
   Kanban,
   MailCheck,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -14,20 +15,27 @@ import { useTranslations } from "next-intl";
 import { ApplicationsKanban } from "@/features/job-tracker/components/applications-kanban";
 import { CompaniesList } from "@/features/job-tracker/components/companies-list";
 import { OutreachHub } from "@/features/job-tracker/components/outreach-hub";
+import { TodayDashboard } from "@/features/job-tracker/components/today-dashboard";
 import { UpcomingEventsAlertBanner } from "@/features/job-tracker/components/upcoming-events-alert-banner";
 import { UpcomingEventsCalendar } from "@/features/job-tracker/components/upcoming-events-calendar";
+import {
+  getPendingFollowUps,
+  getSuggestedClosures,
+} from "@/features/job-tracker/lib/today-dashboard-helpers";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api, type RouterOutputs } from "@/trpc/react";
 import type { Locale } from "@/i18n/config";
 import type { UpcomingEvent } from "@/features/job-tracker/types";
+import { cn } from "@/lib/utils";
 
 type ApplicationRow =
   RouterOutputs["jobTrackerAdmin"]["getApplications"]["data"][number];
 type CompanyRow =
   RouterOutputs["jobTrackerAdmin"]["getCompanies"]["data"][number];
 
-type JobTrackerTab = "applications" | "events" | "companies" | "outreach";
+type JobTrackerTab =
+  "today" | "applications" | "events" | "companies" | "outreach";
 
 interface JobTrackerTabsProps {
   initialApplications: ApplicationRow[];
@@ -42,8 +50,14 @@ interface JobTrackerTabsProps {
 const TAB_CONFIG: {
   id: JobTrackerTab;
   icon: LucideIcon;
-  labelKey: "applicationsTab" | "eventsTab" | "companiesTab" | "outreachTab";
+  labelKey:
+    | "todayTab"
+    | "applicationsTab"
+    | "eventsTab"
+    | "companiesTab"
+    | "outreachTab";
 }[] = [
+  { id: "today", icon: Sparkles, labelKey: "todayTab" },
   { id: "applications", icon: Kanban, labelKey: "applicationsTab" },
   { id: "events", icon: Calendar, labelKey: "eventsTab" },
   { id: "outreach", icon: MailCheck, labelKey: "outreachTab" },
@@ -60,7 +74,7 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
   locale,
 }) => {
   const t = useTranslations("admin.jobTracker");
-  const [activeTab, setActiveTab] = useState<JobTrackerTab>("applications");
+  const [activeTab, setActiveTab] = useState<JobTrackerTab>("today");
 
   const { data: stats } = api.jobTrackerAdmin.getDashboardStats.useQuery(
     undefined,
@@ -98,6 +112,16 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
     ).length;
   }, [upcomingEvents]);
 
+  const pendingFollowUpsCount = useMemo(
+    () => getPendingFollowUps(initialApplications).length,
+    [initialApplications],
+  );
+  const suggestedClosuresCount = useMemo(
+    () => getSuggestedClosures(initialApplications).length,
+    [initialApplications],
+  );
+  const todayUrgentCount = pendingFollowUpsCount + suggestedClosuresCount;
+
   const applicationsCount = stats?.totalApplications ?? applicationsTotalCount;
   const companiesCount = stats?.totalCompanies ?? companiesTotalCount;
   const outreachCount = outreachData?.totalSent ?? 0;
@@ -105,6 +129,8 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
 
   const getCount = (tabId: JobTrackerTab) => {
     switch (tabId) {
+      case "today":
+        return todayUrgentCount;
       case "applications":
         return applicationsCount;
       case "events":
@@ -120,34 +146,50 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
     <Tabs
       value={activeTab}
       onValueChange={(val) => setActiveTab(val as JobTrackerTab)}
-      className="border-border bg-card sticky top-0 z-20 flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden rounded-xl border shadow-sm md:top-16 md:h-[calc(100dvh-4rem)]"
+      className={cn(
+        "border-border bg-card flex w-full max-w-full min-w-0 flex-col rounded-xl border shadow-sm",
+        activeTab === "applications"
+          ? "sticky top-0 z-20 h-[calc(100dvh-3.5rem)] min-h-0 overflow-hidden md:top-16 md:h-[calc(100dvh-4rem)]"
+          : "min-h-0",
+      )}
     >
-      <div className="border-border bg-muted/30 border-b px-3">
-        <TabsList
-          variant="line"
-          aria-label={t("tabsNavAria")}
-          className="flex h-12 w-full [scrollbar-width:none] justify-start gap-1 overflow-x-auto overflow-y-hidden p-0 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
-            <TabsTrigger
-              key={id}
-              value={id}
-              className="h-full flex-initial shrink-0 px-4 text-sm font-medium after:bottom-0"
-            >
-              <Icon className="size-4" aria-hidden />
-              <span>{t(labelKey)}</span>
-              <span className="tabular-nums opacity-75">({getCount(id)})</span>
-              {id === "events" && weekEventsCount > 0 ? (
-                <Badge
-                  variant="secondary"
-                  className="border-primary/25 bg-primary/10 text-primary ml-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+      <div className="border-border bg-muted/30 w-full min-w-0 overflow-hidden rounded-t-xl border-b px-3">
+        <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+          <TabsList
+            variant="line"
+            aria-label={t("tabsNavAria")}
+            className="flex min-h-12 w-max min-w-full justify-start gap-1 p-0"
+          >
+            {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
+              <TabsTrigger
+                key={id}
+                value={id}
+                className="min-h-12 flex-initial shrink-0 gap-2 px-3 text-sm font-medium sm:px-4"
+              >
+                <Icon className="size-4" aria-hidden />
+                <span>{t(labelKey)}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-xs font-medium tabular-nums",
+                    id === "today" && todayUrgentCount > 0
+                      ? "border-warning/30 bg-warning/10 text-warning border font-bold"
+                      : "bg-muted/80 text-foreground",
+                  )}
                 >
-                  {t("eventsThisWeekBadge", { count: weekEventsCount })}
-                </Badge>
-              ) : null}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+                  {getCount(id)}
+                </span>
+                {id === "events" && weekEventsCount > 0 ? (
+                  <Badge
+                    variant="secondary"
+                    className="border-primary/25 bg-primary/10 text-primary ml-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+                  >
+                    {t("eventsThisWeekBadge", { count: weekEventsCount })}
+                  </Badge>
+                ) : null}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
       </div>
 
       <UpcomingEventsAlertBanner
@@ -156,6 +198,17 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
         onViewAgenda={() => setActiveTab("events")}
         className="mx-3 mt-3 sm:mx-4 sm:mt-4"
       />
+
+      <TabsContent value="today" className="p-2.5 sm:p-4 md:p-6">
+        <TodayDashboard
+          applications={initialApplications}
+          upcomingEvents={upcomingEvents}
+          stats={stats}
+          outreachData={outreachData}
+          locale={locale}
+          onNavigateTab={(tab) => setActiveTab(tab)}
+        />
+      </TabsContent>
 
       <TabsContent
         value="applications"
@@ -167,27 +220,18 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
         />
       </TabsContent>
 
-      <TabsContent
-        value="events"
-        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
-      >
+      <TabsContent value="events" className="p-2.5 sm:p-4 md:p-6">
         <UpcomingEventsCalendar
           initialEvents={upcomingEvents}
           locale={locale}
         />
       </TabsContent>
 
-      <TabsContent
-        value="outreach"
-        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
-      >
+      <TabsContent value="outreach" className="p-2.5 sm:p-4 md:p-6">
         <OutreachHub />
       </TabsContent>
 
-      <TabsContent
-        value="companies"
-        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
-      >
+      <TabsContent value="companies" className="p-2.5 sm:p-4 md:p-6">
         <CompaniesList
           initialCompanies={initialCompanies}
           pageCount={companiesPageCount}

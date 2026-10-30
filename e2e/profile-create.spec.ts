@@ -1,12 +1,11 @@
 import { expect, test } from "./authenticated-test";
 import { getWorkerAuthFile } from "./helpers/auth-state";
 
-import { portfolioCv } from "./fixtures/portfolio-cv";
 import {
   cleanupUserProfile,
   fillProfileConsoleFromFixture,
   fillProfileHeroFromFixture,
-  getHeroTitlesMine,
+  getHeroEditor,
   getTerminalMine,
   portfolioHome,
 } from "./helpers/fill-profile-form";
@@ -18,7 +17,7 @@ test.describe.configure({ mode: "serial" });
 test.describe("profile create", () => {
   test.beforeAll(async ({ browser }, testInfo) => {
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(testInfo.workerIndex),
+      storageState: getWorkerAuthFile(testInfo.parallelIndex),
     });
     const page = await context.newPage();
     await cleanupUserProfile(page);
@@ -32,35 +31,33 @@ test.describe("profile create", () => {
     await fillProfileHeroFromFixture(page);
     await fillProfileConsoleFromFixture(page);
 
-    const heroTitles = await getHeroTitlesMine(page);
-    expect(heroTitles.titles).toHaveLength(portfolioHome.heroTitles.length);
+    const hero = await getHeroEditor(page);
+    expect(
+      Object.values(hero.heroSubtitleTranslations).map((entry) => entry.text),
+    ).toEqual(
+      expect.arrayContaining(Object.values(portfolioHome.heroSubtitle)),
+    );
 
     const terminal = await getTerminalMine(page);
     expect(terminal?.username).toBe(portfolioHome.terminal.username);
     expect(terminal?.steps).toHaveLength(portfolioHome.terminal.steps.length);
 
-    const whoamiStep = terminal?.steps.find((step) =>
-      Object.values(step.translations).some(
-        (translation) => translation.command === "whoami",
-      ),
-    );
-    expect(whoamiStep).toBeDefined();
-    expect(
-      Object.values(whoamiStep?.translations ?? {}).some((translation) =>
-        translation.output.includes("jesus-hernandez"),
-      ),
-    ).toBe(true);
-
-    const profileJsonStep = terminal?.steps.find((step) =>
-      Object.values(step.translations).some((translation) =>
-        translation.command.includes("profile.json"),
-      ),
-    );
-    expect(profileJsonStep).toBeDefined();
-    expect(
-      Object.values(profileJsonStep?.translations ?? {}).some((translation) =>
-        translation.output.includes(portfolioCv.header.fullName),
-      ),
-    ).toBe(true);
+    for (const [
+      order,
+      expectedStep,
+    ] of portfolioHome.terminal.steps.entries()) {
+      const actualStep = terminal?.steps.find((step) => step.order === order);
+      expect(actualStep).toBeDefined();
+      for (const locale of ["en", "es", "nl"] as const) {
+        expect(Object.values(actualStep?.translations ?? {})).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              command: expectedStep.command[locale],
+              output: expectedStep.output[locale],
+            }),
+          ]),
+        );
+      }
+    }
   });
 });

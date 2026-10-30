@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import type { LocalizedCvData } from "../types";
 import ClientImage from "./client-image";
 import ContactMe from "../contact-me";
@@ -9,6 +9,7 @@ interface IHeaderCvProps {
   fallbackName?: string | null;
   contacts?: LocalizedCvData["contacts"];
   availability?: string | null;
+  contactsSlot?: ReactNode;
 }
 
 const HeaderCV: FC<IHeaderCvProps> = ({
@@ -16,6 +17,7 @@ const HeaderCV: FC<IHeaderCvProps> = ({
   fallbackName,
   contacts,
   availability,
+  contactsSlot,
 }) => {
   const rawName = header?.fullName;
   const fullName =
@@ -36,7 +38,9 @@ const HeaderCV: FC<IHeaderCvProps> = ({
           </p>
         ) : null}
 
-        {contacts && contacts.length > 0 ? (
+        {contactsSlot ? (
+          <div className="mt-5">{contactsSlot}</div>
+        ) : contacts && contacts.length > 0 ? (
           <div className="mt-5">
             <ContactMe contacts={contacts} variant="header" />
           </div>
@@ -53,7 +57,7 @@ const HeaderCV: FC<IHeaderCvProps> = ({
         ) : null}
       </div>
 
-      <span className="flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/10 text-4xl font-bold text-white ring-2 ring-white/40">
+      <span className="flex size-28 shrink-0 items-center justify-center overflow-hidden bg-white text-4xl font-bold text-slate-800">
         {header?.photoUrl ? (
           <ClientImage src={header.photoUrl} alt={alt || fullName} />
         ) : (

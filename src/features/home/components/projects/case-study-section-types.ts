@@ -4,5 +4,4 @@ export interface CaseStudySectionProps {
   section: CaseStudySectionDTO;
   index: number;
   relatedSection?: CaseStudySectionDTO;
-  introText?: string | null;
 }

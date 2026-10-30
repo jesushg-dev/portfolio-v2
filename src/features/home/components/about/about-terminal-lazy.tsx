@@ -5,15 +5,20 @@ import dynamic from "next/dynamic";
 import type { TerminalDisplayDTO } from "@/features/terminal/lib/types";
 
 import AboutTerminalEmpty from "./about-terminal-empty";
+import ViewportSection from "@/components/shared/viewport-section";
 
-const AboutTerminal = dynamic(() => import("./about-terminal"), {
-  ssr: false,
-  loading: () => (
+function AboutTerminalSkeleton() {
+  return (
     <div
       aria-hidden
       className="bg-muted/60 h-[min(24rem,70vh)] w-full animate-pulse rounded-2xl"
     />
-  ),
+  );
+}
+
+const AboutTerminal = dynamic(() => import("./about-terminal"), {
+  ssr: false,
+  loading: AboutTerminalSkeleton,
 });
 
 interface AboutTerminalLazyProps {
@@ -25,5 +30,9 @@ export default function AboutTerminalLazy({ data }: AboutTerminalLazyProps) {
     return <AboutTerminalEmpty />;
   }
 
-  return <AboutTerminal data={data} />;
+  return (
+    <ViewportSection fallback={<AboutTerminalSkeleton />} minHeight="24rem">
+      <AboutTerminal data={data} />
+    </ViewportSection>
+  );
 }

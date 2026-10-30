@@ -14,12 +14,41 @@ model Company {
   applications Application[]
 }
 
+enum JobSearchStatus {
+  OPEN
+  CLOSED
+}
+
+enum JobSearchOutcome {
+  HIRED
+  PAUSED
+  WITHDRAWN
+}
+
+model JobSearch {
+  id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  startedAt          DateTime      @default(now())
+  endedAt            DateTime?
+  status             JobSearchStatus @default(OPEN)
+  outcome            JobSearchOutcome?
+  hiredApplicationId String?       @db.ObjectId
+  notes              String?
+  userId             String        @db.ObjectId
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications       Application[]
+
+  @@index([userId, status])
+}
+
 model Application {
   id                     String    @id @default(auto()) @map("_id") @db.ObjectId
   position               String
   description            String?
   companyId              String    @db.ObjectId
   company                Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  jobSearchId            String?   @db.ObjectId
+  jobSearch              JobSearch? @relation(fields: [jobSearchId], references: [id], onDelete: SetNull)
   status                 String // "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED"
   appliedDate            DateTime
   notes                  String?
@@ -44,6 +73,8 @@ model Application {
   events    ApplicationEvent[]
   documents Document[]
   emails    ApplicationEmail[]
+
+  @@index([userId, jobSearchId])
 }
 
 type CvFile {
@@ -131,7 +162,12 @@ model ApplicationEmail {
   subject           String
   attachmentName    String
   trackingEnabled   Boolean     @default(false)
-  trackingTokenHash String?
+  providerMessageId String?
+  trackingSource    String?
+  recipientKind     String?
+  deliveryStatus    String?
+  deliveredAt       DateTime?
+  deliveryUpdatedAt DateTime?
   openCount         Int         @default(0)
   firstOpenedAt     DateTime?
   lastOpenedAt      DateTime?
@@ -143,7 +179,21 @@ model ApplicationEmail {
 
   @@index([applicationId, sentAt])
   @@index([userId, applicationId])
-  @@index([trackingTokenHash])
+  @@index([providerMessageId])
+}
+
+model ApplicationEmailEvent {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  emailId         String   @db.ObjectId
+  providerEventId String
+  providerMessageId String
+  type            String
+  occurredAt      DateTime
+  receivedAt      DateTime @default(now())
+
+  @@unique([userId, providerEventId])
+  @@index([emailId, occurredAt])
 }
 
 model ApplicationEmailOpen {

@@ -18,6 +18,7 @@ import {
   getTwoFactorOtpEmailCopy,
 } from "@/lib/auth-email";
 import { resolvePasskeyRelyingParty } from "@/lib/auth-passkey-rp";
+import { withRateLimitRetry } from "@/lib/rate-limit/auth-adapter";
 
 const APP_NAME = "Jehg";
 
@@ -150,9 +151,11 @@ async function sendTwoFactorOtpEmail(
 
 export const auth = betterAuth({
   appName: APP_NAME,
-  database: prismaAdapter(db, {
-    provider: "mongodb",
-  }),
+  database: withRateLimitRetry(
+    prismaAdapter(db, {
+      provider: "mongodb",
+    }),
+  ),
   secret: env.BETTER_AUTH_SECRET,
   baseURL,
   // Better Auth 1.7 keys accounts on (issuer, accountId). 1.7.2 always uses the

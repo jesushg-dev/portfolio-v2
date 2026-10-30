@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
+import { motion, type HTMLMotionProps } from "motion/react";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const revealEase = [0.16, 0.8, 0.3, 1] as const;
 const revealTransition = { duration: 0.65, ease: revealEase } as const;
@@ -20,7 +21,7 @@ export function ProcessReveal({
   className,
   delay = 0,
 }: ProcessRevealProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   if (shouldReduceMotion) {
     return <div className={className}>{children}</div>;
@@ -52,7 +53,7 @@ export function ProcessRevealItem({
   index = 0,
   ...props
 }: ProcessRevealItemProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   if (shouldReduceMotion) {
     return (
@@ -92,7 +93,7 @@ export function ProcessRevealStaggerItem({
   index = 0,
   ...props
 }: ProcessRevealStaggerItemProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   if (shouldReduceMotion) {
     return (

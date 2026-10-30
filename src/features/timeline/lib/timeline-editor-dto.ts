@@ -18,6 +18,12 @@ export interface TimelineTranslationFields {
 
 export type TimelineTranslationMap = TranslationMap<TimelineTranslationFields>;
 
+export interface TimelineRoleDTO {
+  title: string;
+  startDate: string;
+  endDate?: string | null;
+}
+
 export interface TimelineEditorDTO {
   id: string;
   organization: string;
@@ -27,6 +33,8 @@ export interface TimelineEditorDTO {
   endDate: Date | null;
   current: boolean;
   images: string[];
+  roles: TimelineRoleDTO[];
+  skillIds: string[];
   translations: TimelineTranslationMap;
 }
 
@@ -39,6 +47,8 @@ export interface TimelineFormDTO {
   endDate: string;
   current: boolean;
   images: { url: string }[];
+  roles: TimelineRoleDTO[];
+  skillIds: string[];
   translations: TimelineTranslationMap;
 }
 
@@ -50,6 +60,7 @@ type TimelineLanguageRef = Pick<AppLanguage, "id" | "code">;
 
 export type TimelineItemWithTranslations = TimelineItem & {
   TimelineItemTranslation?: TimelineItemTranslation[];
+  TimelineItemSkill?: { skillId: string }[];
 };
 
 function formatDateInput(value: Date | string | null | undefined): string {
@@ -79,6 +90,16 @@ export function mapTimelineToEditorDto(
     endDate: item.endDate,
     current: item.current,
     images,
+    roles: Array.isArray(item.roles)
+      ? item.roles.map((r) => ({
+          title: r.title,
+          startDate: r.startDate,
+          endDate: r.endDate ?? null,
+        }))
+      : [],
+    skillIds: Array.isArray(item.TimelineItemSkill)
+      ? item.TimelineItemSkill.map((s) => s.skillId)
+      : [],
     translations: Object.fromEntries(
       languages.map((language) => {
         const found = translationsMap.find(
@@ -116,6 +137,8 @@ export function mapTimelineToFormDto(
     current: editor.current ?? false,
     images:
       editor.images.length > 0 ? editor.images.map((url) => ({ url })) : [],
+    roles: editor.roles ?? [],
+    skillIds: editor.skillIds ?? [],
     translations: editor.translations,
   };
 }
@@ -131,6 +154,8 @@ export function buildEmptyTimelineCreateDto(
     endDate: "",
     current: false,
     images: [],
+    roles: [],
+    skillIds: [],
     translations: buildEmptyTranslationMap(
       languages,
       emptyTimelineTranslationFields,

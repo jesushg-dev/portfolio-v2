@@ -5,6 +5,7 @@ import { computeCvPdfContentHash } from "@/features/cv/lib/compute-cv-pdf-conten
 import { loadCvPreviewSnapshot } from "@/features/cv/lib/load-cv-preview-snapshot";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
+import { generateCvDocxFromDb } from "@/features/cv/lib/generate-cv-docx-from-db";
 import { convertDocxToPdfForTenant } from "@/lib/ilovepdf/tenant-ilovepdf";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import {
@@ -61,11 +62,14 @@ export async function resolveCvPdfAsset(
   options?: ResolveCvPdfAssetOptions,
 ): Promise<ResolvedCvPdfAsset | null> {
   const paginatePages = options?.paginatePages ?? false;
+  const design = options?.design;
+  const isAts = design === "ats";
+  const isDefaultDesign = !design || design === "default";
   const snapshot = await loadCvPreviewSnapshot(db, userId, locale);
 
   if (!snapshot?.header) return null;
 
-  const contentHash = computeCvPdfContentHash(snapshot, paginatePages);
+  const contentHash = computeCvPdfContentHash(snapshot, paginatePages, design);
   const fileName = buildAtsCvFileName({
     fullName: snapshot.header.fullName,
     roleTrack: inferCvRoleTrack(snapshot.header.degree || ""),
@@ -73,15 +77,17 @@ export async function resolveCvPdfAsset(
     extension: "pdf",
   });
 
-  const cached = await db.cvPdfLink.findUnique({
-    where: {
-      userId_locale_paginatePages: {
-        userId,
-        locale,
-        paginatePages,
-      },
-    },
-  });
+  const cached = isDefaultDesign
+    ? await db.cvPdfLink.findUnique({
+        where: {
+          userId_locale_paginatePages: {
+            userId,
+            locale,
+            paginatePages,
+          },
+        },
+      })
+    : null;
 
   const cacheIsFresh =
     !options?.forceRegenerate &&
@@ -98,21 +104,42 @@ export async function resolveCvPdfAsset(
     };
   }
 
-  const draft = await loadCvStructuredDraft(db, userId, {
-    locale,
-    fallbackLocale,
-  });
+  let docxBuffer: Buffer | null = null;
+  if (!isAts) {
+    try {
+      const styledDocx = await generateCvDocxFromDb(
+        db,
+        userId,
+        locale,
+        fallbackLocale,
+      );
+      if (styledDocx?.buffer) {
+        docxBuffer = styledDocx.buffer;
+      }
+    } catch (err) {
+      console.error(
+        "[resolveCvPdfAsset] styled docx generation failed, falling back to structured docx",
+        err,
+      );
+    }
+  }
 
-  if (!draft) return null;
+  if (!docxBuffer) {
+    const draft = await loadCvStructuredDraft(db, userId, {
+      locale,
+      fallbackLocale,
+    });
+    if (!draft) return null;
+    docxBuffer = await generateDocxFromStructured(draft);
+  }
 
-  const docxBuffer = await generateDocxFromStructured(draft);
   const buffer = await convertDocxToPdfForTenant(
     userId,
     docxBuffer,
     fileName.replace(/\.pdf$/i, ".docx"),
   );
 
-  if (!(await isTenantUploadThingConfigured(userId))) {
+  if (!isDefaultDesign || !(await isTenantUploadThingConfigured(userId))) {
     return {
       url: null,
       buffer,

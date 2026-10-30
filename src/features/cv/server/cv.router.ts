@@ -1,6 +1,7 @@
 import { z } from "zod";
+import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { TRPCError } from "@trpc/server";
-import type { AppLanguage, PrismaClient } from "@prisma/client";
+import type { AppLanguage, PrismaClient, Prisma } from "@prisma/client";
 
 import {
   createTRPCRouter,
@@ -16,6 +17,40 @@ import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
+
+async function saveTechnicalSkillSelection(
+  db: Prisma.TransactionClient,
+  userId: string,
+  groupId: string,
+  skillIds: string[],
+) {
+  if (new Set(skillIds).size !== skillIds.length)
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Skill IDs must be unique",
+    });
+  const skills = await db.skill.findMany({
+    where: { userId, id: { in: skillIds } },
+    select: { id: true },
+  });
+  if (skills.length !== skillIds.length)
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Select skills from your own catalogue",
+    });
+  await db.cvTechnicalSkillSelection.updateMany({
+    where: { cvTechnicalSkillId: groupId },
+    data: { visible: false },
+  });
+  for (const [order, skillId] of skillIds.entries())
+    await db.cvTechnicalSkillSelection.upsert({
+      where: {
+        cvTechnicalSkillId_skillId: { cvTechnicalSkillId: groupId, skillId },
+      },
+      create: { cvTechnicalSkillId: groupId, skillId, visible: true, order },
+      update: { visible: true, order },
+    });
+}
 
 async function getAppLanguages(db: CvDbClient): Promise<AppLanguage[]> {
   return db.appLanguage.findMany({ orderBy: { code: "asc" } });
@@ -218,7 +253,11 @@ const CvEmploymentType = z.enum([
  * Returns every CV section for a given userId. Used by the public CV page
  * (server-side) and by the dashboard to hydrate forms.
  */
-const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
+const getFullCvForUser = async (
+  ctx: { db: PrismaClient },
+  userId: string,
+  includeEmptySkills = false,
+) => {
   const [
     profile,
     header,
@@ -256,7 +295,7 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    resolveUserTechnicalSkills(ctx.db, userId),
+    resolveUserTechnicalSkills(ctx.db, userId, includeEmptySkills),
     ctx.db.cvExperience.findMany({
       where: { userId },
       include: {
@@ -288,6 +327,7 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
 
   return {
     profile,
+    portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
     header,
     aboutMe,
     contacts,
@@ -315,7 +355,7 @@ export const cvRouter = createTRPCRouter({
    * Authenticated — fetches the CV of the currently logged-in user.
    */
   getMine: protectedProcedure.query(async ({ ctx }) => {
-    return getFullCvForUser(ctx, ctx.user.id);
+    return getFullCvForUser(ctx, ctx.user.id, true);
   }),
 
   // ---------- Header ----------
@@ -326,7 +366,7 @@ export const cvRouter = createTRPCRouter({
         degree: CvTextTranslationMapSchema.optional(),
         photoUrl: z.string().nullable().optional(),
         backgroundImageUrl: z.string().nullable().optional(),
-        heroSummary: CvTextTranslationMapSchema.optional(),
+        availabilityBadge: CvTextTranslationMapSchema.optional(),
         clientImageAlt: CvTextTranslationMapSchema.optional(),
       }),
     )
@@ -353,8 +393,8 @@ export const cvRouter = createTRPCRouter({
         const degreeText = input.degree
           ? (input.degree[lang.id]?.text ?? "")
           : "";
-        const summaryText = input.heroSummary
-          ? (input.heroSummary[lang.id]?.text ?? null)
+        const badgeText = input.availabilityBadge
+          ? (input.availabilityBadge[lang.id]?.text ?? null)
           : null;
         const altText = input.clientImageAlt
           ? (input.clientImageAlt[lang.id]?.text ?? null)
@@ -369,7 +409,7 @@ export const cvRouter = createTRPCRouter({
             where: { id: existing.id },
             data: {
               ...(degreeText ? { degree: degreeText } : {}),
-              ...(summaryText !== null ? { heroSummary: summaryText } : {}),
+              ...(badgeText !== null ? { availabilityBadge: badgeText } : {}),
               ...(altText !== null ? { clientImageAlt: altText } : {}),
             },
           });
@@ -379,7 +419,7 @@ export const cvRouter = createTRPCRouter({
               cvHeaderId: header.id,
               appLanguageId: lang.id,
               degree: degreeText,
-              heroSummary: summaryText,
+              availabilityBadge: badgeText,
               clientImageAlt: altText,
             },
           });
@@ -665,13 +705,27 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         category: CvSkillCategory,
-        items: z.array(z.string().min(1)).min(1),
-        order: z.number().int().nonnegative().default(0),
+        skillIds: z.array(z.string().regex(/^[a-f0-9]{24}$/i)),
+        order: z.number().int().nonnegative().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.cvTechnicalSkill.create({
-        data: { ...input, userId: ctx.user.id },
+      return ctx.db.$transaction(async (tx) => {
+        const { skillIds, ...data } = input;
+        const last = await tx.cvTechnicalSkill.findFirst({
+          where: { userId: ctx.user.id },
+          orderBy: { order: "desc" },
+          select: { order: true },
+        });
+        const group = await tx.cvTechnicalSkill.create({
+          data: {
+            ...data,
+            order: data.order ?? (last ? last.order + 1 : 0),
+            userId: ctx.user.id,
+          },
+        });
+        await saveTechnicalSkillSelection(tx, ctx.user.id, group.id, skillIds);
+        return group;
       });
     }),
   updateTechnicalSkill: protectedProcedure
@@ -679,19 +733,23 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         category: CvSkillCategory,
-        items: z.array(z.string().min(1)).min(1),
-        order: z.number().int().nonnegative().default(0),
+        skillIds: z.array(z.string().regex(/^[a-f0-9]{24}$/i)),
+        order: z.number().int().nonnegative().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
+      const { id, skillIds, ...data } = input;
       const existing = await ctx.db.cvTechnicalSkill.findUnique({
         where: { id },
       });
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      return ctx.db.cvTechnicalSkill.update({ where: { id }, data });
+      return ctx.db.$transaction(async (tx) => {
+        const group = await tx.cvTechnicalSkill.update({ where: { id }, data });
+        await saveTechnicalSkillSelection(tx, ctx.user.id, id, skillIds);
+        return group;
+      });
     }),
   deleteTechnicalSkill: protectedProcedure
     .input(z.object({ id: z.string() }))
@@ -710,6 +768,7 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         company: z.string().min(1),
+        companyLogoUrl: z.string().nullable().optional(),
         employmentType: CvEmploymentType.optional().default("FULL_TIME"),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
@@ -786,6 +845,7 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         company: z.string().min(1),
+        companyLogoUrl: z.string().nullable().optional(),
         employmentType: CvEmploymentType.optional(),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
@@ -1579,7 +1639,6 @@ export const cvRouter = createTRPCRouter({
       await tx.cvPersonalReference.deleteMany({ where: { userId } });
       await tx.cvHeader.deleteMany({ where: { userId } });
       await tx.cvAboutMe.deleteMany({ where: { userId } });
-      await tx.cvTerminal.deleteMany({ where: { userId } });
       await tx.cvPdfLink.deleteMany({ where: { userId } });
     });
   }),

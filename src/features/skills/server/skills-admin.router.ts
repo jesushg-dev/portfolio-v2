@@ -1,3 +1,4 @@
+import { buildSkillSearchConditions } from "../lib/skill-list-search";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -37,6 +38,18 @@ const skillUpsertInput = z.object({
 });
 
 export const skillsAdminRouter = createTRPCRouter({
+  getCategories: protectedProcedure.query(async ({ ctx }) => {
+    const groups = await ctx.db.skill.groupBy({
+      by: ["type"],
+      where: { userId: ctx.user.id },
+      orderBy: { type: "asc" },
+      _count: { _all: true },
+    });
+    return groups.map((group) => ({
+      value: group.type,
+      count: group._count._all,
+    }));
+  }),
   getMine: protectedProcedure
     .input(dataTableParamsSchema)
     .query(async ({ ctx, input }) => {
@@ -65,6 +78,9 @@ export const skillsAdminRouter = createTRPCRouter({
       if (typeVals && typeVals.length > 0) {
         where.type = { in: typeVals };
       }
+
+      const search = extractStringFilter(input.filters, "search");
+      if (search) where.AND = buildSkillSearchConditions(search);
 
       const [skills, totalCount, languages] = await Promise.all([
         ctx.db.skill.findMany({
@@ -199,8 +215,40 @@ export const skillsAdminRouter = createTRPCRouter({
         await tx.certificateSkill.deleteMany({ where: { skillId: input.id } });
         await tx.serviceSkill.deleteMany({ where: { skillId: input.id } });
         await tx.cvExperienceSkill.deleteMany({ where: { skillId: input.id } });
+        await tx.cvTechnicalSkillSelection.deleteMany({
+          where: { skillId: input.id },
+        });
         await tx.skillTranslation.deleteMany({ where: { skillId: input.id } });
         return tx.skill.delete({ where: { id: input.id } });
+      });
+    }),
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      if (input.ids.length === 0) return { count: 0 };
+      const items = await ctx.db.skill.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.projectSkill.deleteMany({ where: { skillId: { in: ids } } });
+        await tx.certificateSkill.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        await tx.serviceSkill.deleteMany({ where: { skillId: { in: ids } } });
+        await tx.cvExperienceSkill.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        await tx.cvTechnicalSkillSelection.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        await tx.skillTranslation.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        return tx.skill.deleteMany({ where: { id: { in: ids } } });
       });
     }),
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
@@ -216,6 +264,9 @@ export const skillsAdminRouter = createTRPCRouter({
       await tx.certificateSkill.deleteMany({ where: { skillId: { in: ids } } });
       await tx.serviceSkill.deleteMany({ where: { skillId: { in: ids } } });
       await tx.cvExperienceSkill.deleteMany({
+        where: { skillId: { in: ids } },
+      });
+      await tx.cvTechnicalSkillSelection.deleteMany({
         where: { skillId: { in: ids } },
       });
       await tx.skillTranslation.deleteMany({ where: { skillId: { in: ids } } });

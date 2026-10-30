@@ -75,15 +75,13 @@ const nextConfig: NextConfig = {
     "lvh.me",
     "*.lvh.me",
   ],
-  serverExternalPackages: [
-    "jszip",
-    "docx-preview",
-  ],
+  serverExternalPackages: ["jszip", "docx-preview"],
   outputFileTracingExcludes: {
-    "/*": emailTemplatesDevAssets,
+    "/**/*": emailTemplatesDevAssets,
     "/api/trpc/*": emailTemplatesDevAssets,
   },
   experimental: {
+    globalNotFound: true,
     optimizePackageImports: ["lucide-react", "motion/react"],
   },
   images: {
@@ -103,10 +101,6 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "utfs.io",
-      },
-      {
-        protocol: "https",
-        hostname: "**",
       },
     ],
   },

@@ -42,7 +42,7 @@ const STACK_TYPE_LABELS: Record<string, string> = {
 const MAX_TECH = 5;
 
 const actionButtonClass =
-  "flex size-10 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs cursor-pointer";
+  "flex size-11 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs cursor-pointer";
 
 interface CertificateTopBadgesProps {
   typeLabel: string;
@@ -58,7 +58,7 @@ export function CertificateTopBadges({
   return (
     <>
       <div className="absolute top-4 left-4 z-10">
-        <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
+        <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
           <TypeIcon
             className="text-primary size-3.5 shrink-0"
             aria-hidden="true"
@@ -68,7 +68,7 @@ export function CertificateTopBadges({
       </div>
 
       <div className="absolute top-4 right-4 z-10">
-        <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold shadow-xs ring-1 backdrop-blur-md">
+        <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold shadow-xs ring-1 backdrop-blur-md">
           <GraduationCap
             className="text-primary size-3.5 shrink-0"
             aria-hidden="true"
@@ -167,12 +167,12 @@ export function CertificateHighlightChips({
 }: CertificateHighlightChipsProps) {
   return (
     <ul className="mt-3.5 flex flex-wrap gap-2" aria-label="Key highlights">
-      <li className="bg-primary/10 text-primary inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs leading-none font-semibold">
+      <li className="bg-primary/10 text-primary inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm leading-none font-semibold">
         <Zap className="size-3.5 shrink-0" aria-hidden="true" />
         <span>{verifyLabel}</span>
       </li>
       {idCredential ? (
-        <li className="border-border bg-muted/50 text-foreground inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-xs leading-none">
+        <li className="border-border bg-muted/50 text-foreground inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-sm leading-none">
           <Award className="text-primary size-3 shrink-0" aria-hidden="true" />
           <span className="max-w-36 truncate">ID: {idCredential}</span>
         </li>
@@ -190,7 +190,7 @@ export function CertificateMetaLine({
 }: CertificateMetaLineProps) {
   if (!issuedDateText) return null;
   return (
-    <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-xs">
+    <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-sm">
       <span className="inline-flex items-center gap-1.5">
         <Calendar
           className="text-primary size-3.5 shrink-0"
@@ -225,14 +225,14 @@ export function CertificateTechRow({
         {shownSkills.map((skill) => (
           <li
             key={skill.id}
-            className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-xs font-medium"
+            className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-sm font-medium"
           >
             <SkillIcon
               image={skill.image}
               title={skill.title}
               tile
               size="sm"
-              className="size-6 rounded-lg text-xs"
+              className="size-6 rounded-lg text-sm"
             />
             <span className="capitalize">{skill.title}</span>
           </li>
@@ -243,7 +243,7 @@ export function CertificateTechRow({
               .slice(MAX_TECH)
               .map((s) => s.title)
               .join(", ")}
-            className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-xs font-semibold"
+            className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-sm font-semibold"
           >
             +{restSkillsCount}
           </li>
@@ -254,14 +254,14 @@ export function CertificateTechRow({
 
   return (
     <div className="mt-auto flex flex-wrap gap-2 pt-5">
-      <span className="border-border bg-muted/50 text-foreground inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium">
+      <span className="border-border bg-muted/50 text-foreground inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-sm font-medium">
         <CheckCircle2
           className="text-primary size-3.5 shrink-0"
           aria-hidden="true"
         />
         <span>{verifyLabel}</span>
       </span>
-      <span className="border-border bg-muted/50 text-muted-foreground inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium">
+      <span className="border-border bg-muted/50 text-muted-foreground inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-sm font-medium">
         <span>{company} Certified</span>
       </span>
     </div>
@@ -291,7 +291,7 @@ export function CertificateActionFooter({
             href={certificateUrl}
             target="_blank"
             rel="noreferrer"
-            className="text-primary hover:text-primary/80 group/cta inline-flex cursor-pointer items-center gap-2 text-sm font-bold transition-colors"
+            className="text-primary hover:text-primary/80 group/cta inline-flex min-h-11 min-w-11 cursor-pointer items-center gap-2 text-sm font-bold transition-colors"
           >
             <span>{seeCertificateLabel}</span>
             <ArrowUpRight
@@ -303,7 +303,7 @@ export function CertificateActionFooter({
           <button
             type="button"
             onClick={onPreviewClick}
-            className="text-primary hover:text-primary/80 group/cta inline-flex cursor-pointer items-center gap-2 text-sm font-bold transition-colors"
+            className="text-primary hover:text-primary/80 group/cta inline-flex min-h-11 min-w-11 cursor-pointer items-center gap-2 text-sm font-bold transition-colors"
           >
             <span>{previewLabel}</span>
             <ZoomIn className="size-4" aria-hidden="true" />

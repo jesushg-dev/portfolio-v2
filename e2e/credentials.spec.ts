@@ -35,7 +35,7 @@ test.describe("Admin Credentials & Integrations", () => {
       ).toBeVisible();
     } else {
       await expect(
-        page.locator('[data-integration="resend"][data-available]'),
+        page.locator('[data-integration="resend"][data-connected="false"]'),
       ).toBeVisible();
     }
   });
@@ -56,6 +56,14 @@ test.describe("Admin Credentials & Integrations", () => {
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
     await expect(dialog.locator("#resend-api-key")).toBeVisible();
+    await expect(dialog.locator("#resend-from")).toHaveAttribute(
+      "placeholder",
+      "Portfolio <no-reply@yourdomain.com>",
+    );
+    await expect(dialog.locator("#resend-signature")).toHaveAttribute(
+      "placeholder",
+      "<table>...</table>",
+    );
   });
 
   test("opens Spotify modal with setup guide", async ({ page }) => {

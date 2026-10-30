@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { buildServiceListWhere } from "../lib/service-list-filters";
 
 import { db } from "@/server/db";
 import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
@@ -8,7 +9,7 @@ import {
   mapServicesToEditorDto,
 } from "@/features/services/lib/service-editor-dto";
 import type { DataTableParams } from "@/lib/admin/data-table-schemas";
-import type { Prisma, StackType } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export async function getServiceCreatePageData() {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
@@ -61,19 +62,7 @@ export async function getUserServicesWithLanguages(params: DataTableParams) {
       orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.ServiceWhereInput = { userId };
-  if (params.filters && params.filters.length > 0) {
-    const titleFilter = params.filters.find((f) => f.id === "title");
-    if (titleFilter && typeof titleFilter.value === "string") {
-      where.ServiceTranslation = {
-        some: { title: { contains: titleFilter.value, mode: "insensitive" } },
-      };
-    }
-    const typeFilter = params.filters.find((f) => f.id === "type");
-    if (typeFilter && typeof typeFilter.value === "string") {
-      where.type = typeFilter.value as StackType;
-    }
-  }
+  const where = buildServiceListWhere(userId, params.filters);
 
   const [services, totalCount] = await Promise.all([
     db.service.findMany({

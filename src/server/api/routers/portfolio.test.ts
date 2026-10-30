@@ -113,8 +113,8 @@ describe("portfolioRouter", () => {
                   {
                     title: "Project Alpha",
                     description: "Alpha desc",
-                    hook: "Alpha hook",
                     caseStudy: {
+                      tldr: [{ title: "Users", value: "100 users" }],
                       sections: [
                         { kind: "DECISIONS", items: [1, 2] },
                         { kind: "LAYERS", items: [] },
@@ -151,6 +151,7 @@ describe("portfolioRouter", () => {
     expect(detail?.projects[0]).toMatchObject({
       id: "proj-1",
       title: "Project Alpha",
+      highlights: ["100 users"],
       kind: "PROFESSIONAL",
       csInfo: {
         decisions: 2,
@@ -203,9 +204,7 @@ describe("portfolioRouter", () => {
             kind: "PERSONAL",
             slug: "eleven",
             caseStudyEnabled: true,
-            ProjectTranslation: [
-              { title: "Eleven", description: "App", hook: "Hook" },
-            ],
+            ProjectTranslation: [{ title: "Eleven", description: "App" }],
             ProjectSkill: [
               {
                 Skill: {
@@ -225,7 +224,7 @@ describe("portfolioRouter", () => {
           startDate: new Date("2020-01-01"),
         }),
       },
-      cvHeader: {
+      portfolioHeader: {
         findUnique: jest.fn().mockResolvedValue({
           fullName: "Ada",
           photoUrl: null,
@@ -350,14 +349,14 @@ describe("portfolioRouter", () => {
           },
         ]),
       },
-      cvAboutMe: {
+      portfolioHeader: {
         findUnique: jest.fn().mockResolvedValue({
           translations: [
-            { appLanguageId: "lang-en", aboutMe: "Hello\n\nWorld" },
+            { appLanguageId: "lang-en", portfolioAbout: "Hello\n\nWorld" },
           ],
         }),
       },
-      cvTerminal: {
+      portfolioTerminal: {
         findUnique: jest.fn().mockResolvedValue({ steps: [{ id: "st-1" }] }),
       },
       softSkillsSection: {
@@ -439,10 +438,6 @@ describe("portfolioRouter", () => {
             {
               title: "Eleven",
               description: "App",
-              hook: "Hook",
-              challenge: "Hard",
-              approach: "Ship",
-              outcome: "Won",
             },
           ],
           ProjectSkill: [

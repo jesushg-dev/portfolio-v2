@@ -14,7 +14,7 @@ test.describe("certifications smoke", () => {
 
   test.beforeAll(async ({ browser }, testInfo) => {
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(testInfo.workerIndex),
+      storageState: getWorkerAuthFile(testInfo.parallelIndex),
     });
     const page = await context.newPage();
     await cleanupUserCertifications(page);

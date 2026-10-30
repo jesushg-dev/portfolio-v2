@@ -26,9 +26,11 @@ jest.mock("@/lib/auth-client", () => ({
   },
 }));
 
-jest.mock("@/features/auth/components/auth-showcase-panel", () => ({
+jest.mock("@/features/auth/components/login-layout", () => ({
   __esModule: true,
-  default: () => null,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 const assign = jest.fn();
@@ -61,6 +63,31 @@ describe("TwoFactorVerifyForm", () => {
       });
     });
     expect(assign).toHaveBeenCalledWith("http://localhost/admin/settings");
+  });
+
+  it("submits the replacement code after a rejected authenticator code", async () => {
+    const user = userEvent.setup();
+    mockVerifyTotp
+      .mockResolvedValueOnce({
+        error: { status: 401, message: "Invalid code" },
+      })
+      .mockResolvedValueOnce({ data: { token: "t" }, error: null });
+    renderWithIntl(<TwoFactorVerifyForm />);
+
+    const input = screen.getByLabelText("Verification code");
+    await user.type(input, "000000");
+    await user.click(screen.getByRole("button", { name: "Verify" }));
+    expect(await screen.findByText("Invalid code")).toBeInTheDocument();
+    await user.click(input);
+    await user.keyboard("{Control>}a{/Control}{Backspace}");
+    await user.type(input, "654321");
+    await user.click(screen.getByRole("button", { name: "Verify" }));
+    await waitFor(() =>
+      expect(mockVerifyTotp).toHaveBeenLastCalledWith({
+        code: "654321",
+        trustDevice: false,
+      }),
+    );
   });
 
   it("only offers the methods the server reported (plus backup codes)", () => {

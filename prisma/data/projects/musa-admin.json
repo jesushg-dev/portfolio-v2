@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Musa Admin",
       "description": "Consola de administración empresarial para marketplace agrícola y de perecederos. Gestiona catálogo multitienda, trazabilidad de pedidos en tiempo real, control dinámico de inventario perecedero y analítica de ventas con React, TypeScript y Tailwind CSS.",
-      "hook": "Consola de Operaciones en React & TypeScript · Trazabilidad de pedidos y catálogo multi-tienda · Control de inventario perecedero",
-      "challenge": "El equipo de operaciones gestionaba pedidos e inventario de forma manual con hojas de cálculo y scripts aislados, lo que generaba errores humanos y retrasos en despachos.",
-      "approach": "Desarrollé una SPA administrativa en React + TypeScript con control de acceso basado en roles (RBAC), formularios dinámicos, gestión de estados complejos y métricas operativas en tiempo real.",
-      "outcome": "Eliminación del 70% de tareas manuales repetitivas, trazabilidad total de pedidos desde la recepción hasta la entrega y adopción completa por el equipo operativo.",
       "caseStudy": {
         "chips": [
           "Backoffice de Operaciones",
@@ -50,6 +46,7 @@
             "value": "Musa / Abarrotería San José (Backoffice Privado)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "ecommerce-api",
         "context": "MUSA Admin es la plataforma operativa centralizada para la cadena de tiendas de conveniencia y abarroterías MUSA / Abarrotería San José. Permite a supervisores, cajeros y personal de bodega coordinar ventas de mostrador, control de lotes con fecha de vencimiento, inventario crítico y trazabilidad de órdenes en tiempo real conectándose a los microservicios del negocio.",
         "roleTitle": "Desarrollador Frontend Senior & Arquitecto",
@@ -118,12 +115,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Migración progresiva a TypeScript sin interrumpir la operación continua en tiendas.",
-          "Consumo desacoplado de microservicios con tolerancia a fallos y estados de reintento.",
-          "Control de acceso granular por perfiles (Administrador, Vendedor, Supervisor de Bodega)."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "El equipo de operaciones gestionaba pedidos e inventario de forma manual con hojas de cálculo y scripts aislados, lo que generaba errores humanos y retrasos en despachos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Migración progresiva a TypeScript sin interrumpir la operación continua en tiendas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Consumo desacoplado de microservicios con tolerancia a fallos y estados de reintento.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Control de acceso granular por perfiles (Administrador, Vendedor, Supervisor de Bodega).",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Desarrollé una SPA administrativa en React + TypeScript con control de acceso basado en roles (RBAC), formularios dinámicos, gestión de estados complejos y métricas operativas en tiempo real.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "admin-modules",
             "kind": "CARDS",
@@ -221,6 +270,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Eliminación del 70% de tareas manuales repetitivas, trazabilidad total de pedidos desde la recepción hasta la entrega y adopción completa por el equipo operativo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -229,10 +291,6 @@
       "locale": "en",
       "title": "Musa Admin",
       "description": "Enterprise administration portal for agricultural and perishable marketplaces. Manages multi-vendor catalogs, real-time order lifecycle tracking, perishable batch inventory, and commercial metrics with React, TypeScript, and Tailwind CSS.",
-      "hook": "Operations Console in React & TypeScript · Order lifecycle tracking & multi-vendor catalog · Perishable inventory control",
-      "challenge": "The operations team managed inventory and order fulfillment manually via spreadsheets and one-off scripts, leading to operational bottlenecks and shipping errors.",
-      "approach": "Developed an administrative SPA using React + TypeScript featuring role-based access control (RBAC), dynamic form validation, complex state management, and live fulfillment tracking.",
-      "outcome": "Eliminated 70% of repetitive manual tasks, established full order traceability from receipt to dispatch, and achieved 100% team adoption.",
       "caseStudy": {
         "chips": [
           "Operations Backoffice",
@@ -269,6 +327,7 @@
             "value": "Musa / Abarrotería San José (Private Backoffice)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "ecommerce-api",
         "context": "MUSA Admin is the centralized operations backoffice for the MUSA / Abarrotería San José store chain. It coordinates retail front-desk checkout, perishable lot expiration tracking, safety inventory monitoring, and real-time customer order dispatching connected to underlying business microservices.",
         "roleTitle": "Senior Frontend Developer & Architect",
@@ -337,12 +396,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Zero-downtime progressive migration to TypeScript during active commercial operations.",
-          "Fault-tolerant microservices communication with optimistic UI updates and retries.",
-          "Strict role-based access control (Administrator, Cashier, Warehouse Supervisor)."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "The operations team managed inventory and order fulfillment manually via spreadsheets and one-off scripts, leading to operational bottlenecks and shipping errors.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Zero-downtime progressive migration to TypeScript during active commercial operations.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Fault-tolerant microservices communication with optimistic UI updates and retries.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strict role-based access control (Administrator, Cashier, Warehouse Supervisor).",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Developed an administrative SPA using React + TypeScript featuring role-based access control (RBAC), dynamic form validation, complex state management, and live fulfillment tracking.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "admin-modules",
             "kind": "CARDS",
@@ -440,6 +551,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Eliminated 70% of repetitive manual tasks, established full order traceability from receipt to dispatch, and achieved 100% team adoption.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -448,10 +572,6 @@
       "locale": "nl",
       "title": "Musa Admin",
       "description": "Enterprise beheerportaal voor agrarische marktplaatsen en bederfelijke goederen. Beheert multi-vendor catalogi, realtime orderopvolging, batch-voorraadbeheer en verkoopanalyses met React, TypeScript en Tailwind CSS.",
-      "hook": "Beheerconsole in React & TypeScript · Orderopvolging & multi-vendor catalogus · Voorraadbeheer van bederfelijke waar",
-      "challenge": "Het operationele team beheerde voorraad en bestellingen handmatig via spreadsheets, wat leidde tot menselijke fouten en vertragingen.",
-      "approach": "Een administratieve SPA ontwikkeld met React + TypeScript, voorzien van rolgebaseerde toegang (RBAC), dynamische formulieren en realtime fulfillment tracking.",
-      "outcome": "70% van de handmatige taken geëlimineerd, volledige traceerbaarheid van bestellingen gerealiseerd en direct geadopteerd door het team.",
       "caseStudy": {
         "chips": [
           "Operationeel Beheer",
@@ -488,6 +608,7 @@
             "value": "Musa / Abarrotería San José (Privé Backoffice)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "ecommerce-api",
         "context": "MUSA Admin is het centrale operationele backoffice voor winkelketen MUSA / Abarrotería San José. Het coördineert kassatransacties, houdbaarheidsdata van partijen, voorraadbewaking en realtime orderafhandeling gekoppeld aan achterliggende microservices.",
         "roleTitle": "Senior Frontend Ontwikkelaar & Architect",
@@ -556,12 +677,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Geleidelijke TypeScript-migratie zonder onderbreking van de winkeloperaties.",
-          "Fouttolerante communicatie met microservices en automatische herpogingen.",
-          "Strikte rolgebaseerde toegangscontrole (Beheerder, Verkoper, Magazijnpersoneel)."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Het operationele team beheerde voorraad en bestellingen handmatig via spreadsheets, wat leidde tot menselijke fouten en vertragingen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Geleidelijke TypeScript-migratie zonder onderbreking van de winkeloperaties.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Fouttolerante communicatie met microservices en automatische herpogingen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strikte rolgebaseerde toegangscontrole (Beheerder, Verkoper, Magazijnpersoneel).",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Een administratieve SPA ontwikkeld met React + TypeScript, voorzien van rolgebaseerde toegang (RBAC), dynamische formulieren en realtime fulfillment tracking.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "admin-modules",
             "kind": "CARDS",
@@ -656,6 +829,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "70% van de handmatige taken geëlimineerd, volledige traceerbaarheid van bestellingen gerealiseerd en direct geadopteerd door het team.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

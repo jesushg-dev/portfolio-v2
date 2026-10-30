@@ -43,9 +43,17 @@ jest.mock("@/lib/parsers", () => ({
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      timelineAdmin: { getMine: { invalidate: jest.fn() } },
+      timelineAdmin: { invalidate: jest.fn() },
     }),
     timelineAdmin: {
+      getCategories: {
+        useQuery: () => ({
+          data: [
+            { value: "WORK", count: 1 },
+            { value: "STUDY", count: 1 },
+          ],
+        }),
+      },
       getMine: {
         useQuery: () => ({
           data: {
@@ -163,4 +171,34 @@ describe("TimelineList", () => {
       expect(mockDelete).toHaveBeenCalled();
     });
   }, 30000);
+
+  it("renders category chips and language status badges", () => {
+    renderWithIntl(<TimelineList {...defaultProps} />);
+
+    // Category chips
+    expect(screen.getByRole("tab", { name: /all/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /work/i })).toBeInTheDocument();
+
+    // Language badges
+    const badges = screen.getAllByText(/en/i);
+    expect(badges.length).toBeGreaterThan(0);
+  });
+
+  it("handles row selection and displays the bulk action bar", async () => {
+    renderWithIntl(<TimelineList {...defaultProps} />);
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    // Click the select-all checkbox in the header
+    fireEvent.click(checkboxes[0]);
+
+    await waitFor(() => {
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /clear selection/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /delete selected/i }),
+      ).toBeInTheDocument();
+    });
+  });
 });

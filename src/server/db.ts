@@ -13,12 +13,17 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Dev HMR can keep a stale Prisma client after schema changes — drop it so
-// newly generated delegates (e.g. cvTerminal) are available without a manual restart.
+// newly generated delegates (e.g. portfolioTerminal) are available without a manual restart.
 if (
   env.NODE_ENV !== "production" &&
   globalForPrisma.prisma &&
-  (!("cvTerminal" in globalForPrisma.prisma) ||
+  (!("portfolioTerminal" in globalForPrisma.prisma) ||
     !("processPage" in globalForPrisma.prisma) ||
+    !("jobSearch" in globalForPrisma.prisma) ||
+    !("portfolioHeader" in globalForPrisma.prisma) ||
+    !("cvTechnicalSkillSelection" in globalForPrisma.prisma) ||
+    !("nowStatusSlot" in globalForPrisma.prisma) ||
+    !("applicationEmailEvent" in globalForPrisma.prisma) ||
     !("analyticsDailyStat" in globalForPrisma.prisma))
 ) {
   globalForPrisma.prisma = undefined;

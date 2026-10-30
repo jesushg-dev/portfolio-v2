@@ -69,36 +69,27 @@ export function TypeSegmentButtons({
     <div className="flex w-full justify-center px-2 sm:px-4">
       <Tab
         tabId="projects-catalog-tab"
-        minimal
         currentTab={currentIndex}
         setCurrentTab={handleTabChange}
         ariaLabel={ariaLabel}
-        className="bg-muted/70 border-border text-foreground inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-3xl border p-1.5 shadow-xs md:rounded-full"
+        className="max-w-full"
       >
-        <TabItem
-          icon={Eye}
-          title={`${typeLabels.All} (${counts.All})`}
-          description=""
-        />
+        <TabItem icon={Eye} title={`${typeLabels.All} (${counts.All})`} />
         <TabItem
           icon={Monitor}
           title={`${typeLabels.FRONTEND} (${counts.FRONTEND})`}
-          description=""
         />
         <TabItem
           icon={Server}
           title={`${typeLabels.BACKEND} (${counts.BACKEND})`}
-          description=""
         />
         <TabItem
           icon={Smartphone}
           title={`${typeLabels.MOBILE} (${counts.MOBILE})`}
-          description=""
         />
         <TabItem
           icon={Laptop}
           title={`${typeLabels.DESKTOP} (${counts.DESKTOP})`}
-          description=""
         />
       </Tab>
     </div>
@@ -249,9 +240,6 @@ function getInitialUrlParam(
     if (Array.isArray(val)) return val[0] ?? null;
     return typeof val === "string" ? val : null;
   }
-  if (typeof window !== "undefined") {
-    return new URLSearchParams(window.location.search).get(key);
-  }
   return null;
 }
 
@@ -394,7 +382,6 @@ export function ProjectsCatalogView({
           [
             project.title,
             project.description,
-            project.hook ?? "",
             ...(project.skills?.map((s) => s.title) ?? []),
           ].join(" "),
         );
@@ -449,7 +436,6 @@ export function ProjectsCatalogView({
             [
               project.title,
               project.description,
-              project.hook ?? "",
               ...(project.skills?.map((s) => s.title) ?? []),
             ].join(" "),
           );
@@ -524,7 +510,7 @@ export function ProjectsCatalogView({
   }, []);
 
   const labels = useMemo(
-    () => ({
+    () => (project: ProjectType) => ({
       urlName: t("actions.view"),
       sourceName: t("actions.source"),
       caseStudyLabel: t("actions.caseStudy"),
@@ -538,7 +524,7 @@ export function ProjectsCatalogView({
       },
       metaLabels: {
         solo: t("meta.solo"),
-        formatTeam: (count: number) => t("meta.team", { count }),
+        team: t("meta.team", { count: project.teamSize ?? 0 }),
         now: t("meta.now"),
         statuses: {
           IN_PRODUCTION: t("caseStudy.statuses.IN_PRODUCTION"),
@@ -547,9 +533,11 @@ export function ProjectsCatalogView({
         },
       },
       teaserLabels: {
-        formatDecisions: (count: number) => t("teaser.decisions", { count }),
+        decisions: t("teaser.decisions", {
+          count: project.csInfo?.decisions ?? 0,
+        }),
         layers: t("teaser.layers"),
-        formatMetrics: (count: number) => t("teaser.metrics", { count }),
+        metrics: t("teaser.metrics", { count: project.csInfo?.metrics ?? 0 }),
       },
     }),
     [t],
@@ -751,7 +739,11 @@ export function ProjectsCatalogView({
               transition={{ duration: 0.25, delay: Math.min(idx, 8) * 0.04 }}
               className="flex justify-center"
             >
-              <PortfolioItem {...project} {...labels} priority={idx < 3} />
+              <PortfolioItem
+                {...project}
+                {...labels(project)}
+                preload={idx < 3}
+              />
             </motion.li>
           ))}
         </motion.ul>

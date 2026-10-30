@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Sistema de Control de Temperatura",
       "description": "Plataforma web de bioseguridad y telemetría IoT en tiempo real para control de acceso peatonal en la Universidad Nacional de Ingeniería (UNI). Integra sensores infrarrojos sin contacto, alertas de temperatura febril con Firebase Firestore y analítica de flujo en vivo.",
-      "hook": "Telemetría IoT en tiempo real · Sensores infrarrojos sin contacto · Monitoreo de 2,300+ accesos en UNI",
-      "challenge": "Implementar con urgencia en plena pandemia un sistema de triage térmico para la Universidad Nacional de Ingeniería que evitara aglomeraciones en los accesos peatonales.",
-      "approach": "Diseñé una aplicación web serverless conectada a sensores infrarrojos con Firebase Firestore y Auth, ofreciendo semáforo visual de alerta y curvas estadísticas en tiempo real.",
-      "outcome": "Monitoreo seguro y sin contacto de miles de miembros de la comunidad universitaria, con detección preventiva inmediata de temperaturas superiores a 37.5°C.",
       "caseStudy": {
         "chips": [
           "Telemetría en Tiempo Real",
@@ -44,6 +40,7 @@
             "value": "STC UNI (https://stc-uni.vercel.app)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "kwh-monitor-api",
         "context": "El Sistema de Control de Temperatura (STC UNI) nació durante la pandemia de COVID-19 como una iniciativa tecnológica para la Universidad Nacional de Ingeniería (UNI). El sistema permitía registrar el ingreso de la comunidad universitaria en puntos de acceso, capturando la temperatura corporal mediante sensores infrarrojos sin contacto físico y persistiendo telemetría en tiempo real en la nube para detección temprana de casos febriles y prevención de contagios.",
         "roleTitle": "Desarrollador Full-Stack & Creador",
@@ -112,12 +109,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Registro y validación de temperatura en menos de 1 segundo para evitar filas y aglomeraciones.",
-          "Interfaz altamente legible y usable en computadoras de caseta y tablets móviles.",
-          "Sincronización tolerante a cortes esporádicos de red gracias al soporte offline de Firebase."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Implementar con urgencia en plena pandemia un sistema de triage térmico para la Universidad Nacional de Ingeniería que evitara aglomeraciones en los accesos peatonales.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Registro y validación de temperatura en menos de 1 segundo para evitar filas y aglomeraciones.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Interfaz altamente legible y usable en computadoras de caseta y tablets móviles.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Sincronización tolerante a cortes esporádicos de red gracias al soporte offline de Firebase.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Diseñé una aplicación web serverless conectada a sensores infrarrojos con Firebase Firestore y Auth, ofreciendo semáforo visual de alerta y curvas estadísticas en tiempo real.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "stc-modules",
             "kind": "CARDS",
@@ -259,6 +308,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Monitoreo seguro y sin contacto de miles de miembros de la comunidad universitaria, con detección preventiva inmediata de temperaturas superiores a 37.5°C.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -267,10 +329,6 @@
       "locale": "en",
       "title": "Temperature Control System",
       "description": "Real-time IoT biosecurity and access control web platform deployed at the National University of Engineering (UNI). Connects non-contact infrared sensors, fever alerts with Firebase Firestore, and live pedestrian traffic telemetry for campus safety.",
-      "hook": "Real-time IoT telemetry · Non-contact infrared sensors · 2,300+ access logs at UNI",
-      "challenge": "Rapidly implement a pandemic thermal triage system for the National University of Engineering to prevent gate bottlenecks and safely monitor campus entries.",
-      "approach": "Built a serverless web application integrated with infrared sensors and Firebase Firestore/Auth, delivering instant visual traffic-light alerts and live thermal trend analytics.",
-      "outcome": "Safe, contactless biosecurity screening for thousands of daily entrants with automated threshold notifications for temperatures exceeding 37.5°C.",
       "caseStudy": {
         "chips": [
           "Real-Time Telemetry",
@@ -301,6 +359,7 @@
             "value": "STC UNI (https://stc-uni.vercel.app)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "kwh-monitor-api",
         "context": "The Temperature Control System (STC UNI) originated during the COVID-19 pandemic as a student technological initiative for the National University of Engineering (UNI). It enabled contactless body temperature logging and real-time cloud telemetry at university access points for early fever triage and safe campus entry.",
         "roleTitle": "Full-Stack Developer & Creator",
@@ -369,12 +428,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Sub-second entry validation to prevent queues and congestion at gate entrances.",
-          "High readability and usability across old guardhouse PCs and touch tablets.",
-          "Network-fault tolerance with Firebase offline synchronization during campus connectivity dips."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Rapidly implement a pandemic thermal triage system for the National University of Engineering to prevent gate bottlenecks and safely monitor campus entries.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Sub-second entry validation to prevent queues and congestion at gate entrances.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "High readability and usability across old guardhouse PCs and touch tablets.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Network-fault tolerance with Firebase offline synchronization during campus connectivity dips.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Built a serverless web application integrated with infrared sensors and Firebase Firestore/Auth, delivering instant visual traffic-light alerts and live thermal trend analytics.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "stc-modules",
             "kind": "CARDS",
@@ -516,6 +627,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Safe, contactless biosecurity screening for thousands of daily entrants with automated threshold notifications for temperatures exceeding 37.5°C.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -524,10 +648,6 @@
       "locale": "nl",
       "title": "Temperaturkontrollsystem",
       "description": "Realtime IoT-toegangscontrole en biosecurity-webplatform voor de Nationale Universiteit voor Techniek (UNI). Integreert contactloze infraroodsensoren, koortswaarschuwingen met Firebase Firestore en live doorstroomanalyses voor campustoegang.",
-      "hook": "Realtime IoT-telemetrie · Contactloze infraroodsensoren · 2.300+ toegangsregistraties bij UNI",
-      "challenge": "Met spoed een thermisch controlesysteem implementeren voor de universiteit om wachtrijen bij poorten te voorkomen en campusveiligheid te waarborgen.",
-      "approach": "Serverless webapplicatie gebouwd gekoppeld aan infraroodsensoren en Firebase Firestore/Auth, met visuele stoplicht-alerts en realtime analysetrends.",
-      "outcome": "Veilige, contactloze controle van duizenden dagelijkse campusbezoeken met directe meldingen bij temperaturen boven 37,5°C.",
       "caseStudy": {
         "chips": [
           "Realtime Telemetrie",
@@ -558,6 +678,7 @@
             "value": "STC UNI (https://stc-uni.vercel.app)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "kwh-monitor-api",
         "context": "Het Temperatuurcontrolesysteem (STC UNI) ontstond tijdens de COVID-19-pandemie als studenteninitiatief voor de Nationale Universiteit voor Techniek (UNI). Het maakte contactloze lichaamstemperatuurmetingen en realtime telemetrie in de cloud mogelijk bij toegangspoorten voor vroege koortsdetectie.",
         "roleTitle": "Full-Stack Ontwikkelaar & Bedenker",
@@ -626,12 +747,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Verificatie binnen een seconde om wachtrijen bij poorten te voorkomen.",
-          "Hoge leesbaarheid op oudere computers en mobiele tablets.",
-          "Netwerktolerantie met offline synchronisatie van Firebase."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Met spoed een thermisch controlesysteem implementeren voor de universiteit om wachtrijen bij poorten te voorkomen en campusveiligheid te waarborgen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Verificatie binnen een seconde om wachtrijen bij poorten te voorkomen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Hoge leesbaarheid op oudere computers en mobiele tablets.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Netwerktolerantie met offline synchronisatie van Firebase.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Serverless webapplicatie gebouwd gekoppeld aan infraroodsensoren en Firebase Firestore/Auth, met visuele stoplicht-alerts en realtime analysetrends.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "stc-modules",
             "kind": "CARDS",
@@ -770,6 +943,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Veilige, contactloze controle van duizenden dagelijkse campusbezoeken met directe meldingen bij temperaturen boven 37,5°C.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

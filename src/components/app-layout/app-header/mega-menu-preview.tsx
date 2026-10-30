@@ -75,7 +75,7 @@ export const MegaMenuPreview: FC<MegaMenuPreviewProps> = ({
             {!item.comingSoon ? (
               <Link
                 href={item.href}
-                onClick={onNavigate}
+                onNavigate={onNavigate}
                 className="group text-primary hover:text-primary/80 ml-auto inline-flex items-center gap-1.5 text-sm font-semibold transition-colors"
               >
                 <span>{item.cta}</span>

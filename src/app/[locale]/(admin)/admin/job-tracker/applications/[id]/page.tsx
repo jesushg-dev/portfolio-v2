@@ -2,7 +2,10 @@ export { generateMetadata } from "./metadata";
 import type { Locale } from "@/i18n/config";
 
 import { ApplicationDetailView } from "@/features/job-tracker/components/application-detail-view";
-import { getApplicationDetailPageData } from "@/features/job-tracker/server/job-tracker-queries";
+import {
+  getApplicationDetailContextData,
+  getApplicationDetailPageData,
+} from "@/features/job-tracker/server/job-tracker-queries";
 
 type ApplicationDetailTab = "details" | "timeline" | "tailor" | "emails";
 
@@ -24,13 +27,17 @@ export default async function ApplicationDetailPage({
       ? tab
       : "details";
 
-  const application = await getApplicationDetailPageData(id);
+  const [application, context] = await Promise.all([
+    getApplicationDetailPageData(id),
+    getApplicationDetailContextData(id),
+  ]);
 
   return (
     <ApplicationDetailView
       application={application}
       locale={locale as Locale}
       defaultTab={defaultTab}
+      {...context}
     />
   );
 }

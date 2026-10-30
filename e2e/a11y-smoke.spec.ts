@@ -21,10 +21,32 @@ const PUBLIC_ROUTES = [
 ] as const;
 
 test.describe("accessibility — Shield (WCAG AAA)", () => {
+  test.use({ reducedMotion: "reduce" });
   for (const route of PUBLIC_ROUTES) {
     test(`${route.name} (${route.path})`, async ({ page }) => {
+      const hydrationErrors: string[] = [];
+      page.on("pageerror", (error) => {
+        if (/hydration|server rendered HTML/i.test(error.message)) {
+          hydrationErrors.push(error.message);
+        }
+      });
       await page.goto(route.path, { waitUntil: "load" });
       await page.evaluate(() => document.fonts.ready);
+
+      if (route.path === "/certificates") {
+        const panel = page.getByRole("tabpanel");
+        await expect(panel).toHaveCount(1, { timeout: 60_000 });
+        const panelId = await panel.getAttribute("id");
+        expect(panelId).toBeTruthy();
+        for (const tab of await page.getByRole("tab").all()) {
+          await expect(tab).toHaveAttribute("aria-controls", panelId!);
+        }
+        const selectedTabId = await page
+          .getByRole("tab", { selected: true })
+          .getAttribute("id");
+        expect(selectedTabId).toBeTruthy();
+        await expect(panel).toHaveAttribute("aria-labelledby", selectedTabId!);
+      }
 
       const axeResults = await runAxeAudit(page);
       const axeSummary = summarizeAxeViolations(axeResults.violations);
@@ -38,6 +60,9 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
 
       expect.soft(axeSummary, report).toEqual([]);
       expect.soft(houseRuleIssues, report).toEqual([]);
+      expect
+        .soft(hydrationErrors, "Hydration must match the server HTML")
+        .toEqual([]);
     });
   }
 });

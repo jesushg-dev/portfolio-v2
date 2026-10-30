@@ -150,7 +150,6 @@ function CaseStudyMetricsSection({
   section,
   index,
   relatedSection,
-  introText,
 }: CaseStudySectionProps) {
   return (
     <section id={`s-${section.key}`} className="scroll-mt-8">
@@ -159,9 +158,9 @@ function CaseStudyMetricsSection({
         label={section.eyebrow}
         title={section.title}
       />
-      {introText ? (
+      {section.lead ? (
         <p className="text-muted-foreground mb-6 text-lg leading-8">
-          {introText}
+          {section.lead}
         </p>
       ) : null}
       <dl className="grid grid-cols-2 gap-4 lg:grid-cols-4">

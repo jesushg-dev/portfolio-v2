@@ -45,7 +45,6 @@ const content = (
 ): CaseStudyContentDTO => ({
   ...buildEmptyCaseStudy(),
   roleTitle: "Solo architect",
-  constraints: ["3 locales", "No CMS"],
   sections: [decisions("Tenant from Host", "Identity cannot be spoofed")],
   ...overrides,
 });
@@ -54,7 +53,6 @@ describe("CaseStudyContentSchema", () => {
   it("applies defaults so a partial payload is valid", () => {
     const parsed = CaseStudyContentSchema.parse({ roleTitle: "Solo" });
     expect(parsed.sections).toEqual([]);
-    expect(parsed.constraints).toEqual([]);
     expect(parsed.context).toBe("");
   });
 
@@ -165,11 +163,9 @@ describe("row <-> dto mapping", () => {
     expect(write.context).toBeNull();
     expect(item?.summary).toBeNull();
     expect(item?.tags).toEqual(["Tenant id in a header"]);
-    expect(write.constraints).toEqual(dto.constraints);
     expect(
       caseStudyRowToDto({
         ...dto,
-        constraints: dto.constraints,
         sections: dto.sections,
         tldr: dto.tldr,
         responsibilities: dto.responsibilities,
@@ -182,7 +178,6 @@ describe("auditCaseStudyParity", () => {
   it("is clean when locales share the same structure", () => {
     const es = content({
       roleTitle: "Arquitecto",
-      constraints: ["3 idiomas", "Sin CMS"],
       sections: [
         decisions("Tenant desde el Host", "La identidad no se puede falsear"),
       ],
@@ -222,17 +217,12 @@ describe("auditCaseStudyParity", () => {
     });
   });
 
-  it("flags missing constraints, sections and untranslated items", () => {
+  it("flags missing sections and untranslated items", () => {
     const empty = decisions("", "");
     empty.items[0] = { ...empty.items[0], title: "", body: "" };
-    const es = content({ constraints: ["3 idiomas"], sections: [empty] });
+    const es = content({ sections: [empty] });
     const issues = auditCaseStudyParity({ en: content(), es }, "en");
 
-    expect(issues).toContainEqual({
-      locale: "es",
-      path: "constraints",
-      problem: "missing",
-    });
     expect(issues).toContainEqual({
       locale: "es",
       path: "sections.decisions.items.tenant-from-host",
