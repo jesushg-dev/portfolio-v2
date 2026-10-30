@@ -68,6 +68,14 @@ export default defineConfig({
   },
   projects: [
     {
+      name: "public-seo",
+      testMatch: "**/home-seo.spec.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+        javaScriptEnabled: false,
+      },
+    },
+    {
       name: "setup",
       testMatch: /auth\.setup\.ts/,
     },

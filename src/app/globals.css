@@ -1225,10 +1225,12 @@ video::-webkit-media-controls {
 @keyframes bento-ring {
   0%,
   100% {
-    box-shadow: 0 0 0 0 transparent;
+    opacity: 0;
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 22%, transparent);
+    opacity: 1;
+    transform: scale(1.08);
   }
 }
 
@@ -1236,13 +1238,11 @@ video::-webkit-media-controls {
   0%,
   70%,
   100% {
-    border-color: color-mix(in srgb, var(--border) 40%, transparent);
-    background-color: var(--card);
+    opacity: 0;
   }
   15%,
   50% {
-    border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
-    background-color: color-mix(in srgb, var(--primary) 8.5%, var(--card));
+    opacity: 1;
   }
 }
 
@@ -1258,26 +1258,26 @@ video::-webkit-media-controls {
 
 @keyframes bento-travel {
   0% {
-    left: 0%;
+    transform: translateX(0);
     opacity: 0;
   }
   4% {
     opacity: 1;
   }
   92% {
-    left: 100%;
+    transform: translateX(100%);
     opacity: 1;
   }
   97%,
   100% {
-    left: 100%;
+    transform: translateX(100%);
     opacity: 0;
   }
 }
 
 @keyframes bento-sweep {
   0% {
-    top: -20%;
+    transform: translateY(-20%);
     opacity: 0;
   }
   10% {
@@ -1287,17 +1287,37 @@ video::-webkit-media-controls {
     opacity: 1;
   }
   100% {
-    top: 105%;
+    transform: translateY(105%);
     opacity: 0;
   }
 }
 
-.a-ring {
-  animation: bento-ring 2.4s ease-in-out infinite;
+.a-ring,
+.a-blink {
+  position: relative;
 }
 
-.a-blink {
+.a-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--primary) 22%, transparent);
+  animation: bento-ring 2.4s ease-in-out infinite;
+  animation-delay: inherit;
+}
+
+.a-blink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 0.0625rem solid color-mix(in srgb, var(--primary) 28%, var(--border));
+  background: color-mix(in srgb, var(--primary) 8.5%, transparent);
   animation: bento-blink 4.5s ease-in-out infinite;
+  animation-delay: inherit;
 }
 
 .a-float {
@@ -1310,6 +1330,14 @@ video::-webkit-media-controls {
 
 .a-sweep {
   animation: bento-sweep 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-ring::after,
+  .a-blink::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
 }
 
 @keyframes bento-pop {

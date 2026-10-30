@@ -119,7 +119,7 @@ const mockNextImagePropKeys = new Set([
   "fill",
   "loader",
   "placeholder",
-  "priority",
+  "preload",
   "quality",
   "sizes",
   "unoptimized",
@@ -268,6 +268,7 @@ jest.mock("motion/react", () => {
     useSpring: (v: unknown) => v,
     useTransform: (v: unknown) => v,
     useReducedMotion: () => false,
+    useInView: () => false,
     useDragControls: () => ({
       start: jest.fn(),
     }),

@@ -88,11 +88,13 @@ interface DragConstraints {
 interface TabMeasurements {
   rects: readonly (TabRect | undefined)[];
   constraints: DragConstraints;
+  isVisible: boolean;
 }
 
 const EMPTY_MEASUREMENTS: TabMeasurements = {
   rects: [],
   constraints: { left: 0, right: 0, top: 0, bottom: 0 },
+  isVisible: false,
 };
 
 function constraintsEqual(a: DragConstraints, b: DragConstraints) {
@@ -146,13 +148,19 @@ export function useTabIndicatorDrag({
   const tabNodesRef = useRef(new Map<number, HTMLElement>());
   const [store] = useState(createMeasurementStore);
   const observerRef = useRef<ResizeObserver | null>(null);
+  const isVisibleRef = useRef(false);
+  const measureFrameRef = useRef<number | null>(null);
   const isDraggingRef = useRef(false);
   const hasPositionedRef = useRef(false);
   const liftGenerationRef = useRef(0);
   const currentTabRef = useRef(currentTab);
   const setCurrentTabRef = useRef(setCurrentTab);
   const [isDragging, setIsDragging] = useState(false);
-  const { rects, constraints: dragConstraints } = useSyncExternalStore(
+  const {
+    rects,
+    constraints: dragConstraints,
+    isVisible,
+  } = useSyncExternalStore(
     store.subscribe,
     store.getSnapshot,
     store.getSnapshot,
@@ -202,6 +210,7 @@ export function useTabIndicatorDrag({
   );
 
   const measure = useCallback(() => {
+    if (!isVisibleRef.current) return;
     const list = tabListRef.current;
     if (!list) return;
 
@@ -235,8 +244,17 @@ export function useTabIndicatorDrag({
     store.publish({
       rects: sameRects ? previous.rects : next,
       constraints: sameConstraints ? previous.constraints : nextConstraints,
+      isVisible: true,
     });
   }, [store, tabCount]);
+
+  const scheduleMeasure = useCallback(() => {
+    if (!isVisibleRef.current || measureFrameRef.current !== null) return;
+    measureFrameRef.current = requestAnimationFrame(() => {
+      measureFrameRef.current = null;
+      measure();
+    });
+  }, [measure]);
 
   const registerTab = useCallback(
     (index: number, node: HTMLElement | null) => {
@@ -254,42 +272,64 @@ export function useTabIndicatorDrag({
         tabNodesRef.current.delete(index);
       }
 
-      measure();
+      scheduleMeasure();
     },
-    [measure],
+    [scheduleMeasure],
   );
 
   useEffect(() => {
     const list = tabListRef.current;
     const scroller = scrollContainerRef.current ?? list;
-    if (typeof ResizeObserver === "undefined") return;
-
-    const observer = new ResizeObserver(() => {
-      measure();
-    });
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(scheduleMeasure);
     observerRef.current = observer;
 
-    if (list) observer.observe(list);
-    if (scroller && scroller !== list) observer.observe(scroller);
-    tabNodesRef.current.forEach((node) => observer.observe(node));
+    if (list) observer?.observe(list);
+    if (scroller && scroller !== list) observer?.observe(scroller);
+    tabNodesRef.current.forEach((node) => observer?.observe(node));
 
-    scroller?.addEventListener("scroll", measure, { passive: true });
-    window.addEventListener("resize", measure);
+    const updateVisibility = (visible: boolean) => {
+      isVisibleRef.current = visible;
+      const previous = store.getSnapshot();
+      if (previous.isVisible !== visible) {
+        store.publish({ ...previous, isVisible: visible });
+      }
+      if (visible) scheduleMeasure();
+    };
+    const visibilityObserver =
+      typeof IntersectionObserver === "undefined"
+        ? null
+        : new IntersectionObserver(([entry]) => {
+            updateVisibility(Boolean(entry?.isIntersecting));
+          });
+    if (list && visibilityObserver) visibilityObserver.observe(list);
+    else updateVisibility(true);
+
+    scroller?.addEventListener("scroll", scheduleMeasure, { passive: true });
+    window.addEventListener("resize", scheduleMeasure);
 
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
+      visibilityObserver?.disconnect();
+      isVisibleRef.current = false;
+      if (measureFrameRef.current !== null) {
+        cancelAnimationFrame(measureFrameRef.current);
+        measureFrameRef.current = null;
+      }
       observerRef.current = null;
-      scroller?.removeEventListener("scroll", measure);
-      window.removeEventListener("resize", measure);
+      scroller?.removeEventListener("scroll", scheduleMeasure);
+      window.removeEventListener("resize", scheduleMeasure);
     };
-  }, [measure]);
+  }, [scheduleMeasure, store]);
 
   useLayoutEffect(() => {
-    measure();
-  }, [measure, currentTab, tabCount]);
+    scheduleMeasure();
+  }, [scheduleMeasure, currentTab, tabCount]);
 
   useEffect(() => {
-    if (isDraggingRef.current) return;
+    if (isDraggingRef.current || !isVisible) return;
 
     const rect = rects[currentTab];
     if (!rect) return;
@@ -308,14 +348,35 @@ export function useTabIndicatorDrag({
     }
 
     const activeNode = tabNodesRef.current.get(currentTab);
-    if (activeNode && typeof activeNode.scrollIntoView === "function") {
-      activeNode.scrollIntoView({
-        behavior: shouldReduceMotion ? "auto" : "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+    const scroller = scrollContainerRef.current;
+    if (activeNode && scroller && typeof scroller.scrollTo === "function") {
+      const activeRect = getRelativeRect(activeNode, scroller);
+      const start = vertical ? activeRect.top : activeRect.left;
+      const size = vertical ? activeRect.height : activeRect.width;
+      const offset = vertical ? scroller.scrollTop : scroller.scrollLeft;
+      const viewport = vertical ? scroller.clientHeight : scroller.clientWidth;
+
+      // Scroll only this tab strip. scrollIntoView also scrolls page ancestors,
+      // which pulled below-the-fold tabs into view during hydration and resize.
+      if (start < offset || start + size > offset + viewport) {
+        const target = Math.max(0, start + size / 2 - viewport / 2);
+        scroller.scrollTo({
+          ...(vertical ? { top: target } : { left: target }),
+          behavior: shouldReduceMotion ? "instant" : "smooth",
+        });
+      }
     }
-  }, [currentTab, height, rects, shouldReduceMotion, width, x, y]);
+  }, [
+    currentTab,
+    height,
+    isVisible,
+    rects,
+    shouldReduceMotion,
+    vertical,
+    width,
+    x,
+    y,
+  ]);
 
   const snapToNearest = useCallback(() => {
     const axis = vertical ? "y" : "x";
@@ -422,6 +483,7 @@ export function useTabIndicatorDrag({
     registerTab,
     onActivePointerDown,
     isDragging,
+    isVisible,
     glow,
     indicatorProps: {
       drag: vertical ? ("y" as const) : ("x" as const),
