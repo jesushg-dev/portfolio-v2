@@ -419,13 +419,9 @@ export function useTabIndicatorDrag({
 
   const endDragOrLift = useCallback(() => {
     isDraggingRef.current = false;
-    const generation = liftGenerationRef.current;
+    setIsDragging(false);
     snapToNearest();
-    void applyLift(false).then(() => {
-      if (generation !== liftGenerationRef.current) return;
-      if (isDraggingRef.current) return;
-      setIsDragging(false);
-    });
+    void applyLift(false);
   }, [applyLift, snapToNearest]);
 
   const onActivePointerDown = useCallback(

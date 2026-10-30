@@ -88,6 +88,14 @@ if (typeof globalThis.Request === "undefined") {
   } as unknown as typeof Request;
 }
 
+if (typeof globalThis.fetch === "undefined") {
+  globalThis.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    status: 200,
+    json: () => Promise.resolve({}),
+  }) as unknown as typeof fetch;
+}
+
 import enMessages from "../../messages/en.json";
 
 const mockMotionPropKeys = new Set([

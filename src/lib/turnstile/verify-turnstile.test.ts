@@ -3,9 +3,16 @@ import { verifyTurnstileToken } from "./verify-turnstile";
 describe("verifyTurnstileToken", () => {
   const originalEnv = process.env;
 
+  let consoleErrorSpy: jest.SpyInstance;
+
   beforeEach(() => {
     jest.resetModules();
     process.env = { ...originalEnv };
+    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   afterAll(() => {
