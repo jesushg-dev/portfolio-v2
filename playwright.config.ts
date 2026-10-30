@@ -15,9 +15,14 @@ const isLocalTarget =
 const webServer = isLocalTarget
   ? process.env.CI
     ? {
-        command: "pnpm build && pnpm start",
+        command:
+          process.env.E2E_PREBUILT === "1"
+            ? "pnpm start"
+            : "pnpm build && pnpm start",
         url: "http://127.0.0.1:3000",
-        timeout: 180_000,
+        timeout: process.env.E2E_PREBUILT === "1" ? 180_000 : 600_000,
+        stdout: "pipe" as const,
+        stderr: "pipe" as const,
       }
     : {
         command: "pnpm dev",

@@ -44,8 +44,15 @@ jobs:
 
       - run: pnpm db:push && pnpm db:seed
 
+      - name: Build production server
+        run: pnpm build
+        env:
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          BETTER_AUTH_URL: http://localhost:3000
+
       - run: pnpm exec playwright test
         env:
+          E2E_PREBUILT: "1"
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
           BETTER_AUTH_URL: http://localhost:3000
           CV_PDF_GENERATOR_SECRET: ${{ secrets.CV_PDF_GENERATOR_SECRET }}
