@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import { ArrowRightIcon, Rocket, TrendingUp } from "lucide-react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -25,9 +25,7 @@ interface SkillsTerminalProps {
 
 const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   const t = useTranslations("main.skills");
-  const shouldReduceMotion = useReducedMotion();
   const searchRef = useRef<HTMLInputElement>(null);
-  const isInView = useInView(searchRef, { once: true });
 
   const [activeCategory, setActiveCategory] = useState<SkillCategoryId>("ai");
   const [search, setSearch] = useState("");

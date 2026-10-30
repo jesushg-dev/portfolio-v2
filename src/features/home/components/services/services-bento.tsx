@@ -7,7 +7,6 @@ import {
   AnimatePresence,
   motion,
   type Variants,
-  useReducedMotion,
 } from "motion/react";
 import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
@@ -389,7 +388,6 @@ const INITIAL_VISIBLE_COUNT = 5;
 
 export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
   const t = useTranslations("main.services");
-  const shouldReduceMotion = useReducedMotion();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const containerVariants: Variants = {
