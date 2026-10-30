@@ -110,8 +110,9 @@ describe("AdminOverview", () => {
     const switches = screen.getAllByRole("switch");
     expect(switches.length).toBe(2);
 
-    act(() => {
+    await act(async () => {
       fireEvent.click(switches[0]);
+      await Promise.resolve();
     });
     expect(mockToggleMutateAsync).toHaveBeenCalledWith({
       id: "s-1",

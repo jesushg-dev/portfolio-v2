@@ -31,16 +31,6 @@ const Contact: FC = async () => {
   return (
     <div className="bg-card border-border/40 relative w-full border-t">
       <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-24">
-        {/* Background Texture Image */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-65 contrast-110"
-          style={{
-            backgroundImage:
-              'url("https://res.cloudinary.com/js-media/image/upload/f_auto,q_auto,w_1200/v1642524508/portfolio/hero/3239480_nnfqfm.webp")',
-          }}
-        />
-
         {/* Soft gradient edges overlay */}
         <div
           aria-hidden

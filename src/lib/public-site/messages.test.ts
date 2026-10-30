@@ -28,6 +28,8 @@ it.each([en, es, nl])(
     expect(home.main).toHaveProperty("portfolio", messages.main.portfolio);
     expect(home.main).not.toHaveProperty("now");
     expect(home.main).not.toHaveProperty("howIUseAi");
+    expect(home.main).not.toHaveProperty("services");
+    expect(home.main).not.toHaveProperty("soft-skills");
     expect(home).not.toHaveProperty("curriculum");
     expect(now.main).toEqual({ now: messages.main.now });
     expect(now.global).toBe(messages.global);

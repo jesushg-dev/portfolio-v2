@@ -8,7 +8,9 @@ describe("verifyTurnstileToken", () => {
   beforeEach(() => {
     jest.resetModules();
     process.env = { ...originalEnv };
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => undefined);
+    consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
   });
 
   afterEach(() => {

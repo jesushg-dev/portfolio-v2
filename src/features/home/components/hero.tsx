@@ -8,6 +8,7 @@ import { resolvePublicTenant } from "@/lib/public-site/tenant";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
+import LcpImagePreload from "@/components/shared/lcp-image-preload";
 
 interface HeroStats {
   yearsExperience: number;
@@ -60,38 +61,41 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
   };
 
   return (
-    <section
-      id="top"
-      aria-label="Home"
-      className="bg-card relative flex min-h-screen w-full items-center overflow-hidden"
-    >
-      {/* Top radial gradient light effect */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(60%_70%_at_45%_0%,rgba(99,102,241,.18),transparent)]"
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 pt-28 pb-24 sm:px-6 md:pt-36 md:pb-28 lg:container lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:px-20">
-        <HeroContent
-          heroData={parsedHeroData}
-          stats={stats}
-          showCvLink={showCvLink}
-        />
-        <HeroPhoto heroData={parsedHeroData} />
-      </div>
-
-      {/* Scroll Down Indicator matching Untitled-1.html */}
-      <a
-        href="#about"
-        className="text-muted-foreground hover:text-foreground absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-sm transition-colors lg:flex"
-        aria-label={t("scrollDown")}
+    <>
+      {photoUrl ? <LcpImagePreload href={photoUrl} /> : null}
+      <section
+        id="top"
+        aria-label="Home"
+        className="bg-card relative flex min-h-screen w-full items-center overflow-hidden"
       >
-        <span className="border-border flex h-9 w-6 justify-center rounded-full border pt-1.5">
-          <i className="a-wheel bg-muted-foreground h-1.5 w-1 rounded-full" />
-        </span>
-        {t("scrollDown")}
-      </a>
-    </section>
+        {/* Top radial gradient light effect */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(60%_70%_at_45%_0%,rgba(99,102,241,.18),transparent)]"
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 pt-28 pb-24 sm:px-6 md:pt-36 md:pb-28 lg:container lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:px-20">
+          <HeroContent
+            heroData={parsedHeroData}
+            stats={stats}
+            showCvLink={showCvLink}
+          />
+          <HeroPhoto heroData={parsedHeroData} />
+        </div>
+
+        {/* Scroll Down Indicator matching Untitled-1.html */}
+        <a
+          href="#about"
+          className="text-muted-foreground hover:text-foreground absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-sm transition-colors lg:flex"
+          aria-label={t("scrollDown")}
+        >
+          <span className="border-border flex h-9 w-6 justify-center rounded-full border pt-1.5">
+            <i className="a-wheel bg-muted-foreground h-1.5 w-1 rounded-full" />
+          </span>
+          {t("scrollDown")}
+        </a>
+      </section>
+    </>
   );
 };
 

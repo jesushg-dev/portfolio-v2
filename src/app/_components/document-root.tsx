@@ -15,6 +15,7 @@ const geist = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  preload: false,
 });
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });

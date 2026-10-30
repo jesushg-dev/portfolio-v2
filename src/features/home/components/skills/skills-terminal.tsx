@@ -258,7 +258,10 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                       >
                         {skill.trend ? (
                           <span className="border-primary/30 bg-primary/10 text-primary absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold backdrop-blur-xs">
-                            <TrendingUp className="size-3.5" aria-hidden="true" />
+                            <TrendingUp
+                              className="size-3.5"
+                              aria-hidden="true"
+                            />
                             <span>{t("terminal.trend")}</span>
                           </span>
                         ) : null}
@@ -309,10 +312,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
 
               <div className="mt-6 flex justify-center">
                 <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium backdrop-blur-xs">
-                  <Rocket
-                    className="text-primary size-4"
-                    aria-hidden="true"
-                  />
+                  <Rocket className="text-primary size-4" aria-hidden="true" />
                   <span>{t("terminal.updatedTechPill")}</span>
                 </div>
               </div>

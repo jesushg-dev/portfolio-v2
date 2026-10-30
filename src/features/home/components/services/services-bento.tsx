@@ -1,20 +1,11 @@
-"use client";
-
-import { useState, type FC } from "react";
+import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import {
-  AnimatePresence,
-  motion,
-  type Variants,
-} from "motion/react";
 import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Check,
-  ChevronDown,
   Code2,
   Database,
   Globe,
@@ -23,8 +14,8 @@ import {
   ShieldCheck,
   Terminal,
 } from "lucide-react";
-import { resolveIcon, type IconComponent } from "@/lib/icons/icon-registry";
 import { DynamicIcon } from "@/components/shared/dynamic-icon";
+import { ServicesGrid } from "./services-grid";
 
 export interface ServiceItem {
   id: string;
@@ -325,13 +316,7 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
 }
 
 /* Fallback Micro-visual for custom services */
-function DefaultVisual({
-  IconComponent,
-  service,
-}: {
-  IconComponent: IconComponent;
-  service: ServiceItem;
-}) {
+function DefaultVisual({ service }: { service: ServiceItem }) {
   if (
     service.image &&
     (service.image.startsWith("/") || service.image.startsWith("http"))
@@ -353,7 +338,7 @@ function DefaultVisual({
       <div className="bg-primary/10 absolute size-24 rounded-full blur-xl" />
       <DynamicIcon
         name={service.icon}
-        fallback={IconComponent}
+        fallback={Code2}
         className="text-primary size-16 opacity-75"
       />
       {service.statsValue ? (
@@ -384,195 +369,108 @@ function getVisualContainerClasses(type: string): string {
   }
 }
 
-const INITIAL_VISIBLE_COUNT = 5;
+function ServiceCardContent({ service }: { service: ServiceItem }) {
+  const visualType = getVisualType(service);
+  return (
+    <>
+      {" "}
+      {/* Top Interactive Micro-Visual (decorative) */}
+      <div className={getVisualContainerClasses(visualType)} aria-hidden="true">
+        {visualType === "frontend" && <FrontendVisual service={service} />}
+        {visualType === "backend" && <BackendVisual service={service} />}
+        {visualType === "mobile" && <MobileVisual />}
+        {visualType === "devops" && <DevOpsVisual service={service} />}
+        {visualType === "architecture" && <ArchitectureVisual />}
+        {visualType === "security" && <SecurityVisual service={service} />}
+        {visualType === "default" && <DefaultVisual service={service} />}
+      </div>
+      {/* Bottom Content Area */}
+      <div>
+        <div className="flex items-center gap-3">
+          <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
+            <DynamicIcon
+              name={service.icon}
+              fallback={Code2}
+              className="size-5"
+            />
+          </span>
+          <h3 className="text-foreground group-hover:text-primary text-xl font-bold tracking-tight transition-colors">
+            {service.title}
+          </h3>
+          {service.badge ? (
+            <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:block">
+              {service.badge}
+            </span>
+          ) : null}
+        </div>
+
+        <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
+          {service.description}
+        </p>
+
+        {service.badge ? (
+          <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:hidden">
+            {service.badge}
+          </span>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
+function ServiceContactBanner() {
+  const t = useTranslations("main.services");
+  return (
+    <Link
+      href="#contact"
+      className="group focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/95 relative flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[2rem] p-8 transition-all duration-300 focus-visible:ring-2 focus-visible:outline-none md:flex-row md:items-center md:p-10"
+    >
+      {/* Subtle grid pattern background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-15"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,.5) 0.0625rem, transparent 0.0625rem), linear-gradient(90deg, rgba(255,255,255,.5) 0.0625rem, transparent 0.0625rem)",
+          backgroundSize: "2.5rem 2.5rem",
+          maskImage: "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
+          WebkitMaskImage:
+            "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
+        }}
+      />
+
+      <div className="relative">
+        <p className="text-primary-foreground/80 text-sm font-semibold tracking-wide sm:text-base">
+          {t("items.contact.subtitle")}
+        </p>
+        <h3 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
+          {t("items.contact.title")}
+        </h3>
+      </div>
+
+      <span className="text-primary relative inline-flex items-center gap-3 rounded-full bg-white py-2 pr-2 pl-6 text-base font-bold shadow-md transition-transform group-hover:scale-[1.02]">
+        {t("items.contact.cta")}
+        <span className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
+          <ArrowRight className="size-5" />
+        </span>
+      </span>
+    </Link>
+  );
+}
 
 export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
   const t = useTranslations("main.services");
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.45, ease: "easeOut" },
-    },
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
-    e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
-  };
-
-  const handlePointerLeave = (e: React.PointerEvent<HTMLElement>) => {
-    e.currentTarget.style.removeProperty("--x");
-    e.currentTarget.style.removeProperty("--y");
-  };
-
-  if (dbServices.length === 0) {
-    return null;
-  }
-
-  const hasMore = dbServices.length > INITIAL_VISIBLE_COUNT;
-  const visibleServices = isExpanded
-    ? dbServices
-    : dbServices.slice(0, INITIAL_VISIBLE_COUNT);
-
+  if (dbServices.length === 0) return null;
   return (
-    <motion.div
-      variants={containerVariants}
-      initial={false}
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      className="grid w-full gap-5 md:grid-cols-12"
-    >
-      <AnimatePresence initial={false}>
-        {visibleServices.map((service, index) => {
-          const IconComponent = resolveIcon(service.icon, Code2);
-          const visualType = getVisualType(service);
-          const colSpanClass = getColSpan(index, dbServices.length);
-
-          return (
-            <motion.article
-              key={service.id}
-              variants={itemVariants}
-              initial={false}
-              animate="visible"
-              exit={{ opacity: 0, y: 16, transition: { duration: 0.25 } }}
-              onPointerMove={handlePointerMove}
-              onPointerLeave={handlePointerLeave}
-              className={cn(
-                "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
-                colSpanClass,
-              )}
-            >
-              {/* Top Interactive Micro-Visual (decorative) */}
-              <div
-                className={getVisualContainerClasses(visualType)}
-                aria-hidden="true"
-              >
-                {visualType === "frontend" && (
-                  <FrontendVisual service={service} />
-                )}
-                {visualType === "backend" && (
-                  <BackendVisual service={service} />
-                )}
-                {visualType === "mobile" && <MobileVisual />}
-                {visualType === "devops" && <DevOpsVisual service={service} />}
-                {visualType === "architecture" && <ArchitectureVisual />}
-                {visualType === "security" && (
-                  <SecurityVisual service={service} />
-                )}
-                {visualType === "default" && (
-                  <DefaultVisual
-                    IconComponent={IconComponent}
-                    service={service}
-                  />
-                )}
-              </div>
-
-              {/* Bottom Content Area */}
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
-                    <IconComponent className="size-5" aria-hidden={true} />
-                  </span>
-                  <h3 className="text-foreground group-hover:text-primary text-xl font-bold tracking-tight transition-colors">
-                    {service.title}
-                  </h3>
-                  {service.badge ? (
-                    <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:block">
-                      {service.badge}
-                    </span>
-                  ) : null}
-                </div>
-
-                <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
-                  {service.description}
-                </p>
-
-                {service.badge ? (
-                  <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:hidden">
-                    {service.badge}
-                  </span>
-                ) : null}
-              </div>
-            </motion.article>
-          );
-        })}
-      </AnimatePresence>
-
-      {/* Show more / Show less toggle */}
-      {hasMore && (
-        <div className="flex justify-center py-2 md:col-span-12">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => setIsExpanded((prev) => !prev)}
-            aria-expanded={isExpanded}
-            className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold transition-colors"
-          >
-            <span>{isExpanded ? t("seeLess") : t("seeMore")}</span>
-            <ChevronDown
-              className={cn(
-                "size-4 transition-transform duration-300",
-                isExpanded && "rotate-180",
-              )}
-              aria-hidden="true"
-            />
-          </Button>
-        </div>
-      )}
-
-      {/* Full-width CTA Banner */}
-      <motion.div variants={itemVariants} className="md:col-span-12">
-        <Link
-          href="#contact"
-          className="group focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/95 relative flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[2rem] p-8 transition-all duration-300 focus-visible:ring-2 focus-visible:outline-none md:flex-row md:items-center md:p-10"
-        >
-          {/* Subtle grid pattern background */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-15"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-              maskImage:
-                "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
-              WebkitMaskImage:
-                "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
-            }}
-          />
-
-          <div className="relative">
-            <p className="text-primary-foreground/80 text-sm font-semibold tracking-wide sm:text-base">
-              {t("items.contact.subtitle")}
-            </p>
-            <h3 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
-              {t("items.contact.title")}
-            </h3>
-          </div>
-
-          <span className="text-primary relative inline-flex items-center gap-3 rounded-full bg-white py-2 pr-2 pl-6 text-base font-bold shadow-md transition-transform group-hover:scale-[1.02]">
-            {t("items.contact.cta")}
-            <span className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
-              <ArrowRight className="size-5" />
-            </span>
-          </span>
-        </Link>
-      </motion.div>
-    </motion.div>
+    <ServicesGrid
+      cards={dbServices.map((service, index) => ({
+        id: service.id,
+        className: getColSpan(index, dbServices.length),
+        content: <ServiceCardContent service={service} />,
+      }))}
+      seeMoreLabel={t("seeMore")}
+      seeLessLabel={t("seeLess")}
+      banner={<ServiceContactBanner />}
+    />
   );
 };

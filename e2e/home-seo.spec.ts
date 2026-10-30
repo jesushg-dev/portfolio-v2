@@ -123,7 +123,7 @@ test.describe("hydrated portfolio", () => {
     page,
   }) => {
     await page.goto("/", { waitUntil: "load" });
-    const hero = page.locator('#top img[fetchpriority="high"]');
+    const hero = page.locator("#top img");
     const srcSet = await hero.getAttribute("srcset");
     const sizes = await hero.getAttribute("sizes");
     expect(srcSet).toContain("/_next/image?");
@@ -134,9 +134,14 @@ test.describe("hydrated portfolio", () => {
         links.map((link) => ({
           srcSet: link.getAttribute("imagesrcset"),
           sizes: link.getAttribute("imagesizes"),
+          media: link.getAttribute("media"),
         })),
       );
-    expect(preloads).toContainEqual({ srcSet, sizes });
+    expect(preloads).toContainEqual({
+      srcSet,
+      sizes,
+      media: "(min-width: 64rem)",
+    });
   });
 
   test("uses compositor properties for service micro-animations", async ({
@@ -178,6 +183,26 @@ test.describe("hydrated portfolio", () => {
         ["transform", "opacity"].includes(property),
       ),
     ).toBe(true);
+  });
+
+  test("limits the hero photo preload to desktop home visits", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/", { waitUntil: "load" });
+    const preload = page.locator(
+      'link[rel="preload"][as="image"][media="(min-width: 64rem)"]',
+    );
+    await expect(preload).toHaveCount(1);
+    expect(
+      await preload.evaluate(
+        (link) => matchMedia((link as HTMLLinkElement).media).matches,
+      ),
+    ).toBe(false);
+    await expect(page.locator("#top img")).toHaveAttribute("loading", "lazy");
+
+    await page.goto("/now", { waitUntil: "load" });
+    await expect(preload).toHaveCount(0);
   });
 });
 

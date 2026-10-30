@@ -8,8 +8,6 @@ export function pickPublicMessages(messages: Messages) {
 const routeMainKeys = {
   home: [
     "about",
-    "services",
-    "soft-skills",
     "socialProof",
     "skills",
     "experience",
