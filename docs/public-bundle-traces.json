@@ -1,0 +1,236 @@
+{
+  "platform": "Windows, Node 22.15.1, Next 16.4.3, pnpm 10.34.5",
+  "unit": "uncompressed bytes summed from .nft.json; not Vercel storage",
+  "beforeRoutes": {
+    "dynamic": 100,
+    "static": 2,
+    "ssg": 0
+  },
+  "afterRoutes": {
+    "dynamic": 100,
+    "static": 2,
+    "ssg": 0
+  },
+  "traces": [
+    {
+      "route": "[locale]/(home)",
+      "beforeBytes": 224614523,
+      "afterBytes": 214414594,
+      "savedBytes": 10199929,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/@modal/(.)schedule",
+      "beforeBytes": 224340699,
+      "afterBytes": 214140311,
+      "savedBytes": 10200388,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/@modal/(.)skills/[slug]",
+      "beforeBytes": 224376726,
+      "afterBytes": 214176684,
+      "savedBytes": 10200042,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/certificates/[[...slug]]",
+      "beforeBytes": 224456167,
+      "afterBytes": 214256125,
+      "savedBytes": 10200042,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/colophon",
+      "beforeBytes": 224349410,
+      "afterBytes": 214149538,
+      "savedBytes": 10199872,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/curriculum-vitae",
+      "beforeBytes": 224587288,
+      "afterBytes": 214392153,
+      "savedBytes": 10195135,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/now",
+      "beforeBytes": 224555430,
+      "afterBytes": 214361198,
+      "savedBytes": 10194232,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/privacy",
+      "beforeBytes": 224326335,
+      "afterBytes": 214126208,
+      "savedBytes": 10200127,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/process/[slug]",
+      "beforeBytes": 224377062,
+      "afterBytes": 214176991,
+      "savedBytes": 10200071,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/projects",
+      "beforeBytes": 224398702,
+      "afterBytes": 214197683,
+      "savedBytes": 10201019,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/projects/[slug]",
+      "beforeBytes": 224461407,
+      "afterBytes": 214261530,
+      "savedBytes": 10199877,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/schedule",
+      "beforeBytes": 224340672,
+      "afterBytes": 214140350,
+      "savedBytes": 10200322,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/skills/[slug]",
+      "beforeBytes": 224383547,
+      "afterBytes": 214183020,
+      "savedBytes": 10200527,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/stats",
+      "beforeBytes": 224334403,
+      "afterBytes": 214135407,
+      "savedBytes": 10198996,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/theme-customizer",
+      "beforeBytes": 224346509,
+      "afterBytes": 214146467,
+      "savedBytes": 10200042,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/timeline",
+      "beforeBytes": 224377613,
+      "afterBytes": 214176916,
+      "savedBytes": 10200697,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "[locale]/(home)/uses",
+      "beforeBytes": 224320707,
+      "afterBytes": 214120580,
+      "savedBytes": 10200127,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 0,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "api/cv/docx",
+      "beforeBytes": 216801526,
+      "afterBytes": 216801530,
+      "savedBytes": -4,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 4,
+      "beforePdfjsFiles": 0,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "api/cv/pdf",
+      "beforeBytes": 217325775,
+      "afterBytes": 217325779,
+      "savedBytes": -4,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 4,
+      "beforePdfjsFiles": 0,
+      "afterPdfjsFiles": 0,
+      "missingFiles": 0
+    },
+    {
+      "route": "api/trpc/[trpc]",
+      "beforeBytes": 223421051,
+      "afterBytes": 223419329,
+      "savedBytes": 1722,
+      "beforeCvAssets": 4,
+      "afterCvAssets": 4,
+      "beforePdfjsFiles": 3,
+      "afterPdfjsFiles": 3,
+      "missingFiles": 0
+    }
+  ]
+}
