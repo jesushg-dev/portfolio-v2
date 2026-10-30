@@ -1,8 +1,21 @@
+import { getHeroImageProps } from "@/lib/seo/hero-image";
+
 interface LcpImagePreloadProps {
   href: string;
 }
 
-/** Hoisted to `<head>` by Next.js — must match the hero `<Image>` src exactly. */
+/** Hoisted to head; let the browser choose the same candidate as the hero image. */
 export default function LcpImagePreload({ href }: LcpImagePreloadProps) {
-  return <link rel="preload" as="image" href={href} fetchPriority="high" />;
+  const { src, srcSet, sizes } = getHeroImageProps(href);
+
+  return (
+    <link
+      rel="preload"
+      as="image"
+      href={src}
+      imageSrcSet={srcSet}
+      imageSizes={sizes}
+      fetchPriority="high"
+    />
+  );
 }

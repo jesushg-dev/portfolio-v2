@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import HeroPhoto from "./hero-photo";
 
+jest.unmock("next/image");
+
 describe("HeroPhoto", () => {
   it("renders initials when photoUrl is not provided", () => {
     render(

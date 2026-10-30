@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
-import DeferredTrpcProvider, {
-  useTrpcDeferredReady,
-} from "./deferred-trpc-provider";
+import PublicTrpcProvider, {
+  usePublicWidgetsReady,
+} from "./public-trpc-provider";
 
 const mockUsePathname = jest.fn(() => "/");
 
@@ -17,11 +17,11 @@ jest.mock("@/trpc/react", () => ({
 }));
 
 function ReadyProbe() {
-  const isReady = useTrpcDeferredReady();
+  const isReady = usePublicWidgetsReady();
   return <span data-testid="trpc-ready">{String(isReady)}</span>;
 }
 
-describe("DeferredTrpcProvider", () => {
+describe("PublicTrpcProvider", () => {
   beforeEach(() => {
     mockUsePathname.mockReturnValue("/");
     Object.defineProperty(window, "scrollY", {
@@ -35,23 +35,23 @@ describe("DeferredTrpcProvider", () => {
     mockUsePathname.mockReturnValue("/schedule");
 
     render(
-      <DeferredTrpcProvider>
+      <PublicTrpcProvider>
         <ReadyProbe />
-      </DeferredTrpcProvider>,
+      </PublicTrpcProvider>,
     );
 
     expect(screen.getByTestId("trpc-provider")).toBeInTheDocument();
     expect(screen.getByTestId("trpc-ready")).toHaveTextContent("true");
   });
 
-  it("defers tRPC on the home landing when at the top", () => {
+  it("keeps tRPC mounted while deferring optional home widgets", () => {
     render(
-      <DeferredTrpcProvider>
+      <PublicTrpcProvider>
         <ReadyProbe />
-      </DeferredTrpcProvider>,
+      </PublicTrpcProvider>,
     );
 
-    expect(screen.queryByTestId("trpc-provider")).not.toBeInTheDocument();
+    expect(screen.getByTestId("trpc-provider")).toBeInTheDocument();
     expect(screen.getByTestId("trpc-ready")).toHaveTextContent("false");
   });
 
@@ -63,12 +63,27 @@ describe("DeferredTrpcProvider", () => {
     });
 
     render(
-      <DeferredTrpcProvider>
+      <PublicTrpcProvider>
         <ReadyProbe />
-      </DeferredTrpcProvider>,
+      </PublicTrpcProvider>,
     );
 
     expect(screen.getByTestId("trpc-provider")).toBeInTheDocument();
     expect(screen.getByTestId("trpc-ready")).toHaveTextContent("true");
+  });
+
+  it("preserves the page when interaction enables live widgets", () => {
+    render(
+      <PublicTrpcProvider>
+        <h1>Portfolio</h1>
+        <ReadyProbe />
+      </PublicTrpcProvider>,
+    );
+    const heading = screen.getByRole("heading", { name: "Portfolio" });
+
+    fireEvent.scroll(window);
+
+    expect(screen.getByTestId("trpc-ready")).toHaveTextContent("true");
+    expect(screen.getByRole("heading", { name: "Portfolio" })).toBe(heading);
   });
 });

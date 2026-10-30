@@ -12,20 +12,20 @@ import {
 import { usePathname } from "@/i18n/routing";
 import { TRPCReactProvider } from "@/trpc/react";
 
-interface DeferredTrpcProviderProps {
+interface PublicTrpcProviderProps {
   children: ReactNode;
 }
 
-interface TrpcDeferredContextValue {
+interface PublicWidgetsContextValue {
   isReady: boolean;
 }
 
-const TrpcDeferredContext = createContext<TrpcDeferredContextValue>({
+const PublicWidgetsContext = createContext<PublicWidgetsContextValue>({
   isReady: true,
 });
 
-export function useTrpcDeferredReady(): boolean {
-  return useContext(TrpcDeferredContext).isReady;
+export function usePublicWidgetsReady(): boolean {
+  return useContext(PublicWidgetsContext).isReady;
 }
 
 function isSkillInterceptRoute(pathname: string): boolean {
@@ -53,13 +53,12 @@ function getScrollRestoredServerSnapshot(): boolean {
 }
 
 /**
- * Defers tRPC on the home landing until first interaction so Hero/LCP stays lean.
- * Other routes under `(home)` (e.g. `/schedule`, `/timeline`) mount the footer Spotify widget
- * immediately and need tRPC on first paint. Skill intercept modals also need tRPC right away.
+ * Provides tRPC during prerendering and hydration. Only optional live widgets
+ * wait for interaction on the landing page; public content always renders.
  */
-export default function DeferredTrpcProvider({
+export default function PublicTrpcProvider({
   children,
-}: DeferredTrpcProviderProps) {
+}: PublicTrpcProviderProps) {
   const pathname = usePathname();
   const needsTrpcNow = needsImmediateTrpc(pathname);
   const [deferredReady, setDeferredReady] = useState(false);
@@ -89,15 +88,11 @@ export default function DeferredTrpcProvider({
     };
   }, [needsTrpcNow, deferredReady]);
 
-  const content = isReady ? (
-    <TRPCReactProvider>{children}</TRPCReactProvider>
-  ) : (
-    children
-  );
-
   return (
-    <TrpcDeferredContext.Provider value={{ isReady }}>
-      {content}
-    </TrpcDeferredContext.Provider>
+    <TRPCReactProvider>
+      <PublicWidgetsContext.Provider value={{ isReady }}>
+        {children}
+      </PublicWidgetsContext.Provider>
+    </TRPCReactProvider>
   );
 }
