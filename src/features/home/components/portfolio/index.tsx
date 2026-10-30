@@ -5,7 +5,6 @@ import { getTranslations } from "next-intl/server";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
-import type { ProjectType } from "@/utils/interfaces/types";
 
 import PortfolioGrid from "./portfolio-grid";
 
@@ -16,24 +15,11 @@ const Portfolio: FC = async () => {
   });
   const locale = await getPublicLocale();
 
-  let initialProjects:
-    | {
-        projects: ProjectType[];
-        nextCursor: string | null;
-        totalCount: number;
-        caseStudyCount: number;
-      }
-    | undefined;
-
-  try {
-    const data = await api.portfolio.getProjects({
+  const { projects, totalCount, caseStudyCount } =
+    await api.portfolio.getProjects({
       limit: LIMIT_PER_PAGE_BIG,
       locale,
     });
-    initialProjects = data;
-  } catch (error) {
-    console.error("Failed to prefetch portfolio projects:", error);
-  }
 
   return (
     <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
@@ -46,7 +32,11 @@ const Portfolio: FC = async () => {
           description={t("description")}
           subtitle={t("subtitle")}
         />
-        <PortfolioGrid initialData={initialProjects} />
+        <PortfolioGrid
+          projects={projects}
+          totalCount={totalCount}
+          caseStudyCount={caseStudyCount}
+        />
       </section>
     </div>
   );

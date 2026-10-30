@@ -152,7 +152,7 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
           <motion.ol
             id="timeline"
             className="lg:before:border-primary/20 relative grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:before:absolute lg:before:inset-x-[12.5%] lg:before:top-[3.25rem] lg:before:border-t lg:before:border-dashed"
-            initial={shouldReduceMotion ? false : "hidden"}
+            initial={false}
             whileInView={shouldReduceMotion ? undefined : "visible"}
             viewport={{ once: true, margin: "-60px" }}
             variants={listVariants}

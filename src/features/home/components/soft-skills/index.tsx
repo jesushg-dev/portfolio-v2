@@ -3,7 +3,7 @@ import type { FC } from "react";
 
 import { type Locale, locales } from "@/i18n/config";
 import { getCachedSoftSkillsPublic } from "@/lib/soft-skills/get-cached-soft-skills-public";
-import SoftSkillsBentoLazy from "./soft-skills-bento-lazy";
+import SoftSkillsBento from "./soft-skills-bento";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
@@ -26,7 +26,7 @@ const SoftSkills: FC = async () => {
         id="leadership"
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
       >
-        <SoftSkillsBentoLazy items={items} metrics={metrics} />
+        <SoftSkillsBento items={items} metrics={metrics} />
       </section>
     </div>
   );

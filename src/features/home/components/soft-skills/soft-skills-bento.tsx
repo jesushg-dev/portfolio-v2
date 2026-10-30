@@ -73,7 +73,7 @@ const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items, metrics }) => {
       <div className="lg:sticky lg:top-28 lg:self-start">
         <motion.div
           variants={headerVariants}
-          initial={shouldReduceMotion ? false : "hidden"}
+          initial={false}
           whileInView={shouldReduceMotion ? undefined : "visible"}
           viewport={{ once: true, margin: "-80px" }}
         >
@@ -121,7 +121,7 @@ const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items, metrics }) => {
       {/* Right Column: Interactive Leadership & Soft Skills Timeline */}
       <motion.ol
         variants={containerVariants}
-        initial={shouldReduceMotion ? false : "hidden"}
+        initial={false}
         whileInView={shouldReduceMotion ? undefined : "visible"}
         viewport={{ once: true, margin: "-80px" }}
         className="before:bg-border/20 relative space-y-2.5 before:absolute before:top-[2.375rem] before:bottom-[2.375rem] before:left-[2.375rem] before:w-px before:-translate-x-1/2 sm:before:top-[2.625rem] sm:before:bottom-[2.625rem] sm:before:left-[2.625rem]"

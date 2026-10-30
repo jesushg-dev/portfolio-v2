@@ -165,7 +165,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                               alt={group.company}
                               fill
                               className="size-full object-cover"
-                              sizes="44px"
+                              sizes="2.75rem"
                             />
                           </span>
                         ) : (

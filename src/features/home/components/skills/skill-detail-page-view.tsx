@@ -64,7 +64,7 @@ export async function SkillDetailPageView({
               height={40}
               src={detail.image}
               className="h-10 w-10 object-contain"
-              priority
+              preload
             />
           </div>
           <div className="min-w-0 flex-1 text-center md:text-left">

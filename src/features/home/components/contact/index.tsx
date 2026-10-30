@@ -6,6 +6,8 @@ import { Calendar } from "lucide-react";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { Link } from "@/i18n/routing";
+import ViewportSection from "@/components/shared/viewport-section";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import ContactForm from "./contact-form-lazy";
 import ContactIllustration from "./contact-illustration";
@@ -115,7 +117,13 @@ const Contact: FC = async () => {
                   aria-hidden
                   className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"
                 />
-                <ContactForm />
+                <ViewportSection
+                  fallback={<Skeleton className="h-80 w-full rounded-2xl" />}
+                  minHeight="20rem"
+                  requiresTrpc
+                >
+                  <ContactForm />
+                </ViewportSection>
               </div>
             ) : null}
           </ContactContainer>

@@ -742,7 +742,7 @@ export function ProjectsCatalogView({
               <PortfolioItem
                 {...project}
                 {...labels(project)}
-                priority={idx < 3}
+                preload={idx < 3}
               />
             </motion.li>
           ))}

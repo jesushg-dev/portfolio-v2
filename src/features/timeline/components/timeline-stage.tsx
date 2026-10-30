@@ -119,7 +119,7 @@ export const TimelineStage: FC<TimelineStageProps> = ({
                     fill
                     sizes="(max-width: 1280px) 40vw, 520px"
                     className="object-cover"
-                    priority
+                    preload
                   />
                 </motion.div>
               </AnimatePresence>

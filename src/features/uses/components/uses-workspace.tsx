@@ -55,7 +55,7 @@ export function UsesWorkspace({
               src={src}
               alt={alt}
               fill
-              priority
+              preload
               sizes="(max-width: 1440px) 100vw, 1440px"
               className="object-cover object-center select-none"
             />

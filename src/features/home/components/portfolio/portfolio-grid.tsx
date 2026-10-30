@@ -1,19 +1,16 @@
 "use client";
 
 import type { FC } from "react";
-import { useRef, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
-import { api } from "@/trpc/react";
-import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
 import { LinkPreview } from "@/components/ui/link-preview";
 import type { ProjectType } from "@/utils/interfaces/types";
 
 import FilterType from "./filter-type";
 import PortfolioItem from "./project-item";
-import { PortfolioGridSkeleton } from "./portfolio-grid-skeleton";
 import { ProjectEmptyState } from "./project-empty-state";
 import { PortfolioTopStack } from "./portfolio-top-stack";
 
@@ -39,21 +36,21 @@ const item = {
 };
 
 interface PortfolioGridProps {
-  initialData?: {
-    projects: ProjectType[];
-    nextCursor: string | null;
-    totalCount?: number;
-    caseStudyCount?: number;
-  };
+  projects: ProjectType[];
+  totalCount: number;
+  caseStudyCount: number;
 }
 
-const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
-  const locale = useLocale();
-  const ref = useRef<HTMLElement>(null);
+const PortfolioGrid: FC<PortfolioGridProps> = ({
+  projects: allProjects,
+  totalCount,
+  caseStudyCount,
+}) => {
+  const panelRef = useRef<HTMLElement>(null);
+  const isInView = useInView(panelRef, { once: true });
 
   const t = useTranslations("main.portfolio");
 
-  const isInView = useInView(ref, { once: true });
   const labels = useMemo(
     () => (project: ProjectType) => ({
       urlName: t("actions.view"),
@@ -90,33 +87,6 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
 
   const [crtValue, setCrtValue] = useState<number>(0);
 
-  // If initialData is provided from the RSC, use it without blocking network roundtrip
-  const { data, isLoading } = api.portfolio.getProjects.useQuery(
-    { limit: LIMIT_PER_PAGE_BIG, locale },
-    {
-      initialData: initialData
-        ? {
-            projects: initialData.projects,
-            nextCursor: initialData.nextCursor,
-            totalCount: initialData.totalCount ?? initialData.projects.length,
-            caseStudyCount:
-              initialData.caseStudyCount ??
-              initialData.projects.filter((p) => p.caseStudyEnabled).length,
-          }
-        : undefined,
-    },
-  );
-
-  const allProjects = useMemo(
-    () => data?.projects ?? initialData?.projects ?? [],
-    [data, initialData],
-  );
-
-  const totalCount = data?.totalCount ?? allProjects.length;
-  const caseStudyCount =
-    data?.caseStudyCount ??
-    allProjects.filter((p) => p.caseStudyEnabled).length;
-
   const counts = useMemo(() => {
     return [
       allProjects.length,
@@ -139,39 +109,33 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
     <>
       <FilterType value={crtValue} onChange={setCrtValue} counts={counts} />
       <section
-        ref={ref}
+        ref={panelRef}
         role="tabpanel"
         id={`portfolio-tab-panel-${crtValue}`}
         aria-labelledby={`portfolio-tab-tab-${crtValue}`}
       >
-        {isLoading && allProjects.length === 0 ? (
-          <PortfolioGridSkeleton />
-        ) : visibleProjects.length === 0 ? (
+        {visibleProjects.length === 0 ? (
           <ProjectEmptyState
             type={type[crtValue]}
             onReset={() => setCrtValue(0)}
           />
         ) : (
           <motion.ul
-            initial="hidden"
+            initial={false}
             variants={container}
-            animate={isInView ? "visible" : "hidden"}
+            animate="visible"
             className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3"
           >
-            {visibleProjects.map((project, idx) => (
+            {visibleProjects.map((project) => (
               <motion.li
-                layout
+                layout={isInView}
                 key={project.id}
                 className="flex justify-center"
                 variants={item}
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.25 }}
               >
-                <PortfolioItem
-                  {...project}
-                  {...labels(project)}
-                  priority={idx < 3}
-                />
+                <PortfolioItem {...project} {...labels(project)} />
               </motion.li>
             ))}
           </motion.ul>
