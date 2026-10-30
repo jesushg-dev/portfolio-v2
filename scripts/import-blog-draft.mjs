@@ -19,6 +19,7 @@ async function getDraftFiles() {
   const files = await readdir(draftsDir);
   return files
     .filter((f) => f.endsWith(".json"))
+    .sort()
     .map((f) => path.join(draftsDir, f));
 }
 
@@ -40,7 +41,9 @@ if (!write) {
   console.log(`Validated ${drafts.length} draft(s). No database connection or writes:`);
   for (const d of drafts) {
     const seriesInfo = d.seriesName ? ` [Series: "${d.seriesName}" #${d.seriesOrder}]` : "";
-    console.log(`  ✔ ${d.slug} (${d.locale}, ${d.status}, date: ${d.createdAt ?? "now"})${seriesInfo}`);
+    const imgCount = d.content.content ? d.content.content.filter((c) => c.type === "image").length : 0;
+    const imgInfo = imgCount > 0 ? ` (${imgCount} images)` : "";
+    console.log(`  ✔ ${d.slug} (${d.locale}, ${d.status}, date: ${d.createdAt ?? "now"})${seriesInfo}${imgInfo}`);
   }
 } else {
   if (!email || email.startsWith("--")) {

@@ -16,7 +16,7 @@
     "sistemas-operativos",
     "archivo-2020"
   ],
-  "coverImage": null,
+  "coverImage": "/images/blog/aso/image26.png",
   "content": {
     "type": "doc",
     "content": [
@@ -72,7 +72,7 @@
         "content": [
           {
             "type": "text",
-            "text": "Para procesar el código en C, ensamblador y las tablas de configuración del árbol del kernel, se requieren las siguientes bibliotecas y utilidades:"
+            "text": "Antes de instalar, actualizamos la caché del repositorio de paquetes APT:"
           }
         ]
       },
@@ -84,89 +84,24 @@
         "content": [
           {
             "type": "text",
-            "text": "sudo apt update\nsudo apt install -y gcc make bc bison flex libssl-dev libelf-dev libncurses-dev rsync build-essential"
+            "text": "sudo apt-get update"
           }
         ]
       },
       {
-        "type": "bulletList",
-        "content": [
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "gcc y make: compilador C y motor de construcción del proyecto."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "bison y flex: generadores de analizadores sintácticos y léxicos requeridos durante el parseo de configuraciones."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "libncurses-dev: biblioteca para interfaces en terminal requerida por make menuconfig."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "libssl-dev y libelf-dev: soporte para firmado criptográfico y análisis de binarios ELF."
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "heading",
+        "type": "image",
         "attrs": {
-          "level": 2
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "2. Descarga y Descompresión del Kernel"
-          }
-        ]
+          "src": "/images/blog/aso/image1.png",
+          "alt": "Actualización de caché APT",
+          "title": "Actualización de caché APT"
+        }
       },
       {
         "type": "paragraph",
         "content": [
           {
             "type": "text",
-            "text": "Se descarga el tarball oficial desde el repositorio de kernel.org. En el laboratorio original se empleó la versión 5.9.8; el procedimiento se mantiene idéntico en versiones modernas 6.x:"
+            "text": "Instalamos las herramientas base: compilador gcc, utilidades de sincronización y calculadora de línea de comandos:"
           }
         ]
       },
@@ -178,28 +113,24 @@
         "content": [
           {
             "type": "text",
-            "text": "cd ~/Descargas\nwget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.9.8.tar.xz\ntar -xvf linux-5.9.8.tar.xz\ncd linux-5.9.8"
+            "text": "sudo apt-get install gcc rsync bc"
           }
         ]
       },
       {
-        "type": "heading",
+        "type": "image",
         "attrs": {
-          "level": 2
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "3. Configuración del Núcleo (.config)"
-          }
-        ]
+          "src": "/images/blog/aso/image2.png",
+          "alt": "Instalación de gcc rsync bc",
+          "title": "Instalación de gcc rsync bc"
+        }
       },
       {
         "type": "paragraph",
         "content": [
           {
             "type": "text",
-            "text": "Para asegurar compatibilidad con el hardware en uso, clonamos la configuración del kernel que se encuentra actualmente en ejecución:"
+            "text": "Instalamos bibliotecas para interfaces TUI basadas en texto y metapaquete build-essential:"
           }
         ]
       },
@@ -211,9 +142,75 @@
         "content": [
           {
             "type": "text",
-            "text": "cp -v /boot/config-$(uname -r) ./.config\n# Aclaración técnica moderna para distribuciones Ubuntu/Debian:\n# Desactivar certificados de confianza locales para evitar fallos de firma:\nscripts/config --set-str SYSTEM_TRUSTED_KEYS \"\"\nscripts/config --set-str SYSTEM_REVOCATION_KEYS \"\""
+            "text": "sudo apt-get install libncurses5-dev build-essential"
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image3.png",
+          "alt": "Instalación de libncurses5-dev y build-essential",
+          "title": "Instalación de libncurses5-dev y build-essential"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Instalamos generadores léxicos/sintácticos y cabeceras criptográficas:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt-get install bison flex libssl-dev libelf-dev"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image4.png",
+          "alt": "Instalación de bison flex libssl-dev libelf-dev",
+          "title": "Instalación de bison flex libssl-dev libelf-dev"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Opcionalmente instalamos un editor gráfico o empleamos nano/vim en consola:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt-get install gedit"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image5.png",
+          "alt": "Instalación de editor de texto",
+          "title": "Instalación de editor de texto"
+        }
       },
       {
         "type": "heading",
@@ -223,7 +220,7 @@
         "content": [
           {
             "type": "text",
-            "text": "4. Modificación de Código en init/main.c"
+            "text": "2. Ajuste Preliminar del Gestor de Arranque (GRUB)"
           }
         ]
       },
@@ -232,7 +229,374 @@
         "content": [
           {
             "type": "text",
-            "text": "Accedemos al subsistema de inicialización en 'init/main.c', el cual contiene la función start_kernel() y la cadena de montaje de los primeros procesos. Localizamos la función numa_default_policy() e insertamos una llamada con printk:"
+            "text": "Para asegurar que los mensajes de inicio sean visibles, abrimos '/etc/default/grub':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo gedit /etc/default/grub"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image6.png",
+          "alt": "Apertura del archivo grub",
+          "title": "Apertura del archivo grub"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Comentamos '#GRUB_TIMEOUT_STYLE=hidden', fijamos 'GRUB_TIMEOUT=10' y aseguramos 'GRUB_CMDLINE_LINUX_DEFAULT=\"splash\"':"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image7.png",
+          "alt": "Configuración editada de GRUB",
+          "title": "Configuración editada de GRUB"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Actualizamos los cambios en el cargador:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo update-grub"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image8.png",
+          "alt": "Actualización de GRUB con update-grub",
+          "title": "Actualización de GRUB con update-grub"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Descarga y Descompresión del Kernel"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ingresamos a kernel.org para obtener el enlace al tarball del código fuente:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image9.png",
+          "alt": "Página oficial kernel.org",
+          "title": "Página oficial kernel.org"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Nos situamos en la carpeta Descargas y procedemos a la descarga mediante wget:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cd Descargas"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image10.png",
+          "alt": "Directorio de descargas",
+          "title": "Directorio de descargas"
+        }
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.9.8.tar.xz"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image11.png",
+          "alt": "Descarga del tarball del kernel",
+          "title": "Descarga del tarball del kernel"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Configuración del Kernel (.config)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Verificamos la versión actual del kernel con 'uname -r':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "uname -r"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image12.png",
+          "alt": "Versión de kernel inicial",
+          "title": "Versión de kernel inicial"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Descomprimimos el tarball y entramos al directorio de fuentes:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "tar -xvf linux-5.9.8.tar.xz\ncd linux-5.9.8/"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image13.png",
+          "alt": "Descompresión del kernel",
+          "title": "Descompresión del kernel"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image14.png",
+          "alt": "Ingreso al directorio de fuentes",
+          "title": "Ingreso al directorio de fuentes"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspeccionamos el tamaño del árbol fuente con 'du -sh':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "du -sh"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image15.png",
+          "alt": "Espacio en disco del kernel descomprimido",
+          "title": "Espacio en disco del kernel descomprimido"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Copiamos el archivo de configuración del kernel en ejecución al nuevo árbol:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cp -v /boot/config-$(uname -r) ./.config"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image16.png",
+          "alt": "Copia de .config",
+          "title": "Copia de .config"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Como alternativa, podemos afinar la configuración según el hardware conectado mediante 'make localmodconfig':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "make localmodconfig"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image17.png",
+          "alt": "Configuración asistida con localmodconfig",
+          "title": "Configuración asistida con localmodconfig"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Modificación del Kernel en init/main.c"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Accedemos al directorio init e ingresamos al archivo de arranque 'main.c':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cd init/\ngedit main.c"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image18.png",
+          "alt": "Acceso al directorio init",
+          "title": "Acceso al directorio init"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image19.png",
+          "alt": "Apertura de main.c",
+          "title": "Apertura de main.c"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Localizamos la función 'numa_default_policy()' e insertamos nuestro mensaje con printk y un retardo de observación:"
           }
         ]
       },
@@ -244,37 +608,24 @@
         "content": [
           {
             "type": "text",
-            "text": "/* Modificación en init/main.c tras numa_default_policy() */\nprintk(KERN_ALERT \"===========================================\\n\");\nprintk(KERN_ALERT \"[UNI-ASO] Kernel personalizado iniciado!\\n\");\nprintk(KERN_ALERT \"Integrantes: Jesus Hernandez & Juan Lopez\\n\");\nprintk(KERN_ALERT \"===========================================\\n\");\nmdelay(10000); /* Retardo de 10 segundos para visualización */"
+            "text": "/* Debajo de numa_default_policy() */\nprintk(KERN_ALERT \"=======================================\\n\");\nprintk(KERN_ALERT \"[UNI-ASO] Kernel Linux Modificado!\\n\");\nprintk(KERN_ALERT \"Jesus Hernandez & Juan Lopez\\n\");\nprintk(KERN_ALERT \"=======================================\\n\");\nmdelay(10000);"
           }
         ]
       },
       {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Nota técnica: 'KERN_ALERT' garantiza que el mensaje se emita a la consola independientemente del nivel de log. La función 'mdelay(10000)' implementa un bucle de espera activa (busy-wait); en entornos de producción debe evitarse ya que retiene el hilo de arranque del CPU."
-          }
-        ]
-      },
-      {
-        "type": "heading",
+        "type": "image",
         "attrs": {
-          "level": 2
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "5. Compilación e Instalación de Paquetes Debian"
-          }
-        ]
+          "src": "/images/blog/aso/image20.png",
+          "alt": "Edición de main.c con printk y mdelay",
+          "title": "Edición de main.c con printk y mdelay"
+        }
       },
       {
         "type": "paragraph",
         "content": [
           {
             "type": "text",
-            "text": "Compilamos usando 'deb-pkg'. Se recomienda enfáticamente usar '-j$(nproc)' para habilitar paralelismo multihilo y recortar el tiempo de compilación:"
+            "text": "Guardamos los cambios y regresamos a la raíz del kernel:"
           }
         ]
       },
@@ -286,7 +637,27 @@
         "content": [
           {
             "type": "text",
-            "text": "make -j$(nproc) bindeb-pkg\ncd ..\nsudo dpkg -i linux-image-*.deb linux-headers-*.deb\nsudo update-grub\nsudo reboot"
+            "text": "cd .."
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image21.png",
+          "alt": "Retorno a la carpeta raíz del kernel",
+          "title": "Retorno a la carpeta raíz del kernel"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "6. Compilación e Instalación de Paquetes"
           }
         ]
       },
@@ -295,9 +666,161 @@
         "content": [
           {
             "type": "text",
-            "text": "Tras el reinicio, ejecutamos 'uname -r' para verificar la carga del nuevo kernel modificado y comprobar la emisión del mensaje en dmesg."
+            "text": "Iniciamos la compilación con empaquetado nativo para Debian/Ubuntu. Se recomienda usar '-j$(nproc)' para habilitar paralelismo multihilo:"
           }
         ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "make -j$(nproc) bindeb-pkg"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image22.png",
+          "alt": "Compilación del kernel con make deb-pkg",
+          "title": "Compilación del kernel con make deb-pkg"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Una vez concluida, nos desplazamos al directorio superior e instalamos los paquetes .deb generados:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cd ..\nsudo dpkg -i linux-*.deb"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image23.png",
+          "alt": "Directorio con paquetes deb compilados",
+          "title": "Directorio con paquetes deb compilados"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image24.png",
+          "alt": "Instalación de paquetes con dpkg",
+          "title": "Instalación de paquetes con dpkg"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "7. Comprobación y Verificación del Arranque"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reiniciamos la computadora para iniciar con el nuevo núcleo:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo reboot"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image25.png",
+          "alt": "Reinicio del sistema",
+          "title": "Reinicio del sistema"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Durante el arranque, se observa en pantalla el mensaje personalizado emitido por printk:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image26.png",
+          "alt": "Mensaje de inicio personalizado en pantalla de arranque",
+          "title": "Mensaje de inicio personalizado en pantalla de arranque"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Finalmente, ejecutamos 'uname -r' para certificar que el sistema corre sobre la versión de kernel recién compilada:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "uname -r"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image27.png",
+          "alt": "Verificación de versión de kernel actualizada",
+          "title": "Verificación de versión de kernel actualizada"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image28.png",
+          "alt": "Confirmación en terminal",
+          "title": "Confirmación en terminal"
+        }
       }
     ]
   }

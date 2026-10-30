@@ -16,7 +16,7 @@
     "telefonia-ip",
     "archivo-2020"
   ],
-  "coverImage": null,
+  "coverImage": "/images/blog/aso/image72.png",
   "content": {
     "type": "doc",
     "content": [
@@ -42,7 +42,7 @@
         "content": [
           {
             "type": "text",
-            "text": "Introducción a la Telefonía IP y Asterisk"
+            "text": "1. Instalación y Preparación de Archivos CEL y CDR"
           }
         ]
       },
@@ -51,28 +51,7 @@
         "content": [
           {
             "type": "text",
-            "text": "Asterisk es un framework de telecomunicaciones de código abierto que convierte una máquina Linux en una central telefónica IP (PBX). Emplea el protocolo SIP (Session Initiation Protocol, puerto 5060 UDP) para la señalización y establecimiento de sesiones, y RTP (Real-time Transport Protocol) para el transporte de audio bidireccional."
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Nota técnica sobre canales SIP: En el momento de este laboratorio (2020) el canal tradicional 'chan_sip' ('sip.conf') era estándar. A partir de Asterisk 21, 'chan_sip' fue definitivamente retirado en favor de 'chan_pjsip' ('pjsip.conf'). Se preserva aquí la configuración didáctica clásica."
-          }
-        ]
-      },
-      {
-        "type": "heading",
-        "attrs": {
-          "level": 2
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "1. Instalación de Asterisk y Paquetes de Sonido"
+            "text": "Actualizamos repositorios e instalamos Asterisk junto con los paquetes de sonido en español:"
           }
         ]
       },
@@ -84,9 +63,67 @@
         "content": [
           {
             "type": "text",
-            "text": "sudo apt update\nsudo apt install -y asterisk asterisk-core-sounds-es-wav asterisk-prompt-es\nsudo systemctl enable asterisk\nsudo systemctl start asterisk"
+            "text": "sudo apt-get update\nsudo apt-get install asterisk\nsudo apt-get install asterisk-core-sounds-es-wav asterisk-prompt-es\nservice asterisk status"
           }
         ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Respaldamos y ajustamos la configuración de radiusclient en 'cel.conf':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cp /etc/asterisk/cel.conf /etc/asterisk/cel.conf.copia\ngedit /etc/asterisk/cel.conf"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image66.png",
+          "alt": "Ajuste en cel.conf",
+          "title": "Ajuste en cel.conf"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Repetimos en 'cdr.conf' descomentando la línea requerida y reiniciamos el servicio:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cp /etc/asterisk/cdr.conf /etc/asterisk/cdr.conf.copia\ngedit /etc/asterisk/cdr.conf\nservice asterisk restart"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image67.png",
+          "alt": "Ajuste en cdr.conf",
+          "title": "Ajuste en cdr.conf"
+        }
       },
       {
         "type": "heading",
@@ -96,7 +133,7 @@
         "content": [
           {
             "type": "text",
-            "text": "2. Creación de Extensiones en sip.conf"
+            "text": "2. Configuración de Extensiones en sip.conf"
           }
         ]
       },
@@ -105,7 +142,7 @@
         "content": [
           {
             "type": "text",
-            "text": "Creamos un respaldo de '/etc/asterisk/sip.conf' y definimos una plantilla reutilizable y las extensiones 2001 y 2002:"
+            "text": "Respaldamos 'sip.conf', limpiamos comentarios y creamos la plantilla de usuario y las extensiones 2001 y 2002:"
           }
         ]
       },
@@ -117,7 +154,7 @@
         "content": [
           {
             "type": "text",
-            "text": "[usuario](!)\ntype=friend\nhost=dynamic\ncontext=alksoft\ndisallow=all\nallow=ulaw\nallow=alaw\n\n[ext2001](usuario)\nusername=juan\nsecret=ClaveSegura2001!\n\n[ext2002](usuario)\nusername=jesus\nsecret=ClaveSegura2002!"
+            "text": "[usuario](!)\ntype=friend\nhost=dynamic\ncontext=alksoft\n\n[ext2001](usuario)\nusername=juan\nsecret=ClaveExt2001!\n\n[ext2002](usuario)\nusername=jesus\nsecret=ClaveExt2002!\nport=5061"
           }
         ]
       },
@@ -129,7 +166,7 @@
         "content": [
           {
             "type": "text",
-            "text": "3. Definición del Plan de Marcado en extensions.conf"
+            "text": "3. Plan de Marcado en extensions.conf"
           }
         ]
       },
@@ -138,7 +175,7 @@
         "content": [
           {
             "type": "text",
-            "text": "El archivo '/etc/asterisk/extensions.conf' controla la lógica de enrutamiento telefónico mediante la directiva: exten => <número>,<prioridad>,<aplicación>(<parámetros>):"
+            "text": "Definimos el contexto de llamada en '/etc/asterisk/extensions.conf':"
           }
         ]
       },
@@ -155,6 +192,23 @@
         ]
       },
       {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image68.png",
+          "alt": "Configuración de extensions.conf",
+          "title": "Configuración de extensions.conf"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Recargamos el servicio:"
+          }
+        ]
+      },
+      {
         "type": "codeBlock",
         "attrs": {
           "language": "bash"
@@ -162,7 +216,7 @@
         "content": [
           {
             "type": "text",
-            "text": "# Recargar configuración sin detener llamadas activas\nsudo asterisk -rx \"sip reload\"\nsudo asterisk -rx \"dialplan reload\"\n# Verificar clientes registrados\nsudo asterisk -rx \"sip show peers\""
+            "text": "service asterisk reload"
           }
         ]
       },
@@ -174,7 +228,7 @@
         "content": [
           {
             "type": "text",
-            "text": "4. Comprobación con Softphones (Zoiper)"
+            "text": "4. Comprobación y Llamadas de Voz con Zoiper"
           }
         ]
       },
@@ -183,56 +237,66 @@
         "content": [
           {
             "type": "text",
-            "text": "Se instala el cliente Zoiper en dos dispositivos independientes (Windows/Linux y Android):"
+            "text": "Descargamos e instalamos Zoiper en el equipo cliente y configuramos la cuenta con usuario, IP y clave:"
           }
         ]
       },
       {
-        "type": "orderedList",
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image69.png",
+          "alt": "Zoiper - Ingreso de credenciales SIP",
+          "title": "Zoiper - Ingreso de credenciales SIP"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image70.png",
+          "alt": "Zoiper - Validación de host y nombre de usuario",
+          "title": "Zoiper - Validación de host y nombre de usuario"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image71.png",
+          "alt": "Zoiper - Protocolo SIP UDP detectado",
+          "title": "Zoiper - Protocolo SIP UDP detectado"
+        }
+      },
+      {
+        "type": "paragraph",
         "content": [
           {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Configurar cuenta con formato: 'ext2001@IP_DEL_SERVIDOR' y su respectivo secreto."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Seleccionar protocolo SIP UDP y validar el registro con estado 'Account is ready'."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Marcar la extensión 2002 desde el softphone 2001 y verificar la transmisión de voz en tiempo real."
-                  }
-                ]
-              }
-            ]
+            "type": "text",
+            "text": "Marcamos la extensión remota desde el softphone y verificamos el enlace de voz activo:"
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image72.png",
+          "alt": "Marcado de extensión en dialpad",
+          "title": "Marcado de extensión en dialpad"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image73.png",
+          "alt": "Recepción de llamada entrante",
+          "title": "Recepción de llamada entrante"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image74.png",
+          "alt": "Comunicación de voz establecida",
+          "title": "Comunicación de voz establecida"
+        }
       }
     ]
   }

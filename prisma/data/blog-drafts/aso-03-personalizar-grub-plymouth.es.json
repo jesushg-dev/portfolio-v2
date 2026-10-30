@@ -16,7 +16,7 @@
     "personalizacion",
     "archivo-2020"
   ],
-  "coverImage": null,
+  "coverImage": "/images/blog/aso/image36.png",
   "content": {
     "type": "doc",
     "content": [
@@ -42,7 +42,7 @@
         "content": [
           {
             "type": "text",
-            "text": "Etapas de Arranque Gráfico en Linux"
+            "text": "1. Personalización de la Imagen del Menú GRUB"
           }
         ]
       },
@@ -51,28 +51,7 @@
         "content": [
           {
             "type": "text",
-            "text": "Cuando el firmware UEFI/BIOS cede el control a GRUB 2 (Grand Unified Bootloader), este presenta el menú de selección de núcleos y sistemas operativos. Posteriormente, el kernel inicializa el hardware y delega la experiencia visual de carga a Plymouth, ocultando los mensajes de inicialización detrás de un splash screen."
-          }
-        ]
-      },
-      {
-        "type": "heading",
-        "attrs": {
-          "level": 2
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "1. Personalización de GRUB (/etc/default/grub)"
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "Para personalizar el menú de GRUB, abrimos su archivo de configuración principal con permisos de superusuario:"
+            "text": "El fondo del menú de GRUB admite formatos PNG, JPG (de 8 bits/256 colores) o TGA. Se recomienda formato PNG para evitar distorsiones de color. Abrimos el archivo de configuración:"
           }
         ]
       },
@@ -89,72 +68,36 @@
         ]
       },
       {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image29.png",
+          "alt": "Edición de /etc/default/grub",
+          "title": "Edición de /etc/default/grub"
+        }
+      },
+      {
         "type": "paragraph",
         "content": [
           {
             "type": "text",
-            "text": "Realizamos los siguientes ajustes en las directivas:"
+            "text": "Descomentamos GRUB_GFXMODE e ingresamos la resolución soportada por nuestro monitor (consultada con 'xrandr'):"
           }
         ]
       },
       {
-        "type": "bulletList",
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image30.png",
+          "alt": "Configuración de GRUB_GFXMODE",
+          "title": "Configuración de GRUB_GFXMODE"
+        }
+      },
+      {
+        "type": "paragraph",
         "content": [
           {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Comentar '#GRUB_TIMEOUT_STYLE=hidden' para asegurar que el menú sea visible."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Establecer 'GRUB_TIMEOUT=10' para dar 10 segundos de margen de selección."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Verificar la resolución soportada con el comando 'xrandr' y asignarla en 'GRUB_GFXMODE=\"1920x1080\"' (o la nativa del monitor)."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Agregar la ruta absoluta a la imagen de fondo con 'GRUB_BACKGROUND=\"/home/usuario/Imágenes/fondo-grub.png\"'."
-                  }
-                ]
-              }
-            ]
+            "type": "text",
+            "text": "Añadimos la directiva GRUB_BACKGROUND indicando la ruta absoluta de la imagen PNG:"
           }
         ]
       },
@@ -166,9 +109,46 @@
         "content": [
           {
             "type": "text",
-            "text": "# Regenerar la configuración /boot/grub/grub.cfg\nsudo update-grub"
+            "text": "GRUB_BACKGROUND=\"/home/usuario/Imágenes/logo.png\""
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image31.png",
+          "alt": "Directiva GRUB_BACKGROUND configurada",
+          "title": "Directiva GRUB_BACKGROUND configurada"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Regeneramos la configuración activa con update-grub:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo update-grub"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image32.png",
+          "alt": "Regeneración de GRUB",
+          "title": "Regeneración de GRUB"
+        }
       },
       {
         "type": "heading",
@@ -178,7 +158,7 @@
         "content": [
           {
             "type": "text",
-            "text": "2. Personalización del Splash Screen con Plymouth"
+            "text": "2. Personalización del Logo de Arranque con Plymouth"
           }
         ]
       },
@@ -187,7 +167,24 @@
         "content": [
           {
             "type": "text",
-            "text": "Plymouth se ejecuta desde el initramfs antes de que los sistemas de archivos raíz se monten en modo lectura/escritura. Para sustituir el logotipo de arranque:"
+            "text": "Accedemos al directorio donde se ubica nuestra nueva imagen PNG:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image33.png",
+          "alt": "Ubicación de imagen de logo",
+          "title": "Ubicación de imagen de logo"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reemplazamos las imágenes de los temas oficiales de Plymouth en el sistema:"
           }
         ]
       },
@@ -199,7 +196,56 @@
         "content": [
           {
             "type": "text",
-            "text": "# Reemplazar las imágenes por el logotipo deseado en formato PNG\nsudo cp mi-logo.png /usr/share/plymouth/ubuntu-logo.png\nsudo cp mi-logo.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo.png\nsudo cp mi-logo.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo16.png\n\n# Reconstruir la imagen del sistema de archivos en memoria (initramfs)\nsudo update-initramfs -u"
+            "text": "sudo cp logos.png /usr/share/plymouth/ubuntu-logo.png\nsudo cp logos.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo.png\nsudo cp logos.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo16.png"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image34.png",
+          "alt": "Copia de logotipos en tema Plymouth",
+          "title": "Copia de logotipos en tema Plymouth"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Actualizamos el sistema de archivos en memoria (initramfs) para empacar la nueva imagen:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo update-initramfs -u"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image35.png",
+          "alt": "Actualización de initramfs",
+          "title": "Actualización de initramfs"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Comprobación Visual del Arranque"
           }
         ]
       },
@@ -208,9 +254,34 @@
         "content": [
           {
             "type": "text",
-            "text": "Reiniciamos el sistema con 'sudo reboot' para constatar que tanto la pantalla de selección de GRUB como la animación de carga de Plymouth reflejan la identidad visual personalizada."
+            "text": "Reiniciamos el sistema con 'sudo reboot'. Al encender, observamos el menú de GRUB con la imagen de fondo personalizada:"
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image36.png",
+          "alt": "Menú GRUB personalizado",
+          "title": "Menú GRUB personalizado"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Posteriormente, durante la transición de carga del sistema operativo, se aprecia el nuevo logo en Plymouth:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image37.png",
+          "alt": "Logo de Plymouth en pantalla de arranque",
+          "title": "Logo de Plymouth en pantalla de arranque"
+        }
       }
     ]
   }
