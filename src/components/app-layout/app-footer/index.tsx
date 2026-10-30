@@ -1,3 +1,4 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ArrowUp, Heart } from "lucide-react";
@@ -83,7 +84,10 @@ const Footer = async ({
   processNavPages?: ProcessNavPage[];
   siteBrand: SiteBrand;
 }) => {
-  const t = await getTranslations("global.footer");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "global.footer",
+  });
   const year = new Date().getFullYear();
 
   const data = await api.contact.getPublic();

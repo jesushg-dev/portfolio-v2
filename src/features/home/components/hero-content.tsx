@@ -1,3 +1,4 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -29,7 +30,10 @@ export default async function HeroContent({
   stats,
   showCvLink = true,
 }: HeroContentProps) {
-  const t = await getTranslations("main.heroMain");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.heroMain",
+  });
   const { fullName, heroSubtitle, heroTagline, heroSummary } = heroData;
 
   const nameParts = fullName.split(" ");

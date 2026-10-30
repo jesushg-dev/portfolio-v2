@@ -13,15 +13,15 @@ import { ProjectCoverMockup } from "./project-cover-mockup";
 
 export interface ProjectMetaLabels {
   solo: string;
-  formatTeam: (count: number) => string;
+  team: string;
   now: string;
   statuses: Record<string, string>;
 }
 
 export interface ProjectTeaserLabels {
-  formatDecisions: (count: number) => string;
+  decisions: string;
   layers: string;
-  formatMetrics: (count: number) => string;
+  metrics: string;
 }
 
 export interface IPortfolioItemProps extends Omit<ProjectType, "csInfo"> {
@@ -63,9 +63,7 @@ export function ProjectMetaLine({
   const parts: string[] = [];
 
   if (typeof teamSize === "number" && teamSize > 0) {
-    parts.push(
-      teamSize === 1 ? metaLabels.solo : metaLabels.formatTeam(teamSize),
-    );
+    parts.push(teamSize === 1 ? metaLabels.solo : metaLabels.team);
   }
 
   if (startedAt) {
@@ -105,13 +103,13 @@ export function ProjectTeaserLine({
   const parts: string[] = [];
 
   if (csInfo.decisions > 0) {
-    parts.push(teaserLabels.formatDecisions(csInfo.decisions));
+    parts.push(teaserLabels.decisions);
   }
   if (csInfo.layers) {
     parts.push(teaserLabels.layers);
   }
   if (csInfo.metrics > 0) {
-    parts.push(teaserLabels.formatMetrics(csInfo.metrics));
+    parts.push(teaserLabels.metrics);
   }
 
   if (parts.length === 0) return null;

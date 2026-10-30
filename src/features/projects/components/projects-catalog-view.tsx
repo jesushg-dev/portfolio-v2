@@ -240,9 +240,6 @@ function getInitialUrlParam(
     if (Array.isArray(val)) return val[0] ?? null;
     return typeof val === "string" ? val : null;
   }
-  if (typeof window !== "undefined") {
-    return new URLSearchParams(window.location.search).get(key);
-  }
   return null;
 }
 
@@ -513,7 +510,7 @@ export function ProjectsCatalogView({
   }, []);
 
   const labels = useMemo(
-    () => ({
+    () => (project: ProjectType) => ({
       urlName: t("actions.view"),
       sourceName: t("actions.source"),
       caseStudyLabel: t("actions.caseStudy"),
@@ -527,7 +524,7 @@ export function ProjectsCatalogView({
       },
       metaLabels: {
         solo: t("meta.solo"),
-        formatTeam: (count: number) => t("meta.team", { count }),
+        team: t("meta.team", { count: project.teamSize ?? 0 }),
         now: t("meta.now"),
         statuses: {
           IN_PRODUCTION: t("caseStudy.statuses.IN_PRODUCTION"),
@@ -536,9 +533,11 @@ export function ProjectsCatalogView({
         },
       },
       teaserLabels: {
-        formatDecisions: (count: number) => t("teaser.decisions", { count }),
+        decisions: t("teaser.decisions", {
+          count: project.csInfo?.decisions ?? 0,
+        }),
         layers: t("teaser.layers"),
-        formatMetrics: (count: number) => t("teaser.metrics", { count }),
+        metrics: t("teaser.metrics", { count: project.csInfo?.metrics ?? 0 }),
       },
     }),
     [t],
@@ -740,7 +739,11 @@ export function ProjectsCatalogView({
               transition={{ duration: 0.25, delay: Math.min(idx, 8) * 0.04 }}
               className="flex justify-center"
             >
-              <PortfolioItem {...project} {...labels} priority={idx < 3} />
+              <PortfolioItem
+                {...project}
+                {...labels(project)}
+                priority={idx < 3}
+              />
             </motion.li>
           ))}
         </motion.ul>

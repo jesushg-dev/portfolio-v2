@@ -1,9 +1,10 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -20,8 +21,11 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = async ({ stats }) => {
-  const locale = await getLocale();
-  const t = await getTranslations("main.heroMain");
+  const locale = await getPublicLocale();
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.heroMain",
+  });
 
   const heroData = await getCachedHeroPublic(locale);
 
@@ -29,7 +33,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     return <HeroEmpty />;
   }
 
-  const showCvLink = isPublicCvVisible(await resolveTenant());
+  const showCvLink = isPublicCvVisible(await resolvePublicTenant());
 
   const fullName = heroData.fullName?.trim() ?? "";
   const photoUrl = heroData.photoUrl?.trim() ?? "";

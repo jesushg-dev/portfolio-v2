@@ -1,9 +1,10 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import { MediaImage } from "@/components/shared/media-image";
 import { getTranslations } from "next-intl/server";
 import { MdOpenInNew } from "react-icons/md";
 
 import CertificateItem from "@/features/certifications/components/certification-item";
-import PortfolioItem from "@/features/home/components/portfolio/project-item";
+import { SkillProjectCard } from "./skill-project-card";
 import { SkillExperienceList } from "@/features/home/components/skills/skill-experience-list";
 import { Link } from "@/i18n/routing";
 import type { SkillDetailType } from "@/utils/interfaces/types";
@@ -20,7 +21,10 @@ function formatStackType(type: string) {
 export async function SkillDetailPageView({
   detail,
 }: SkillDetailPageViewProps) {
-  const t = await getTranslations("main.skills");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.skills",
+  });
   const skillName = detail.title;
 
   const hasCertificates = detail.certificates.length > 0;
@@ -164,38 +168,7 @@ export async function SkillDetailPageView({
               <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
                 {detail.projects.map((project) => (
                   <li key={project.id} className="flex justify-center">
-                    <PortfolioItem
-                      {...project}
-                      urlName={t("page.viewProject")}
-                      sourceName={t("page.viewSource")}
-                      privateName={t("page.privateLabel")}
-                      privateDescription={t("page.privateDescription")}
-                      canSeeDemo={t("page.canSeeDemo")}
-                      caseStudyLabel={t("page.caseStudy")}
-                      kindLabels={{
-                        PROFESSIONAL: t("page.kind.PROFESSIONAL"),
-                        PERSONAL: t("page.kind.PERSONAL"),
-                        LEARNING: t("page.kind.LEARNING"),
-                      }}
-                      metaLabels={{
-                        solo: t("page.meta.solo"),
-                        formatTeam: (count: number) =>
-                          t("page.meta.team", { count }),
-                        now: t("page.meta.now"),
-                        statuses: {
-                          IN_PRODUCTION: t("page.statuses.IN_PRODUCTION"),
-                          MAINTENANCE: t("page.statuses.MAINTENANCE"),
-                          ARCHIVED: t("page.statuses.ARCHIVED"),
-                        },
-                      }}
-                      teaserLabels={{
-                        formatDecisions: (count: number) =>
-                          t("page.teaser.decisions", { count }),
-                        layers: t("page.teaser.layers"),
-                        formatMetrics: (count: number) =>
-                          t("page.teaser.metrics", { count }),
-                      }}
-                    />
+                    <SkillProjectCard project={project} />
                   </li>
                 ))}
               </ul>

@@ -4,7 +4,9 @@ import { headers } from "next/headers";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 
-import { DocumentLang } from "@/components/document-lang";
+import DocumentRoot, {
+  metadata as documentMetadata,
+} from "@/app/_components/document-root";
 import { routing } from "@/i18n/routing";
 import { buildLocaleAlternates } from "@/lib/seo/alternates";
 
@@ -27,6 +29,7 @@ export async function generateMetadata({
   const pathname = headersList.get("pathname") ?? `/${locale}`;
 
   return {
+    ...documentMetadata,
     alternates: buildLocaleAlternates(locale, pathname),
   };
 }
@@ -44,10 +47,5 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  return (
-    <>
-      <DocumentLang locale={locale} />
-      {children}
-    </>
-  );
+  return <DocumentRoot locale={locale}>{children}</DocumentRoot>;
 }

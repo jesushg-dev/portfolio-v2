@@ -46,16 +46,16 @@ describe("PortfolioItem", () => {
     kindLabels: { PROFESSIONAL: "Professional" },
     metaLabels: {
       solo: "Solo",
-      formatTeam: (count: number) => `Team of ${count}`,
+      team: "Team of 4",
       now: "present",
       statuses: {
         IN_PRODUCTION: "In production",
       },
     },
     teaserLabels: {
-      formatDecisions: (count: number) => `${count} technical decisions`,
+      decisions: "8 technical decisions",
       layers: "Architecture",
-      formatMetrics: (count: number) => `${count} metrics`,
+      metrics: "4 metrics",
     },
   } as unknown as Parameters<typeof PortfolioItem>[0];
 

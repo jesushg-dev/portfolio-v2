@@ -1,3 +1,4 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
 import { Calendar } from "lucide-react";
@@ -14,7 +15,10 @@ import { buildContactLinks } from "@/utils/contact-links";
 import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 
 const Contact: FC = async () => {
-  const t = await getTranslations("main.contact");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.contact",
+  });
   const data = await api.contact.getPublic();
   const links = buildContactLinks(data.contacts, {
     excludePortfolioUrl: data.portfolioUrl ?? undefined,

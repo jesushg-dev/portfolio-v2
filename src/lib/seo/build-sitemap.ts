@@ -11,29 +11,33 @@ interface DynamicHref {
   params: { slug: string };
 }
 
-function absoluteUrl(path: string): string {
-  return new URL(path, SITE_URL).href;
+function absoluteUrl(path: string, origin: string): string {
+  return new URL(path, origin).href;
 }
 
 function buildLanguageAlternates(
   href: StaticHref | DynamicHref,
+  origin: string,
 ): Record<string, string> {
   const languages: Record<string, string> = {};
 
   for (const locale of locales) {
     languages[locale] = absoluteUrl(
       getPathname({ locale: locale, href: href }),
+      origin,
     );
   }
 
   languages["x-default"] = absoluteUrl(
     getPathname({ locale: defaultLocale, href: href }),
+    origin,
   );
 
   return languages;
 }
 
 interface SitemapEntryOptions {
+  origin?: string;
   lastModified?: Date | string;
   changeFrequency?: MetadataRoute.Sitemap[number]["changeFrequency"];
   priority?: number;
@@ -43,7 +47,7 @@ export function buildLocalizedSitemapEntries(
   href: StaticHref | DynamicHref,
   options: SitemapEntryOptions = {},
 ): MetadataRoute.Sitemap {
-  const languages = buildLanguageAlternates(href);
+  const languages = buildLanguageAlternates(href, options.origin ?? SITE_URL);
   const urls = new Set(locales.map((locale) => languages[locale]));
 
   return Array.from(urls, (url) => ({

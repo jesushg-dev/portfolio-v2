@@ -1,5 +1,6 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
@@ -9,8 +10,11 @@ import type { ProjectType } from "@/utils/interfaces/types";
 import PortfolioGrid from "./portfolio-grid";
 
 const Portfolio: FC = async () => {
-  const t = await getTranslations("main.portfolio");
-  const locale = await getLocale();
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.portfolio",
+  });
+  const locale = await getPublicLocale();
 
   let initialProjects:
     | {

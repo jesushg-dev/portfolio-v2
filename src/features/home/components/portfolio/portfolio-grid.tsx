@@ -55,7 +55,7 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
 
   const isInView = useInView(ref, { once: true });
   const labels = useMemo(
-    () => ({
+    () => (project: ProjectType) => ({
       urlName: t("actions.view"),
       sourceName: t("actions.source"),
       caseStudyLabel: t("actions.caseStudy"),
@@ -69,7 +69,7 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
       },
       metaLabels: {
         solo: t("meta.solo"),
-        formatTeam: (count: number) => t("meta.team", { count }),
+        team: t("meta.team", { count: project.teamSize ?? 0 }),
         now: t("meta.now"),
         statuses: {
           IN_PRODUCTION: t("caseStudy.statuses.IN_PRODUCTION"),
@@ -78,9 +78,11 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
         },
       },
       teaserLabels: {
-        formatDecisions: (count: number) => t("teaser.decisions", { count }),
+        decisions: t("teaser.decisions", {
+          count: project.csInfo?.decisions ?? 0,
+        }),
         layers: t("teaser.layers"),
-        formatMetrics: (count: number) => t("teaser.metrics", { count }),
+        metrics: t("teaser.metrics", { count: project.csInfo?.metrics ?? 0 }),
       },
     }),
     [t],
@@ -165,7 +167,11 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.25 }}
               >
-                <PortfolioItem {...project} {...labels} priority={idx < 3} />
+                <PortfolioItem
+                  {...project}
+                  {...labels(project)}
+                  priority={idx < 3}
+                />
               </motion.li>
             ))}
           </motion.ul>

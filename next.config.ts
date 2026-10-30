@@ -56,11 +56,11 @@ const securityHeaders: { key: string; value: string }[] = [
   },
   ...(isProduction
     ? [
-      {
-        key: "Strict-Transport-Security",
-        value: "max-age=63072000; includeSubDomains; preload",
-      },
-    ]
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=63072000; includeSubDomains; preload",
+        },
+      ]
     : []),
 ];
 
@@ -81,6 +81,7 @@ const nextConfig: NextConfig = {
     "/api/trpc/*": emailTemplatesDevAssets,
   },
   experimental: {
+    globalNotFound: true,
     optimizePackageImports: ["lucide-react", "motion/react"],
   },
   images: {
@@ -100,7 +101,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "utfs.io",
-      }
+      },
     ],
   },
 };

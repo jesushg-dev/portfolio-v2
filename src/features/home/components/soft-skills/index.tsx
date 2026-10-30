@@ -1,5 +1,5 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
-import { getLocale } from "next-intl/server";
 
 import { type Locale, locales } from "@/i18n/config";
 import { getCachedSoftSkillsPublic } from "@/lib/soft-skills/get-cached-soft-skills-public";
@@ -9,7 +9,7 @@ const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
 const SoftSkills: FC = async () => {
-  const locale = await getLocale();
+  const locale = await getPublicLocale();
 
   const data = isLocale(locale)
     ? await getCachedSoftSkillsPublic(locale)

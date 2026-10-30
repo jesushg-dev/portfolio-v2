@@ -62,6 +62,32 @@ if (typeof globalThis.Response === "undefined") {
   } as unknown as typeof Response;
 }
 
+if (typeof globalThis.Request === "undefined") {
+  globalThis.Request = class PolyfillRequest {
+    url: string;
+    method: string;
+    headers: Headers;
+    body?: unknown;
+    constructor(
+      input: string | { url: string },
+      init?: { method?: string; headers?: HeadersInit; body?: unknown },
+    ) {
+      this.url = typeof input === "string" ? input : input.url;
+      this.method = init?.method ?? "GET";
+      this.headers = new Headers(init?.headers);
+      this.body = init?.body;
+    }
+
+    clone() {
+      return new PolyfillRequest(this.url, {
+        method: this.method,
+        headers: this.headers,
+        body: this.body,
+      });
+    }
+  } as unknown as typeof Request;
+}
+
 import enMessages from "../../messages/en.json";
 
 const mockMotionPropKeys = new Set([
@@ -266,7 +292,6 @@ jest.mock("next-intl/server", () => {
 
   return {
     getTranslations: jest.fn(() => Promise.resolve(createMockTranslator())),
-    setRequestLocale: jest.fn(),
   };
 });
 
@@ -296,6 +321,20 @@ jest.mock("@t3-oss/env-nextjs", () => ({
 
 jest.mock("next/headers", () => ({
   headers: jest.fn(() => Promise.resolve(new Headers())),
+}));
+
+jest.mock(
+  "next/root-params",
+  () => ({
+    locale: jest.fn(() => Promise.resolve("en")),
+    site: jest.fn(() => Promise.resolve("primary")),
+  }),
+  { virtual: true },
+);
+
+jest.mock("next/cache", () => ({
+  revalidateTag: jest.fn(),
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
 }));
 
 jest.mock("@/lib/auth", () => ({
