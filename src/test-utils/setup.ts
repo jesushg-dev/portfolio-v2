@@ -313,10 +313,12 @@ jest.mock("next-intl/navigation", () => ({
     Link: ({
       children,
       href,
-      prefetch: _prefetch,
       ...props
-    }: PropsWithChildren<{ href: string; prefetch?: boolean }>) =>
-      createElement("a", { href, ...props }, children),
+    }: PropsWithChildren<{ href: string; prefetch?: boolean }>) => {
+      const rest = { ...props };
+      delete (rest as { prefetch?: boolean }).prefetch;
+      return createElement("a", { href, ...rest }, children);
+    },
     redirect: jest.fn(),
     usePathname: jest.fn(() => "/"),
     useRouter: jest.fn(() => ({

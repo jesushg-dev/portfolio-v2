@@ -56,16 +56,15 @@ const securityHeaders: { key: string; value: string }[] = [
   },
   ...(isProduction
     ? [
-        {
-          key: "Strict-Transport-Security",
-          value: "max-age=63072000; includeSubDomains; preload",
-        },
-      ]
+      {
+        key: "Strict-Transport-Security",
+        value: "max-age=63072000; includeSubDomains; preload",
+      },
+    ]
     : []),
 ];
 
 const nextConfig: NextConfig = {
-  productionBrowserSourceMaps: true,
   poweredByHeader: false,
   headers() {
     return Promise.resolve([{ source: "/(.*)", headers: securityHeaders }]);
