@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import { ArrowRightIcon, Rocket, TrendingUp } from "lucide-react";
-import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -167,15 +166,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                 )}
               >
                 {isActive ? (
-                  <motion.span
-                    layoutId="skills-terminal-tab"
-                    className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5"
-                    transition={{
-                      type: "spring",
-                      bounce: 0.15,
-                      duration: 0.45,
-                    }}
-                  />
+                  <span className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5" />
                 ) : null}
                 <span
                   className={cn(
@@ -205,12 +196,9 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
             </p>
           ) : isSearching ? (
             /* Search Results: Flat list of chips */
-            <motion.ul
+            <ul
               key={`search-${search}`}
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-wrap gap-2.5"
+              className="animate-in fade-in flex flex-wrap gap-2.5 duration-200"
             >
               {visibleSkills.map((skill) => (
                 <li key={skill.id}>
@@ -234,15 +222,12 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   </Link>
                 </li>
               ))}
-            </motion.ul>
+            </ul>
           ) : (
             /* Category View: Featured Cards Grid + Regular Chips */
-            <motion.div
+            <div
               key={activeCategory}
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-6"
+              className="animate-in fade-in space-y-6 duration-200"
             >
               {featuredSkills.length > 0 ? (
                 <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -316,7 +301,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   <span>{t("terminal.updatedTechPill")}</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

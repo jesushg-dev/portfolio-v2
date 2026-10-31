@@ -11,8 +11,7 @@ import { type ProjectType } from "@/utils/interfaces/types";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
 
 const ProjectCoverMockup = dynamic(
-  () =>
-    import("./project-cover-mockup").then((mod) => mod.ProjectCoverMockup),
+  () => import("./project-cover-mockup").then((mod) => mod.ProjectCoverMockup),
   { ssr: false },
 );
 
@@ -377,10 +376,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   title={`${urlName}: ${title}`}
                   className={actionButtonClass}
                 >
-                  <Eye
-                    className="text-primary size-4.5"
-                    aria-hidden="true"
-                  />
+                  <Eye className="text-primary size-4.5" aria-hidden="true" />
                 </a>
               ) : null}
             </div>

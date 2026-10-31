@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type PointerEvent, type ReactNode } from "react";
-import { AnimatePresence, motion, type Variants } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,18 +19,6 @@ interface ServicesGridProps {
 }
 
 const INITIAL_VISIBLE_COUNT = 5;
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: "easeOut" },
-  },
-};
 
 function handlePointerMove(event: PointerEvent<HTMLElement>) {
   const rect = event.currentTarget.getBoundingClientRect();
@@ -60,32 +47,20 @@ export function ServicesGrid({
     : cards.slice(0, INITIAL_VISIBLE_COUNT);
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial={false}
-      whileInView="visible"
-      viewport={{ once: true }}
-      className="grid w-full gap-5 md:grid-cols-12"
-    >
-      <AnimatePresence initial={false}>
-        {visibleCards.map((card) => (
-          <motion.article
-            key={card.id}
-            variants={itemVariants}
-            initial={false}
-            animate="visible"
-            exit={{ opacity: 0, y: 16, transition: { duration: 0.25 } }}
-            onPointerMove={handlePointerMove}
-            onPointerLeave={handlePointerLeave}
-            className={cn(
-              "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
-              card.className,
-            )}
-          >
-            {card.content}
-          </motion.article>
-        ))}
-      </AnimatePresence>
+    <div className="grid w-full gap-5 md:grid-cols-12">
+      {visibleCards.map((card) => (
+        <article
+          key={card.id}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          className={cn(
+            "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
+            card.className,
+          )}
+        >
+          {card.content}
+        </article>
+      ))}
 
       {cards.length > INITIAL_VISIBLE_COUNT && (
         <div className="flex justify-center py-2 md:col-span-12">
@@ -107,9 +82,7 @@ export function ServicesGrid({
           </Button>
         </div>
       )}
-      <motion.div variants={itemVariants} className="md:col-span-12">
-        {banner}
-      </motion.div>
-    </motion.div>
+      <div className="md:col-span-12">{banner}</div>
+    </div>
   );
 }

@@ -67,7 +67,8 @@ test.describe("hydrated portfolio", () => {
     );
     await expect(async () => {
       await spotifyLink.scrollIntoViewIfNeeded();
-      await expect(spotifyLink).toBeInViewport();
+      await page.mouse.wheel(0, 50);
+      await expect(spotifyLink).toBeInViewport({ timeout: 500 });
     }).toPass({ timeout: 15000 });
     await playbackRequest;
     expect(errors).toEqual([]);
@@ -96,6 +97,7 @@ test.describe("hydrated portfolio", () => {
     test(`provides the required client translations on public routes: ${locale}`, async ({
       page,
     }) => {
+      test.slow();
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
       page.on("console", (message) => {

@@ -48,7 +48,7 @@ function ContactItem({
   contact: LocalizedCvData["contacts"][number];
   variant: "header" | "sidebar";
 }) {
-  const Icon = ICONS[contact.type] ?? MdWeb;
+  const Icon = ICONS[contact.type] ?? Globe;
   const label = contact.label || contact.value;
   const href = buildHref(contact.type, contact.value);
   const linkClassName =

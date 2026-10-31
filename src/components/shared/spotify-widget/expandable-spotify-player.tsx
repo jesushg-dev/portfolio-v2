@@ -311,10 +311,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
                   className="absolute right-0 bottom-full mb-2 flex w-28 items-center gap-1.5 rounded-full bg-[#282828] px-2.5 py-1.5 shadow-xl"
                   onClick={(event) => event.stopPropagation()}
                 >
-                  <Volume2
-                    size={14}
-                    className="shrink-0 text-white/70"
-                  />
+                  <Volume2 size={14} className="shrink-0 text-white/70" />
                   <input
                     type="range"
                     value={localVolume}

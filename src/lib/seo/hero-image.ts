@@ -10,7 +10,7 @@ export function getHeroImageProps(photoUrl: string, imageAlt = "") {
     // Portrait source aspect ratio; CSS controls the displayed crop and size.
     width: 1086,
     height: 1448,
-    sizes: "(min-width: 64rem) 28rem, (min-width: 40rem) 26rem, 22rem",
+    sizes: "(min-width: 64rem) 26rem, (min-width: 40rem) 24rem, 20rem",
     loading: "lazy",
     unoptimized: !isCloudinary && !photoUrl.startsWith("/"),
   }).props;

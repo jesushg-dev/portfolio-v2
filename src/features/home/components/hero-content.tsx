@@ -60,6 +60,9 @@ export default async function HeroContent({
         <h1 className="text-foreground mt-1 text-5xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
           {firstName}{" "}
           {lastName ? <span className="text-primary">{lastName}</span> : null}
+          {heroSubtitle ? (
+            <span className="sr-only"> — {heroSubtitle}</span>
+          ) : null}
         </h1>
         {heroSubtitle ? (
           <h2 className="text-foreground mt-3 text-2xl font-bold tracking-tight sm:text-3xl">

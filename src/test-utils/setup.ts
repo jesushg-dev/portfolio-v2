@@ -93,7 +93,7 @@ if (typeof globalThis.fetch === "undefined") {
     ok: true,
     status: 200,
     json: () => Promise.resolve({}),
-  }) as unknown as typeof fetch;
+  });
 }
 
 import enMessages from "../../messages/en.json";

@@ -28,9 +28,7 @@ export const ClientLocalAssignmentIcon: FC = () => (
   <IconComponent Icon={ClipboardList} />
 );
 
-export const ClientLocalGroupsIcon: FC = () => (
-  <IconComponent Icon={Users} />
-);
+export const ClientLocalGroupsIcon: FC = () => <IconComponent Icon={Users} />;
 
 export const ClientLocalInsightsIcon: FC = () => (
   <IconComponent Icon={TrendingUp} />

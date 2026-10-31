@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState, type FC } from "react";
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ArrowRightIcon, ChevronDown, ChevronUp, Quote } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
@@ -65,7 +64,6 @@ function SocialProofContent({
 }) {
   const t = useTranslations("main.socialProof");
   const cvPublic = usePublicCvVisible();
-  const shouldReduceMotion = useReducedMotion();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -164,47 +162,39 @@ function SocialProofContent({
                     <Quote className="size-4.5" aria-hidden="true" />
                   </span>
 
-                  {/* Blockquote with Animated Key Transition */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeTestimonial.id}
-                      initial={false}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
-                      transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
+                  {/* Blockquote with Key Transition */}
+                  <div
+                    key={activeTestimonial.id}
+                    className="animate-in fade-in duration-200"
+                  >
+                    <blockquote
+                      className={cn(
+                        "text-foreground relative mt-4 text-base leading-relaxed font-medium transition-all duration-300 sm:mt-5 sm:text-lg sm:leading-8",
+                        !isExpanded && "line-clamp-4 sm:line-clamp-none",
+                      )}
                     >
-                      <blockquote
-                        className={cn(
-                          "text-foreground relative mt-4 text-base leading-relaxed font-medium transition-all duration-300 sm:mt-5 sm:text-lg sm:leading-8",
-                          !isExpanded && "line-clamp-4 sm:line-clamp-none",
-                        )}
-                      >
-                        &ldquo;{activeTestimonial.quote}&rdquo;
-                      </blockquote>
+                      & ldquo;{activeTestimonial.quote}&rdquo;
+                    </blockquote>
 
-                      {/* Read More / Read Less Toggle for Mobile */}
-                      {activeTestimonial.quote.length > 140 ? (
-                        <button
-                          type="button"
-                          onClick={() => setIsExpanded((prev) => !prev)}
-                          aria-expanded={isExpanded}
-                          className="text-primary hover:text-primary/80 mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
-                        >
-                          <span>
-                            {isExpanded ? t("readLess") : t("readMore")}
-                          </span>
-                          {isExpanded ? (
-                            <ChevronUp className="size-4" aria-hidden="true" />
-                          ) : (
-                            <ChevronDown
-                              className="size-4"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </button>
-                      ) : null}
-                    </motion.div>
-                  </AnimatePresence>
+                    {/* Read More / Read Less Toggle for Mobile */}
+                    {activeTestimonial.quote.length > 140 ? (
+                      <button
+                        type="button"
+                        onClick={() => setIsExpanded((prev) => !prev)}
+                        aria-expanded={isExpanded}
+                        className="text-primary hover:text-primary/80 mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
+                      >
+                        <span>
+                          {isExpanded ? t("readLess") : t("readMore")}
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="size-4" aria-hidden="true" />
+                        ) : (
+                          <ChevronDown className="size-4" aria-hidden="true" />
+                        )}
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
 
                 {/* Bottom Section: Author Info, Controls & Hire CTA */}

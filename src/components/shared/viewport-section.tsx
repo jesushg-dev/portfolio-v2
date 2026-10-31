@@ -40,6 +40,20 @@ export default function ViewportSection({
     const element = containerRef.current;
     if (!element) return;
 
+    const parsedMargin = Number.parseInt(rootMargin, 10) || 200;
+
+    const checkVisibility = () => {
+      const rect = element.getBoundingClientRect();
+      if (
+        rect.top <= window.innerHeight + parsedMargin &&
+        rect.bottom >= -parsedMargin
+      ) {
+        setIsVisible(true);
+        return true;
+      }
+      return false;
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
@@ -52,7 +66,21 @@ export default function ViewportSection({
 
     observer.observe(element);
 
-    return () => observer.disconnect();
+    const onScroll = () => {
+      if (checkVisibility()) {
+        observer.disconnect();
+        window.removeEventListener("scroll", onScroll, true);
+      }
+    };
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll, true);
+    };
   }, [rootMargin]);
 
   return (

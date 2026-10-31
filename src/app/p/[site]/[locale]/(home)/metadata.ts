@@ -15,6 +15,22 @@ import { site } from "next/root-params";
 import { buildPublicAlternates } from "@/lib/public-site/metadata";
 import { resolvePublicTenant } from "@/lib/public-site/tenant";
 
+const MAX_META_DESCRIPTION_LENGTH = 160;
+
+export function trimMetaDescription(
+  text: string,
+  maxLength = MAX_META_DESCRIPTION_LENGTH,
+): string {
+  const trimmed = text.trim();
+  if (trimmed.length <= maxLength) {
+    return trimmed;
+  }
+  const slice = trimmed.slice(0, maxLength);
+  const lastSpace = slice.lastIndexOf(" ");
+  const truncated = (lastSpace > 0 ? slice.slice(0, lastSpace) : slice).trim();
+  return truncated.replace(/[,;:\-\s]+$/, "");
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -66,6 +82,8 @@ export async function generateMetadata({
       })}${getPathname({ locale: appLocale, href: "/" })}`;
     }
   }
+
+  description = trimMetaDescription(description);
 
   return {
     alternates: await buildPublicAlternates(appLocale, "/"),

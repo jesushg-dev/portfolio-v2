@@ -27,8 +27,14 @@ export function usePublicWidgetsReady(): boolean {
   return useContext(PublicWidgetsContext).isReady;
 }
 
-const emptySubscribe = () => () => {
-  /* empty */
+const subscribeScroll = (onStoreChange: () => void) => {
+  window.addEventListener("scroll", onStoreChange, {
+    passive: true,
+    capture: true,
+  });
+  return () => {
+    window.removeEventListener("scroll", onStoreChange, { capture: true });
+  };
 };
 
 function getScrollRestoredSnapshot(): boolean {
@@ -50,7 +56,7 @@ export default function PublicWidgetsProvider({
   const needsWidgetsNow = pathname !== "/";
   const [deferredReady, setDeferredReady] = useState(false);
   const scrollRestored = useSyncExternalStore(
-    emptySubscribe,
+    subscribeScroll,
     getScrollRestoredSnapshot,
     getScrollRestoredServerSnapshot,
   );
@@ -61,16 +67,30 @@ export default function PublicWidgetsProvider({
       return;
     }
 
-    const enable = () => setDeferredReady(true);
+    const enable = () => {
+      setDeferredReady(true);
+    };
 
-    window.addEventListener("scroll", enable, { passive: true, once: true });
+    window.addEventListener("scroll", enable, {
+      passive: true,
+      once: true,
+      capture: true,
+    });
+    window.addEventListener("wheel", enable, {
+      passive: true,
+      once: true,
+      capture: true,
+    });
     window.addEventListener("pointerdown", enable, { once: true });
     window.addEventListener("keydown", enable, { once: true });
+    document.addEventListener("scroll", enable, { passive: true, once: true });
 
     return () => {
-      window.removeEventListener("scroll", enable);
+      window.removeEventListener("scroll", enable, { capture: true });
+      window.removeEventListener("wheel", enable, { capture: true });
       window.removeEventListener("pointerdown", enable);
       window.removeEventListener("keydown", enable);
+      document.removeEventListener("scroll", enable);
     };
   }, [needsWidgetsNow, deferredReady]);
 

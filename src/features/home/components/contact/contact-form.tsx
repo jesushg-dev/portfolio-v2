@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { motion } from "motion/react";
 import { Send, Zap } from "lucide-react";
 
 import { Form, FormField } from "@/components/ui/form";
@@ -186,16 +185,10 @@ const ContactForm: FC = () => {
           className="flex justify-center empty:hidden"
         />
 
-        <motion.button
+        <button
           type="submit"
           disabled={isPending || sendMessage.isPending}
-          whileHover={{
-            scale: isPending || sendMessage.isPending ? 1 : 1.01,
-          }}
-          whileTap={{
-            scale: isPending || sendMessage.isPending ? 1 : 0.98,
-          }}
-          className="group bg-primary text-primary-foreground shadow-primary/25 hover:bg-primary/90 relative box-border flex w-full max-w-full min-w-0 items-center justify-center gap-3 overflow-hidden rounded-2xl py-4 text-sm font-bold tracking-[0.2em] uppercase shadow-lg transition-all hover:-translate-y-0.5 active:scale-[0.99] disabled:opacity-60"
+          className="group bg-primary text-primary-foreground shadow-primary/25 hover:bg-primary/90 relative box-border flex w-full max-w-full min-w-0 cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-2xl py-4 text-sm font-bold tracking-[0.2em] uppercase shadow-lg transition-all hover:-translate-y-0.5 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {!(isPending || sendMessage.isPending) && (
             <span
@@ -225,7 +218,7 @@ const ContactForm: FC = () => {
             <Send className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           )}
           {t("form.submit")}
-        </motion.button>
+        </button>
 
         <p className="text-muted-foreground mt-2 text-center text-[0.8125rem] leading-relaxed">
           {t.rich("form.alternativeContact", {

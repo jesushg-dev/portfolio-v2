@@ -49,12 +49,14 @@ const ContactItem: FC<ContactItemProps> = ({
     "--contact-accent": effectiveAccent,
   } as CSSProperties;
 
+  const isEmail = href.startsWith("mailto:");
+
   const className = cn(
     "group inline-flex min-h-11 items-center gap-2 rounded-full border border-border/80 bg-card px-4 py-2.5 text-sm font-semibold text-foreground shadow-2xs transition-all duration-200",
     "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md hover:-translate-y-0.5 active:scale-95",
   );
 
-  return isInternal ? (
+  const linkNode = isInternal ? (
     <Link
       href={href as "/schedule"}
       aria-label={ariaLabel ?? label}
@@ -77,6 +79,24 @@ const ContactItem: FC<ContactItemProps> = ({
       <span className="truncate">{label}</span>
     </a>
   );
+
+  if (isEmail) {
+    return (
+      <>
+        <span
+          className="contents"
+          dangerouslySetInnerHTML={{ __html: "<!--email_off-->" }}
+        />
+        {linkNode}
+        <span
+          className="contents"
+          dangerouslySetInnerHTML={{ __html: "<!--/email_off-->" }}
+        />
+      </>
+    );
+  }
+
+  return linkNode;
 };
 
 export default ContactItem;

@@ -12,21 +12,33 @@ import {
 } from "@/lib/site-brand/site-brand";
 import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 
+import dynamic from "next/dynamic";
+
 import DesktopNav from "./desktop-nav";
-import MobileNav from "./mobile-nav";
-import DesktopMegaMenu from "./desktop-mega-menu";
 import ToolbarHeader from "./toolbar-header";
 import ThemeSelectorLazy from "./theme-selector-lazy";
 import { NAV_GROUPS } from "./navigation-config";
+
+const MobileNav = dynamic(
+  () => import("./mobile-nav").then((mod) => mod.MobileNav),
+  { ssr: false },
+);
+
+const DesktopMegaMenu = dynamic(
+  () => import("./desktop-mega-menu").then((mod) => mod.DesktopMegaMenu),
+  { ssr: false },
+);
 
 const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
   const t = useTranslations("global.header");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasOpenedMenu, setHasOpenedMenu] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<
     (typeof NAV_GROUPS)[number]["id"] | null
   >(null);
+  const [hasOpenedMegaMenu, setHasOpenedMegaMenu] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
   const headerRef = useRef<HTMLElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -36,6 +48,14 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
     setIsMenuOpen(false);
     setActiveGroup(null);
   }
+
+  const handleActiveGroupChange = useCallback(
+    (group: (typeof NAV_GROUPS)[number]["id"] | null) => {
+      if (group) setHasOpenedMegaMenu(true);
+      setActiveGroup(group);
+    },
+    [],
+  );
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -56,6 +76,7 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
 
   const toogleMainOpen = () => {
     setActiveGroup(null);
+    setHasOpenedMenu(true);
     setIsMenuOpen((prev) => !prev);
   };
 
@@ -118,6 +139,7 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
           <div className="flex w-full items-center justify-between gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6">
             <Link
               href="/"
+              prefetch={false}
               aria-label={t("homeLogo", {
                 brand: getBrandAccessibleLabel(siteBrand),
               })}
@@ -130,11 +152,14 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
                 }
                 dotClassName="text-primary group-hover:text-primary/80"
               />
+              <span className="sr-only">
+                {t("homeLogo", { brand: getBrandAccessibleLabel(siteBrand) })}
+              </span>
             </Link>
 
             <DesktopNav
               activeGroup={activeGroup}
-              onActiveGroupChange={setActiveGroup}
+              onActiveGroupChange={handleActiveGroupChange}
               className="justify-self-center"
             />
 
@@ -151,11 +176,15 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
             </div>
           </div>
 
-          <div className="w-full lg:hidden">
-            <MobileNav isOpen={isMenuOpen} onClose={closeMenus} />
-          </div>
+          {hasOpenedMenu && (
+            <div className="w-full lg:hidden">
+              <MobileNav isOpen={isMenuOpen} onClose={closeMenus} />
+            </div>
+          )}
 
-          <DesktopMegaMenu activeGroup={activeGroup} onClose={closeMenus} />
+          {hasOpenedMegaMenu && (
+            <DesktopMegaMenu activeGroup={activeGroup} onClose={closeMenus} />
+          )}
         </div>
       </nav>
     </header>

@@ -47,7 +47,7 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
         {tabs.map((tab) => (
           <TabItem
             key={tab.id}
-            icon={TAB_ICONS[tab.id] ?? HiOutlineCode}
+            icon={TAB_ICONS[tab.id] ?? Code}
             title={`${tab.label} (${tab.count})`}
           />
         ))}

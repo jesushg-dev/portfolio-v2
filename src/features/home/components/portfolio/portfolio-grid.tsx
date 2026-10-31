@@ -1,8 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { useMemo, useRef, useState } from "react";
-import { motion, useInView } from "motion/react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
@@ -15,31 +14,11 @@ import PortfolioItem from "./project-item";
 import { PortfolioTopStack } from "./portfolio-top-stack";
 
 const ProjectEmptyState = dynamic(
-  () =>
-    import("./project-empty-state").then((mod) => mod.ProjectEmptyState),
+  () => import("./project-empty-state").then((mod) => mod.ProjectEmptyState),
   { ssr: false },
 );
 
 const type = [undefined, "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
-
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const item = {
-  hidden: { y: 12, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.25 },
-  },
-};
 
 interface PortfolioGridProps {
   projects: ProjectType[];
@@ -52,9 +31,6 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({
   totalCount,
   caseStudyCount,
 }) => {
-  const panelRef = useRef<HTMLElement>(null);
-  const isInView = useInView(panelRef, { once: true });
-
   const t = useTranslations("main.portfolio");
 
   const labels = useMemo(
@@ -115,7 +91,6 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({
     <>
       <FilterType value={crtValue} onChange={setCrtValue} counts={counts} />
       <section
-        ref={panelRef}
         role="tabpanel"
         id={`portfolio-tab-panel-${crtValue}`}
         aria-labelledby={`portfolio-tab-tab-${crtValue}`}
@@ -126,25 +101,16 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({
             onReset={() => setCrtValue(0)}
           />
         ) : (
-          <motion.ul
-            initial={false}
-            variants={container}
-            animate="visible"
-            className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3"
-          >
+          <ul className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
             {visibleProjects.map((project) => (
-              <motion.li
-                layout={isInView}
+              <li
                 key={project.id}
-                className="flex justify-center"
-                variants={item}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25 }}
+                className="flex justify-center transition-transform duration-200 hover:-translate-y-1"
               >
                 <PortfolioItem {...project} {...labels(project)} />
-              </motion.li>
+              </li>
             ))}
-          </motion.ul>
+          </ul>
         )}
 
         <PortfolioTopStack

@@ -2,7 +2,6 @@
 
 import type { FC, ReactNode, MouseEvent } from "react";
 import { useCallback, useState } from "react";
-import { motion } from "motion/react";
 
 interface ContactContainerProps {
   children: ReactNode;
@@ -25,11 +24,7 @@ export const ContactContainer: FC<ContactContainerProps> = ({
   }, []);
 
   return (
-    <motion.div
-      initial={false}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] }}
+    <div
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -63,6 +58,6 @@ export const ContactContainer: FC<ContactContainerProps> = ({
       />
 
       {children}
-    </motion.div>
+    </div>
   );
 };

@@ -65,7 +65,7 @@ const SkillIcon: FC<SkillIconProps> = ({
             width={size === "lg" ? 28 : size === "md" ? 20 : 16}
             height={size === "lg" ? 28 : size === "md" ? 20 : 16}
             src={trimmed}
-            alt=""
+            alt={title}
             className={cn("object-contain", config.img)}
             onError={() => setFailed(true)}
           />
@@ -91,7 +91,7 @@ const SkillIcon: FC<SkillIconProps> = ({
       width={17}
       height={17}
       src={trimmed}
-      alt=""
+      alt={title}
       className={cn("size-5 shrink-0 sm:size-4.25", className)}
       onError={() => setFailed(true)}
     />

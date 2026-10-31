@@ -10,7 +10,6 @@ import {
   GraduationCap,
   type LucideIcon,
 } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "motion/react";
 
 import { LinkPreview } from "@/components/ui/link-preview";
 import type { TimelinePublicItem } from "@/features/timeline/lib/map-timeline-public";
@@ -34,25 +33,6 @@ interface TimelineCardProps {
   image?: string;
 }
 
-const listVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: "easeOut" },
-  },
-};
-
 const TimelineCard: FC<TimelineCardProps> = ({
   date,
   title,
@@ -67,10 +47,7 @@ const TimelineCard: FC<TimelineCardProps> = ({
   const orgTrimmed = organization?.trim();
 
   return (
-    <motion.li
-      variants={cardVariants}
-      className="group relative flex flex-col items-center text-center"
-    >
+    <li className="group relative flex flex-col items-center text-center">
       {/* Date */}
       <time
         className="text-primary text-sm font-semibold tracking-wide tabular-nums"
@@ -116,7 +93,7 @@ const TimelineCard: FC<TimelineCardProps> = ({
           {description}
         </p>
       </div>
-    </motion.li>
+    </li>
   );
 };
 
@@ -128,7 +105,6 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
   items,
 }) => {
   const t = useTranslations("main.about.timeline");
-  const shouldReduceMotion = useReducedMotion();
 
   const getCategoryLabel = (category: TimelineCategory) =>
     t(`categories.${category}` as "categories.WORK");
@@ -138,13 +114,9 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
   return (
     <div className="w-full space-y-10">
       {hasItems ? (
-        <motion.ol
+        <ol
           id="timeline"
           className="lg:before:border-primary/20 relative grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:before:absolute lg:before:inset-x-[12.5%] lg:before:top-[3.25rem] lg:before:border-t lg:before:border-dashed"
-          initial={false}
-          whileInView={shouldReduceMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: "-60px" }}
-          variants={listVariants}
         >
           {items.map((item) => (
             <TimelineCard
@@ -159,7 +131,7 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
               image={item.images?.[0]}
             />
           ))}
-        </motion.ol>
+        </ol>
       ) : (
         <p className="text-muted-foreground text-center text-sm">
           {t("empty")}
