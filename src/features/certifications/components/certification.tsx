@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import Skeleton from "react-loading-skeleton";
 import type { FC } from "react";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/react";
 import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
 import type { stackTypes } from "@/utils/constants/certificates-type";
@@ -13,7 +13,7 @@ import { CertificatesCatalogView } from "./certificates-catalog-view";
 import type { CertificateType } from "@/utils/interfaces/types";
 
 const NoResult = dynamic(() => import("@/components/shared/no-result"), {
-  loading: () => <Skeleton count={10} />,
+  loading: () => <Skeleton className="h-64 w-full rounded-2xl" />,
 });
 
 interface ICertificationProps {
@@ -56,19 +56,16 @@ const Certification: FC<ICertificationProps> = ({
   if (isLoading && allCertificates.length === 0) {
     return (
       <div className="mx-auto w-full px-4 pt-24 pb-20 sm:px-6 sm:pt-28 lg:container lg:px-20">
-        <div className="mx-auto mb-10 max-w-3xl text-center">
-          <Skeleton width="8rem" height="1.25rem" className="mb-2" />
-          <Skeleton width="18rem" height="2.5rem" className="mb-4" />
-          <Skeleton width="26rem" height="1.5rem" />
+        <div className="mx-auto mb-10 flex max-w-3xl flex-col items-center text-center">
+          <Skeleton className="mb-2 h-5 w-32" />
+          <Skeleton className="mb-4 h-10 w-72" />
+          <Skeleton className="h-6 w-96 max-w-full" />
         </div>
-        <Skeleton
-          inline
-          count={6}
-          width="100%"
-          height="19rem"
-          className="react-loading-skeleton rounded-2xl"
-          containerClassName="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-        />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} className="h-76 w-full rounded-2xl" />
+          ))}
+        </div>
       </div>
     );
   }

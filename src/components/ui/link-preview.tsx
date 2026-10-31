@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLocale } from "next-intl";
 
 import { Link } from "@/i18n/routing";
@@ -24,6 +23,7 @@ export interface LinkPreviewProps {
   height?: number;
   className?: string;
   children: ReactNode;
+  prefetch?: boolean;
 }
 
 type InternalHref = ComponentProps<typeof Link>["href"];
@@ -145,6 +145,7 @@ export function LinkPreview({
   height = 125,
   className,
   children,
+  prefetch,
 }: LinkPreviewProps) {
   const locale = useLocale();
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -153,7 +154,6 @@ export function LinkPreview({
   const [imageError, setImageError] = useState(false);
   const [placement, setPlacement] = useState<"top" | "bottom">("top");
   const canHoverPreview = useMediaQuery(HOVER_MEDIA_QUERY);
-  const shouldReduceMotion = useReducedMotion();
 
   const previewImageSrc = resolvePreviewImageSrc(url, locale, imageSrc);
   const rootFallbackSrc = previewImageSrc.replace(
@@ -204,7 +204,11 @@ export function LinkPreview({
       {children}
     </a>
   ) : (
-    <Link href={resolveInternalHref(url)} className={linkClassName}>
+    <Link
+      href={resolveInternalHref(url)}
+      prefetch={prefetch}
+      className={linkClassName}
+    >
       {children}
     </Link>
   );
@@ -219,62 +223,37 @@ export function LinkPreview({
     >
       {trigger}
 
-      {canHoverPreview ? (
-        <AnimatePresence>
-          {isHovered ? (
-            <motion.div
-              key="link-preview"
-              role="presentation"
-              aria-hidden
-              initial={
-                shouldReduceMotion
-                  ? false
-                  : {
-                      opacity: 0,
-                      scale: 0.96,
-                      y: placement === "top" ? 10 : -10,
-                    }
-              }
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={
-                shouldReduceMotion
-                  ? { opacity: 0 }
-                  : {
-                      opacity: 0,
-                      scale: 0.96,
-                      y: placement === "top" ? 10 : -10,
-                    }
-              }
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className={cn(
-                "pointer-events-none absolute z-50",
-                placement === "top" ? "bottom-full mb-3" : "top-full mt-3",
-              )}
-              style={{
-                width,
-                height,
-                left: `calc(50% + ${offsetX}px - ${width / 2}px)`,
+      {canHoverPreview && isHovered ? (
+        <div
+          role="presentation"
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute z-50 transition-all duration-200 ease-out",
+            placement === "top" ? "bottom-full mb-3" : "top-full mt-3",
+          )}
+          style={{
+            width,
+            height,
+            left: `calc(50% + ${offsetX}px - ${width / 2}px)`,
+          }}
+        >
+          <div className="bg-card border-border relative h-full w-full overflow-hidden rounded-lg border shadow-lg">
+            <Image
+              src={finalImageSrc}
+              alt={previewImageAlt}
+              width={width}
+              height={height}
+              className="h-full w-full object-cover"
+              sizes={`${width}px`}
+              unoptimized={isExternalPreview}
+              onError={() => {
+                if (!imageError && finalImageSrc !== rootFallbackSrc) {
+                  setImageError(true);
+                }
               }}
-            >
-              <div className="bg-card border-border relative h-full w-full overflow-hidden rounded-lg border shadow-lg">
-                <Image
-                  src={finalImageSrc}
-                  alt={previewImageAlt}
-                  width={width}
-                  height={height}
-                  className="h-full w-full object-cover"
-                  sizes={`${width}px`}
-                  unoptimized={isExternalPreview}
-                  onError={() => {
-                    if (!imageError && finalImageSrc !== rootFallbackSrc) {
-                      setImageError(true);
-                    }
-                  }}
-                />
-              </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+            />
+          </div>
+        </div>
       ) : null}
     </span>
   );

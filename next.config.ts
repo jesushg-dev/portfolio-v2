@@ -65,6 +65,7 @@ const securityHeaders: { key: string; value: string }[] = [
 ];
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   headers() {
     return Promise.resolve([{ source: "/(.*)", headers: securityHeaders }]);
   },
@@ -75,15 +76,23 @@ const nextConfig: NextConfig = {
     "lvh.me",
     "*.lvh.me",
   ],
-  serverExternalPackages: ["jszip", "docx-preview"],
+  serverExternalPackages: ["jszip"],
   outputFileTracingExcludes: {
     "/**/*": emailTemplatesDevAssets,
     "/api/trpc/*": emailTemplatesDevAssets,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "motion/react"],
+    globalNotFound: true,
+    optimizePackageImports: [
+      "lucide-react",
+      "motion/react",
+      "@base-ui/react",
+      "date-fns",
+      "d3",
+    ],
   },
   images: {
+    deviceSizes: [480, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     remotePatterns: [
       {
         protocol: "https",
@@ -100,7 +109,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "utfs.io",
-      }
+      },
     ],
   },
 };

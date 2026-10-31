@@ -1,10 +1,8 @@
-import { portfolioRouter } from "@/server/api/routers/portfolio";
 import { cvRouter } from "@/features/cv/server/cv.router";
 import { cvPublicRouter } from "@/features/cv/server/cv-public.router";
 import { profileAdminRouter } from "@/features/profile/server/profile-admin.router";
-import { terminalRouter } from "@/features/terminal/server/terminal.router";
-import { contactRouter } from "@/server/api/routers/contact";
-import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
+import { createTRPCRouter } from "@/server/api/trpc";
+import { publicRouters } from "@/server/api/public";
 import { spotifyRouter } from "@/server/api/routers/spotify";
 import { spotifyAdminRouter } from "@/server/api/routers/spotify-admin";
 import { googleCalendarAdminRouter } from "@/server/api/routers/google-calendar-admin";
@@ -18,7 +16,6 @@ import { timelineAdminRouter } from "@/features/timeline/server/timeline-admin.r
 import { usesAdminRouter } from "@/features/uses/server/uses-admin.router";
 import { nowAdminRouter } from "@/features/now/server/now-admin.router";
 import { processPagesAdminRouter } from "@/features/process-pages/server/process-pages-admin.router";
-import { processPagesRouter } from "@/features/process-pages/server/process-pages.router";
 import { jobTrackerAdminRouter } from "@/features/job-tracker/server/job-tracker-admin.router";
 import { resumeEngineAdminRouter } from "@/features/resume-engine/server/resume-engine-admin.router";
 import { interviewPrepAdminRouter } from "@/features/resume-engine/server/interview-prep-admin.router";
@@ -30,10 +27,10 @@ import { analyticsAdminRouter } from "@/features/analytics/server/analytics-admi
 import { geoRouter } from "@/server/api/routers/geo";
 
 export const appRouter = createTRPCRouter({
+  ...publicRouters,
   geo: geoRouter,
   analytics: analyticsRouter,
   analyticsAdmin: analyticsAdminRouter,
-  portfolio: portfolioRouter,
   appLanguagesAdmin: appLanguagesAdminRouter,
   projectsAdmin: projectsAdminRouter,
   servicesAdmin: servicesAdminRouter,
@@ -44,15 +41,12 @@ export const appRouter = createTRPCRouter({
   usesAdmin: usesAdminRouter,
   nowAdmin: nowAdminRouter,
   processPagesAdmin: processPagesAdminRouter,
-  processPages: processPagesRouter,
   cv: cvRouter,
   cvPublic: cvPublicRouter,
   profileAdmin: profileAdminRouter,
-  terminal: terminalRouter,
   spotify: spotifyRouter,
   spotifyAdmin: spotifyAdminRouter,
   googleCalendarAdmin: googleCalendarAdminRouter,
-  contact: contactRouter,
   jobTrackerAdmin: jobTrackerAdminRouter,
   resumeEngineAdmin: resumeEngineAdminRouter,
   interviewPrepAdmin: interviewPrepAdminRouter,
@@ -62,12 +56,3 @@ export const appRouter = createTRPCRouter({
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
-
-/**
- * Create a server-side caller for the tRPC API.
- * @example
- * const trpc = createCaller(createContext);
- * const res = await trpc.post.all();
- *       ^? Post[]
- */
-export const createCaller = createCallerFactory(appRouter);

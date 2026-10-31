@@ -3,11 +3,13 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { routing } from "./i18n/routing-config";
 import { matchLegacyProcessPageRedirect } from "@/features/process-pages/lib/legacy-process-page-redirects";
-import {
-  CV_PDF_MODE_HEADER,
-  TENANT_USERNAME_HEADER,
-} from "@/lib/tenant/headers";
+import { TENANT_USERNAME_HEADER } from "@/lib/tenant/headers";
 import { getPrimaryDomain, parseTenantSlug } from "@/lib/tenant/parse-host";
+import {
+  isAccountPath,
+  PUBLIC_RENDER_PREFIX,
+  publicRenderScope,
+} from "@/lib/public-site/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -33,6 +35,13 @@ const forwardRequestHeader = (
 };
 
 export default function middleware(req: NextRequest) {
+  // Only host-derived rewrites may select a tenant's render/cache namespace.
+  if (
+    req.nextUrl.pathname === PUBLIC_RENDER_PREFIX ||
+    req.nextUrl.pathname.startsWith(`${PUBLIC_RENDER_PREFIX}/`)
+  ) {
+    return new NextResponse(null, { status: 404 });
+  }
   const legacyProcessPath = matchLegacyProcessPageRedirect(
     req.nextUrl.pathname,
   );
@@ -47,6 +56,13 @@ export default function middleware(req: NextRequest) {
     getPrimaryDomain(),
   );
 
+  if (["/sitemap.xml", "/robots.txt"].includes(req.nextUrl.pathname)) {
+    if (!tenantSlug) return NextResponse.next();
+    const destination = req.nextUrl.clone();
+    destination.pathname = `${PUBLIC_RENDER_PREFIX}/${publicRenderScope(tenantSlug)}${req.nextUrl.pathname}`;
+    return NextResponse.rewrite(destination);
+  }
+
   const response = intlMiddleware(req) ?? NextResponse.next();
 
   forwardRequestHeader(response, "pathname", req.nextUrl.pathname);
@@ -56,13 +72,34 @@ export default function middleware(req: NextRequest) {
     response.headers.set(TENANT_USERNAME_HEADER, tenantSlug);
   }
 
-  if (req.nextUrl.searchParams.get("pdf") === "1") {
-    forwardRequestHeader(response, CV_PDF_MODE_HEADER, "1");
+  const rewrite = response.headers.get("x-middleware-rewrite");
+  if (!response.headers.has("location") && response.status < 300) {
+    const destination = new URL(rewrite ?? req.url, req.url);
+    const [, locale, ...segments] = destination.pathname.split("/");
+    const pathname = `/${segments.join("/")}`;
+    if (
+      routing.locales.includes(locale as (typeof routing.locales)[number]) &&
+      !isAccountPath(pathname)
+    ) {
+      const renderPath =
+        pathname === "/curriculum-vitae" &&
+        req.nextUrl.searchParams.get("pdf") === "1"
+          ? "/cv-render"
+          : pathname;
+      destination.pathname = `${PUBLIC_RENDER_PREFIX}/${publicRenderScope(tenantSlug)}/${locale}${renderPath === "/" ? "" : renderPath}`;
+      response.headers.set("x-middleware-rewrite", destination.toString());
+    }
   }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|.*\\..*).*)", "/"],
+  matcher: [
+    "/((?!api|_next|.*\\..*).*)",
+    "/",
+    "/p/:path*",
+    "/sitemap.xml",
+    "/robots.txt",
+  ],
 };

@@ -1,13 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import {
-  HiOutlineCode,
-  HiOutlineCollection,
-  HiOutlineDesktopComputer,
-  HiOutlineEye,
-  HiOutlineGlobe,
-} from "react-icons/hi";
+import { Code, Eye, Globe, Layers, Monitor } from "lucide-react";
 
 import Tab from "@/components/custom-ui/custom-tab";
 import TabItem from "@/components/custom-ui/custom-tab/tab-item";
@@ -50,11 +44,11 @@ const UsesFilterTabs: FC<UsesFilterTabsProps> = ({
         ariaLabel={ariaLabel}
         className="z-20 max-w-full"
       >
-        <TabItem icon={HiOutlineEye} title={labels.all} />
-        <TabItem icon={HiOutlineCollection} title={labels.everyday} />
-        <TabItem icon={HiOutlineDesktopComputer} title={labels.software} />
-        <TabItem icon={HiOutlineGlobe} title={labels.browser} />
-        <TabItem icon={HiOutlineCode} title={labels.coding} />
+        <TabItem icon={Eye} title={labels.all} />
+        <TabItem icon={Layers} title={labels.everyday} />
+        <TabItem icon={Monitor} title={labels.software} />
+        <TabItem icon={Globe} title={labels.browser} />
+        <TabItem icon={Code} title={labels.coding} />
       </Tab>
     </div>
   );

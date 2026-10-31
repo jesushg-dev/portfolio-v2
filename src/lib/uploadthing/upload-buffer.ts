@@ -6,8 +6,7 @@ import {
 } from "@/lib/uploadthing/tenant-uploadthing";
 
 interface UploadThingFileData {
-  url: string;
-  ufsUrl?: string | null;
+  ufsUrl: string;
   key: string;
 }
 
@@ -56,7 +55,7 @@ export async function uploadBufferToUploadThing(
   const data = normalizeUploadResponse(response);
 
   return {
-    url: data.ufsUrl ?? data.url,
+    url: data.ufsUrl,
     key: data.key,
   };
 }

@@ -1,6 +1,15 @@
 import type { NextRequest } from "next/server";
 
-jest.mock("next-intl/middleware", () => () => () => undefined);
+jest.mock("next-intl/middleware", () => () => (req: { url: string }) => {
+  const { NextResponse } =
+    jest.requireMock<typeof import("next/server")>("next/server");
+  const response = NextResponse.next();
+  const url = new URL(req.url);
+  if (!/^\/(en|es|nl)(\/|$)/.test(url.pathname))
+    url.pathname = `/en${url.pathname}`;
+  response.headers.set("x-middleware-rewrite", url.toString());
+  return response;
+});
 
 jest.mock("./i18n/routing-config", () => ({
   routing: { locales: ["en", "es", "nl"], defaultLocale: "en" },
@@ -11,16 +20,16 @@ jest.mock("next/server", () => {
     status: number;
     headers = new Headers();
 
-    constructor(status = 200) {
-      this.status = status;
+    constructor(_body?: null, options?: { status?: number }) {
+      this.status = options?.status ?? 200;
     }
 
     static next() {
-      return new MockNextResponse(200);
+      return new MockNextResponse();
     }
 
     static redirect(url: URL, status = 307) {
-      const response = new MockNextResponse(status);
+      const response = new MockNextResponse(null, { status });
       response.headers.set("location", url.toString());
       return response;
     }
@@ -30,14 +39,12 @@ jest.mock("next/server", () => {
 });
 
 import middleware from "./proxy";
-import {
-  CV_PDF_MODE_HEADER,
-  TENANT_USERNAME_HEADER,
-} from "@/lib/tenant/headers";
+import { TENANT_USERNAME_HEADER } from "@/lib/tenant/headers";
 
 function request(url: string, host = "jesushg.com"): NextRequest {
   const parsed = new URL(url);
   return {
+    url,
     nextUrl: {
       pathname: parsed.pathname,
       searchParams: parsed.searchParams,
@@ -67,12 +74,12 @@ describe("middleware / proxy", () => {
     ).toBe("ada");
   });
 
-  it("marks PDF mode from the query string", () => {
+  it("routes PDF mode outside the public site shell", () => {
     const response = middleware(
       request("https://jesushg.com/curriculum-vitae?pdf=1"),
     );
-    expect(
-      response.headers.get(`x-middleware-request-${CV_PDF_MODE_HEADER}`),
-    ).toBe("1");
+    expect(response.headers.get("x-middleware-rewrite")).toContain(
+      "/p/primary/en/cv-render?pdf=1",
+    );
   });
 });

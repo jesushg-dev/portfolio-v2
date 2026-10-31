@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { useTrpcDeferredReady } from "@/components/providers/deferred-trpc-provider";
+import { usePublicWidgetsReady } from "@/components/providers/public-widgets-provider";
 
 interface ViewportSectionProps {
   children: ReactNode;
@@ -18,8 +18,8 @@ interface ViewportSectionProps {
   rootMargin?: string;
   id?: string;
   className?: string;
-  /** When true, waits for deferred tRPC before mounting children. */
-  requiresTrpc?: boolean;
+  /** Waits for interaction before mounting optional live widgets on the home page. */
+  requiresInteraction?: boolean;
 }
 
 export default function ViewportSection({
@@ -29,16 +29,30 @@ export default function ViewportSection({
   rootMargin = "250px 0px",
   id,
   className,
-  requiresTrpc = false,
+  requiresInteraction = false,
 }: ViewportSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const trpcReady = useTrpcDeferredReady();
-  const canMountChildren = isVisible && (!requiresTrpc || trpcReady);
+  const widgetsReady = usePublicWidgetsReady();
+  const canMountChildren = isVisible && (!requiresInteraction || widgetsReady);
 
   useEffect(() => {
     const element = containerRef.current;
     if (!element) return;
+
+    const parsedMargin = Number.parseInt(rootMargin, 10) || 200;
+
+    const checkVisibility = () => {
+      const rect = element.getBoundingClientRect();
+      if (
+        rect.top <= window.innerHeight + parsedMargin &&
+        rect.bottom >= -parsedMargin
+      ) {
+        setIsVisible(true);
+        return true;
+      }
+      return false;
+    };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -52,7 +66,21 @@ export default function ViewportSection({
 
     observer.observe(element);
 
-    return () => observer.disconnect();
+    const onScroll = () => {
+      if (checkVisibility()) {
+        observer.disconnect();
+        window.removeEventListener("scroll", onScroll, true);
+      }
+    };
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll, true);
+    };
   }, [rootMargin]);
 
   return (

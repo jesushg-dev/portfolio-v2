@@ -1,15 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState, type FC } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { ArrowRightIcon, ChevronDown, ChevronUp, Quote } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
 import { MediaImage } from "@/components/shared/media-image";
-import { Skeleton } from "@/components/ui/skeleton";
 import { usePublicCvVisible } from "@/components/app-layout/public-cv-visible";
-import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
 export interface TestimonialItem {
@@ -30,7 +27,7 @@ interface SocialProofStats {
 
 interface SocialProofProps {
   stats: SocialProofStats;
-  testimonials?: TestimonialItem[];
+  testimonials: TestimonialItem[];
 }
 
 function AuthorName({
@@ -51,59 +48,22 @@ function AuthorName({
       href={linkedInUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-foreground hover:text-primary block text-base font-bold underline-offset-2 transition-colors hover:underline"
+      className="text-foreground hover:text-primary inline-flex min-h-11 items-center text-base font-bold underline-offset-2 transition-colors hover:underline"
     >
       {author}
     </a>
   );
 }
 
-function TestimonialSkeleton() {
-  return (
-    <div className="border-border/30 bg-card flex flex-col justify-between rounded-[2rem] border p-8 shadow-xs md:p-10">
-      <Skeleton className="size-11 rounded-2xl" />
-      <div className="my-8 space-y-3">
-        <Skeleton className="h-5 w-full" />
-        <Skeleton className="h-5 w-5/6" />
-        <Skeleton className="h-5 w-4/6" />
-      </div>
-      <div className="border-border/20 flex items-center gap-4 border-t pt-8">
-        <Skeleton className="size-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-3 w-48" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SocialProofWithQuery({ stats }: { stats: SocialProofStats }) {
-  const locale = useLocale();
-  const { data: items = [], isLoading } =
-    api.portfolio.getTestimonialsPublic.useQuery({ locale, limit: 10 });
-
-  return (
-    <SocialProofContent
-      stats={stats}
-      items={items}
-      isTestimonialsLoading={isLoading}
-    />
-  );
-}
-
 function SocialProofContent({
   stats: statsData,
   items,
-  isTestimonialsLoading,
 }: {
   stats: SocialProofStats;
   items: TestimonialItem[];
-  isTestimonialsLoading: boolean;
 }) {
   const t = useTranslations("main.socialProof");
   const cvPublic = usePublicCvVisible();
-  const shouldReduceMotion = useReducedMotion();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -178,9 +138,7 @@ function SocialProofContent({
         <div className="mt-8 grid items-stretch gap-4 sm:mt-10 sm:gap-5 md:mt-12 md:grid-cols-12">
           {/* Left Column: Testimonial Figure Card */}
           <div className="flex flex-col md:col-span-7">
-            {isTestimonialsLoading ? (
-              <TestimonialSkeleton />
-            ) : activeTestimonial ? (
+            {activeTestimonial ? (
               <figure
                 onPointerMove={handlePointerMove}
                 onPointerLeave={handlePointerLeave}
@@ -204,50 +162,39 @@ function SocialProofContent({
                     <Quote className="size-4.5" aria-hidden="true" />
                   </span>
 
-                  {/* Blockquote with Animated Key Transition */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeTestimonial.id}
-                      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
-                      transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
+                  {/* Blockquote with Key Transition */}
+                  <div
+                    key={activeTestimonial.id}
+                    className="animate-in fade-in duration-200"
+                  >
+                    <blockquote
+                      className={cn(
+                        "text-foreground relative mt-4 text-base leading-relaxed font-medium transition-all duration-300 sm:mt-5 sm:text-lg sm:leading-8",
+                        !isExpanded && "line-clamp-4 sm:line-clamp-none",
+                      )}
                     >
-                      <blockquote
-                        className={cn(
-                          "text-foreground relative mt-4 text-base leading-relaxed font-medium transition-all duration-300 sm:mt-5 sm:text-lg sm:leading-8",
-                          !isExpanded && "line-clamp-4 sm:line-clamp-none",
-                        )}
-                      >
-                        &ldquo;{activeTestimonial.quote}&rdquo;
-                      </blockquote>
+                      & ldquo;{activeTestimonial.quote}&rdquo;
+                    </blockquote>
 
-                      {/* Read More / Read Less Toggle for Mobile */}
-                      {activeTestimonial.quote.length > 140 ? (
-                        <button
-                          type="button"
-                          onClick={() => setIsExpanded((prev) => !prev)}
-                          aria-expanded={isExpanded}
-                          className="text-primary hover:text-primary/80 mt-2.5 inline-flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors sm:hidden"
-                        >
-                          <span>
-                            {isExpanded ? t("readLess") : t("readMore")}
-                          </span>
-                          {isExpanded ? (
-                            <ChevronUp
-                              className="size-3.5"
-                              aria-hidden="true"
-                            />
-                          ) : (
-                            <ChevronDown
-                              className="size-3.5"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </button>
-                      ) : null}
-                    </motion.div>
-                  </AnimatePresence>
+                    {/* Read More / Read Less Toggle for Mobile */}
+                    {activeTestimonial.quote.length > 140 ? (
+                      <button
+                        type="button"
+                        onClick={() => setIsExpanded((prev) => !prev)}
+                        aria-expanded={isExpanded}
+                        className="text-primary hover:text-primary/80 mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
+                      >
+                        <span>
+                          {isExpanded ? t("readLess") : t("readMore")}
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="size-4" aria-hidden="true" />
+                        ) : (
+                          <ChevronDown className="size-4" aria-hidden="true" />
+                        )}
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
 
                 {/* Bottom Section: Author Info, Controls & Hire CTA */}
@@ -264,11 +211,11 @@ function SocialProofContent({
                             alt={activeTestimonial.author}
                             fill
                             className="object-cover"
-                            sizes="44px"
+                            sizes="2.75rem"
                           />
                         </div>
                       ) : (
-                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:size-11 sm:text-sm">
+                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold sm:size-11">
                           {initials}
                         </span>
                       )}
@@ -280,7 +227,7 @@ function SocialProofContent({
                           linkedInUrl={activeTestimonial.linkedInUrl}
                         />
                         {activeTestimonial.role ? (
-                          <span className="text-muted-foreground block text-xs leading-normal">
+                          <span className="text-muted-foreground block text-sm leading-normal">
                             {activeTestimonial.role}
                           </span>
                         ) : null}
@@ -291,7 +238,7 @@ function SocialProofContent({
                     {items.length > 1 ? (
                       <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
                         <div
-                          className="flex items-center gap-1.5"
+                          className="flex items-center gap-1"
                           aria-label="Pagination"
                         >
                           {items.map((_, idx) => (
@@ -303,22 +250,26 @@ function SocialProofContent({
                                 setIsExpanded(false);
                                 setCurrentIndex(idx);
                               }}
-                              className={cn(
-                                "h-1.5 cursor-pointer rounded-full transition-all duration-300",
-                                idx === currentIndex % items.length
-                                  ? "bg-primary w-6"
-                                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-1.5",
-                              )}
-                            />
+                              className="focus-visible:ring-ring flex size-11 cursor-pointer items-center justify-center rounded-full p-2 transition-transform focus-visible:ring-2 focus-visible:outline-none"
+                            >
+                              <span
+                                className={cn(
+                                  "h-1.5 rounded-full transition-all duration-300",
+                                  idx === currentIndex % items.length
+                                    ? "bg-primary w-6"
+                                    : "bg-muted-foreground/40 hover:bg-muted-foreground/60 w-1.5",
+                                )}
+                              />
+                            </button>
                           ))}
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                           <button
                             type="button"
                             aria-label="Previous testimonial"
                             onClick={handlePrev}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
                           >
                             ‹
                           </button>
@@ -326,7 +277,7 @@ function SocialProofContent({
                             type="button"
                             aria-label="Next testimonial"
                             onClick={handleNext}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
                           >
                             ›
                           </button>
@@ -339,7 +290,7 @@ function SocialProofContent({
                   <a
                     href="#contact"
                     id="hire-me-cta"
-                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-xs font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6 sm:text-sm"
+                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-sm font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6"
                   >
                     {t("cta")}
                     <span className="bg-primary-foreground text-primary flex size-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
@@ -363,7 +314,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData.engineersMentored}
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.engineersMentored.label")}
                 </p>
               </div>
@@ -394,7 +345,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData?.projectsCount ?? 19}+
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.projects.label")}
                 </p>
               </div>
@@ -439,7 +390,7 @@ function SocialProofContent({
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                   {statsData?.yearsExperience ?? 6}+
                 </p>
-                <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
+                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
                   {t("stats.experience.label")}
                 </p>
               </div>
@@ -459,7 +410,7 @@ function SocialProofContent({
             </Link>
 
             {/* Note below cards */}
-            <p className="text-muted-foreground px-2 text-center text-xs">
+            <p className="text-muted-foreground px-2 text-center text-sm">
               {t("statsNote")}
             </p>
           </div>
@@ -469,21 +420,8 @@ function SocialProofContent({
   );
 }
 
-const SocialProof: FC<SocialProofProps> = ({
-  stats,
-  testimonials: testimonialsFromServer,
-}) => {
-  if (testimonialsFromServer !== undefined) {
-    return (
-      <SocialProofContent
-        stats={stats}
-        items={testimonialsFromServer}
-        isTestimonialsLoading={false}
-      />
-    );
-  }
-
-  return <SocialProofWithQuery stats={stats} />;
-};
+const SocialProof: FC<SocialProofProps> = ({ stats, testimonials }) => (
+  <SocialProofContent stats={stats} items={testimonials} />
+);
 
 export default SocialProof;

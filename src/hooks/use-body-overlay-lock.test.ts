@@ -32,7 +32,8 @@ describe("useBodyOverlayLocked", () => {
 
   it("reads the overlay lock dataset", () => {
     document.body.dataset.overlayLock = "true";
-    const { result } = renderHook(() => useBodyOverlayLocked());
+    const { result, unmount } = renderHook(() => useBodyOverlayLocked());
     expect(result.current).toBe(true);
+    unmount();
   });
 });

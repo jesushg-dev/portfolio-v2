@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { MediaImage } from "@/components/shared/media-image";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -85,7 +84,6 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
   const showingRecentLabel = t("showingRecent");
   const promotionLabel = t("promotion");
   const showCvLink = usePublicCvVisible();
-  const shouldReduceMotion = useReducedMotion();
 
   const groups = useMemo(() => groupExperiences(experiences), [experiences]);
 
@@ -142,10 +140,12 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                     (r) => r.responsibilities.length > 0,
                   );
                   const panelId = `exp-panel-${group.id}`;
+                  const triggerId = `exp-trigger-${group.id}`;
 
                   return (
                     <>
                       <button
+                        id={triggerId}
                         type="button"
                         onClick={() =>
                           setOpenGroupIndex(isGroupOpen ? null : groupIdx)
@@ -165,7 +165,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                               alt={group.company}
                               fill
                               className="size-full object-cover"
-                              sizes="44px"
+                              sizes="2.75rem"
                             />
                           </span>
                         ) : (
@@ -183,7 +183,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
 
                         {/* Title (Role) & Company Subtitle */}
                         <span className="min-w-0 flex-1">
-                          <time className="text-muted-foreground mb-1 block text-xs font-semibold tabular-nums md:hidden">
+                          <time className="text-muted-foreground mb-1 block text-sm font-semibold tabular-nums md:hidden">
                             {group.overallDates}
                           </time>
                           <span className="text-foreground block text-lg leading-snug font-bold tracking-tight">
@@ -194,9 +194,9 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                               · {group.company}
                             </span>
                             {isMultiRole ? (
-                              <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold">
+                              <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold">
                                 <TrendingUpIcon
-                                  className="size-3"
+                                  className="size-3.5"
                                   aria-hidden="true"
                                 />
                                 <span>{promotionLabel}</span>
@@ -219,126 +219,113 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
 
                       {/* Collapsible Content */}
                       {hasDetails ? (
-                        <AnimatePresence initial={false}>
-                          {isGroupOpen && (
-                            <motion.div
-                              id={panelId}
-                              initial={
-                                shouldReduceMotion
-                                  ? { opacity: 1 }
-                                  : { height: 0, opacity: 0 }
-                              }
-                              animate={
-                                shouldReduceMotion
-                                  ? { opacity: 1 }
-                                  : { height: "auto", opacity: 1 }
-                              }
-                              exit={
-                                shouldReduceMotion
-                                  ? { opacity: 0 }
-                                  : { height: 0, opacity: 0 }
-                              }
-                              transition={{ duration: 0.3, ease: "easeOut" }}
-                            >
-                              <div className="border-border/20 border-t px-5 pt-5 pb-6 sm:px-6 sm:pl-20">
-                                {(() => {
-                                  const displayChips =
-                                    latestRole.metrics &&
-                                    latestRole.metrics.length > 0
-                                      ? latestRole.metrics
-                                      : latestRole.skills;
+                        <div
+                          id={panelId}
+                          role="region"
+                          aria-labelledby={triggerId}
+                          className={cn(
+                            "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
+                            isGroupOpen
+                              ? "grid-rows-[1fr] opacity-100"
+                              : "pointer-events-none grid-rows-[0fr] opacity-0",
+                          )}
+                        >
+                          <div className="overflow-hidden">
+                            <div className="border-border/20 border-t px-5 pt-5 pb-6 sm:px-6 sm:pl-20">
+                              {(() => {
+                                const displayChips =
+                                  latestRole.metrics &&
+                                  latestRole.metrics.length > 0
+                                    ? latestRole.metrics
+                                    : latestRole.skills;
 
-                                  if (
-                                    !displayChips ||
-                                    displayChips.length === 0
-                                  )
-                                    return null;
+                                if (!displayChips || displayChips.length === 0)
+                                  return null;
 
-                                  return (
-                                    <div className="mb-4 flex flex-wrap gap-2">
-                                      {displayChips.map((chip) => (
-                                        <span
-                                          key={chip}
-                                          className="border-primary/20 bg-primary/10 text-primary shrink-0 rounded-full border px-3 py-1 text-xs font-bold shadow-2xs"
-                                        >
-                                          {chip}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  );
-                                })()}
-
-                                <ul className="space-y-3">
-                                  {latestRole.responsibilities.map(
-                                    (bullet, bulletIdx) => (
-                                      <li
-                                        key={`${latestRole.id}-b-${bulletIdx}`}
-                                        className="flex items-start gap-3"
+                                return (
+                                  <div className="mb-4 flex flex-wrap gap-2">
+                                    {displayChips.map((chip) => (
+                                      <span
+                                        key={chip}
+                                        className="border-primary/20 bg-primary/10 text-primary shrink-0 rounded-full border px-3 py-1 text-sm font-semibold shadow-2xs"
                                       >
-                                        <CheckIcon
-                                          className="text-primary mt-1 size-4 shrink-0"
+                                        {chip}
+                                      </span>
+                                    ))}
+                                  </div>
+                                );
+                              })()}
+
+                              <ul className="space-y-3">
+                                {latestRole.responsibilities.map(
+                                  (bullet, bulletIdx) => (
+                                    <li
+                                      key={`${latestRole.id}-b-${bulletIdx}`}
+                                      className="flex items-start gap-3"
+                                    >
+                                      <CheckIcon
+                                        className="text-primary mt-1 size-4 shrink-0"
+                                        aria-hidden="true"
+                                      />
+                                      <span className="text-muted-foreground text-[15px] leading-relaxed">
+                                        {bullet}
+                                      </span>
+                                    </li>
+                                  ),
+                                )}
+                              </ul>
+
+                              {/* Previous Roles in Promotion Track */}
+                              {isMultiRole && previousRoles.length > 0 ? (
+                                <div className="border-border/25 mt-6 border-t pt-5">
+                                  <p className="text-muted-foreground mb-3 text-sm font-semibold tracking-wider uppercase">
+                                    {t("previousRole")}
+                                  </p>
+                                  <div className="space-y-5">
+                                    {previousRoles.map((prevRole) => (
+                                      <div
+                                        key={prevRole.id}
+                                        className="border-border/30 relative ml-2 border-l pl-4"
+                                      >
+                                        <span
+                                          className="bg-muted-foreground/40 absolute top-1.5 -left-px size-2 -translate-x-1/2 rounded-full"
                                           aria-hidden="true"
                                         />
-                                        <span className="text-muted-foreground text-[15px] leading-relaxed">
-                                          {bullet}
-                                        </span>
-                                      </li>
-                                    ),
-                                  )}
-                                </ul>
-
-                                {/* Previous Roles in Promotion Track */}
-                                {isMultiRole && previousRoles.length > 0 ? (
-                                  <div className="border-border/25 mt-6 border-t pt-5">
-                                    <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-wider uppercase">
-                                      {t("previousRole")}
-                                    </p>
-                                    <div className="space-y-5">
-                                      {previousRoles.map((prevRole) => (
-                                        <div
-                                          key={prevRole.id}
-                                          className="border-border/30 relative ml-2 border-l pl-4"
-                                        >
-                                          <span
-                                            className="bg-muted-foreground/40 absolute top-1.5 -left-px size-2 -translate-x-1/2 rounded-full"
-                                            aria-hidden="true"
-                                          />
-                                          <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                            <h4 className="text-foreground text-sm font-bold">
-                                              {prevRole.role}
-                                            </h4>
-                                            <time className="text-muted-foreground text-xs font-medium tabular-nums">
-                                              {prevRole.dates}
-                                            </time>
-                                          </div>
-                                          {prevRole.responsibilities.length >
-                                          0 ? (
-                                            <ul className="text-muted-foreground mt-2.5 space-y-2 text-xs leading-relaxed">
-                                              {prevRole.responsibilities.map(
-                                                (resp, i) => (
-                                                  <li
-                                                    key={i}
-                                                    className="flex items-start gap-2"
-                                                  >
-                                                    <CheckIcon
-                                                      className="text-primary/70 mt-0.5 size-3.5 shrink-0"
-                                                      aria-hidden="true"
-                                                    />
-                                                    <span>{resp}</span>
-                                                  </li>
-                                                ),
-                                              )}
-                                            </ul>
-                                          ) : null}
+                                        <div className="flex flex-wrap items-baseline justify-between gap-2">
+                                          <h3 className="text-foreground text-sm font-bold">
+                                            {prevRole.role}
+                                          </h3>
+                                          <time className="text-muted-foreground text-sm font-medium tabular-nums">
+                                            {prevRole.dates}
+                                          </time>
                                         </div>
-                                      ))}
-                                    </div>
+                                        {prevRole.responsibilities.length >
+                                        0 ? (
+                                          <ul className="text-muted-foreground mt-2.5 space-y-2 text-sm leading-relaxed">
+                                            {prevRole.responsibilities.map(
+                                              (resp, i) => (
+                                                <li
+                                                  key={i}
+                                                  className="flex items-start gap-2"
+                                                >
+                                                  <CheckIcon
+                                                    className="text-primary/70 mt-0.5 size-3.5 shrink-0"
+                                                    aria-hidden="true"
+                                                  />
+                                                  <span>{resp}</span>
+                                                </li>
+                                              ),
+                                            )}
+                                          </ul>
+                                        ) : null}
+                                      </div>
+                                    ))}
                                   </div>
-                                ) : null}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                                </div>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
                       ) : null}
                     </>
                   );
@@ -355,6 +342,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
         {showCvLink ? (
           <LinkPreview
             url="/curriculum-vitae"
+            prefetch={false}
             className="group text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
           >
             <span>{viewAllLabel}</span>

@@ -7,6 +7,7 @@ import { MapPin } from "lucide-react";
 import { distanceKm, formatDistanceKm } from "@/lib/geo/distance";
 import { useVisitorLocation } from "@/hooks/use-visitor-location";
 import GlobeMapLazy from "./globe-map-lazy";
+import { TRPCReactProvider } from "@/trpc/react";
 
 export interface OwnerMapLocation {
   lat: number;
@@ -19,7 +20,7 @@ function cityLabel(place: string): string {
   return city && city.length > 0 ? city : place;
 }
 
-export function ContactGlobe({ location }: { location: OwnerMapLocation }) {
+function ContactGlobeContent({ location }: { location: OwnerMapLocation }) {
   const t = useTranslations("main.contact.globe");
   const locale = useLocale();
   const { location: visitor, status } = useVisitorLocation();
@@ -102,5 +103,13 @@ export function ContactGlobe({ location }: { location: OwnerMapLocation }) {
               })}
       </p>
     </div>
+  );
+}
+
+export function ContactGlobe({ location }: { location: OwnerMapLocation }) {
+  return (
+    <TRPCReactProvider>
+      <ContactGlobeContent location={location} />
+    </TRPCReactProvider>
   );
 }

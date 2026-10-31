@@ -11,7 +11,8 @@ overrides:
   # mysql2 (better-auth optional driver), effect/valibot (@hookform/resolvers
   # optional peers), deepmerge-ts (@prisma/config).
   mysql2: ">=3.23.1"
-  effect: ">=3.20.0"
+  # Prisma and UploadThing depend on Effect 3 APIs removed in Effect 4.
+  effect: ">=3.20.0 <4"
   valibot: ">=1.4.2"
   deepmerge-ts: ">=8.0.0"
   # nwsapi 2.2.25+ (jsdom's selector engine) recurses forever on `:modal` /

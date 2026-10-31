@@ -1,40 +1,38 @@
 import {
-  RiDashboard3Line,
-  RiEmotion2Line,
-  RiHandHeartLine,
-  RiMapPinTimeLine,
-  RiMedal2Line,
-  RiQuillPenLine,
-  RiSettingsLine,
-  RiShieldStarLine,
-  RiTeamLine,
-  RiTimerFlashLine,
-  RiCalendarTodoLine,
-  RiUserStarLine,
-  RiGroupLine,
-  RiLightbulbLine,
-  RiBarChartLine,
-} from "react-icons/ri";
-import type { IconType } from "react-icons/lib";
-import { resolveIcon } from "@/lib/icons/icon-registry";
+  Award,
+  BarChart3,
+  CalendarCheck,
+  HeartHandshake,
+  LayoutGrid,
+  Lightbulb,
+  MapPin,
+  PenTool,
+  Settings,
+  ShieldCheck,
+  Smile,
+  Timer,
+  UserCheck,
+  Users,
+} from "lucide-react";
+import { resolveIcon, type IconComponent } from "@/lib/icons/icon-registry";
 
 export const SOFT_SKILL_ICON_OPTIONS = {
-  RiTeamLine: RiTeamLine,
-  RiShieldStarLine: RiShieldStarLine,
-  RiMedal2Line: RiMedal2Line,
-  RiSettingsLine: RiSettingsLine,
-  RiTimerFlashLine: RiTimerFlashLine,
-  RiHandHeartLine: RiHandHeartLine,
-  RiMapPinTimeLine: RiMapPinTimeLine,
-  RiDashboard3Line: RiDashboard3Line,
-  RiEmotion2Line: RiEmotion2Line,
-  RiQuillPenLine: RiQuillPenLine,
-  RiCalendarTodoLine: RiCalendarTodoLine,
-  RiUserStarLine: RiUserStarLine,
-  RiGroupLine: RiGroupLine,
-  RiLightbulbLine: RiLightbulbLine,
-  RiBarChartLine: RiBarChartLine,
-} as const satisfies Record<string, IconType>;
+  RiTeamLine: Users,
+  RiShieldStarLine: ShieldCheck,
+  RiMedal2Line: Award,
+  RiSettingsLine: Settings,
+  RiTimerFlashLine: Timer,
+  RiHandHeartLine: HeartHandshake,
+  RiMapPinTimeLine: MapPin,
+  RiDashboard3Line: LayoutGrid,
+  RiEmotion2Line: Smile,
+  RiQuillPenLine: PenTool,
+  RiCalendarTodoLine: CalendarCheck,
+  RiUserStarLine: UserCheck,
+  RiGroupLine: Users,
+  RiLightbulbLine: Lightbulb,
+  RiBarChartLine: BarChart3,
+} as const satisfies Record<string, IconComponent>;
 
 export type SoftSkillIconKey = keyof typeof SOFT_SKILL_ICON_OPTIONS;
 
@@ -44,8 +42,8 @@ export const SOFT_SKILL_ICON_KEYS = Object.keys(
 
 const DEFAULT_ICON: SoftSkillIconKey = "RiTeamLine";
 
-export function resolveSoftSkillIcon(key: string): IconType {
-  return resolveIcon(key, SOFT_SKILL_ICON_OPTIONS[DEFAULT_ICON]) as IconType;
+export function resolveSoftSkillIcon(key: string): IconComponent {
+  return resolveIcon(key, SOFT_SKILL_ICON_OPTIONS[DEFAULT_ICON]);
 }
 
 export function isSoftSkillIconKey(key: string): key is SoftSkillIconKey {

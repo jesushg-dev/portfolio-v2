@@ -2,7 +2,7 @@
 
 import { type FC, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { RiCheckLine, RiMoonLine, RiSunLine } from "react-icons/ri";
+import { Check, Moon, Sun } from "lucide-react";
 import { Link } from "@/i18n/routing";
 
 import {
@@ -129,9 +129,9 @@ const ThemeChoice: FC<ThemeChoiceProps> = ({
       </span>
       <span className="text-muted-foreground mt-0.5 flex items-center gap-1 text-xs">
         {option.isDark ? (
-          <RiMoonLine aria-hidden className="size-3.5" />
+          <Moon aria-hidden className="size-3.5" />
         ) : (
-          <RiSunLine aria-hidden className="size-3.5" />
+          <Sun aria-hidden className="size-3.5" />
         )}
         {groupLabel}
       </span>
@@ -139,7 +139,7 @@ const ThemeChoice: FC<ThemeChoiceProps> = ({
 
     {isSelected ? (
       <span className="bg-primary text-primary-foreground inline-flex size-6 shrink-0 items-center justify-center rounded-full">
-        <RiCheckLine aria-hidden className="size-3.5" />
+        <Check aria-hidden className="size-3.5" />
       </span>
     ) : null}
   </button>

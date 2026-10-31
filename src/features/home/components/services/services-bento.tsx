@@ -1,21 +1,11 @@
-"use client";
-
-import { useState, type FC } from "react";
+import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import {
-  AnimatePresence,
-  motion,
-  type Variants,
-  useReducedMotion,
-} from "motion/react";
 import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Check,
-  ChevronDown,
   Code2,
   Database,
   Globe,
@@ -24,8 +14,8 @@ import {
   ShieldCheck,
   Terminal,
 } from "lucide-react";
-import { resolveIcon, type IconComponent } from "@/lib/icons/icon-registry";
 import { DynamicIcon } from "@/components/shared/dynamic-icon";
+import { ServicesGrid } from "./services-grid";
 
 export interface ServiceItem {
   id: string;
@@ -107,7 +97,7 @@ function FrontendVisual({ service }: { service: ServiceItem }) {
               </span>
             ) : null}
             {metricText ? (
-              <span className="rounded-md bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-600">
+              <span className="rounded-md bg-emerald-500/15 px-2 py-1 text-xs font-bold text-emerald-800">
                 {metricText}
               </span>
             ) : null}
@@ -169,7 +159,7 @@ function BackendVisual({ service }: { service: ServiceItem }) {
           className="a-blink border-border/60 bg-card flex items-center justify-between rounded-lg border px-3 py-1.5 shadow-2xs"
         >
           <span>
-            <b className="font-bold text-emerald-600">{log.code}</b>{" "}
+            <b className="font-bold text-emerald-800">{log.code}</b>{" "}
             {log.method} {log.path}
           </span>
           {log.time ? (
@@ -222,24 +212,26 @@ function DevOpsVisual({ service }: { service: ServiceItem }) {
 
       {/* Traveling Dot bounded between Build and Deploy centers */}
       <div className="pointer-events-none absolute top-5 right-7 left-7 h-0.5 -translate-y-1/2 sm:right-9 sm:left-9">
-        <span className="a-travel bg-primary shadow-primary/60 ring-card absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-xs ring-2" />
+        <span className="a-travel absolute inset-0">
+          <span className="bg-primary shadow-primary/60 ring-card absolute top-1/2 left-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-xs ring-2" />
+        </span>
       </div>
 
-      <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
+      <div className="text-foreground relative flex flex-col items-center gap-2 text-xs font-semibold">
         <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Code2 className="size-4" aria-hidden="true" />
         </span>
         Build
       </div>
 
-      <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
+      <div className="text-foreground relative flex flex-col items-center gap-2 text-xs font-semibold">
         <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Check className="size-4" aria-hidden="true" />
         </span>
         {stage2 ?? "Test"}
       </div>
 
-      <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
+      <div className="text-foreground relative flex flex-col items-center gap-2 text-xs font-semibold">
         <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Terminal className="size-4" aria-hidden="true" />
         </span>
@@ -291,10 +283,12 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
       {/* Laser Sweep Scanner */}
-      <div className="a-sweep pointer-events-none absolute inset-x-0 flex flex-col items-center">
-        <div className="via-primary/15 h-10 w-full bg-gradient-to-b from-transparent to-transparent" />
-        <div className="via-primary/70 h-px w-full bg-gradient-to-r from-transparent to-transparent shadow-[0_0_8px_var(--primary)]" />
-        <div className="from-primary/15 h-10 w-full bg-gradient-to-b via-transparent to-transparent" />
+      <div className="a-sweep pointer-events-none absolute inset-0">
+        <div className="absolute inset-x-0 top-0 flex flex-col items-center">
+          <div className="via-primary/15 h-10 w-full bg-gradient-to-b from-transparent to-transparent" />
+          <div className="via-primary/70 h-px w-full bg-gradient-to-r from-transparent to-transparent shadow-[0_0_0.5rem_var(--primary)]" />
+          <div className="from-primary/15 h-10 w-full bg-gradient-to-b via-transparent to-transparent" />
+        </div>
       </div>
 
       <ShieldCheck
@@ -303,17 +297,17 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
         aria-hidden="true"
       />
       {badge3 ? (
-        <span className="border-border/60 bg-card absolute top-4 left-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute top-4 left-4 rounded-md border px-2 py-1 text-xs font-bold text-emerald-700 shadow-2xs">
           {badge3}
         </span>
       ) : null}
       {badge2 ? (
-        <span className="border-border/60 bg-card absolute top-10 right-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute top-10 right-4 rounded-md border px-2 py-1 text-xs font-bold text-emerald-700 shadow-2xs">
           {badge2}
         </span>
       ) : null}
       {badge1 ? (
-        <span className="border-border/60 bg-card absolute bottom-3 left-6 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute bottom-3 left-6 rounded-md border px-2 py-1 text-xs font-bold text-emerald-700 shadow-2xs">
           {badge1}
         </span>
       ) : null}
@@ -322,13 +316,7 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
 }
 
 /* Fallback Micro-visual for custom services */
-function DefaultVisual({
-  IconComponent,
-  service,
-}: {
-  IconComponent: IconComponent;
-  service: ServiceItem;
-}) {
+function DefaultVisual({ service }: { service: ServiceItem }) {
   if (
     service.image &&
     (service.image.startsWith("/") || service.image.startsWith("http"))
@@ -350,7 +338,7 @@ function DefaultVisual({
       <div className="bg-primary/10 absolute size-24 rounded-full blur-xl" />
       <DynamicIcon
         name={service.icon}
-        fallback={IconComponent}
+        fallback={Code2}
         className="text-primary size-16 opacity-75"
       />
       {service.statsValue ? (
@@ -381,197 +369,108 @@ function getVisualContainerClasses(type: string): string {
   }
 }
 
-const INITIAL_VISIBLE_COUNT = 5;
+function ServiceCardContent({ service }: { service: ServiceItem }) {
+  const visualType = getVisualType(service);
+  return (
+    <>
+      {" "}
+      {/* Top Interactive Micro-Visual (decorative) */}
+      <div className={getVisualContainerClasses(visualType)} aria-hidden="true">
+        {visualType === "frontend" && <FrontendVisual service={service} />}
+        {visualType === "backend" && <BackendVisual service={service} />}
+        {visualType === "mobile" && <MobileVisual />}
+        {visualType === "devops" && <DevOpsVisual service={service} />}
+        {visualType === "architecture" && <ArchitectureVisual />}
+        {visualType === "security" && <SecurityVisual service={service} />}
+        {visualType === "default" && <DefaultVisual service={service} />}
+      </div>
+      {/* Bottom Content Area */}
+      <div>
+        <div className="flex items-center gap-3">
+          <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
+            <DynamicIcon
+              name={service.icon}
+              fallback={Code2}
+              className="size-5"
+            />
+          </span>
+          <h3 className="text-foreground group-hover:text-primary text-xl font-bold tracking-tight transition-colors">
+            {service.title}
+          </h3>
+          {service.badge ? (
+            <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:block">
+              {service.badge}
+            </span>
+          ) : null}
+        </div>
+
+        <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
+          {service.description}
+        </p>
+
+        {service.badge ? (
+          <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-sm font-semibold sm:hidden">
+            {service.badge}
+          </span>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
+function ServiceContactBanner() {
+  const t = useTranslations("main.services");
+  return (
+    <Link
+      href="#contact"
+      className="group focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/95 relative flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[2rem] p-8 transition-all duration-300 focus-visible:ring-2 focus-visible:outline-none md:flex-row md:items-center md:p-10"
+    >
+      {/* Subtle grid pattern background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-15"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,.5) 0.0625rem, transparent 0.0625rem), linear-gradient(90deg, rgba(255,255,255,.5) 0.0625rem, transparent 0.0625rem)",
+          backgroundSize: "2.5rem 2.5rem",
+          maskImage: "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
+          WebkitMaskImage:
+            "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
+        }}
+      />
+
+      <div className="relative">
+        <p className="text-primary-foreground/80 text-sm font-semibold tracking-wide sm:text-base">
+          {t("items.contact.subtitle")}
+        </p>
+        <h3 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
+          {t("items.contact.title")}
+        </h3>
+      </div>
+
+      <span className="text-primary relative inline-flex items-center gap-3 rounded-full bg-white py-2 pr-2 pl-6 text-base font-bold shadow-md transition-transform group-hover:scale-[1.02]">
+        {t("items.contact.cta")}
+        <span className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
+          <ArrowRight className="size-5" />
+        </span>
+      </span>
+    </Link>
+  );
+}
 
 export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
   const t = useTranslations("main.services");
-  const shouldReduceMotion = useReducedMotion();
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.45, ease: "easeOut" },
-    },
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
-    e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
-  };
-
-  const handlePointerLeave = (e: React.PointerEvent<HTMLElement>) => {
-    e.currentTarget.style.removeProperty("--x");
-    e.currentTarget.style.removeProperty("--y");
-  };
-
-  if (dbServices.length === 0) {
-    return null;
-  }
-
-  const hasMore = dbServices.length > INITIAL_VISIBLE_COUNT;
-  const visibleServices = isExpanded
-    ? dbServices
-    : dbServices.slice(0, INITIAL_VISIBLE_COUNT);
-
+  if (dbServices.length === 0) return null;
   return (
-    <motion.div
-      variants={containerVariants}
-      initial={shouldReduceMotion ? false : "hidden"}
-      whileInView={shouldReduceMotion ? undefined : "visible"}
-      viewport={{ once: true, margin: "-80px" }}
-      className="grid w-full gap-5 md:grid-cols-12"
-    >
-      <AnimatePresence initial={false}>
-        {visibleServices.map((service, index) => {
-          const IconComponent = resolveIcon(service.icon, Code2);
-          const visualType = getVisualType(service);
-          const colSpanClass = getColSpan(index, dbServices.length);
-
-          return (
-            <motion.article
-              key={service.id}
-              variants={itemVariants}
-              initial={shouldReduceMotion ? false : "hidden"}
-              animate={shouldReduceMotion ? undefined : "visible"}
-              exit={
-                shouldReduceMotion
-                  ? undefined
-                  : { opacity: 0, y: 16, transition: { duration: 0.25 } }
-              }
-              onPointerMove={handlePointerMove}
-              onPointerLeave={handlePointerLeave}
-              className={cn(
-                "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
-                colSpanClass,
-              )}
-            >
-              {/* Top Interactive Micro-Visual */}
-              <div className={getVisualContainerClasses(visualType)}>
-                {visualType === "frontend" && (
-                  <FrontendVisual service={service} />
-                )}
-                {visualType === "backend" && (
-                  <BackendVisual service={service} />
-                )}
-                {visualType === "mobile" && <MobileVisual />}
-                {visualType === "devops" && <DevOpsVisual service={service} />}
-                {visualType === "architecture" && <ArchitectureVisual />}
-                {visualType === "security" && (
-                  <SecurityVisual service={service} />
-                )}
-                {visualType === "default" && (
-                  <DefaultVisual
-                    IconComponent={IconComponent}
-                    service={service}
-                  />
-                )}
-              </div>
-
-              {/* Bottom Content Area */}
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
-                    <IconComponent className="size-5" aria-hidden={true} />
-                  </span>
-                  <h3 className="text-foreground group-hover:text-primary text-xl font-bold tracking-tight transition-colors">
-                    {service.title}
-                  </h3>
-                  {service.badge ? (
-                    <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:block">
-                      {service.badge}
-                    </span>
-                  ) : null}
-                </div>
-
-                <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
-                  {service.description}
-                </p>
-
-                {service.badge ? (
-                  <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:hidden">
-                    {service.badge}
-                  </span>
-                ) : null}
-              </div>
-            </motion.article>
-          );
-        })}
-      </AnimatePresence>
-
-      {/* Show more / Show less toggle */}
-      {hasMore && (
-        <div className="flex justify-center py-2 md:col-span-12">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => setIsExpanded((prev) => !prev)}
-            aria-expanded={isExpanded}
-            className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold transition-colors"
-          >
-            <span>{isExpanded ? t("seeLess") : t("seeMore")}</span>
-            <ChevronDown
-              className={cn(
-                "size-4 transition-transform duration-300",
-                isExpanded && "rotate-180",
-              )}
-              aria-hidden="true"
-            />
-          </Button>
-        </div>
-      )}
-
-      {/* Full-width CTA Banner */}
-      <motion.div variants={itemVariants} className="md:col-span-12">
-        <Link
-          href="#contact"
-          className="group focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/95 relative flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[2rem] p-8 transition-all duration-300 focus-visible:ring-2 focus-visible:outline-none md:flex-row md:items-center md:p-10"
-        >
-          {/* Subtle grid pattern background */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-15"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-              maskImage:
-                "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
-              WebkitMaskImage:
-                "radial-gradient(60% 100% at 100% 50%, #000, transparent)",
-            }}
-          />
-
-          <div className="relative">
-            <p className="text-primary-foreground/80 text-sm font-semibold tracking-wide sm:text-base">
-              {t("items.contact.subtitle")}
-            </p>
-            <h3 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
-              {t("items.contact.title")}
-            </h3>
-          </div>
-
-          <span className="text-primary relative inline-flex items-center gap-3 rounded-full bg-white py-2 pr-2 pl-6 text-base font-bold shadow-md transition-transform group-hover:scale-[1.02]">
-            {t("items.contact.cta")}
-            <span className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
-              <ArrowRight className="size-5" />
-            </span>
-          </span>
-        </Link>
-      </motion.div>
-    </motion.div>
+    <ServicesGrid
+      cards={dbServices.map((service, index) => ({
+        id: service.id,
+        className: getColSpan(index, dbServices.length),
+        content: <ServiceCardContent service={service} />,
+      }))}
+      seeMoreLabel={t("seeMore")}
+      seeLessLabel={t("seeLess")}
+      banner={<ServiceContactBanner />}
+    />
   );
 };

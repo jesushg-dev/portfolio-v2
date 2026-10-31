@@ -2,13 +2,12 @@
 
 import { useCallback, type FC } from "react";
 import type { IconComponent } from "@/lib/icons/icon-registry";
-import type { IconType } from "react-icons/lib";
 import { useTabContext } from "@/hoc/tab-context-provider";
 import { cn } from "@/lib/utils";
 
 export interface TabItemProps {
   index?: number;
-  icon: IconComponent | IconType;
+  icon: IconComponent;
   title: string;
   /** A stable results panel shared by filter tabs, when content is reused. */
   panelId?: string;

@@ -3,7 +3,25 @@
 import type React from "react";
 
 import { useEffect, useRef, useState } from "react";
-import * as d3 from "d3";
+import {
+  easeBackOut,
+  geoCentroid,
+  geoDistance,
+  geoEquirectangularRaw,
+  geoGraticule,
+  geoInterpolate,
+  geoOrthographicRaw,
+  geoPath,
+  geoProjectionMutator,
+  scaleLinear,
+  select,
+  type BaseType,
+  type GeoPermissibleObjects,
+  type GeoProjection,
+  type GeoRawProjection,
+  type Selection,
+} from "d3";
+import "d3-transition";
 import { feature } from "topojson-client";
 import { useTranslations } from "next-intl";
 import {
@@ -28,7 +46,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type GeoFeature = d3.GeoPermissibleObjects;
+export type GeoFeature = GeoPermissibleObjects;
 
 interface LocationPoint {
   lat: number;
@@ -73,32 +91,30 @@ const MAX_ZOOM_OUT = 3.2;
 const FLIGHT_EXTRA_LIFT_RATIO = 0.1;
 const FLIGHT_EXTRA_LIFT_MAX_PX = 28;
 
-export interface InterpolatedProjection extends d3.GeoProjection {
+export interface InterpolatedProjection extends GeoProjection {
   alpha(): number;
   alpha(t: number): InterpolatedProjection;
 }
 
 function interpolateProjection(
-  raw0: d3.GeoRawProjection,
-  raw1: d3.GeoRawProjection,
+  raw0: GeoRawProjection,
+  raw1: GeoRawProjection,
 ): InterpolatedProjection {
-  const mutate = d3.geoProjectionMutator(
-    (t: number) => (x: number, y: number) => {
-      const [x0, y0] = raw0(x, y);
-      const [x1, y1] = raw1(x, y);
-      return [x0 + t * (x1 - x0), y0 + t * (y1 - y0)];
-    },
-  );
+  const mutate = geoProjectionMutator((t: number) => (x: number, y: number) => {
+    const [x0, y0] = raw0(x, y);
+    const [x1, y1] = raw1(x, y);
+    return [x0 + t * (x1 - x0), y0 + t * (y1 - y0)];
+  });
 
   let currentAlpha = 0;
-  const proj = (mutate as (t: number) => d3.GeoProjection)(
+  const proj = (mutate as (t: number) => GeoProjection)(
     currentAlpha,
   ) as InterpolatedProjection;
 
   proj.alpha = function (_?: number): number | InterpolatedProjection {
     if (typeof _ === "number") {
       currentAlpha = _;
-      (mutate as (t: number) => d3.GeoProjection)(currentAlpha);
+      (mutate as (t: number) => GeoProjection)(currentAlpha);
       return proj;
     }
     return currentAlpha;
@@ -162,7 +178,7 @@ function getFollowRotation(
   origin: LocationPoint,
   destination: LocationPoint,
 ): [number, number] {
-  const interpolate = d3.geoInterpolate(
+  const interpolate = geoInterpolate(
     [origin.lon, origin.lat],
     [destination.lon, destination.lat],
   );
@@ -231,7 +247,7 @@ function flightPathD(
   const end = project([destination.lon, destination.lat]);
   if (!isValidProjected(start) || !isValidProjected(end)) return "";
 
-  const interpolate = d3.geoInterpolate(
+  const interpolate = geoInterpolate(
     [origin.lon, origin.lat],
     [destination.lon, destination.lat],
   );
@@ -286,7 +302,7 @@ function getZoomOutTarget(
   origin: LocationPoint,
   destination: LocationPoint,
 ): number {
-  const angularDistance = d3.geoDistance(
+  const angularDistance = geoDistance(
     [origin.lon, origin.lat],
     [destination.lon, destination.lat],
   );
@@ -529,14 +545,14 @@ export function GlobeMap({
   useEffect(() => {
     if (!svgRef.current || worldData.length === 0) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     svg.selectAll("*").remove();
 
     const tProg = progress[0] / 100;
     const alpha = Math.pow(tProg, 0.5);
 
-    const scale = d3.scaleLinear().domain([0, 1]).range([200, 120]);
-    const baseRotate = d3.scaleLinear().domain([0, 1]).range([0, 0]);
+    const scale = scaleLinear().domain([0, 1]).range([200, 120]);
+    const baseRotate = scaleLinear().domain([0, 1]).range([0, 0]);
 
     const isSequenceActive =
       connectionPhase !== "idle" && connectionPhase !== "done";
@@ -560,8 +576,8 @@ export function GlobeMap({
     const effectiveScale = scale(alpha) * cameraZoom * userZoomMultiplier;
 
     const projection = interpolateProjection(
-      d3.geoOrthographicRaw,
-      d3.geoEquirectangularRaw,
+      geoOrthographicRaw,
+      geoEquirectangularRaw,
     )
       .scale(effectiveScale)
       .translate([width / 2 + translation[0], height / 2 + translation[1]])
@@ -570,7 +586,7 @@ export function GlobeMap({
 
     projection.alpha(alpha);
 
-    const path = d3.geoPath(projection);
+    const path = geoPath(projection);
 
     const currentRotate = projection.rotate();
     const cullBackHemisphere = tProg < GLOBE_MODE_THRESHOLD;
@@ -578,7 +594,7 @@ export function GlobeMap({
     const isFrontFacing = (lon: number, lat: number) => {
       if (!cullBackHemisphere) return true;
       const antipode: [number, number] = [-currentRotate[0], -currentRotate[1]];
-      return d3.geoDistance([lon, lat], antipode) < Math.PI / 2 + 0.05;
+      return geoDistance([lon, lat], antipode) < Math.PI / 2 + 0.05;
     };
 
     const boundaryCenterX = width / 2 + translation[0];
@@ -603,7 +619,7 @@ export function GlobeMap({
 
     if (showGraticule) {
       try {
-        const graticule = d3.geoGraticule();
+        const graticule = geoGraticule();
         const graticulePath = path(graticule());
         if (graticulePath) {
           svg
@@ -646,13 +662,13 @@ export function GlobeMap({
       .attr("stroke-width", 0.5)
       .attr("opacity", 1.0)
       .style("visibility", function (d) {
-        const pathData = d3.select(this).attr("d");
+        const pathData = select(this).attr("d");
         const hasValidPath =
           pathData && pathData.length > 0 && !pathData.includes("NaN");
         if (!hasValidPath) return "hidden";
         if (!cullBackHemisphere) return "visible";
         try {
-          const centroid = d3.geoCentroid(d);
+          const centroid = geoCentroid(d);
           return isFrontFacing(centroid[0], centroid[1]) ? "visible" : "hidden";
         } catch {
           return "visible";
@@ -693,7 +709,7 @@ export function GlobeMap({
       isFrontFacing(destination.lon, destination.lat);
 
     const drawHalo = (
-      group: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+      group: Selection<SVGGElement, unknown, BaseType, unknown>,
       x: number,
       y: number,
     ) => {
@@ -708,7 +724,7 @@ export function GlobeMap({
     };
 
     const drawLabel = (
-      group: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+      group: Selection<SVGGElement, unknown, BaseType, unknown>,
       x: number,
       y: number,
       text: string,
@@ -750,7 +766,7 @@ export function GlobeMap({
           .attr("opacity", 0)
           .transition()
           .duration(380)
-          .ease(d3.easeBackOut)
+          .ease(easeBackOut)
           .attr("r", 6)
           .attr("opacity", 1);
         hasPopped.current = true;

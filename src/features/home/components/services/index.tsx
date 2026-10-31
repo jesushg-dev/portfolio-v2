@@ -1,5 +1,6 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
@@ -9,8 +10,11 @@ const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
 const Services: FC = async () => {
-  const t = await getTranslations("main.services");
-  const locale = await getLocale();
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.services",
+  });
+  const locale = await getPublicLocale();
 
   const services = isLocale(locale)
     ? await api.portfolio.getServicesPublic({ locale })

@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 
@@ -46,16 +46,16 @@ describe("PortfolioItem", () => {
     kindLabels: { PROFESSIONAL: "Professional" },
     metaLabels: {
       solo: "Solo",
-      formatTeam: (count: number) => `Team of ${count}`,
+      team: "Team of 4",
       now: "present",
       statuses: {
         IN_PRODUCTION: "In production",
       },
     },
     teaserLabels: {
-      formatDecisions: (count: number) => `${count} technical decisions`,
+      decisions: "8 technical decisions",
       layers: "Architecture",
-      formatMetrics: (count: number) => `${count} metrics`,
+      metrics: "4 metrics",
     },
   } as unknown as Parameters<typeof PortfolioItem>[0];
 
@@ -120,7 +120,7 @@ describe("PortfolioItem", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows fallback when image fail event is triggered", () => {
+  it("shows fallback when image fail event is triggered", async () => {
     renderWithIntl(<PortfolioItem {...defaultProps} />);
 
     const img = screen.getByAltText("Awesome Project");
@@ -128,9 +128,11 @@ describe("PortfolioItem", () => {
 
     expect(screen.queryByAltText("Awesome Project")).not.toBeInTheDocument();
     expect(screen.getByText("Awesome Project")).toBeInTheDocument();
-    expect(
-      document.querySelector('[data-mock="frontend"]'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        document.querySelector('[data-mock="frontend"]'),
+      ).toBeInTheDocument();
+    });
   });
 
   it("shows a modern case study button for enabled projects", () => {
