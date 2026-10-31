@@ -11,7 +11,8 @@ export function getHeroImageProps(photoUrl: string, imageAlt = "") {
     width: 1086,
     height: 1448,
     sizes: "(min-width: 64rem) 26rem, (min-width: 40rem) 24rem, 20rem",
-    loading: "lazy",
+    loading: "eager",
+    priority: true,
     unoptimized: !isCloudinary && !photoUrl.startsWith("/"),
   }).props;
 }

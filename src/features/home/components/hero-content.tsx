@@ -114,6 +114,7 @@ export default async function HeroContent({
         {showCvLink ? (
           <LinkPreview
             url="/curriculum-vitae"
+            prefetch={false}
             className="group bg-primary text-primary-foreground hover:bg-primary/95 inline-flex items-center gap-3 rounded-full py-2 pr-2 pl-7 font-bold shadow-sm transition"
           >
             {t("viewCV")}

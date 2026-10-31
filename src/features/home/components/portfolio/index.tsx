@@ -21,6 +21,16 @@ const Portfolio: FC = async () => {
       locale,
     });
 
+  const compactProjects = projects.map((p) => ({
+    ...p,
+    skills:
+      p.skills?.map((s) => ({
+        id: s.id,
+        title: s.title,
+        image: s.image,
+      })) ?? [],
+  })) as typeof projects;
+
   return (
     <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
       <section
@@ -33,7 +43,7 @@ const Portfolio: FC = async () => {
           subtitle={t("subtitle")}
         />
         <PortfolioGrid
-          projects={projects}
+          projects={compactProjects}
           totalCount={totalCount}
           caseStudyCount={caseStudyCount}
         />

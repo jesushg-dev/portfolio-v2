@@ -1343,11 +1343,13 @@ video::-webkit-media-controls {
   0%,
   60%,
   100% {
-    background-color: color-mix(in srgb, var(--primary) 15%, var(--card));
+    opacity: 0.2;
+    transform: scale(0.92);
   }
   20%,
   40% {
-    background-color: var(--primary);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -1361,6 +1363,8 @@ video::-webkit-media-controls {
 }
 
 .bento-pop {
+  background-color: var(--primary);
+  will-change: opacity, transform;
   animation: bento-pop 4s ease-in-out infinite;
 }
 

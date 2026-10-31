@@ -23,6 +23,7 @@ export interface LinkPreviewProps {
   height?: number;
   className?: string;
   children: ReactNode;
+  prefetch?: boolean;
 }
 
 type InternalHref = ComponentProps<typeof Link>["href"];
@@ -144,6 +145,7 @@ export function LinkPreview({
   height = 125,
   className,
   children,
+  prefetch,
 }: LinkPreviewProps) {
   const locale = useLocale();
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -202,7 +204,11 @@ export function LinkPreview({
       {children}
     </a>
   ) : (
-    <Link href={resolveInternalHref(url)} className={linkClassName}>
+    <Link
+      href={resolveInternalHref(url)}
+      prefetch={prefetch}
+      className={linkClassName}
+    >
       {children}
     </Link>
   );

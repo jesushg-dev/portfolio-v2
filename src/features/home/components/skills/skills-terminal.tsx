@@ -18,8 +18,13 @@ import {
 } from "./lib/skill-display";
 import SkillIcon from "./skill-icon";
 
+export type CompactSkillType = Pick<
+  SkillType,
+  "id" | "title" | "image" | "type" | "featured" | "trend"
+>;
+
 interface SkillsTerminalProps {
-  initialSkills: SkillType[];
+  initialSkills: (SkillType | CompactSkillType)[];
 }
 
 const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {

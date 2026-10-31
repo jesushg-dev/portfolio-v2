@@ -5,8 +5,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import PreloadTheme from "./preload-theme";
 import ThemeContextProvider from "@/hoc/theme-context-provider";
-import clsx from "clsx";
-import { Inter, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/config";
 import { DocumentLang } from "@/components/document-lang";
@@ -15,10 +14,8 @@ const geist = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-  preload: false,
+  preload: true,
 });
-
-const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
@@ -57,12 +54,7 @@ export default function DocumentRoot({
       <head>
         <PreloadTheme />
       </head>
-      <body
-        className={clsx(
-          inter.className,
-          "bg-card text-foreground flex min-h-screen w-full max-w-full flex-col justify-between overflow-x-hidden scroll-smooth",
-        )}
-      >
+      <body className="bg-card text-foreground flex min-h-screen w-full max-w-full flex-col justify-between overflow-x-hidden scroll-smooth">
         <NextIntlClientProvider
           locale={locale}
           messages={messages}

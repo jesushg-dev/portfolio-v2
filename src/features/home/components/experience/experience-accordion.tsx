@@ -292,9 +292,9 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                                           aria-hidden="true"
                                         />
                                         <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                          <h4 className="text-foreground text-sm font-bold">
+                                          <h3 className="text-foreground text-sm font-bold">
                                             {prevRole.role}
-                                          </h4>
+                                          </h3>
                                           <time className="text-muted-foreground text-sm font-medium tabular-nums">
                                             {prevRole.dates}
                                           </time>
@@ -342,6 +342,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
         {showCvLink ? (
           <LinkPreview
             url="/curriculum-vitae"
+            prefetch={false}
             className="group text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
           >
             <span>{viewAllLabel}</span>

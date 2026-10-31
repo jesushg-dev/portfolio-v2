@@ -84,7 +84,6 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     globalNotFound: true,
-    inlineCss: true,
     optimizePackageImports: [
       "lucide-react",
       "motion/react",
