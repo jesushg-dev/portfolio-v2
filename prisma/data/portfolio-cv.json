@@ -164,15 +164,7 @@
     },
     {
       "category": "BACKEND",
-      "items": [
-        "C#",
-        ".NET",
-        "Nest.js",
-        "Python",
-        "Node.js",
-        "PHP",
-        "GraphQL"
-      ],
+      "items": ["C#", ".NET", "Nest.js", "Python", "Node.js", "PHP", "GraphQL"],
       "order": 1
     },
     {

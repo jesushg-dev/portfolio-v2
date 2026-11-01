@@ -212,24 +212,24 @@ export const ExperienceForm: FC<{
       employmentType: normalizeEmploymentType(initial?.employmentType),
       role: initial?.translations
         ? textTranslationMapFromRows(
-          languages,
-          initial.translations,
-          (row) => row.role,
-        )
+            languages,
+            initial.translations,
+            (row) => row.role,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
       location: initial?.translations
         ? textTranslationMapFromRows(
-          languages,
-          initial.translations,
-          (row) => row.location,
-        )
+            languages,
+            initial.translations,
+            (row) => row.location,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
       companyBlurb: initial?.translations
         ? textTranslationMapFromRows(
-          languages,
-          initial.translations,
-          (row) => row.companyBlurb,
-        )
+            languages,
+            initial.translations,
+            (row) => row.companyBlurb,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
       startDate: initial?.startDate ?? undefined,
       endDate: initial?.endDate ?? undefined,
@@ -643,8 +643,8 @@ export const ExperienceForm: FC<{
                       {fields.map((fieldItem, idx) => {
                         const baseRespText = primaryLang?.id
                           ? watchedResponsibilities?.[idx]?.text?.[
-                            primaryLang.id
-                          ]?.text
+                              primaryLang.id
+                            ]?.text
                           : undefined;
 
                         return (
@@ -668,8 +668,8 @@ export const ExperienceForm: FC<{
 
                                 <div className="min-w-0 flex-1 space-y-2">
                                   {isNonPrimary &&
-                                    showOriginal &&
-                                    baseRespText ? (
+                                  showOriginal &&
+                                  baseRespText ? (
                                     <ReferenceSnippet
                                       content={baseRespText}
                                       label={`Responsibility #${idx + 1}`}

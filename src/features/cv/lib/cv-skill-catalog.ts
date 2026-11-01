@@ -19,11 +19,7 @@ const categoryTypes: Record<CvSkillCategory, StackType> = {
 };
 
 export function normalizeSkillTitle(title: string): string {
-  return title
-    .normalize("NFKC")
-    .trim()
-    .replace(/\s+/g, " ")
-    .toLowerCase();
+  return title.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
 }
 
 /** Imports/seeds resolve names once. Persisted CV selections contain IDs only. */

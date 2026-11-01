@@ -180,12 +180,16 @@ export async function signInOwner(
     return true;
   } catch (dashboardError) {
     if (page.url().includes("/two-factor") && !email.includes("-e2e-2fa")) {
-      await resetTwoFactorForEmail(email).catch(() => {/* */ });
+      await resetTwoFactorForEmail(email).catch(() => {
+        /* */
+      });
       await page.goto("/login");
       if (!isAdminPath(page.url())) {
         await fillSignInCredentials(page, email, password);
         const retryResponse = await submitSignInRequest(page);
-        await parseSignInResponse(retryResponse).catch(() => {/* */ });
+        await parseSignInResponse(retryResponse).catch(() => {
+          /* */
+        });
       }
       await expectAdminDashboard(page, 30_000);
       return true;
@@ -216,7 +220,7 @@ export async function signInOwner(
     }
     throw new Error(
       "Sign-in API succeeded but no authenticated session was available. " +
-      "Check session cookies and BETTER_AUTH_URL versus E2E_BASE_URL.",
+        "Check session cookies and BETTER_AUTH_URL versus E2E_BASE_URL.",
       { cause: dashboardError },
     );
   }
@@ -288,7 +292,9 @@ export async function ensureOwnerAccount(
   input: RegisterOwnerInput = buildOwnerAccountInput(),
 ): Promise<void> {
   if (!input.email.includes("-e2e-2fa")) {
-    await resetTwoFactorForEmail(input.email).catch(() => {/* */ });
+    await resetTwoFactorForEmail(input.email).catch(() => {
+      /* */
+    });
   }
   try {
     const signedIn = await signInOwner(page, input.email, input.password);

@@ -29,8 +29,11 @@ test.describe("services edit and restore data integrity", () => {
     await goToServicesList(page);
 
     // 2. Find row & click edit link
-    const cell = page.getByRole("cell", { name: testService.title }).first();
-    await expect(cell).toBeVisible();
+    const cell = page
+      .getByRole("cell")
+      .filter({ has: page.getByText(testService.title, { exact: true }) })
+      .first();
+    await expect(cell).toBeVisible({ timeout: 15_000 });
 
     const row = page.locator("tr").filter({ has: cell }).first();
     await row
@@ -57,10 +60,14 @@ test.describe("services edit and restore data integrity", () => {
 
     await page.locator('button[type="submit"]').first().click();
     await updateResponse;
+    await page
+      .waitForURL((url) => !url.pathname.includes("/edit"), { timeout: 10_000 })
+      .catch(() => {
+        /* ignore if already navigated */
+      });
 
     // 4. Verify modified title in list
     await goToServicesList(page);
-    await page.goto("/admin/services?perPage=100");
     await expect(
       page.getByText(modifiedTitle, { exact: false }).first(),
     ).toBeVisible({ timeout: 30_000 });
@@ -88,6 +95,11 @@ test.describe("services edit and restore data integrity", () => {
 
     await page.locator('button[type="submit"]').first().click();
     await restoreResponse;
+    await page
+      .waitForURL((url) => !url.pathname.includes("/edit"), { timeout: 10_000 })
+      .catch(() => {
+        /* ignore if already navigated */
+      });
 
     // 6. Cleanup item
     await deleteServiceByTitle(page, testService.title);

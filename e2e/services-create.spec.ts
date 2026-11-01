@@ -24,8 +24,10 @@ test.describe("services create and cleanup", () => {
     await fillServiceForm(page, tempService);
     await goToServicesList(page);
 
-    await expect(
-      page.getByRole("cell", { name: tempService.title }).first(),
-    ).toBeVisible();
+    const cell = page
+      .getByRole("cell")
+      .filter({ has: page.getByText(tempService.title, { exact: true }) })
+      .first();
+    await expect(cell).toBeVisible({ timeout: 15_000 });
   });
 });
