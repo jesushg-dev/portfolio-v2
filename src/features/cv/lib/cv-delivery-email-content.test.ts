@@ -26,4 +26,3 @@ describe("getCvDeliveryEmailContent", () => {
     expect(result.html).toContain('lang="nl"');
   });
 });
-

@@ -69,7 +69,18 @@ test.describe("jobs application CRUD and integrity", () => {
     );
 
     // 6. Navigate back to list and verify Kanban card presence
-    await page.goto("/admin/job-tracker");
+    await page.goto("/admin/job-tracker?tab=applications");
+    const applicationsTab = page
+      .locator("#job-tracker-tab-applications")
+      .or(
+        page.getByRole("tab", {
+          name: /applications|postulaciones|sollicitaties/i,
+        }),
+      )
+      .first();
+    if (await applicationsTab.isVisible()) {
+      await applicationsTab.click();
+    }
     const cardTitle = page.getByText(testPosition, { exact: false }).first();
     await expect(cardTitle).toBeVisible({ timeout: 15_000 });
 

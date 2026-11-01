@@ -167,4 +167,3 @@ Masaya, Nicaragua`;
     text,
   };
 }
-

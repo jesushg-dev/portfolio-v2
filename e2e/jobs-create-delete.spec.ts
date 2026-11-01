@@ -51,7 +51,18 @@ test.describe("jobs application CRUD and integrity", () => {
     );
 
     // 6. Navigate back to list and verify item is present
-    await page.goto("/admin/job-tracker");
+    await page.goto("/admin/job-tracker?tab=applications");
+    const applicationsTab = page
+      .locator("#job-tracker-tab-applications")
+      .or(
+        page.getByRole("tab", {
+          name: /applications|postulaciones|sollicitaties/i,
+        }),
+      )
+      .first();
+    if (await applicationsTab.isVisible()) {
+      await applicationsTab.click();
+    }
     const cell = page.getByText(testPosition, { exact: false }).first();
     await expect(cell).toBeVisible({ timeout: 15_000 });
   });

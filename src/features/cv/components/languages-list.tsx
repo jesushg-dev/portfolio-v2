@@ -188,7 +188,7 @@ export const LanguagesList: FC<LanguagesListProps> = ({
         <p className="text-muted-foreground text-xs sm:text-sm">
           {t("entriesCount", { count: optimisticItems.length })}
         </p>
-        <CvAddButton id="cv-language-add" onClick={handleAddClick}>
+        <CvAddButton id="cv-languages-add" onClick={handleAddClick}>
           {t("add")}
         </CvAddButton>
       </div>

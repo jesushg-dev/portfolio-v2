@@ -126,17 +126,17 @@ describe("cvPublicRouter.sendPdfByEmail", () => {
     );
     await expect(caller.sendPdfByEmail(input)).resolves.toEqual({ ok: true });
     expect(send).toHaveBeenCalledTimes(1);
-    const mockCalls = (send).mock.calls as [
-        {
-          from: string;
-          to: string;
-          replyTo: string;
-          subject: string;
-          html: string;
-          text: string;
-          attachments: { filename: string }[];
-        },
-      ][];
+    const mockCalls = send.mock.calls as [
+      {
+        from: string;
+        to: string;
+        replyTo: string;
+        subject: string;
+        html: string;
+        text: string;
+        attachments: { filename: string }[];
+      },
+    ][];
     const payload = mockCalls[0]?.[0];
     expect(payload?.from).toBe("me@example.com");
     expect(payload?.to).toBe("hire@example.com");

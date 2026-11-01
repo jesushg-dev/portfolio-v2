@@ -190,7 +190,10 @@ async function ensureCvItemAddReady(
   sectionId: string,
   addButtonId: string,
 ): Promise<void> {
-  const addButton = page.locator(`#${addButtonId}`);
+  const addButton = page
+    .locator(`#${addButtonId}`)
+    .or(page.locator(`#${addButtonId.replace(/s-add$/, "-add")}`))
+    .first();
   if (await addButton.isVisible()) return;
 
   const sectionModal = page.locator("#cv-section-sheet");
@@ -206,7 +209,10 @@ async function ensureCvItemAddReady(
 }
 
 async function openCvItemSheet(page: Page, addButtonId: string): Promise<void> {
-  const addButton = page.locator(`#${addButtonId}`);
+  const addButton = page
+    .locator(`#${addButtonId}`)
+    .or(page.locator(`#${addButtonId.replace(/s-add$/, "-add")}`))
+    .first();
   await addButton.waitFor({ state: "visible", timeout: 15_000 });
   await addButton.scrollIntoViewIfNeeded();
   await addButton.click();

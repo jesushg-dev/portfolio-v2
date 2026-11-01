@@ -1,9 +1,4 @@
-import {
-  Html,
-  Head,
-  Body,
-  Preview,
-} from "@react-email/components";
+import { Html, Head, Body, Preview } from "@react-email/components";
 import { createTranslator } from "use-intl";
 import { loadMessages, type Locale } from "./load-messages";
 
@@ -123,10 +118,7 @@ export default async function CvDeliveryEmail({
                           >
                             jesushg.com
                           </a>
-                          <span
-                            className="muted"
-                            style={{ color: "#9ca3af" }}
-                          >
+                          <span className="muted" style={{ color: "#9ca3af" }}>
                             &nbsp;·&nbsp;
                           </span>
                           <a
@@ -139,10 +131,7 @@ export default async function CvDeliveryEmail({
                           >
                             LinkedIn
                           </a>
-                          <span
-                            className="muted"
-                            style={{ color: "#9ca3af" }}
-                          >
+                          <span className="muted" style={{ color: "#9ca3af" }}>
                             &nbsp;·&nbsp;
                           </span>
                           <a

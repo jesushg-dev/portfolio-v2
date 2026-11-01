@@ -66,6 +66,7 @@ export const ProfileSaveBar: FC<ProfileSaveBarProps> = ({
           </Button>
 
           <Button
+            id="profile-save-button"
             type="button"
             variant="default"
             size="sm"

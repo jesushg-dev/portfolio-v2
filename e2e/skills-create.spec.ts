@@ -46,7 +46,9 @@ test.describe("skills create", () => {
     await page.goto("/admin/skills?perPage=100");
     for (const skill of portfolioSkills) {
       await expect(
-        page.getByRole("cell", { name: skill.title, exact: true }),
+        page
+          .getByRole("cell")
+          .filter({ has: page.getByText(skill.title, { exact: true }) }),
       ).toBeVisible();
     }
   });
