@@ -1,20 +1,14 @@
 {
   "cv-delivery": {
-    "preview": "Hier is mijn cv — Jesús Hernández",
-    "tagline": "Senior Software Engineer",
-    "greeting": "Hallo {recipientName},",
-    "body1": "Bedankt voor uw interesse via mijn portfolio. Hierbij vindt u mijn meest recente cv als bijlage.",
-    "highlight": "Senior Software Engineer met 6+ jaar ervaring in .NET Core, React/Next.js en TypeScript — momenteel verantwoordelijk voor e-commerce engineering op VTEX voor Walmart Global Tech in Centraal-Amerika.",
-    "body2": "Ik beantwoord graag al uw vragen of plan een gesprek in wanneer het u uitkomt.",
+    "preview": "Mijn cv is bijgevoegd. Beantwoord deze e-mail en we plannen een gesprek.",
+    "tagline": "Full Stack Developer | Computer Engineer",
+    "greeting": "Hallo,",
+    "body1": "Bedankt voor je interesse. Ik ben Jesús, Full Stack developer met 6+ jaar ervaring in .NET Core, React/Next.js en TypeScript. Momenteel leid ik het e-commerce engineering team op VTEX voor Walmart Global Tech in Centraal-Amerika.",
+    "body2": "Mijn cv is bijgevoegd. Als je wilt praten, antwoord dan op deze e-mail en we plannen een gesprek.",
     "signOff": "Met vriendelijke groet,",
     "name": "Jesús Hernández",
-    "role": "Senior Software Engineer",
-    "footer": "Automatisch verzonden vanuit het contactformulier op jesushg.com.",
-    "stats": {
-      "years": "Jaar ervaring",
-      "projects": "Projecten opgeleverd",
-      "certifications": "Certificeringen"
-    }
+    "role": "Full Stack Developer | Computer Engineer",
+    "footer": "Verzonden vanuit het contactformulier op jesushg.com."
   },
   "contact-notification": {
     "preview": "Nieuw bericht van {senderName} via jesushg.com",

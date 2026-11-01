@@ -12,6 +12,10 @@ import { mapLocalizedCvToDraft } from "@/features/cv/lib/map-localized-to-draft"
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import { generateCvDocxFromDb } from "@/features/cv/lib/generate-cv-docx-from-db";
 import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
+import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -163,13 +167,20 @@ export async function GET(request: Request) {
     const draft = mapLocalizedCvToDraft(localizedData, aboutMeText, locale);
     const buffer = await generateDocxFromStructured(draft);
 
-    const fileName = `CV-${header.fullName.replace(/[^\w.-]+/g, "_")}.docx`;
+    const fileName = buildAtsCvFileName({
+      fullName: header.fullName,
+      roleTrack: inferCvRoleTrack(field(header.translations, "degree") || ""),
+      locale,
+      extension: "docx",
+    });
+
+    const encodedFileName = encodeURIComponent(fileName);
 
     return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type":
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "Content-Disposition": `attachment; filename="${fileName}"`,
+        "Content-Disposition": `attachment; filename="${fileName}"; filename*=UTF-8''${encodedFileName}`,
         "Cache-Control": "no-store",
       },
     });
