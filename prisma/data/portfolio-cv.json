@@ -156,7 +156,7 @@
         "React",
         "React Native",
         "Redux",
-        "Tailwind",
+        "Tailwind CSS",
         "WebSockets",
         "REST APIs"
       ],
@@ -166,10 +166,10 @@
       "category": "BACKEND",
       "items": [
         "C#",
-        ".NET Core",
+        ".NET",
         "Nest.js",
         "Python",
-        "Node-JS",
+        "Node.js",
         "PHP",
         "GraphQL"
       ],
@@ -856,7 +856,7 @@
         "React Native",
         "Next.js",
         "TypeScript",
-        "Tailwind",
+        "Tailwind CSS",
         "Redux"
       ],
       "order": 1

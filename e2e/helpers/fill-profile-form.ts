@@ -119,10 +119,14 @@ async function selectProfileLocale(
 }
 
 async function submitProfileHeroForm(page: Page): Promise<void> {
-  const submit = page.getByRole("button", {
-    name: "Save changes",
-    exact: true,
-  });
+  const submit = page
+    .locator("#profile-save-button")
+    .or(
+      page.getByRole("button", {
+        name: /Save changes|Guardar cambios|Wijzigingen opslaan/i,
+      }),
+    )
+    .first();
   const savePromise = page.waitForResponse(
     (response) =>
       response.url().includes("profileAdmin.upsertHero") &&
@@ -201,6 +205,18 @@ export async function fillProfileHeroFromFixture(
     await page.locator("#profile-tr-tagline").fill(fixture.heroTagline[locale]);
   }
 
+  const aboutTab = page
+    .locator("#profile-tab-about")
+    .or(page.getByRole("tab", { name: /About Me & Terminal/i }))
+    .first();
+  if (await aboutTab.isVisible()) {
+    await aboutTab.click();
+    for (const locale of PROFILE_LOCALES) {
+      await selectProfileLocale(page, locale);
+      await page.locator("#profile-tr-about").fill(portfolioCv.aboutMe[locale]);
+    }
+  }
+
   await submitProfileHeroForm(page);
 }
 
@@ -277,7 +293,7 @@ export async function fillProfileConsoleFromFixture(
     .first();
   const savePromise = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/terminal.upsert") &&
+      response.url().includes("terminal.upsert") &&
       response.request().method() === "POST" &&
       response.ok(),
     { timeout: 30_000 },
@@ -316,9 +332,13 @@ export async function fillProfileHeroSmoke(
   await selectProfileLocale(page, "en");
   await page.locator("#profile-tr-summary").fill(heroSummary.en);
 
-  await page
-    .getByRole("tab", { name: "About Me & Terminal", exact: true })
-    .click();
+  const aboutTab = page
+    .locator("#profile-tab-about")
+    .or(page.getByRole("tab", { name: /About Me & Terminal/i }))
+    .first();
+  if (await aboutTab.isVisible()) {
+    await aboutTab.click();
+  }
   for (const locale of PROFILE_LOCALES) {
     await selectProfileLocale(page, locale);
     await page.locator("#profile-tr-about").fill(portfolioCv.aboutMe[locale]);

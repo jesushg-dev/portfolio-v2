@@ -244,6 +244,7 @@ export function SkillPicker({
             <button
               key={skill.id}
               id={`skill-picker-${skill.id}`}
+              data-skill-title={skill.title}
               type="button"
               onClick={() => toggle(skill.id)}
               aria-pressed={isSelected}

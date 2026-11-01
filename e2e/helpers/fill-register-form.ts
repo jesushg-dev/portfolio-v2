@@ -4,6 +4,7 @@ import { expect } from "@playwright/test";
 import { requireE2eCredentials } from "../env";
 import { portfolioProfile } from "../fixtures/portfolio-profile";
 import { syncE2eWorkerPassword } from "./ensure-app-languages";
+import { resetTwoFactorForEmail } from "./two-factor-state";
 
 export interface RegisterOwnerInput {
   name: string;
@@ -178,6 +179,18 @@ export async function signInOwner(
     await expectAdminDashboard(page, 30_000);
     return true;
   } catch (dashboardError) {
+    if (page.url().includes("/two-factor") && !email.includes("-e2e-2fa")) {
+      await resetTwoFactorForEmail(email).catch(() => {/* */ });
+      await page.goto("/login");
+      if (!isAdminPath(page.url())) {
+        await fillSignInCredentials(page, email, password);
+        const retryResponse = await submitSignInRequest(page);
+        await parseSignInResponse(retryResponse).catch(() => {/* */ });
+      }
+      await expectAdminDashboard(page, 30_000);
+      return true;
+    }
+
     const sessionResponse = await page
       .context()
       .request.get(new URL("/api/auth/get-session", page.url()).href);
@@ -203,7 +216,7 @@ export async function signInOwner(
     }
     throw new Error(
       "Sign-in API succeeded but no authenticated session was available. " +
-        "Check session cookies and BETTER_AUTH_URL versus E2E_BASE_URL.",
+      "Check session cookies and BETTER_AUTH_URL versus E2E_BASE_URL.",
       { cause: dashboardError },
     );
   }
@@ -274,6 +287,9 @@ export async function ensureOwnerAccount(
   page: Page,
   input: RegisterOwnerInput = buildOwnerAccountInput(),
 ): Promise<void> {
+  if (!input.email.includes("-e2e-2fa")) {
+    await resetTwoFactorForEmail(input.email).catch(() => {/* */ });
+  }
   try {
     const signedIn = await signInOwner(page, input.email, input.password);
     if (signedIn) return;

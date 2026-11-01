@@ -133,6 +133,7 @@ export async function ensurePortfolioSkills(page: Page): Promise<void> {
   const missing = portfolioSkills.filter(
     (skill) => !existingTitles.has(skill.title),
   );
+
   if (missing.length === 0) {
     return;
   }

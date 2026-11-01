@@ -6,7 +6,7 @@ The CV editor uses the canonical SkillPicker. The selected list supports drag ha
 
 All standard exports, previews and tailored resume source documents use visible selections in saved category/item order. The AI can select a subset for a job, but the renderer preserves the selected items' CMS order. It cannot bring back hidden catalogue skills.
 
-Imports and seeds resolve textual source names at their boundary into catalogue IDs. Existing exact/case-insensitive matches are reused, including the explicit aliases Tailwind → Tailwind CSS and Node-JS/NodeJS → Node.js. An absent catalogue entry can be created from the imported text; existing catalogue metadata is not overwritten. Editing the CV does not create catalogue entries: users select from their own Skill catalogue.
+Imports and seeds resolve textual source names at their boundary into catalogue IDs. Existing exact/case-insensitive matches are reused. An absent catalogue entry can be created from the imported text; existing catalogue metadata is not overwritten. Editing the CV does not create catalogue entries: users select from their own Skill catalogue.
 
 ## Migration
 
