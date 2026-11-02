@@ -4,12 +4,8 @@ import type { AppLanguage } from "@prisma/client";
 import { type FC, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { parseAsStringEnum, useQueryState } from "nuqs";
-import {
-  HiOutlineBookOpen,
-  HiOutlineCollection,
-  HiOutlineStatusOnline,
-} from "react-icons/hi";
-import { FaGithub } from "react-icons/fa";
+import { Activity, BookOpen, Layers } from "lucide-react";
+import { GithubIcon } from "@/components/shared/brand-icons";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { NowSettingsEditorDTO } from "@/features/now/lib/now-editor-dto";
@@ -58,19 +54,19 @@ export const NowAdminPanel: FC<NowAdminPanelProps> = ({
             className="w-max min-w-full"
           >
             <TabsTrigger value="SNAPSHOT" className="gap-1.5">
-              <HiOutlineStatusOnline className="size-4" />
+              <Activity className="size-4" />
               {t("tabs.snapshot")}
             </TabsTrigger>
             <TabsTrigger value="ACTIVITY" className="gap-1.5">
-              <HiOutlineBookOpen className="size-4" />
+              <BookOpen className="size-4" />
               {t("tabs.activity")}
             </TabsTrigger>
             <TabsTrigger value="GITHUB" className="gap-1.5">
-              <FaGithub className="size-4" />
+              <GithubIcon className="size-4" />
               {t("tabs.github")}
             </TabsTrigger>
             <TabsTrigger value="FOCUSES" className="gap-1.5">
-              <HiOutlineCollection className="size-4" />
+              <Layers className="size-4" />
               {t("tabs.focuses")}
             </TabsTrigger>
           </TabsList>

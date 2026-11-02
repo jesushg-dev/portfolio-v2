@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ExternalLink, LayoutGrid, Lock } from "lucide-react";
-import { AiFillGithub } from "react-icons/ai";
+import { GithubIcon } from "@/components/shared/brand-icons";
 import Tab from "@/components/custom-ui/custom-tab";
 import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 import { MediaImage } from "@/components/shared/media-image";
@@ -268,7 +268,7 @@ function ProjectActions({
           rel="noreferrer"
           className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
         >
-          <AiFillGithub className="text-primary size-3.5" aria-hidden="true" />
+          <GithubIcon className="text-primary size-3.5" aria-hidden="true" />
           <span>{t("viewSource")}</span>
         </a>
       ) : project.isPrivate ? (

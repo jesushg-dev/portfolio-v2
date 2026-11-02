@@ -2,7 +2,7 @@ import "server-only";
 
 import type { Locale } from "@/i18n/config";
 import { db } from "@/server/db";
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
 
 export interface UsesPublicItem {
   id: string;
@@ -73,7 +73,7 @@ function pickLocaleText(
 export async function getUsesPageData(
   locale: Locale,
 ): Promise<UsesPublicPageData | null> {
-  const tenant = await resolveTenant();
+  const tenant = await resolvePublicTenant();
   if (!tenant) return null;
 
   const [settings, items] = await Promise.all([

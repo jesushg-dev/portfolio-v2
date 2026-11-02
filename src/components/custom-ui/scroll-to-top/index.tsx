@@ -2,7 +2,7 @@
 
 import type { FC, MouseEvent, RefObject } from "react";
 import { useEffect, useState } from "react";
-import { BiArrowFromBottom } from "react-icons/bi";
+import { ArrowUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
@@ -66,7 +66,7 @@ const ScrollToTop: FC<ScrollToTopProps> = ({
         className,
       )}
     >
-      <BiArrowFromBottom className="h-6 w-6" aria-hidden="true" />
+      <ArrowUp className="size-6" aria-hidden="true" />
     </button>
   );
 

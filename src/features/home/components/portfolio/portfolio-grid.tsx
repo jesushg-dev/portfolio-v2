@@ -1,61 +1,40 @@
 "use client";
 
 import type { FC } from "react";
-import { useRef, useMemo, useState } from "react";
-import { motion, useInView } from "motion/react";
-import { useTranslations, useLocale } from "next-intl";
+import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
-import { api } from "@/trpc/react";
-import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
+import dynamic from "next/dynamic";
 import { LinkPreview } from "@/components/ui/link-preview";
 import type { ProjectType } from "@/utils/interfaces/types";
 
 import FilterType from "./filter-type";
 import PortfolioItem from "./project-item";
-import { PortfolioGridSkeleton } from "./portfolio-grid-skeleton";
-import { ProjectEmptyState } from "./project-empty-state";
 import { PortfolioTopStack } from "./portfolio-top-stack";
+
+const ProjectEmptyState = dynamic(
+  () => import("./project-empty-state").then((mod) => mod.ProjectEmptyState),
+  { ssr: false },
+);
 
 const type = [undefined, "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const item = {
-  hidden: { y: 12, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.25 },
-  },
-};
-
 interface PortfolioGridProps {
-  initialData?: {
-    projects: ProjectType[];
-    nextCursor: string | null;
-    totalCount?: number;
-    caseStudyCount?: number;
-  };
+  projects: ProjectType[];
+  totalCount: number;
+  caseStudyCount: number;
 }
 
-const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
-  const locale = useLocale();
-  const ref = useRef<HTMLElement>(null);
-
+const PortfolioGrid: FC<PortfolioGridProps> = ({
+  projects: allProjects,
+  totalCount,
+  caseStudyCount,
+}) => {
   const t = useTranslations("main.portfolio");
 
-  const isInView = useInView(ref, { once: true });
   const labels = useMemo(
-    () => ({
+    () => (project: ProjectType) => ({
       urlName: t("actions.view"),
       sourceName: t("actions.source"),
       caseStudyLabel: t("actions.caseStudy"),
@@ -69,7 +48,7 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
       },
       metaLabels: {
         solo: t("meta.solo"),
-        formatTeam: (count: number) => t("meta.team", { count }),
+        team: t("meta.team", { count: project.teamSize ?? 0 }),
         now: t("meta.now"),
         statuses: {
           IN_PRODUCTION: t("caseStudy.statuses.IN_PRODUCTION"),
@@ -78,42 +57,17 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
         },
       },
       teaserLabels: {
-        formatDecisions: (count: number) => t("teaser.decisions", { count }),
+        decisions: t("teaser.decisions", {
+          count: project.csInfo?.decisions ?? 0,
+        }),
         layers: t("teaser.layers"),
-        formatMetrics: (count: number) => t("teaser.metrics", { count }),
+        metrics: t("teaser.metrics", { count: project.csInfo?.metrics ?? 0 }),
       },
     }),
     [t],
   );
 
   const [crtValue, setCrtValue] = useState<number>(0);
-
-  // If initialData is provided from the RSC, use it without blocking network roundtrip
-  const { data, isLoading } = api.portfolio.getProjects.useQuery(
-    { limit: LIMIT_PER_PAGE_BIG, locale },
-    {
-      initialData: initialData
-        ? {
-            projects: initialData.projects,
-            nextCursor: initialData.nextCursor,
-            totalCount: initialData.totalCount ?? initialData.projects.length,
-            caseStudyCount:
-              initialData.caseStudyCount ??
-              initialData.projects.filter((p) => p.caseStudyEnabled).length,
-          }
-        : undefined,
-    },
-  );
-
-  const allProjects = useMemo(
-    () => data?.projects ?? initialData?.projects ?? [],
-    [data, initialData],
-  );
-
-  const totalCount = data?.totalCount ?? allProjects.length;
-  const caseStudyCount =
-    data?.caseStudyCount ??
-    allProjects.filter((p) => p.caseStudyEnabled).length;
 
   const counts = useMemo(() => {
     return [
@@ -137,38 +91,26 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
     <>
       <FilterType value={crtValue} onChange={setCrtValue} counts={counts} />
       <section
-        ref={ref}
         role="tabpanel"
         id={`portfolio-tab-panel-${crtValue}`}
         aria-labelledby={`portfolio-tab-tab-${crtValue}`}
       >
-        {isLoading && allProjects.length === 0 ? (
-          <PortfolioGridSkeleton />
-        ) : visibleProjects.length === 0 ? (
+        {visibleProjects.length === 0 ? (
           <ProjectEmptyState
             type={type[crtValue]}
             onReset={() => setCrtValue(0)}
           />
         ) : (
-          <motion.ul
-            initial="hidden"
-            variants={container}
-            animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {visibleProjects.map((project, idx) => (
-              <motion.li
-                layout
+          <ul className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {visibleProjects.map((project) => (
+              <li
                 key={project.id}
-                className="flex justify-center"
-                variants={item}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25 }}
+                className="flex justify-center transition-transform duration-200 hover:-translate-y-1"
               >
-                <PortfolioItem {...project} {...labels} priority={idx < 3} />
-              </motion.li>
+                <PortfolioItem {...project} {...labels(project)} />
+              </li>
             ))}
-          </motion.ul>
+          </ul>
         )}
 
         <PortfolioTopStack

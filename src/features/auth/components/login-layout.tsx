@@ -3,12 +3,12 @@
 import type { ReactNode } from "react";
 import { useCallback, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { RiPaintBrushLine } from "react-icons/ri";
 import {
   ArrowUpRight,
   BriefcaseBusiness,
   FileText,
   LayoutDashboard,
+  Palette,
   ShieldCheck,
   Shuffle,
 } from "lucide-react";
@@ -74,7 +74,7 @@ export default function LoginLayout({
             })}
           >
             <span className="sr-only">{t("openThemeMenu")}</span>
-            <RiPaintBrushLine aria-hidden className="size-4" />
+            <Palette aria-hidden className="size-4" />
           </button>
         </div>
       </header>

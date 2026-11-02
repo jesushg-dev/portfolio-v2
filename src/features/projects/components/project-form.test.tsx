@@ -12,9 +12,23 @@ const mockInvalidate = jest.fn().mockResolvedValue(undefined);
 const mockRouterBack = jest.fn();
 const mockStartUpload = jest
   .fn()
-  .mockResolvedValue([{ url: "https://cdn.example.com/project-cover.jpg" }]);
+  .mockResolvedValue([{ ufsUrl: "https://cdn.example.com/project-cover.jpg" }]);
 jest.mock("@/lib/uploadthing", () => ({
   useUploadThing: () => ({ startUpload: mockStartUpload, isUploading: false }),
+}));
+jest.mock("@/components/ui/scroll-area", () => ({
+  ScrollArea: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <div data-slot="scroll-area" className={className}>
+      {children}
+    </div>
+  ),
+  ScrollBar: () => null,
 }));
 jest.mock("next/navigation", () => ({
   useRouter: () => ({

@@ -41,29 +41,6 @@ jest.mock("@/i18n/routing", () => ({
   ),
 }));
 
-jest.mock("@/trpc/react", () => ({
-  api: {
-    portfolio: {
-      getTestimonialsPublic: {
-        useQuery: () => ({
-          data: [
-            {
-              id: "t1",
-              quote:
-                "Jesús is an exceptional engineer who elevated our architecture and delivery.",
-              author: "Mauricio Arias",
-              role: "Software Engineer · Capstone Logistics",
-              avatarUrl: null,
-              linkedInUrl: null,
-            },
-          ],
-          isLoading: false,
-        }),
-      },
-    },
-  },
-}));
-
 describe("SocialProof Component", () => {
   const mockStats = {
     yearsExperience: 6,
@@ -73,7 +50,20 @@ describe("SocialProof Component", () => {
   };
 
   it("renders testimonials quote and Bento stats correctly", () => {
-    render(<SocialProof stats={mockStats} />);
+    render(
+      <SocialProof
+        stats={mockStats}
+        testimonials={[
+          {
+            id: "t1",
+            quote:
+              "Jesús is an exceptional engineer who elevated our architecture and delivery.",
+            author: "Mauricio Arias",
+            role: "Software Engineer · Capstone Logistics",
+          },
+        ]}
+      />,
+    );
 
     expect(
       screen.getByText("What senior developers say about me"),

@@ -2,13 +2,8 @@
 
 import type { FC, ReactNode } from "react";
 import { motion } from "motion/react";
-import {
-  FaSpotify,
-  FaTerminal,
-  FaFileAlt,
-  FaFolderOpen,
-  FaCog,
-} from "react-icons/fa";
+import { FileText, FolderOpen, Settings, Terminal } from "lucide-react";
+import { SpotifyIcon } from "@/components/shared/brand-icons";
 
 import { useIOSNavigation } from "./hooks/use-ios-navigation";
 import { cn } from "@/lib/utils";
@@ -25,31 +20,31 @@ export const DEFAULT_IOS_APPS: IOSAppItem[] = [
   {
     id: "spotify",
     name: "Spotify",
-    icon: <FaSpotify className="size-6 text-white" />,
+    icon: <SpotifyIcon className="size-6 text-white" />,
     bgColor: "bg-green-600",
   },
   {
     id: "terminal",
     name: "Terminal",
-    icon: <FaTerminal className="size-5 text-green-400" />,
+    icon: <Terminal className="size-5 text-green-400" />,
     bgColor: "bg-zinc-900 border border-zinc-700",
   },
   {
     id: "cv",
     name: "Curriculum",
-    icon: <FaFileAlt className="size-5 text-white" />,
+    icon: <FileText className="size-5 text-white" />,
     bgColor: "bg-blue-600",
   },
   {
     id: "projects",
     name: "Proyectos",
-    icon: <FaFolderOpen className="size-5 text-white" />,
+    icon: <FolderOpen className="size-5 text-white" />,
     bgColor: "bg-amber-600",
   },
   {
     id: "settings",
     name: "Ajustes",
-    icon: <FaCog className="size-5 text-zinc-300" />,
+    icon: <Settings className="size-5 text-zinc-300" />,
     bgColor: "bg-zinc-700",
   },
 ];

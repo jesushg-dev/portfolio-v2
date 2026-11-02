@@ -76,7 +76,7 @@ describe("Certification", () => {
       fetchNextPage: jest.fn(),
     });
     const { container } = renderWithIntl(<Certification slug={undefined} />);
-    expect(container.querySelector(".react-loading-skeleton")).toBeTruthy();
+    expect(container.querySelector('[data-slot="skeleton"]')).toBeTruthy();
   });
 
   it("renders certificate items from query data", () => {

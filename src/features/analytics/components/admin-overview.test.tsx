@@ -1,4 +1,4 @@
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, act } from "@testing-library/react";
 import React from "react";
 import { AdminOverview } from "./admin-overview";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
@@ -104,13 +104,16 @@ describe("AdminOverview", () => {
     expect(screen.getByText("No upcoming events")).toBeInTheDocument();
   });
 
-  it("toggles service visibility when switch is clicked", () => {
+  it("toggles service visibility when switch is clicked", async () => {
     renderWithIntl(<AdminOverview data={mockData} />);
 
     const switches = screen.getAllByRole("switch");
     expect(switches.length).toBe(2);
 
-    fireEvent.click(switches[0]);
+    await act(async () => {
+      fireEvent.click(switches[0]);
+      await Promise.resolve();
+    });
     expect(mockToggleMutateAsync).toHaveBeenCalledWith({
       id: "s-1",
       isActive: false,

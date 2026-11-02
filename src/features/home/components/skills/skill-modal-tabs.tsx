@@ -2,12 +2,8 @@
 
 import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import {
-  HiOutlineAcademicCap,
-  HiOutlineBriefcase,
-  HiOutlineCode,
-} from "react-icons/hi";
-import type { IconType } from "react-icons/lib";
+import { Briefcase, Code, GraduationCap } from "lucide-react";
+import type { IconComponent } from "@/lib/icons/icon-registry";
 
 import Tab from "@/components/custom-ui/custom-tab";
 import TabItem from "@/components/custom-ui/custom-tab/tab-item";
@@ -24,10 +20,10 @@ interface SkillModalTabsProps {
   tabs: SkillModalTab[];
 }
 
-const TAB_ICONS: Record<string, IconType> = {
-  certificates: HiOutlineAcademicCap,
-  experiences: HiOutlineBriefcase,
-  projects: HiOutlineCode,
+const TAB_ICONS: Record<string, IconComponent> = {
+  certificates: GraduationCap,
+  experiences: Briefcase,
+  projects: Code,
 };
 
 export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
@@ -51,7 +47,7 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
         {tabs.map((tab) => (
           <TabItem
             key={tab.id}
-            icon={TAB_ICONS[tab.id] ?? HiOutlineCode}
+            icon={TAB_ICONS[tab.id] ?? Code}
             title={`${tab.label} (${tab.count})`}
           />
         ))}

@@ -1,6 +1,7 @@
 import "server-only";
 import { z } from "zod";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
+import { publicPortfolioTag } from "@/lib/public-site/cache-tags";
 import type {
   GitHubActivity,
   GitHubActivityKind,
@@ -46,7 +47,7 @@ export async function getGitHubActivity(
           Accept: "application/vnd.github+json",
           "X-GitHub-Api-Version": "2022-11-28",
         },
-        next: { revalidate: 300 },
+        next: { revalidate: 7200, tags: [publicPortfolioTag(userId)] },
         signal: AbortSignal.timeout(10000),
       },
     );

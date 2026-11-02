@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Building2, Globe, Mail, MapPin } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
+import { LinkedinIcon } from "@/components/shared/brand-icons";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -189,7 +189,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({ initialData }) => {
                     id="company-linkedin"
                     type="url"
                     placeholder={t("placeholders.linkedinUrl")}
-                    icon={<FaLinkedin className="size-4" />}
+                    icon={<LinkedinIcon className="size-4" />}
                     {...field}
                   />
                 </FormItem>

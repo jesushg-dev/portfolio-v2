@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import SpotifyWidgetSkeleton from "./spotify-widget-skeleton";
 import ExpandableSpotifyPlayer from "./expandable-spotify-player";
 import { useSpotifyPlayback } from "./hooks/use-spotify-playback";
+import { TRPCReactProvider } from "@/trpc/react";
 
 const SpotifyWidget: FC = () => {
   const t = useTranslations("global.footer");
@@ -48,4 +49,12 @@ const SpotifyWidget: FC = () => {
   );
 };
 
-export default memo(SpotifyWidget);
+function SpotifyWidgetWithProvider() {
+  return (
+    <TRPCReactProvider>
+      <SpotifyWidget />
+    </TRPCReactProvider>
+  );
+}
+
+export default memo(SpotifyWidgetWithProvider);

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
-import { FaSpotify } from "react-icons/fa";
+import { SpotifyIcon } from "@/components/shared/brand-icons";
 import { useIOSNavigation } from "@/components/shared/ios-device";
 
 import SpotifyFullscreenProgress from "./spotify-fullscreen-progress";
@@ -114,7 +114,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               height={256}
               draggable={false}
               className="pointer-events-none size-full rounded-[0.5rem] object-cover shadow-md select-none"
-              priority
+              preload
             />
           </div>
 
@@ -130,7 +130,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               className="mt-2.5 mb-3 inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1 text-[0.55rem] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/55"
             >
               <span className="flex size-3 items-center justify-center rounded-[0.1875rem] border border-white/80">
-                <FaSpotify className="size-2.5" />
+                <SpotifyIcon className="size-2.5" />
               </span>
               {t("spotify.fullscreen.openInSpotify")}
             </a>

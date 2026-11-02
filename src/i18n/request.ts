@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { locale as rootLocale } from "next/root-params";
 
 import { routing } from "@/i18n/routing-config";
 
@@ -24,18 +25,15 @@ async function loadMessages(locale: string): Promise<Record<string, unknown>> {
   ).default;
 }
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  const requested = await requestLocale;
-  const locale = hasLocale(routing.locales, requested)
-    ? requested
-    : routing.defaultLocale;
-
-  if (!locale) {
+export default getRequestConfig(async ({ locale: override }) => {
+  // Route Handlers and Server Actions must provide an explicit locale.
+  const requested = override ?? (await rootLocale());
+  if (!hasLocale(routing.locales, requested)) {
     notFound();
   }
 
   return {
-    locale,
-    messages: await loadMessages(locale),
+    locale: requested,
+    messages: await loadMessages(requested),
   };
 });

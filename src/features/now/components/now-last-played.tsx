@@ -3,6 +3,7 @@ import { Music } from "lucide-react";
 import { MediaImage } from "@/components/shared/media-image";
 import ViewportSection from "@/components/shared/viewport-section";
 import { useSpotifyPlayback } from "@/components/shared/spotify-widget/hooks/use-spotify-playback";
+import { TRPCReactProvider } from "@/trpc/react";
 import { NowHover } from "./now-hover";
 interface NowLastPlayedProps {
   headingPlaying: string;
@@ -88,9 +89,11 @@ export function NowLastPlayed(props: NowLastPlayedProps) {
     <ViewportSection
       fallback={<PlaybackSkeleton />}
       minHeight="6rem"
-      requiresTrpc
+      requiresInteraction
     >
-      <NowLastPlayedContent {...props} />
+      <TRPCReactProvider>
+        <NowLastPlayedContent {...props} />
+      </TRPCReactProvider>
     </ViewportSection>
   );
 }

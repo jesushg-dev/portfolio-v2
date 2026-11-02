@@ -9,6 +9,11 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { revalidateTag } from "next/cache";
+import {
+  PRIMARY_PORTFOLIO_TAG,
+  publicPortfolioTag,
+} from "@/lib/public-site/cache-tags";
 
 import { db } from "@/server/db";
 import { auth } from "@/lib/auth";
@@ -134,6 +139,16 @@ export const protectedProcedure = t.procedure
         user: ctx.user,
       },
     });
+  })
+  .use(async ({ ctx, next, type, path }) => {
+    const result = await next();
+    if (result.ok && type === "mutation") {
+      revalidateTag(publicPortfolioTag(ctx.user.id), { expire: 0 });
+      if (path.startsWith("appLanguagesAdmin.")) {
+        revalidateTag(PRIMARY_PORTFOLIO_TAG, { expire: 0 });
+      }
+    }
+    return result;
   });
 
 /**

@@ -104,7 +104,7 @@ describe("ExperienceAccordion", () => {
 
     expect(screen.getByText("Previous position")).toBeInTheDocument();
     expect(
-      screen.getByText("Senior Software Engineer", { selector: "h4" }),
+      screen.getByText("Senior Software Engineer", { selector: "h3" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Built enterprise APIs and microservices."),

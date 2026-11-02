@@ -6,6 +6,51 @@ import TabItem from "./tab-item";
 const DummyIcon = () => <svg data-testid="dummy-icon" />;
 
 describe("Tab & TabItem components", () => {
+  it("does not measure tabs while their strip is outside the viewport", () => {
+    const previousObserver = global.IntersectionObserver;
+    const observe = jest.fn();
+    global.IntersectionObserver = jest.fn(() => ({
+      observe,
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+      takeRecords: () => [],
+      root: null,
+      rootMargin: "",
+      thresholds: [],
+    })) as unknown as typeof IntersectionObserver;
+    const geometry = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect");
+
+    try {
+      const { unmount } = render(
+        <Tab ariaLabel="Offscreen measured tabs" currentTab={0}>
+          <TabItem icon={DummyIcon} title="All" />
+          <TabItem icon={DummyIcon} title="Frontend" />
+        </Tab>,
+      );
+
+      expect(observe).toHaveBeenCalled();
+      expect(geometry).not.toHaveBeenCalled();
+      unmount();
+    } finally {
+      geometry.mockRestore();
+      global.IntersectionObserver = previousObserver;
+    }
+  });
+
+  it("does not scroll page ancestors when measuring the initial active tab", () => {
+    const scrollIntoView = jest.spyOn(Element.prototype, "scrollIntoView");
+    scrollIntoView.mockClear();
+
+    render(
+      <Tab ariaLabel="Offscreen portfolio tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="All projects" />
+        <TabItem icon={DummyIcon} title="Frontend" />
+      </Tab>,
+    );
+
+    expect(scrollIntoView).not.toHaveBeenCalled();
+  });
+
   it("renders tab items and handles tab switching", () => {
     const setCurrentTab = jest.fn();
     render(

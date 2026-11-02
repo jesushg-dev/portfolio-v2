@@ -7,7 +7,7 @@ import type { GitHubContributions } from "../lib/github-contributions";
 
 import type { Locale } from "@/i18n/config";
 import { db } from "@/server/db";
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
 
 export interface NowPublicFocus {
   id: string;
@@ -38,7 +38,7 @@ export interface NowPublicPageData {
 export async function getNowPageData(
   locale: Locale,
 ): Promise<NowPublicPageData | null> {
-  const tenant = await resolveTenant();
+  const tenant = await resolvePublicTenant();
   if (!tenant) return null;
 
   const [settings, focuses] = await Promise.all([

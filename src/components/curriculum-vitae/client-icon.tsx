@@ -1,40 +1,39 @@
+import type { ComponentType, FC } from "react";
 import {
-  MdOutlineGroups3,
-  MdInsights,
-  MdSettings,
-  MdAssignment,
-  MdImportContacts,
-  MdLocalLibrary,
-} from "react-icons/md";
-import type { FC } from "react";
-import type { IconType } from "react-icons/lib";
+  BookOpen,
+  ClipboardList,
+  Library,
+  Settings,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
 // Generic Icon Component
-const IconComponent: FC<{ Icon: IconType }> = ({ Icon }) => {
+const IconComponent: FC<{ Icon: ComponentType<{ className?: string }> }> = ({
+  Icon,
+}) => {
   return <Icon className="text-xs" />;
 };
 
 // Specific Icon Exports
 export const ClientLocalImportContactsIcon: FC = () => (
-  <IconComponent Icon={MdImportContacts} />
+  <IconComponent Icon={BookOpen} />
 );
 
 export const ClientLocalLibraryIcon: FC = () => (
-  <IconComponent Icon={MdLocalLibrary} />
+  <IconComponent Icon={Library} />
 );
 
 export const ClientLocalAssignmentIcon: FC = () => (
-  <IconComponent Icon={MdAssignment} />
+  <IconComponent Icon={ClipboardList} />
 );
 
-export const ClientLocalGroupsIcon: FC = () => (
-  <IconComponent Icon={MdOutlineGroups3} />
-);
+export const ClientLocalGroupsIcon: FC = () => <IconComponent Icon={Users} />;
 
 export const ClientLocalInsightsIcon: FC = () => (
-  <IconComponent Icon={MdInsights} />
+  <IconComponent Icon={TrendingUp} />
 );
 
 export const ClientLocalSettingsIcon: FC = () => (
-  <IconComponent Icon={MdSettings} />
+  <IconComponent Icon={Settings} />
 );

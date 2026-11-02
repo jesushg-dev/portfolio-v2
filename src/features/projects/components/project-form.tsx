@@ -603,9 +603,7 @@ function CoverPreview({
 interface GeneralTabContentProps {
   form: UseFormReturn<ProjectFormValues>;
   t: TTranslations;
-  uploadCover: (
-    files: File[],
-  ) => Promise<{ url: string; ufsUrl?: string | null }[] | undefined>;
+  uploadCover: (files: File[]) => Promise<{ ufsUrl: string }[] | undefined>;
   isUploadingCover: boolean;
 }
 
@@ -643,7 +641,7 @@ function GeneralTabContent({
 
     try {
       const uploaded = await uploadCover([file]);
-      const url = uploaded?.[0]?.ufsUrl ?? uploaded?.[0]?.url;
+      const url = uploaded?.[0]?.ufsUrl;
       if (!url) throw new Error("Upload failed");
       form.setValue("image", url, { shouldValidate: true, shouldDirty: true });
     } catch (error) {

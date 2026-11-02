@@ -4,12 +4,7 @@ import { useMemo, type FC } from "react";
 import type { AppLanguage, UsesItemType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { parseAsStringEnum, useQueryState } from "nuqs";
-import {
-  HiOutlineCog,
-  HiOutlineCollection,
-  HiOutlineDesktopComputer,
-  HiOutlineGlobe,
-} from "react-icons/hi";
+import { Globe, Layers, Monitor, Settings } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UsesItemsList } from "@/features/uses/components/admin/uses-items-list";
@@ -65,19 +60,19 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
         className="max-w-full overflow-x-auto overflow-y-hidden"
       >
         <TabsTrigger value="EVERYDAY" className="gap-1.5">
-          <HiOutlineCollection className="size-4" />
+          <Layers className="size-4" />
           {t("tabs.everyday")}
         </TabsTrigger>
         <TabsTrigger value="SOFTWARE" className="gap-1.5">
-          <HiOutlineDesktopComputer className="size-4" />
+          <Monitor className="size-4" />
           {t("tabs.software")}
         </TabsTrigger>
         <TabsTrigger value="BROWSER" className="gap-1.5">
-          <HiOutlineGlobe className="size-4" />
+          <Globe className="size-4" />
           {t("tabs.browser")}
         </TabsTrigger>
         <TabsTrigger value="SETTINGS" className="gap-1.5">
-          <HiOutlineCog className="size-4" />
+          <Settings className="size-4" />
           {t("tabs.settings")}
         </TabsTrigger>
       </TabsList>

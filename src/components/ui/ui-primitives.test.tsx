@@ -1,4 +1,4 @@
-﻿import { render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import React from "react";
 import { Button } from "./button";
 import { Badge } from "./badge";
@@ -65,11 +65,11 @@ describe("Button component", () => {
             Custom Link
           </a>
         )}
-        nativeButton={true}
+        nativeButton={false}
       />,
     );
     expect(
-      screen.getByRole("link", { name: "Custom Link" }),
+      screen.getByRole("button", { name: "Custom Link" }),
     ).toBeInTheDocument();
   });
 });

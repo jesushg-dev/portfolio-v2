@@ -10,7 +10,7 @@ interface ProjectCoverImageProps {
   src: string;
   alt: string;
   fill?: boolean;
-  priority?: boolean;
+  preload?: boolean;
   sizes?: string;
   className?: string;
   fallbackTitle?: string;
@@ -20,7 +20,7 @@ export const ProjectCoverImage: FC<ProjectCoverImageProps> = ({
   src,
   alt,
   fill = true,
-  priority = false,
+  preload = false,
   sizes,
   className,
   fallbackTitle,
@@ -48,7 +48,7 @@ export const ProjectCoverImage: FC<ProjectCoverImageProps> = ({
       src={src}
       alt={alt}
       fill={fill}
-      priority={priority}
+      preload={preload}
       sizes={sizes}
       className={cn("object-cover", className)}
       onError={() => setFailed(true)}

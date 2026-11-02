@@ -1,10 +1,10 @@
 import { cache } from "react";
 
 import { resolveSiteBrand, type SiteBrand } from "@/lib/site-brand/site-brand";
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
 
 export const getCachedSiteBrand = cache(async (): Promise<SiteBrand> => {
-  const tenant = await resolveTenant();
+  const tenant = await resolvePublicTenant();
   if (!tenant) {
     return resolveSiteBrand({});
   }

@@ -26,7 +26,7 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
+import { LinkedinIcon } from "@/components/shared/brand-icons";
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/routing";
 
@@ -779,7 +779,7 @@ function ApplicationDetailsPanel({
                   rel="noopener noreferrer"
                   className="text-primary inline-flex items-center gap-1 hover:underline"
                 >
-                  <FaLinkedin className="size-3" aria-hidden />
+                  <LinkedinIcon className="size-3" aria-hidden />
                   LinkedIn
                 </a>
               ) : null}

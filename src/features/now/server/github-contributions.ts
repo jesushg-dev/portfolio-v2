@@ -1,4 +1,5 @@
 import "server-only";
+import { publicPortfolioTag } from "@/lib/public-site/cache-tags";
 import { z } from "zod";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
 import type { GitHubContributions } from "../lib/github-contributions";
@@ -58,7 +59,7 @@ export async function getGitHubContributions(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ query, variables: { login: username } }),
-      next: { revalidate: 3600 },
+      next: { revalidate: 7200, tags: [publicPortfolioTag(userId)] },
       signal: AbortSignal.timeout(10000),
     });
     if (!response.ok) return { status: "unavailable", username };

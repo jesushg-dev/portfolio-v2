@@ -1,3 +1,4 @@
+import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
 import { Calendar } from "lucide-react";
@@ -5,6 +6,8 @@ import { Calendar } from "lucide-react";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { Link } from "@/i18n/routing";
+import ViewportSection from "@/components/shared/viewport-section";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import ContactForm from "./contact-form-lazy";
 import ContactIllustration from "./contact-illustration";
@@ -14,7 +17,10 @@ import { buildContactLinks } from "@/utils/contact-links";
 import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 
 const Contact: FC = async () => {
-  const t = await getTranslations("main.contact");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "main.contact",
+  });
   const data = await api.contact.getPublic();
   const links = buildContactLinks(data.contacts, {
     excludePortfolioUrl: data.portfolioUrl ?? undefined,
@@ -25,16 +31,6 @@ const Contact: FC = async () => {
   return (
     <div className="bg-card border-border/40 relative w-full border-t">
       <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-24">
-        {/* Background Texture Image */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-65 contrast-110"
-          style={{
-            backgroundImage:
-              'url("https://res.cloudinary.com/js-media/image/upload/f_auto,q_auto,w_1200/v1642524508/portfolio/hero/3239480_nnfqfm.webp")',
-          }}
-        />
-
         {/* Soft gradient edges overlay */}
         <div
           aria-hidden
@@ -111,7 +107,13 @@ const Contact: FC = async () => {
                   aria-hidden
                   className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"
                 />
-                <ContactForm />
+                <ViewportSection
+                  fallback={<Skeleton className="h-80 w-full rounded-2xl" />}
+                  minHeight="20rem"
+                  requiresInteraction
+                >
+                  <ContactForm />
+                </ViewportSection>
               </div>
             ) : null}
           </ContactContainer>

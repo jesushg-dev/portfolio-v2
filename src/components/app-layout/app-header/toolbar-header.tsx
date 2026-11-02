@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
-import { RiMenu3Line, RiCloseLine, RiPaintBrushLine } from "react-icons/ri";
+import { Menu, Palette, X } from "lucide-react";
 
 import LocaleSelector from "./locale-selector";
 import { headerIconControlStyles } from "./toolbar-control-styles";
@@ -36,7 +36,7 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
         })}
       >
         <span className="sr-only">{t("openThemeMenu")}</span>
-        <RiPaintBrushLine aria-hidden="true" className="size-[1.15rem]" />
+        <Palette aria-hidden="true" className="size-[1.15rem]" />
       </button>
       <LocaleSelector inverted={inverted} />
       <button
@@ -52,9 +52,9 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
           {isMenuOpen ? t("closeMenu") : t("openMenu")}
         </span>
         {isMenuOpen ? (
-          <RiCloseLine aria-hidden="true" className="size-[1.15rem]" />
+          <X aria-hidden="true" className="size-[1.15rem]" />
         ) : (
-          <RiMenu3Line aria-hidden="true" className="size-[1.15rem]" />
+          <Menu aria-hidden="true" className="size-[1.15rem]" />
         )}
       </button>
     </div>

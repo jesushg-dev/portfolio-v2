@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import type { FC, KeyboardEvent, ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { FaEdit } from "react-icons/fa";
+import { Pencil } from "lucide-react";
 
 import { Sheet } from "@/components/ui/sheet";
 import { FormSheetContent } from "@/components/shared/form-sheet-content";
@@ -144,7 +144,7 @@ const EditableSection: FC<EditableSectionProps> = ({
             canHoverEdit ? "cursor-none" : "cursor-pointer",
           )}
         >
-          <FaEdit className="size-3.5" aria-hidden />
+          <Pencil className="size-3.5" aria-hidden />
         </button>
       </div>
       {isEmpty ? (

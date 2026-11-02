@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode, type FC } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { RiCloseCircleFill } from "react-icons/ri";
+import { XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface IModalProps {
@@ -70,7 +70,7 @@ const CloseModal: FC<ICloseModalProps> = ({
         className,
       )}
     >
-      <RiCloseCircleFill className={cn("size-6", classIcon)} />
+      <XCircle className={cn("size-6", classIcon)} />
     </motion.button>
   );
 };

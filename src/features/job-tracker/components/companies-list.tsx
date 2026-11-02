@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Plus, Pencil, Trash2, Globe, Mail } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
+import { LinkedinIcon } from "@/components/shared/brand-icons";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -272,7 +272,7 @@ export const CompaniesList: FC<CompaniesListProps> = ({
                   rel="noopener noreferrer"
                   className="text-primary flex items-center gap-1 text-sm hover:underline"
                 >
-                  <FaLinkedin className="size-3.5" />
+                  <LinkedinIcon className="size-3.5" />
                   LinkedIn
                 </a>
               ) : null}

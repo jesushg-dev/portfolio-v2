@@ -65,6 +65,7 @@ const Tab: FC<ITabProps> = ({
     onActivePointerDown,
     indicatorProps,
     isDragging,
+    isVisible,
     glow,
   } = useTabIndicatorDrag({
     currentTab,
@@ -78,7 +79,7 @@ const Tab: FC<ITabProps> = ({
   const edgeScrollRafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (vertical) return;
+    if (vertical || !isVisible) return;
     const scroller = scrollContainerRef.current;
     if (!scroller) return;
 
@@ -106,7 +107,7 @@ const Tab: FC<ITabProps> = ({
       scroller.removeEventListener("scroll", updateScrollEdges);
       window.removeEventListener("resize", updateScrollEdges);
     };
-  }, [scrollContainerRef, tabItems.length, vertical]);
+  }, [isVisible, scrollContainerRef, tabItems.length, vertical]);
 
   // Velocity-driven scroll: scroll follows the direction and speed the cursor
   // moves toward the overflow edge — like a mobile swipe translating to content movement.

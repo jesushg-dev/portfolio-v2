@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import { ArrowRightIcon, Rocket, TrendingUp } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -19,13 +18,17 @@ import {
 } from "./lib/skill-display";
 import SkillIcon from "./skill-icon";
 
+export type CompactSkillType = Pick<
+  SkillType,
+  "id" | "title" | "image" | "type" | "featured" | "trend"
+>;
+
 interface SkillsTerminalProps {
-  initialSkills: SkillType[];
+  initialSkills: (SkillType | CompactSkillType)[];
 }
 
 const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   const t = useTranslations("main.skills");
-  const shouldReduceMotion = useReducedMotion();
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [activeCategory, setActiveCategory] = useState<SkillCategoryId>("ai");
@@ -115,12 +118,12 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               className="size-2.5 rounded-full bg-emerald-400/80"
               aria-hidden="true"
             />
-            <span className="text-muted-foreground ml-2 font-mono text-xs">
+            <span className="text-muted-foreground ml-2 font-mono text-sm">
               expertise.json
             </span>
           </div>
 
-          <label className="border-border/40 bg-background/80 focus-within:border-primary flex items-center gap-2 rounded-xl border px-3 py-1.5 font-mono text-xs transition-colors sm:text-sm">
+          <label className="border-border/40 bg-background/80 focus-within:border-primary flex min-h-11 items-center gap-2 rounded-xl border px-3 py-1 font-mono text-sm transition-colors">
             <span className="text-primary font-bold">$</span>
             <input
               ref={searchRef}
@@ -130,9 +133,9 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               placeholder={t("terminal.searchPlaceholder")}
               aria-label={t("terminal.searchLabel")}
               autoComplete="off"
-              className="text-foreground placeholder:text-muted-foreground w-28 bg-transparent outline-none sm:w-36"
+              className="text-foreground placeholder:text-muted-foreground h-11 w-28 bg-transparent outline-none sm:w-36"
             />
-            <kbd className="border-border/40 text-muted-foreground rounded border px-1.5 text-[11px]">
+            <kbd className="border-border/40 text-muted-foreground rounded border px-1.5 text-sm">
               /
             </kbd>
           </label>
@@ -161,22 +164,14 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   setActiveCategory(category.id);
                 }}
                 className={cn(
-                  "focus-visible:ring-primary/40 relative flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 py-3 text-xs font-semibold whitespace-nowrap transition-all duration-150 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:px-4 sm:text-sm",
+                  "focus-visible:ring-primary/40 relative flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-150 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:px-4",
                   isActive
                     ? "text-foreground font-bold"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-t-lg",
                 )}
               >
-                {isActive && !shouldReduceMotion ? (
-                  <motion.span
-                    layoutId="skills-terminal-tab"
-                    className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5"
-                    transition={{
-                      type: "spring",
-                      bounce: 0.15,
-                      duration: 0.45,
-                    }}
-                  />
+                {isActive ? (
+                  <span className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5" />
                 ) : null}
                 <span
                   className={cn(
@@ -185,7 +180,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   )}
                 />
                 <span>{t(`tabs.${category.id}.title`)}</span>
-                <span className="text-muted-foreground font-mono text-xs opacity-70">
+                <span className="text-muted-foreground font-mono text-sm font-medium">
                   {counts[category.id]}
                 </span>
               </button>
@@ -206,12 +201,9 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
             </p>
           ) : isSearching ? (
             /* Search Results: Flat list of chips */
-            <motion.ul
+            <ul
               key={`search-${search}`}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-wrap gap-2.5"
+              className="animate-in fade-in flex flex-wrap gap-2.5 duration-200"
             >
               {visibleSkills.map((skill) => (
                 <li key={skill.id}>
@@ -235,15 +227,12 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   </Link>
                 </li>
               ))}
-            </motion.ul>
+            </ul>
           ) : (
             /* Category View: Featured Cards Grid + Regular Chips */
-            <motion.div
+            <div
               key={activeCategory}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-6"
+              className="animate-in fade-in space-y-6 duration-200"
             >
               {featuredSkills.length > 0 ? (
                 <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -258,9 +247,9 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                         className="group/feat border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 relative flex cursor-pointer flex-col rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs"
                       >
                         {skill.trend ? (
-                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-pink-500/30 bg-pink-500/15 px-2 py-0.5 text-[10px] font-semibold text-pink-400 backdrop-blur-xs">
+                          <span className="border-primary/30 bg-primary/10 text-primary absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold backdrop-blur-xs">
                             <TrendingUp
-                              className="size-2.5"
+                              className="size-3.5"
                               aria-hidden="true"
                             />
                             <span>{t("terminal.trend")}</span>
@@ -275,7 +264,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                         <p className="text-foreground group-hover/feat:text-primary mt-4 text-sm font-bold tracking-tight transition-colors">
                           {skill.title}
                         </p>
-                        <p className="text-primary mt-0.5 text-xs font-semibold">
+                        <p className="text-primary mt-0.5 text-sm font-semibold">
                           {t("terminal.featured")}
                         </p>
                       </Link>
@@ -312,15 +301,12 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               ) : null}
 
               <div className="mt-6 flex justify-center">
-                <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium backdrop-blur-xs">
-                  <Rocket
-                    className="text-primary size-3.5"
-                    aria-hidden="true"
-                  />
+                <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium backdrop-blur-xs">
+                  <Rocket className="text-primary size-4" aria-hidden="true" />
                   <span>{t("terminal.updatedTechPill")}</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

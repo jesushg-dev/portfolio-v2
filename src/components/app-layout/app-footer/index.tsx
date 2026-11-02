@@ -1,16 +1,21 @@
+import type { ComponentType } from "react";
+import { getPublicLocale } from "@/lib/public-site/locale";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowUp, Heart } from "lucide-react";
-import { IoMail } from "react-icons/io5";
 import {
-  FaCalendarAlt,
-  FaLinkedinIn,
-  FaGithub,
-  FaGlobe,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
-import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
-import type { IconType } from "react-icons";
+  ArrowUp,
+  Calendar,
+  Globe,
+  Heart,
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
+import {
+  GithubIcon,
+  LinkedinIcon,
+  WhatsappIcon,
+} from "@/components/shared/brand-icons";
 
 import { Link } from "@/i18n/routing";
 import { LinkPreview } from "@/components/ui/link-preview";
@@ -30,15 +35,18 @@ import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 const footerLinkClassName =
   "text-primary-foreground/90 hover:text-primary-foreground inline-flex min-h-11 min-w-11 items-center text-sm underline-offset-4 transition hover:underline";
 
-const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
-  email: IoMail,
-  phone: RiPhoneFill,
-  whatsapp: RiWhatsappFill,
-  linkedin: FaLinkedinIn,
-  github: FaGithub,
-  website: FaGlobe,
-  location: FaMapMarkerAlt,
-  calendly: FaCalendarAlt,
+const FOOTER_ICONS: Record<
+  ContactIconKey,
+  ComponentType<{ className?: string }>
+> = {
+  email: Mail,
+  phone: Phone,
+  whatsapp: WhatsappIcon,
+  linkedin: LinkedinIcon,
+  github: GithubIcon,
+  website: Globe,
+  location: MapPin,
+  calendly: Calendar,
 };
 
 const PEOPLE_PLEDGE_URL = "https://peoplepledge.org";
@@ -54,7 +62,7 @@ function FooterPreviewLink({
   soonLabel: string;
   soon?: boolean;
 }) {
-  if (!soon) {
+  if (soon) {
     return (
       <span
         className={`${footerLinkClassName} cursor-default gap-2 opacity-85`}
@@ -83,7 +91,10 @@ const Footer = async ({
   processNavPages?: ProcessNavPage[];
   siteBrand: SiteBrand;
 }) => {
-  const t = await getTranslations("global.footer");
+  const t = await getTranslations({
+    locale: await getPublicLocale(),
+    namespace: "global.footer",
+  });
   const year = new Date().getFullYear();
 
   const data = await api.contact.getPublic();
@@ -123,6 +134,9 @@ const Footer = async ({
                 brand={siteBrand}
                 dotClassName="text-primary-foreground"
               />
+              <span className="sr-only">
+                {t("homeLogo", { brand: getBrandAccessibleLabel(siteBrand) })}
+              </span>
             </Link>
             <p className="text-primary-foreground/90 flex items-center gap-1.5 text-sm leading-relaxed">
               {t("madeWith")}
@@ -301,6 +315,7 @@ const Footer = async ({
                   width={60}
                   height={18}
                   className="h-4.5 w-auto"
+                  style={{ width: "auto" }}
                 />
               </a>
             </div>
@@ -319,7 +334,8 @@ const Footer = async ({
           <div className="flex items-center gap-2">
             {socialLinks.map((link) => {
               const Icon = FOOTER_ICONS[link.icon];
-              return (
+              const isEmail = link.href.startsWith("mailto:");
+              const anchor = (
                 <a
                   key={link.key}
                   href={link.href}
@@ -329,8 +345,29 @@ const Footer = async ({
                   className="flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-0.5 hover:bg-white/25"
                 >
                   <Icon className="size-4" />
+                  <span className="sr-only">
+                    {t(`socialChannels.${link.icon}`)}
+                  </span>
                 </a>
               );
+
+              if (isEmail) {
+                return (
+                  <span key={link.key} className="contents">
+                    <span
+                      className="contents"
+                      dangerouslySetInnerHTML={{ __html: "<!--email_off-->" }}
+                    />
+                    {anchor}
+                    <span
+                      className="contents"
+                      dangerouslySetInnerHTML={{ __html: "<!--/email_off-->" }}
+                    />
+                  </span>
+                );
+              }
+
+              return anchor;
             })}
             {calendlyUrl ? (
               <Link
@@ -338,7 +375,8 @@ const Footer = async ({
                 aria-label={t("socialChannels.calendly")}
                 className="flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:-translate-y-0.5 hover:bg-white/25"
               >
-                <FaCalendarAlt className="size-4" />
+                <Calendar className="size-4" />
+                <span className="sr-only">{t("socialChannels.calendly")}</span>
               </Link>
             ) : null}
             <a
@@ -347,6 +385,7 @@ const Footer = async ({
               className="text-primary ml-2 flex size-11 items-center justify-center rounded-full bg-white shadow-md transition-all hover:-translate-y-0.5"
             >
               <ArrowUp className="size-4.5" />
+              <span className="sr-only">Volver arriba</span>
             </a>
           </div>
         </div>
