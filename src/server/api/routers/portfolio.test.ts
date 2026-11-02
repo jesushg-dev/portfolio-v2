@@ -220,6 +220,13 @@ describe("portfolioRouter", () => {
       },
       certification: { count: jest.fn().mockResolvedValue(8) },
       cvExperience: {
+        findMany: jest.fn().mockResolvedValue([
+          {
+            startDate: new Date("2020-01-01"),
+            endDate: null,
+            current: true,
+          },
+        ]),
         findFirst: jest.fn().mockResolvedValue({
           startDate: new Date("2020-01-01"),
         }),

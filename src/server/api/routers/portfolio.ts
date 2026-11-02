@@ -14,6 +14,7 @@ import {
   skillSlugFromTitle,
 } from "@/utils/tools/skill-slug";
 import { formatExperienceDates } from "@/utils/tools/date";
+import { calculateCumulativeYearsExperience } from "@/features/cv/lib/calculate-years-experience";
 
 const LanguageCode = z.enum(["es", "en", "nl"]);
 const StackType = z.enum([
@@ -670,23 +671,17 @@ export const portfolioRouter = createTRPCRouter({
           engineersMentored: 0,
         };
 
-      const [projectsCount, certificationsCount, firstExperience] =
+      const [projectsCount, certificationsCount, experiences] =
         await Promise.all([
           ctx.db.project.count({ where: { userId: tenantUserId } }),
           ctx.db.certification.count({ where: { userId: tenantUserId } }),
-          ctx.db.cvExperience.findFirst({
+          ctx.db.cvExperience.findMany({
             where: { userId: tenantUserId, startDate: { not: null } },
-            orderBy: { startDate: "asc" },
-            select: { startDate: true },
+            select: { startDate: true, endDate: true, current: true },
           }),
         ]);
 
-      const yearsExperience = firstExperience?.startDate
-        ? Math.floor(
-            (new Date().getTime() - firstExperience.startDate.getTime()) /
-              (1000 * 60 * 60 * 24 * 365.25),
-          )
-        : 0;
+      const yearsExperience = calculateCumulativeYearsExperience(experiences);
 
       return {
         projectsCount: Math.max(19, projectsCount),
