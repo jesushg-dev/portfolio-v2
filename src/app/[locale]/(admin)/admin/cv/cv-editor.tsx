@@ -137,13 +137,25 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
                   variant="line"
                   className="min-h-12 w-max min-w-full justify-start"
                 >
-                  <TabsTrigger value="visual" className="text-sm">
+                  <TabsTrigger
+                    id="cv-editor-visual"
+                    value="visual"
+                    className="text-sm"
+                  >
                     {t("visualSheet")}
                   </TabsTrigger>
-                  <TabsTrigger value="preview" className="text-sm">
+                  <TabsTrigger
+                    id="cv-editor-preview"
+                    value="preview"
+                    className="text-sm"
+                  >
                     {t("preview")}
                   </TabsTrigger>
-                  <TabsTrigger value="import" className="text-sm">
+                  <TabsTrigger
+                    id="cv-editor-import"
+                    value="import"
+                    className="text-sm"
+                  >
                     {t("import")}
                   </TabsTrigger>
                 </TabsList>

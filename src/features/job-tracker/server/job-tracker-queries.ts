@@ -143,9 +143,24 @@ function buildCompanyOrderBy(
 export async function getDashboardStatsData(): Promise<DashboardStatsDTO> {
   const userId = await requireAuthenticatedUserId();
   const search = await getOpenJobSearch(db, userId);
-  const where = search
-    ? { userId, jobSearchId: search.id }
-    : { id: { in: [] } };
+  if (!search) {
+    const totalCompanies = await db.company.count({ where: { userId } });
+    return {
+      totalApplications: 0,
+      totalCompanies,
+      applied: 0,
+      inProgress: 0,
+      offers: 0,
+      ghosted: 0,
+      rejected: 0,
+      hired: 0,
+    };
+  }
+
+  const where: Prisma.ApplicationWhereInput = {
+    userId,
+    jobSearchId: search.id,
+  };
 
   const [totalApplications, totalCompanies, statusCounts] = await Promise.all([
     db.application.count({ where }),
@@ -153,12 +168,18 @@ export async function getDashboardStatsData(): Promise<DashboardStatsDTO> {
     db.application.groupBy({
       by: ["status"],
       where,
-      _count: true,
+      _count: { _all: true },
     }),
   ]);
 
-  const countByStatus = (status: ApplicationStatus) =>
-    statusCounts.find((s) => s.status === status)?._count ?? 0;
+  const countByStatus = (status: ApplicationStatus) => {
+    const item = statusCounts.find((s) => s.status === status);
+    if (!item) return 0;
+    if (typeof item._count === "object" && item._count !== null) {
+      return (item._count as { _all?: number })._all ?? 0;
+    }
+    return Number(item._count) || 0;
+  };
 
   return {
     totalApplications,

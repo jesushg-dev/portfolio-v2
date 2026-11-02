@@ -368,6 +368,7 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
         )}
 
         <Button
+          id="profile-console-add-step"
           type="button"
           variant="outline"
           onClick={onAddStep}

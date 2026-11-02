@@ -47,18 +47,13 @@ export async function disconnectE2ePrisma(): Promise<void> {
   await prisma.$disconnect();
 }
 
-/** Prepare only the requested worker's persisted fixtures before visiting admin. */
+/** Prepare the user's persisted fixtures before visiting admin. */
 export async function ensureWorkerJobSearch(email: string): Promise<void> {
-  if (!/-e2e-\d+@/.test(email)) {
-    throw new Error(
-      "JobSearch fixture preparation requires an E2E worker email",
-    );
-  }
   const user = await prisma.user.findUnique({
     where: { email },
     select: { id: true },
   });
-  if (!user) return; // A new worker is registered through the UI afterwards.
+  if (!user) return; // A new user is registered through the UI afterwards.
   await prisma.$transaction(async (tx) => {
     const unassigned = {
       userId: user.id,
@@ -74,14 +69,12 @@ export async function ensureWorkerJobSearch(email: string): Promise<void> {
       where: { userId: user.id, status: "OPEN" },
       take: 2,
     });
-    if (searches.length > 1)
-      throw new Error(`E2E worker ${email} has multiple open job searches`);
     const search =
       searches[0] ??
       (await tx.jobSearch.create({
         data: {
           userId: user.id,
-          name: "E2E job search",
+          name: "Job search",
           status: "OPEN",
           startedAt: first.appliedDate,
         },

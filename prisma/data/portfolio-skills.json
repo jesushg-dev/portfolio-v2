@@ -1764,5 +1764,130 @@
         "urlWiki": "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel"
       }
     ]
+  },
+  {
+    "key": "Python",
+    "title": "Python",
+    "type": "BACKEND",
+    "image": "https://cdn.simpleicons.org/python",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje de programación versátil de alto nivel utilizado para backend, scripting y análisis de datos.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Python"
+      },
+      {
+        "locale": "en",
+        "description": "High-level, versatile programming language widely used for backend services, scripting, and automation.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Python_(programming_language)"
+      },
+      {
+        "locale": "nl",
+        "description": "Veelzijdige programmeertaal van hoog niveau voor backend-services, scripting en automatisering.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Python_(programmeertaal)"
+      }
+    ]
+  },
+  {
+    "key": "AWS",
+    "title": "AWS",
+    "type": "TOOLS",
+    "image": "https://cdn.simpleicons.org/amazonaws",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Plataforma integral de servicios de computación en la nube pública de Amazon.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Amazon_Web_Services"
+      },
+      {
+        "locale": "en",
+        "description": "Comprehensive, evolving cloud computing platform provided by Amazon.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Amazon_Web_Services"
+      },
+      {
+        "locale": "nl",
+        "description": "Cloud computing-platform aangeboden door Amazon.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Amazon_Web_Services"
+      }
+    ]
+  },
+  {
+    "key": "GCP",
+    "title": "GCP",
+    "type": "TOOLS",
+    "image": "https://cdn.simpleicons.org/googlecloud",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Conjunto de servicios de computación en la nube proporcionados por Google.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Google_Cloud_Platform"
+      },
+      {
+        "locale": "en",
+        "description": "Suite of cloud computing services running on the same infrastructure Google uses internally.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Google_Cloud_Platform"
+      },
+      {
+        "locale": "nl",
+        "description": "Suite van cloud computing-services aangeboden door Google.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Google_Cloud_Platform"
+      }
+    ]
+  },
+  {
+    "key": "SQLite",
+    "title": "SQLite",
+    "type": "DATA",
+    "image": "https://cdn.simpleicons.org/sqlite",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Sistema de gestión de bases de datos relacionales embebido en el proceso del cliente.",
+        "urlWiki": "https://es.wikipedia.org/wiki/SQLite"
+      },
+      {
+        "locale": "en",
+        "description": "Self-contained, serverless, zero-configuration SQL database engine.",
+        "urlWiki": "https://en.wikipedia.org/wiki/SQLite"
+      },
+      {
+        "locale": "nl",
+        "description": "Zelfstandige, serverloze SQL-database-engine.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/SQLite"
+      }
+    ]
+  },
+  {
+    "key": "RestApis",
+    "title": "REST APIs",
+    "type": "BACKEND",
+    "image": "https://cdn.simpleicons.org/openapiinitiative",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Diseño e implementación de servicios web basados en la arquitectura REST.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Transferencia_de_Estado_Representacional"
+      },
+      {
+        "locale": "en",
+        "description": "Design and implementation of scalable HTTP web APIs conforming to REST architectural constraints.",
+        "urlWiki": "https://en.wikipedia.org/wiki/REST"
+      },
+      {
+        "locale": "nl",
+        "description": "Ontwerp en implementatie van schaalbare web-API's conform de REST-architectuur.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Representational_state_transfer"
+      }
+    ]
   }
 ]

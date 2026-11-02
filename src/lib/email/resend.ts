@@ -124,15 +124,14 @@ export async function getPortfolioContactTemplateId(
   );
 }
 
-/** Whether the tenant can send CV PDFs by email (Resend + template for locale). */
+/** Whether the tenant can send CV PDFs by email (Resend is configured with sender email). */
 export async function canDeliverPortfolioCvEmail(
   userId: string,
-  locale: Locale,
+  _locale?: Locale,
 ): Promise<boolean> {
+  void _locale;
   const client = await getPortfolioEmailClient(userId);
-  if (!client.isConfigured) return false;
-  const templateId = await getPortfolioCvTemplateId(locale, userId);
-  return Boolean(templateId);
+  return Boolean(client.isConfigured && client.resend && client.fromEmail);
 }
 
 /** Whether the tenant contact form can deliver messages (Resend + template). */

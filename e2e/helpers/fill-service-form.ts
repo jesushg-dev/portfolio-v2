@@ -4,6 +4,7 @@ import {
   translationField,
 } from "./admin-form";
 import type { Page } from "@playwright/test";
+import { dismissDialogOverlay } from "./dismiss-dialog-overlay";
 
 export interface ServiceFixture {
   title: string;
@@ -13,10 +14,15 @@ export interface ServiceFixture {
 }
 
 export async function goToServicesList(page: Page): Promise<void> {
-  if (/\/admin\/services(\?|$)/.test(page.url())) {
+  await dismissDialogOverlay(page);
+  const currentUrl = page.url();
+  if (
+    /\/admin\/services(\?|$)/.test(currentUrl) &&
+    currentUrl.includes("perPage=100")
+  ) {
     return;
   }
-  await page.goto("/admin/services");
+  await page.goto("/admin/services?perPage=100");
   await page.waitForURL(/\/admin\/services(\?|$)/, { timeout: 15_000 });
 }
 
@@ -56,6 +62,13 @@ export async function fillServiceForm(
   await page.locator('button[type="submit"]').first().click();
   await createResponse;
 
+  await page
+    .waitForURL((url) => !url.pathname.endsWith("/new"), { timeout: 10_000 })
+    .catch(() => {
+      /* ignore if router.back did not change URL */
+    });
+  await dismissDialogOverlay(page);
+
   await goToServicesList(page);
 }
 
@@ -64,8 +77,11 @@ export async function deleteServiceByTitle(
   title: string,
 ): Promise<void> {
   await goToServicesList(page);
-  const rowCell = page.getByRole("cell", { name: title }).first();
-  if (await rowCell.isVisible()) {
+  const rowCell = page
+    .getByRole("cell")
+    .filter({ has: page.getByText(title, { exact: true }) })
+    .first();
+  if (await rowCell.isVisible({ timeout: 5_000 }).catch(() => false)) {
     const row = page.locator("tr").filter({ has: rowCell }).first();
     const deleteBtn = row
       .getByRole("button", { name: /delete|eliminar/i })
@@ -81,5 +97,8 @@ export async function deleteServiceByTitle(
 
     await deleteBtn.click();
     await deleteResponse;
+    await rowCell.waitFor({ state: "hidden", timeout: 10_000 }).catch(() => {
+      /* ignore if row already unmounted */
+    });
   }
 }

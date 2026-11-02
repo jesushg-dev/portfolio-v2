@@ -136,11 +136,16 @@ async function fillLocalizedField(
   text: LocalizedFixture,
 ): Promise<void> {
   const modal = activeCvSheet(page);
+  const altPrefix = inputIdPrefix.includes("experience-responsibility-")
+    ? inputIdPrefix.replace("experience-responsibility-", "experience-resp-")
+    : inputIdPrefix;
   for (const locale of CV_LOCALES) {
     await switchCvLocale(page, locale);
-    const field = modal.locator(
-      `:is(input, textarea)[id^="${inputIdPrefix}-"]:visible`,
-    );
+    const field = modal
+      .locator(
+        `:is(input, textarea)[id^="${inputIdPrefix}-"]:visible, :is(input, textarea)[id^="${altPrefix}-"]:visible`,
+      )
+      .first();
     await field.waitFor({ state: "visible", timeout: 15_000 });
     await field.fill(text[locale]);
   }
@@ -190,7 +195,10 @@ async function ensureCvItemAddReady(
   sectionId: string,
   addButtonId: string,
 ): Promise<void> {
-  const addButton = page.locator(`#${addButtonId}`);
+  const addButton = page
+    .locator(`#${addButtonId}`)
+    .or(page.locator(`#${addButtonId.replace(/s-add$/, "-add")}`))
+    .first();
   if (await addButton.isVisible()) return;
 
   const sectionModal = page.locator("#cv-section-sheet");
@@ -206,7 +214,10 @@ async function ensureCvItemAddReady(
 }
 
 async function openCvItemSheet(page: Page, addButtonId: string): Promise<void> {
-  const addButton = page.locator(`#${addButtonId}`);
+  const addButton = page
+    .locator(`#${addButtonId}`)
+    .or(page.locator(`#${addButtonId.replace(/s-add$/, "-add")}`))
+    .first();
   await addButton.waitFor({ state: "visible", timeout: 15_000 });
   await addButton.scrollIntoViewIfNeeded();
   await addButton.click();
@@ -320,14 +331,8 @@ export async function fillCvTechnicalSkill(
         (item) => normalizeSkillTitle(item.title) === canonical,
       )
     ) {
-      const name =
-        canonical === "tailwind css"
-          ? "Tailwind CSS"
-          : canonical === "node.js"
-            ? "Node.js"
-            : title;
       await trpcMutate(page, "skillsAdmin.createItem", {
-        title: name,
+        title,
         image: "/favicon.svg",
         type:
           skill.category === "DATABASE"
@@ -337,7 +342,7 @@ export async function fillCvTechnicalSkill(
               : skill.category,
         translations: {},
       });
-      catalogue.data.push({ title: name });
+      catalogue.data.push({ title });
     }
   }
   await ensureCvItemAddReady(page, "skills", "cv-skills-add");
@@ -352,9 +357,13 @@ export async function fillCvTechnicalSkill(
     .first()
     .waitFor({ state: "visible" });
   for (const title of skill.items) {
-    const canonical = normalizeSkillTitle(title);
-    await page.locator("#skill-picker-search").fill(canonical);
-    const tile = page.locator("#skill-picker-grid button").first();
+    await page.locator("#skill-picker-search").fill(title);
+    const tile = page
+      .locator(
+        `#skill-picker-grid button[data-skill-title="${title}"], #skill-picker-grid button:has-text("${title}")`,
+      )
+      .filter({ has: page.getByText(title, { exact: true }) })
+      .first();
     await tile.waitFor({ state: "visible" });
     if ((await tile.getAttribute("aria-pressed")) !== "true")
       await tile.click();
@@ -398,6 +407,13 @@ export async function fillCvExperience(
   }
 
   if (experience.skillKeys.length > 0) {
+    const skillsTab = page
+      .locator("#experience-tab-skills")
+      .or(page.getByRole("tab", { name: /skills/i }))
+      .first();
+    if (await skillsTab.isVisible()) {
+      await skillsTab.click();
+    }
     await selectSkillsInPicker(page, experience.skillKeys, skillsByKey);
   }
 

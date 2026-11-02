@@ -691,10 +691,11 @@ export const ExperienceForm: FC<{
                                         label={t("responsibility", {
                                           n: idx + 1,
                                         })}
-                                        inputId={`experience-resp-${idx}-${activeLangId}`}
+                                        inputId={`experience-responsibility-${idx}-${activeLangId}`}
                                       >
                                         <Textarea
                                           {...textField}
+                                          id={`experience-responsibility-${idx}-${activeLangId}`}
                                           rows={2}
                                           placeholder={t(
                                             "responsibilityPlaceholder",

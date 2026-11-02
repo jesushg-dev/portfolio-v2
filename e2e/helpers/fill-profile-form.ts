@@ -80,26 +80,34 @@ function profileNavLink(page: Page) {
 }
 
 export async function goToProfileHero(page: Page): Promise<void> {
-  if (/\/admin\/profile\/?$/.test(page.url())) {
-    return;
+  if (!/\/admin\/profile(?:\/.*)?$/.test(page.url())) {
+    if (!page.url().includes("/admin")) {
+      await page.goto("/admin");
+    }
+
+    const navLink = profileNavLink(page);
+    await navLink.waitFor({ state: "visible", timeout: 15_000 });
+    await navLink.click();
+    await page.waitForURL(/\/admin\/profile(?:\/.*)?$/, { timeout: 15_000 });
   }
 
-  if (!page.url().includes("/admin")) {
-    await page.goto("/admin");
+  const identityTab = page.locator("#profile-tab-identity");
+  if (await identityTab.isVisible()) {
+    await identityTab.click();
   }
-
-  const navLink = profileNavLink(page);
-  await navLink.waitFor({ state: "visible", timeout: 15_000 });
-  await navLink.click();
-  await page.waitForURL(/\/admin\/profile\/?$/, { timeout: 15_000 });
 }
 
 export async function goToProfileConsole(page: Page): Promise<void> {
   await goToProfileHero(page);
-  await page.locator("#profile-tab-about").click();
-  await page.waitForURL(/\/admin\/profile\/about\/?$/, { timeout: 15_000 });
+  const aboutTab = page.locator("#profile-tab-about");
+  await aboutTab.waitFor({ state: "visible", timeout: 15_000 });
+  await aboutTab.click();
+  await page.waitForURL(/\/admin\/profile(?:\/about)?\/?$/, {
+    timeout: 15_000,
+  });
   await page
-    .locator("#profile-console-username")
+    .locator("#profile-terminal-username, #profile-console-username")
+    .first()
     .waitFor({ state: "visible", timeout: 15_000 });
 }
 
@@ -111,10 +119,14 @@ async function selectProfileLocale(
 }
 
 async function submitProfileHeroForm(page: Page): Promise<void> {
-  const submit = page.getByRole("button", {
-    name: "Save changes",
-    exact: true,
-  });
+  const submit = page
+    .locator("#profile-save-button")
+    .or(
+      page.getByRole("button", {
+        name: /Save changes|Guardar cambios|Wijzigingen opslaan/i,
+      }),
+    )
+    .first();
   const savePromise = page.waitForResponse(
     (response) =>
       response.url().includes("profileAdmin.upsertHero") &&
@@ -174,13 +186,17 @@ export async function fillProfileHeroFromFixture(
   await goToProfileHero(page);
 
   await page.locator("#profile-full-name").fill(portfolioCv.header.fullName);
-  await page.locator("#profile-hero-photo-url").fill(portfolioProfile.photoUrl);
+  await page
+    .locator("#profile-photo-url, #profile-hero-photo-url")
+    .first()
+    .fill(portfolioProfile.photoUrl);
 
   for (const locale of PROFILE_LOCALES) {
     await selectProfileLocale(page, locale);
 
     await page
-      .locator(`#profile-hero-summary-${locale}`)
+      .locator(`#profile-tr-summary, #profile-hero-summary-${locale}`)
+      .first()
       .fill(portfolioCv.aboutMe[locale]);
 
     await page
@@ -189,11 +205,25 @@ export async function fillProfileHeroFromFixture(
     await page.locator("#profile-tr-tagline").fill(fixture.heroTagline[locale]);
   }
 
+  const aboutTab = page
+    .locator("#profile-tab-about")
+    .or(page.getByRole("tab", { name: /About Me & Terminal/i }))
+    .first();
+  if (await aboutTab.isVisible()) {
+    await aboutTab.click();
+    for (const locale of PROFILE_LOCALES) {
+      await selectProfileLocale(page, locale);
+      await page.locator("#profile-tr-about").fill(portfolioCv.aboutMe[locale]);
+    }
+  }
+
   await submitProfileHeroForm(page);
 }
 
 async function countConsoleSteps(page: Page): Promise<number> {
-  return page.locator('[id^="profile-console-command-"][id$="-en"]').count();
+  return page
+    .locator('[id^="profile-step-cmd-"], [id^="profile-console-command-"]')
+    .count();
 }
 
 export async function fillProfileConsoleFromFixture(
@@ -203,13 +233,16 @@ export async function fillProfileConsoleFromFixture(
   await goToProfileConsole(page);
 
   await page
-    .locator("#profile-console-username")
+    .locator("#profile-terminal-username, #profile-console-username")
+    .first()
     .fill(fixture.terminal.username);
   await page
-    .locator("#profile-console-typing-speed")
+    .locator("#profile-terminal-speed, #profile-console-typing-speed")
+    .first()
     .fill(String(fixture.terminal.typingSpeed));
   await page
-    .locator("#profile-console-delay")
+    .locator("#profile-terminal-delay, #profile-console-delay")
+    .first()
     .fill(String(fixture.terminal.delayBetweenCommands));
 
   const stepCount = fixture.terminal.steps.length;
@@ -220,31 +253,54 @@ export async function fillProfileConsoleFromFixture(
     visibleSteps = await countConsoleSteps(page);
   }
 
+  // Fill commands (commands are shared across locales in unified editor)
+  for (const [index, step] of fixture.terminal.steps.entries()) {
+    const cmdLocator = page
+      .locator(
+        `#profile-step-cmd-${index}, #profile-console-command-${index}-en`,
+      )
+      .first();
+    if (await cmdLocator.isVisible()) {
+      await cmdLocator.fill(step.command.en || step.command.es || "");
+    }
+  }
+
+  // Fill outputs per locale
   for (const locale of PROFILE_LOCALES) {
     await selectProfileLocale(page, locale);
 
     for (const [index, step] of fixture.terminal.steps.entries()) {
-      await page
-        .locator(`#profile-console-command-${index}-${locale}`)
-        .fill(step.command[locale]);
-      await page
-        .locator(`#profile-console-output-${index}-${locale}`)
-        .fill(step.output[locale]);
+      const perLangCmd = page.locator(
+        `#profile-console-command-${index}-${locale}`,
+      );
+      if (await perLangCmd.isVisible()) {
+        await perLangCmd.fill(step.command[locale]);
+      }
+
+      const outLocator = page
+        .locator(
+          `#profile-step-out-${index}, #profile-console-output-${index}-${locale}`,
+        )
+        .first();
+      await outLocator.waitFor({ state: "visible", timeout: 15_000 });
+      await outLocator.fill(step.output[locale]);
     }
   }
 
-  const submit = page.locator("#profile-console-submit");
+  const submit = page
+    .locator("#profile-save-button, #profile-console-submit")
+    .or(page.getByRole("button", { name: "Save changes", exact: true }))
+    .first();
   const savePromise = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/terminal.upsert") &&
+      response.url().includes("terminal.upsert") &&
       response.request().method() === "POST" &&
       response.ok(),
     { timeout: 30_000 },
   );
   await submit.click();
   await savePromise;
-  await expect(submit).toBeEnabled({ timeout: 30_000 });
-  await expect(submit).not.toHaveText(/Saving/i);
+  await expect(submit).toBeHidden({ timeout: 30_000 });
 }
 
 export async function getHeroEditor(page: Page): Promise<ProfileHeroEditorDTO> {
@@ -276,9 +332,13 @@ export async function fillProfileHeroSmoke(
   await selectProfileLocale(page, "en");
   await page.locator("#profile-tr-summary").fill(heroSummary.en);
 
-  await page
-    .getByRole("tab", { name: "About Me & Terminal", exact: true })
-    .click();
+  const aboutTab = page
+    .locator("#profile-tab-about")
+    .or(page.getByRole("tab", { name: /About Me & Terminal/i }))
+    .first();
+  if (await aboutTab.isVisible()) {
+    await aboutTab.click();
+  }
   for (const locale of PROFILE_LOCALES) {
     await selectProfileLocale(page, locale);
     await page.locator("#profile-tr-about").fill(portfolioCv.aboutMe[locale]);

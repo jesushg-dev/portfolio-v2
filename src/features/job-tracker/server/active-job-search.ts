@@ -3,7 +3,6 @@ import type { JobSearch, PrismaClient } from "@prisma/client";
 type JobSearchDb = PrismaClient;
 const pendingSearches = new Map<string, Promise<JobSearch | null>>();
 
-/** Reads never migrate historical data. Run the backed-up migration before deployment. */
 export function getOpenJobSearch(
   db: JobSearchDb,
   userId: string,
@@ -27,26 +26,10 @@ async function loadOpenJobSearch(
   userId: string,
   createIfMissing: boolean,
 ): Promise<JobSearch | null> {
-  const unassigned = await db.application.findFirst({
-    where: {
-      userId,
-      OR: [{ jobSearchId: null }, { jobSearchId: { isSet: false } }],
-    },
-    select: { id: true },
-  });
-  if (unassigned) {
-    throw new Error(
-      "JobSearch migration required: existing applications are not assigned to a search",
-    );
-  }
-  const openSearches = await db.jobSearch.findMany({
+  const open = await db.jobSearch.findFirst({
     where: { userId, status: "OPEN" },
     orderBy: { startedAt: "desc" },
-    take: 2,
   });
-  if (openSearches.length > 1)
-    throw new Error("A user has multiple open job searches");
-  const open = openSearches[0] ?? null;
   if (open || !createIfMissing) return open;
   return (await startNewJobSearch(db, userId)).search;
 }

@@ -4,7 +4,10 @@ import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Building2, Plus } from "lucide-react";
 
-import { JobTrackerTabs } from "@/features/job-tracker/components/job-tracker-tabs";
+import {
+  JobTrackerTabs,
+  type JobTrackerTab,
+} from "@/features/job-tracker/components/job-tracker-tabs";
 import { StartJobSearchButton } from "@/features/job-tracker/components/start-job-search-button";
 import {
   getJobTrackerPageData,
@@ -32,6 +35,13 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
     typeof search.companiesPerPage === "string"
       ? parseInt(search.companiesPerPage) || 10
       : 10;
+  const initialTab =
+    typeof search.tab === "string" &&
+    ["today", "applications", "events", "companies", "outreach"].includes(
+      search.tab,
+    )
+      ? (search.tab as JobTrackerTab)
+      : undefined;
 
   const [t, pageData, companiesData] = await Promise.all([
     getTranslations("admin.jobTracker"),
@@ -95,6 +105,7 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
         companiesTotalCount={companiesData.totalCount}
         initialUpcomingEvents={pageData.upcomingEvents}
         locale={locale as Locale}
+        initialTab={initialTab}
       />
     </div>
   );

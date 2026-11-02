@@ -34,7 +34,7 @@ type ApplicationRow =
 type CompanyRow =
   RouterOutputs["jobTrackerAdmin"]["getCompanies"]["data"][number];
 
-type JobTrackerTab =
+export type JobTrackerTab =
   "today" | "applications" | "events" | "companies" | "outreach";
 
 interface JobTrackerTabsProps {
@@ -45,6 +45,7 @@ interface JobTrackerTabsProps {
   companiesTotalCount: number;
   initialUpcomingEvents: UpcomingEvent[];
   locale: Locale;
+  initialTab?: JobTrackerTab;
 }
 
 const TAB_CONFIG: {
@@ -72,9 +73,12 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
   companiesTotalCount,
   initialUpcomingEvents,
   locale,
+  initialTab,
 }) => {
   const t = useTranslations("admin.jobTracker");
-  const [activeTab, setActiveTab] = useState<JobTrackerTab>("today");
+  const [activeTab, setActiveTab] = useState<JobTrackerTab>(
+    initialTab ?? "today",
+  );
 
   const { data: stats } = api.jobTrackerAdmin.getDashboardStats.useQuery(
     undefined,
@@ -163,6 +167,7 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
             {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
               <TabsTrigger
                 key={id}
+                id={`job-tracker-tab-${id}`}
                 value={id}
                 className="min-h-12 flex-initial shrink-0 gap-2 px-3 text-sm font-medium sm:px-4"
               >

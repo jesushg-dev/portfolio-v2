@@ -48,13 +48,21 @@ export async function openAdminCvPreview(
   page: Page,
   locale?: CvPreviewLocale,
 ): Promise<void> {
-  const sectionModal = page.locator("#cv-section-modal");
+  const sectionModal = page.locator("#cv-section-modal, #cv-section-sheet");
   if (await sectionModal.isVisible()) {
-    await page.locator("#cv-section-modal-close").click();
+    await page
+      .locator(
+        "#cv-section-modal-close, #cv-section-sheet-close, button[aria-label='Close']",
+      )
+      .first()
+      .click();
     await sectionModal.waitFor({ state: "hidden", timeout: 15_000 });
   }
 
-  await page.locator("#cv-editor-preview").click();
+  await page
+    .locator("#cv-editor-preview, [role='tab'][value='preview']")
+    .first()
+    .click();
   await page
     .locator("#cv-admin-preview")
     .waitFor({ state: "visible", timeout: 30_000 });

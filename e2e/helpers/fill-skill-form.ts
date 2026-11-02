@@ -173,7 +173,9 @@ export async function expectSkillListContains(
   }
 
   await page
-    .getByRole("cell", { name: title, exact: true })
+    .getByRole("cell")
+    .filter({ has: page.getByText(title, { exact: true }) })
+    .first()
     .waitFor({ timeout: 15_000 });
 }
 

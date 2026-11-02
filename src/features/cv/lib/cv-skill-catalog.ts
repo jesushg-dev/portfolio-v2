@@ -17,15 +17,9 @@ const categoryTypes: Record<CvSkillCategory, StackType> = {
   CYBERSECURITY: StackType.CYBERSECURITY,
   OTHER: StackType.TOOLS,
 };
+
 export function normalizeSkillTitle(title: string): string {
-  const normalized = title
-    .normalize("NFKC")
-    .trim()
-    .replace(/\s+/g, " ")
-    .toLowerCase();
-  if (normalized === "tailwind") return "tailwind css";
-  if (normalized === "node-js" || normalized === "nodejs") return "node.js";
-  return normalized;
+  return title.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
 }
 
 /** Imports/seeds resolve names once. Persisted CV selections contain IDs only. */

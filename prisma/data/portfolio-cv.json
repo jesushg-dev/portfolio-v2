@@ -156,7 +156,7 @@
         "React",
         "React Native",
         "Redux",
-        "Tailwind",
+        "Tailwind CSS",
         "WebSockets",
         "REST APIs"
       ],
@@ -164,15 +164,7 @@
     },
     {
       "category": "BACKEND",
-      "items": [
-        "C#",
-        ".NET Core",
-        "Nest.js",
-        "Python",
-        "Node-JS",
-        "PHP",
-        "GraphQL"
-      ],
+      "items": ["C#", ".NET", "Nest.js", "Python", "Node.js", "PHP", "GraphQL"],
       "order": 1
     },
     {
@@ -680,9 +672,9 @@
         },
         {
           "text": {
-            "es": "Integré WebSockets con Socket.IO para recepción instantánea de eventos de pago (NOTIFY_INVOICE_PAYMENT) y acreditaciones P2P (NOTIFY_P2P) sin necesidad de refresco manual.",
-            "en": "Integrated WebSockets via Socket.IO for instantaneous payment event streaming (NOTIFY_INVOICE_PAYMENT) and P2P credits (NOTIFY_P2P) without manual polling.",
-            "nl": "Integreerde WebSockets via Socket.IO voor directe betalingsnotificaties (NOTIFY_INVOICE_PAYMENT) en P2P-overboekingen (NOTIFY_P2P) zonder handmatige polling."
+            "es": "Integré WebSockets con Socket.IO para recepción instantánea de eventos de pago y acreditaciones P2P sin necesidad de refresco manual.",
+            "en": "Integrated WebSockets via Socket.IO for instantaneous payment event streaming and P2P credits without manual polling.",
+            "nl": "Integreerde WebSockets via Socket.IO voor directe betalingsnotificaties en P2P-overboekingen zonder handmatige polling."
           },
           "order": 1,
           "atsOnly": false
@@ -856,7 +848,7 @@
         "React Native",
         "Next.js",
         "TypeScript",
-        "Tailwind",
+        "Tailwind CSS",
         "Redux"
       ],
       "order": 1

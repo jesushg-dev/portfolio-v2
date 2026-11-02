@@ -1,20 +1,14 @@
 {
   "cv-delivery": {
-    "preview": "Aquí está mi CV — Jesús Hernández",
-    "tagline": "Desarrollador Full Stack Senior",
-    "greeting": "Hola {recipientName},",
-    "body1": "Gracias por comunicarte a través de mi portafolio. He adjuntado mi CV más reciente para que puedas revisarlo.",
-    "highlight": "Desarrollador Full Stack Senior con más de 6 años de experiencia en .NET Core, React/Next.js y TypeScript — actualmente liderando el equipo de ingeniería de e-commerce en VTEX para Walmart Global Tech en Centroamérica.",
-    "body2": "Con gusto respondo cualquier pregunta o coordinamos una llamada cuando te venga bien.",
+    "preview": "Te dejo mi CV adjunto. Responde a este correo y coordinamos una llamada.",
+    "tagline": "Desarrollador Full Stack | Ingeniero en Computación",
+    "greeting": "Hola,",
+    "body1": "Gracias por tu interés. Soy Jesús, desarrollador Full Stack con más de 6 años de experiencia en .NET Core, React/Next.js y TypeScript. Actualmente lidero el equipo de ingeniería de e-commerce en VTEX para Walmart Global Tech en Centroamérica.",
+    "body2": "Te dejo mi CV adjunto. Si quieres conversar, responde a este correo y coordinamos una llamada.",
     "signOff": "Saludos,",
     "name": "Jesús Hernández",
-    "role": "Desarrollador Full Stack Senior",
-    "footer": "Enviado automáticamente desde el formulario de contacto en jesushg.com.",
-    "stats": {
-      "years": "Años de experiencia",
-      "projects": "Proyectos entregados",
-      "certifications": "Certificaciones"
-    }
+    "role": "Desarrollador Full Stack | Ingeniero en Computación",
+    "footer": "Enviado desde el formulario de contacto en jesushg.com."
   },
   "contact-notification": {
     "preview": "Nuevo mensaje de {senderName} vía jesushg.com",

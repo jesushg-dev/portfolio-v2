@@ -113,13 +113,41 @@ describe("cvPublicRouter.sendPdfByEmail", () => {
       buffer: Buffer.from("pdf"),
     });
     const db = {
-      user: { findUnique: jest.fn().mockResolvedValue(null) },
+      user: {
+        findUnique: jest.fn().mockResolvedValue({
+          email: "owner@example.com",
+          name: "Jesús Hernández",
+        }),
+      },
     };
     const caller = createRouterCaller(
       cvPublicRouter,
       createTrpcTestContext({ db }),
     );
     await expect(caller.sendPdfByEmail(input)).resolves.toEqual({ ok: true });
-    expect(send).toHaveBeenCalled();
+    expect(send).toHaveBeenCalledTimes(1);
+    const mockCalls = send.mock.calls as [
+      {
+        from: string;
+        to: string;
+        replyTo: string;
+        subject: string;
+        html: string;
+        text: string;
+        attachments: { filename: string }[];
+      },
+    ][];
+    const payload = mockCalls[0]?.[0];
+    expect(payload?.from).toBe("me@example.com");
+    expect(payload?.to).toBe("hire@example.com");
+    expect(payload?.replyTo).toBe("owner@example.com");
+    expect(payload?.subject).toBe(
+      "Résumé – Jesús Hernández, Full Stack Developer",
+    );
+    expect(payload?.html).toContain("#1c58da");
+    expect(payload?.text).toContain("My résumé is attached");
+    expect(payload?.attachments[0]?.filename).toBe(
+      "Ada Lovelace - Fullstack Developer - EN.pdf",
+    );
   });
 });

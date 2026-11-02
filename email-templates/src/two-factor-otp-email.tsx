@@ -1,5 +1,5 @@
 import { Section, Text } from "@react-email/components";
-import { createTranslator } from "next-intl";
+import { createTranslator } from "use-intl";
 import { EmailWrapper } from "./components/email-wrapper";
 import { EmailHeader } from "./components/email-header";
 import { EmailFooter } from "./components/email-footer";

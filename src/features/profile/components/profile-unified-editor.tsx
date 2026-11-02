@@ -480,6 +480,7 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
           <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
             <TabsList variant="line" className="w-max min-w-full justify-start">
               <TabsTrigger
+                id="profile-tab-identity"
                 value="identity"
                 className="min-h-12 gap-2 px-4 text-sm"
               >
@@ -487,6 +488,7 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
                 <span>{t("tabIdentity")}</span>
               </TabsTrigger>
               <TabsTrigger
+                id="profile-tab-about"
                 value="about"
                 className="min-h-12 gap-2 px-4 text-sm"
               >

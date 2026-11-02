@@ -5,7 +5,6 @@ import { randomUUID } from "crypto";
 import { createTRPCRouter, tenantProcedure } from "@/server/api/trpc";
 import {
   getPortfolioEmailClient,
-  getPortfolioCvTemplateId,
   getPortfolioContactTemplateId,
   canDeliverPortfolioCvEmail,
 } from "@/lib/email/resend";
@@ -18,10 +17,11 @@ import {
 } from "@/features/cv/lib/rate-limit-cv-email";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
-
-function sanitizeFileName(value: string): string {
-  return value.replace(/[^\w.-]+/g, "_");
-}
+import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
+import { getCvDeliveryEmailContent } from "@/features/cv/lib/cv-delivery-email-content";
 
 const localeSchema = z.enum(["en", "es", "nl"]);
 type Locale = z.infer<typeof localeSchema>;
@@ -79,17 +79,6 @@ export const cvPublicRouter = createTRPCRouter({
 
       const locale: Locale = input.locale;
 
-      const cvTemplateId = await getPortfolioCvTemplateId(
-        locale,
-        ctx.tenant.userId,
-      );
-      if (!cvTemplateId) {
-        throw new TRPCError({
-          code: "PRECONDITION_FAILED",
-          message: `CV email template is not configured for locale "${locale}".`,
-        });
-      }
-
       const draft = await loadCvStructuredDraft(ctx.db, ctx.tenant.userId, {
         locale,
         fallbackLocale: ctx.tenant.defaultLocale,
@@ -132,18 +121,31 @@ export const cvPublicRouter = createTRPCRouter({
       }
 
       const pdfBuffer = pdfAsset.buffer;
-      const fullName = draft.header.fullName;
-      const fileName = `CV-${sanitizeFileName(fullName)}.pdf`;
+      const fileName =
+        pdfAsset.fileName ??
+        buildAtsCvFileName({
+          fullName: draft.header.fullName,
+          roleTrack: inferCvRoleTrack(draft.header.degree ?? ""),
+          locale,
+          extension: "pdf",
+        });
 
-      // --- CV delivery to visitor (in visitor's locale) ---
+      const owner = await ctx.db.user.findUnique({
+        where: { id: ctx.tenant.userId },
+        select: { email: true, name: true },
+      });
+
+      const emailContent = getCvDeliveryEmailContent(locale);
+
+      // --- CV delivery to visitor (multipart HTML + plain text with Reply-To) ---
       const { error: cvError } = await emailClient.resend.emails.send(
         {
           from: emailClient.fromEmail,
           to: recipientEmail,
-          template: {
-            id: cvTemplateId,
-            variables: { RECIPIENT_NAME: "there" },
-          },
+          replyTo: owner?.email ?? emailClient.fromEmail,
+          subject: emailContent.subject,
+          html: emailContent.html,
+          text: emailContent.text,
           attachments: [
             {
               filename: fileName,
@@ -171,11 +173,6 @@ export const cvPublicRouter = createTRPCRouter({
       });
 
       // --- Owner notification (in the owner's default locale) ---
-      const owner = await ctx.db.user.findUnique({
-        where: { id: ctx.tenant.userId },
-        select: { email: true, name: true },
-      });
-
       if (owner?.email) {
         const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
         const contactTemplateId = await getPortfolioContactTemplateId(
