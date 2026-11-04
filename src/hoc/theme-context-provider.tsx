@@ -69,8 +69,8 @@ interface IThemeContextProviderProps {
 
 const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
   const [theme, setRawTheme] = useState<ITheme>({
-    theme: ETheme.MAIN_LIGHT,
-    isDark: false,
+    theme: ETheme.MAIN_DARK,
+    isDark: true,
   });
   const [isCustomActive, setIsCustomActive] = useState<boolean>(false);
 
@@ -192,7 +192,10 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
       window.localStorage.getItem("custom-theme-active") === "true";
 
     startTransition(() => {
-      setTheme(initialTheme ?? "main-light", initialColorMode === "dark");
+      setTheme(
+        initialTheme ?? ETheme.MAIN_DARK,
+        initialColorMode ? initialColorMode === "dark" : true,
+      );
       if (customActive) {
         setIsCustomActive(true);
         const root = document.documentElement;

@@ -46,7 +46,8 @@ export default function DocumentRoot({
     <html
       lang={locale}
       className={cn(
-        "h-full max-w-full overflow-x-hidden font-sans",
+        "bg-background text-foreground h-full max-w-full overflow-x-hidden font-sans",
+
         geist.variable,
       )}
       suppressHydrationWarning
@@ -54,14 +55,20 @@ export default function DocumentRoot({
       <head>
         <PreloadTheme />
       </head>
-      <body className="bg-card text-foreground flex min-h-screen w-full max-w-full flex-col justify-between overflow-x-hidden scroll-smooth">
+      <body className="bg-background text-foreground relative flex min-h-screen w-full max-w-full flex-col justify-between overflow-x-hidden scroll-smooth">
         <NextIntlClientProvider
           locale={locale}
           messages={messages}
           timeZone="UTC"
         >
           <DocumentLang locale={locale} />
-          <ThemeContextProvider>{children}</ThemeContextProvider>
+          <ThemeContextProvider>
+            <div className="orbs" aria-hidden="true">
+              <i />
+              <i />
+            </div>
+            {children}
+          </ThemeContextProvider>
         </NextIntlClientProvider>
       </body>
     </html>

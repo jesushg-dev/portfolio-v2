@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 
 export interface TabItemProps {
   index?: number;
-  icon: IconComponent;
+  icon?: IconComponent;
   title: string;
+  count?: number;
   /** A stable results panel shared by filter tabs, when content is reused. */
   panelId?: string;
 }
@@ -17,6 +18,7 @@ const TabItem: FC<TabItemProps> = ({
   index = -1,
   icon: Icon,
   title,
+  count,
   panelId,
 }) => {
   const { currentTab, setCurrentTab, tabId, registerTab, onActivePointerDown } =
@@ -68,15 +70,22 @@ const TabItem: FC<TabItemProps> = ({
             textClassName,
           )}
         >
-          <Icon
-            className="size-3.5 shrink-0 sm:size-4.5"
-            width={16}
-            height={16}
-            aria-hidden
-          />
-          <span className="ml-0 sm:ml-3 sm:grow">
-            <span className="block text-[0.6875rem] leading-tight whitespace-nowrap sm:text-sm">
+          {Icon ? (
+            <Icon
+              className="size-3.5 shrink-0 sm:size-4.5"
+              width={16}
+              height={16}
+              aria-hidden
+            />
+          ) : null}
+          <span className={cn(Icon ? "ml-0 sm:ml-3 sm:grow" : "")}>
+            <span className="block text-xs leading-tight whitespace-nowrap sm:text-sm">
               {title}
+              {typeof count === "number" ? (
+                <small className="ml-1.5 text-xs font-normal opacity-60">
+                  {count}
+                </small>
+              ) : null}
             </span>
           </span>
         </span>
