@@ -37,6 +37,9 @@ import { ProfileAboutLivePreview } from "./profile-about-live-preview";
 import { ProfileIdentityTab } from "./profile-identity-tab";
 import { ProfileAboutTab } from "./profile-about-tab";
 import { ProfileSaveBar } from "./profile-save-bar";
+import { ProfileFaqEditor } from "./profile-faq-editor";
+import { ProfileCareerAvailabilityEditor } from "./profile-career-availability-editor";
+import { ProfileContactPreferencesEditor } from "./profile-contact-preferences-editor";
 
 interface ProfileUnifiedEditorProps {
   languages: AppLanguage[];
@@ -730,6 +733,19 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
           </div>
         </div>
       </Tabs>
+
+      {activeTab === "identity" && (
+        <div className="mt-8">
+          <ProfileCareerAvailabilityEditor />
+        </div>
+      )}
+
+      {activeTab === "about" && (
+        <div className="mt-8">
+          <ProfileFaqEditor />
+          <ProfileContactPreferencesEditor />
+        </div>
+      )}
 
       {/* Floating Bottom Save Bar */}
       <ProfileSaveBar

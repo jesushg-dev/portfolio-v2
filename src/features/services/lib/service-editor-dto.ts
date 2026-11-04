@@ -1,3 +1,9 @@
+import {
+  parseServiceVisualNodes,
+  serviceVisualTypeSchema,
+  type ServiceVisualNode,
+  type ServiceVisualType,
+} from "./service-visual";
 import type { Service, ServiceSkill, ServiceTranslation } from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
@@ -12,6 +18,8 @@ export interface ServiceTranslationFields {
   description: string;
   badge: string;
   statsLabel: string;
+  practicePoints?: string;
+  visualNodes?: ServiceVisualNode[];
 }
 
 export type ServiceTranslationMap = TranslationMap<ServiceTranslationFields>;
@@ -21,6 +29,7 @@ export interface ServiceEditorDTO {
   image: string;
   type: Service["type"];
   icon: string;
+  visualType?: ServiceVisualType;
   statsValue: string;
   featured: boolean;
   isActive: boolean;
@@ -36,6 +45,8 @@ const emptyServiceTranslationFields: ServiceTranslationFields = {
   description: "",
   badge: "",
   statsLabel: "",
+  practicePoints: "",
+  visualNodes: [],
 };
 
 type ServiceWithRelations = Service & {
@@ -54,6 +65,8 @@ export function mapServiceToEditorDto(
       description: translation.description,
       badge: translation.badge ?? "",
       statsLabel: translation.statsLabel ?? "",
+      practicePoints: translation.practicePoints ?? "",
+      visualNodes: parseServiceVisualNodes(translation.visualNodes),
     })) ?? [];
 
   return {
@@ -61,6 +74,9 @@ export function mapServiceToEditorDto(
     image: service.image ?? "",
     type: service.type,
     icon: service.icon ?? "code",
+    visualType: serviceVisualTypeSchema
+      .catch("network")
+      .parse(service.visualType),
     statsValue: service.statsValue ?? "",
     featured: service.featured ?? false,
     isActive: service.isActive ?? true,
@@ -88,6 +104,7 @@ export function buildEmptyServiceCreateDto(
     image: "",
     type: "FRONTEND",
     icon: "code",
+    visualType: "network",
     statsValue: "",
     featured: false,
     isActive: true,

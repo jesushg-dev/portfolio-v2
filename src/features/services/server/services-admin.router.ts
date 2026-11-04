@@ -1,4 +1,9 @@
+import {
+  serviceVisualNodesSchema,
+  serviceVisualTypeSchema,
+} from "../lib/service-visual";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 import { buildServiceListWhere } from "../lib/service-list-filters";
 
@@ -13,7 +18,7 @@ import {
 } from "@/features/services/lib/service-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
-import type { Prisma } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 
 const ServiceTranslationMapSchema = z.record(
   z.string(),
@@ -22,11 +27,14 @@ const ServiceTranslationMapSchema = z.record(
     description: z.string(),
     badge: z.string().default(""),
     statsLabel: z.string().default(""),
+    practicePoints: z.string().default(""),
+    visualNodes: serviceVisualNodesSchema.default([]),
   }),
 );
 
 const serviceUpsertInput = z.object({
   image: z.string().default(""),
+  visualType: serviceVisualTypeSchema.default("network"),
   type: StackTypeSchema,
   icon: z.string().default("code"),
   statsValue: z.string().default(""),
@@ -36,6 +44,25 @@ const serviceUpsertInput = z.object({
   skillIds: z.array(z.string()).default([]),
   translations: ServiceTranslationMapSchema.default({}),
 });
+
+async function ownedServiceSkillIds(
+  db: Pick<PrismaClient, "skill">,
+  userId: string,
+  requested: string[],
+) {
+  const skillIds = [...new Set(requested)];
+  if (
+    skillIds.length &&
+    (await db.skill.count({ where: { id: { in: skillIds }, userId } })) !==
+      skillIds.length
+  ) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Invalid service skills",
+    });
+  }
+  return skillIds;
+}
 
 export const servicesAdminRouter = createTRPCRouter({
   getCategories: protectedProcedure.query(async ({ ctx }) => {
@@ -98,7 +125,12 @@ export const servicesAdminRouter = createTRPCRouter({
   createItem: protectedProcedure
     .input(serviceUpsertInput)
     .mutation(async ({ ctx, input }) => {
-      const { translations, skillIds, ...rest } = input;
+      const { translations, skillIds: requestedSkillIds, ...rest } = input;
+      const skillIds = await ownedServiceSkillIds(
+        ctx.db,
+        ctx.user.id,
+        requestedSkillIds,
+      );
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
@@ -124,12 +156,17 @@ export const servicesAdminRouter = createTRPCRouter({
   updateItem: protectedProcedure
     .input(serviceUpsertInput.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, skillIds, translations, ...data } = input;
+      const { id, skillIds: requestedSkillIds, translations, ...data } = input;
       await assertOwner(
         await ctx.db.service.findUnique({ where: { id } }),
         ctx.user.id,
       );
 
+      const skillIds = await ownedServiceSkillIds(
+        ctx.db,
+        ctx.user.id,
+        requestedSkillIds,
+      );
       await ctx.db.service.update({ where: { id }, data });
       await ctx.db.serviceSkill.deleteMany({ where: { serviceId: id } });
       if (skillIds.length > 0) {
@@ -137,9 +174,18 @@ export const servicesAdminRouter = createTRPCRouter({
           data: skillIds.map((skillId) => ({ serviceId: id, skillId })),
         });
       }
-      for (const translation of translationMapEntries(translations).filter(
+      const translationRows = translationMapEntries(translations).filter(
         (entry) => entry.title.trim() !== "" || entry.description.trim() !== "",
-      )) {
+      );
+      await ctx.db.serviceTranslation.deleteMany({
+        where: {
+          serviceId: id,
+          appLanguageId: {
+            notIn: translationRows.map((entry) => entry.appLanguageId),
+          },
+        },
+      });
+      for (const translation of translationRows) {
         const existing = await ctx.db.serviceTranslation.findFirst({
           where: { serviceId: id, appLanguageId: translation.appLanguageId },
         });
@@ -151,6 +197,8 @@ export const servicesAdminRouter = createTRPCRouter({
               description: translation.description,
               badge: translation.badge,
               statsLabel: translation.statsLabel,
+              practicePoints: translation.practicePoints,
+              visualNodes: translation.visualNodes,
             },
           });
         } else {

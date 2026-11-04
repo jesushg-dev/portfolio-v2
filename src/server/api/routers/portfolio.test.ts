@@ -5,6 +5,94 @@ import {
 } from "@/test-utils/trpc-caller";
 
 describe("portfolioRouter", () => {
+  it("shows next-stage career copy only with explicit availability and configured translations", async () => {
+    const header = {
+      fullName: "Ada",
+      photoUrl: null,
+      backgroundImageUrl: null,
+      availableForWork: false,
+      translations: [
+        {
+          appLanguageId: "lang-en",
+          availabilityBadge: "Open to work",
+          careerNextTitle: "Your team",
+          careerNextDescription: "Open to senior roles.",
+        },
+      ],
+    };
+    const db = {
+      appLanguage: {
+        findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
+      },
+      portfolioHeader: { findUnique: jest.fn().mockResolvedValue(header) },
+      profile: {
+        findUnique: jest.fn().mockResolvedValue({ displayName: "Ada" }),
+      },
+    };
+    const caller = createRouterCaller(
+      portfolioRouter,
+      createTrpcTestContext({ db }),
+    );
+    expect(
+      (await caller.getHeroPublic({ locale: "en" }))?.careerNextStage,
+    ).toBeNull();
+    db.portfolioHeader.findUnique.mockResolvedValue({
+      ...header,
+      availableForWork: true,
+    });
+    expect(
+      (await caller.getHeroPublic({ locale: "en" }))?.careerNextStage,
+    ).toEqual({ title: "Your team", description: "Open to senior roles." });
+    db.portfolioHeader.findUnique.mockResolvedValue({
+      ...header,
+      availableForWork: true,
+      translations: [{ ...header.translations[0], careerNextDescription: "" }],
+    });
+    expect(
+      (await caller.getHeroPublic({ locale: "en" }))?.careerNextStage,
+    ).toBeNull();
+  });
+
+  it("respects home experience visibility, limits, and ATS-only responsibility privacy", async () => {
+    const findMany = jest.fn().mockResolvedValue([]);
+    const caller = createRouterCaller(
+      portfolioRouter,
+      createTrpcTestContext({
+        db: {
+          appLanguage: { findMany: jest.fn().mockResolvedValue([]) },
+          cvExperience: { findMany },
+        },
+      }),
+    );
+
+    await expect(
+      caller.getExperiencesPublic({ locale: "en", limit: 2 }),
+    ).resolves.toEqual([]);
+    expect(findMany).toHaveBeenCalledTimes(1);
+    const [[findManyCallArgs]] = findMany.mock.calls as [
+      [
+        {
+          where?: { featuredOnHome?: boolean };
+          take?: number;
+          include?: {
+            responsibilities?: {
+              where?: { atsOnly?: boolean };
+            };
+          };
+        },
+      ],
+    ];
+    expect(findManyCallArgs).toMatchObject({
+      where: { featuredOnHome: true },
+      take: 2,
+      include: {
+        responsibilities: {
+          where: { atsOnly: false },
+        },
+      },
+    });
+  });
+
   it("returns empty public collections without a tenant", async () => {
     const caller = createRouterCaller(
       portfolioRouter,

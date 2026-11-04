@@ -60,6 +60,61 @@ function createDb() {
 }
 
 describe("profileAdminRouter", () => {
+  it("persists explicit career availability with tenant-owned localized next-stage copy", async () => {
+    const db = createDb();
+    const transaction = {
+      portfolioHeader: db.portfolioHeader,
+      portfolioHeaderTranslation: db.portfolioHeaderTranslation,
+    };
+    const database = {
+      ...db,
+      $transaction: jest.fn(
+        async (callback: (tx: typeof transaction) => Promise<void>) =>
+          callback(transaction),
+      ),
+    };
+    const caller = createRouterCaller(
+      profileAdminRouter,
+      createTrpcTestContext({ db: database }),
+    );
+    await caller.upsertCareerAvailability({
+      availableForWork: true,
+      translations: [
+        {
+          appLanguageId: "lang-en",
+          title: "Your team",
+          description: "Open to engineering roles.",
+        },
+      ],
+    });
+    expect(db.portfolioHeader.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: MOCK_OWNER_USER.id },
+        update: { availableForWork: true },
+      }),
+    );
+    expect(db.portfolioHeaderTranslation.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        update: {
+          careerNextTitle: "Your team",
+          careerNextDescription: "Open to engineering roles.",
+        },
+      }),
+    );
+    await expect(
+      caller.upsertCareerAvailability({
+        availableForWork: true,
+        translations: [
+          {
+            appLanguageId: "not-configured",
+            title: "Your team",
+            description: "No",
+          },
+        ],
+      }),
+    ).rejects.toThrow("Unknown language");
+  });
+
   it("returns a modern hero editor DTO with subtitle and tagline", async () => {
     const db = createDb();
     const caller = createRouterCaller(

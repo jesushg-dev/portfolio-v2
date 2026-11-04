@@ -43,6 +43,11 @@ import {
   type ServiceCreateFormDTO,
   type ServiceEditorDTO,
 } from "@/features/services/lib/service-editor-dto";
+import {
+  serviceVisualTypes,
+  serviceVisualTypeSchema,
+  type ServiceVisualNode,
+} from "../lib/service-visual";
 import { StackTypeSchema } from "@/features/portfolio/server/portfolio-admin-shared";
 
 interface ServiceFormProps {
@@ -59,6 +64,7 @@ function createServiceFormSchema(
   return z.object({
     id: z.string().optional(),
     image: z.string(),
+    visualType: serviceVisualTypeSchema,
     type: StackTypeSchema,
     icon: z.string(),
     statsValue: z.string(),
@@ -74,6 +80,8 @@ function createServiceFormSchema(
           description: z.string(),
           badge: z.string(),
           statsLabel: z.string(),
+          practicePoints: z.string(),
+          visualNodes: z.array(z.object({ label: z.string().max(48) })).max(16),
         }),
       )
       .refine(
@@ -124,11 +132,20 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         description?: string;
         badge?: string;
         statsLabel?: string;
+        practicePoints?: string;
+        visualNodes?: ServiceVisualNode[];
       }
     >;
     const normalizedTranslations: Record<
       string,
-      { title: string; description: string; badge: string; statsLabel: string }
+      {
+        title: string;
+        description: string;
+        badge: string;
+        statsLabel: string;
+        practicePoints: string;
+        visualNodes: ServiceVisualNode[];
+      }
     > = {};
 
     for (const lang of languages) {
@@ -138,12 +155,15 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         description: existing?.description ?? "",
         badge: existing?.badge ?? "",
         statsLabel: existing?.statsLabel ?? "",
+        practicePoints: existing?.practicePoints ?? "",
+        visualNodes: existing?.visualNodes ?? [],
       };
     }
 
     return {
       id: "id" in initialData ? initialData.id : undefined,
       image: initialData.image ?? "",
+      visualType: initialData.visualType ?? "network",
       type: initialData.type ?? "FRONTEND",
       icon: initialData.icon ?? "code",
       statsValue: initialData.statsValue ?? "",
@@ -238,6 +258,8 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         description: primaryTranslation.description ?? "",
         badge: primaryTranslation.badge ?? "",
         statsLabel: primaryTranslation.statsLabel ?? "",
+        practicePoints: primaryTranslation.practicePoints ?? "",
+        visualNodes: primaryTranslation.visualNodes ?? [],
       });
     },
     [form, primaryTranslation],
@@ -251,6 +273,8 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         description: "",
         badge: "",
         statsLabel: "",
+        practicePoints: "",
+        visualNodes: [],
       });
     },
     [form],
@@ -264,6 +288,8 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         description: "",
         badge: "",
         statsLabel: "",
+        practicePoints: "",
+        visualNodes: [],
       });
       toast.success(t("delete"));
     },
@@ -274,14 +300,30 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     (values: ServiceFormValues) => {
       startTransition(async () => {
         try {
+          const payload = {
+            ...values,
+            translations: Object.fromEntries(
+              Object.entries(values.translations).map(
+                ([languageId, translation]) => [
+                  languageId,
+                  {
+                    ...translation,
+                    visualNodes: translation.visualNodes
+                      .map((node) => ({ label: node.label.trim() }))
+                      .filter((node) => node.label),
+                  },
+                ],
+              ),
+            ),
+          };
           if (isEditMode && values.id) {
             await updateService.mutateAsync({
               id: values.id,
-              ...values,
+              ...payload,
             });
             toast.success(t("updatedSuccess"));
           } else {
-            await createService.mutateAsync(values);
+            await createService.mutateAsync(payload);
             toast.success(t("createdSuccess"));
           }
 
@@ -315,6 +357,33 @@ export const ServiceForm: FC<ServiceFormProps> = ({
             </TabsList>
 
             <TabsContent value="general" className="space-y-6">
+              <FormField
+                control={form.control}
+                name="visualType"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("visualType")}
+                    inputId="service-visual-type"
+                    description={t("visualTypeHint")}
+                  >
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger id="service-visual-type">
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {serviceVisualTypes.map((value) => (
+                          <SelectItem key={value} value={value}>
+                            {t(`visualTypes.${value}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+
               <div className="grid gap-6 sm:grid-cols-2">
                 <FormField
                   control={form.control}
@@ -554,6 +623,52 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                     />
                   </div>
 
+                  <FormField
+                    control={form.control}
+                    name={`translations.${activeLangId}.practicePoints`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("practicePoints")}
+                        description={t("practicePointsHint")}
+                        inputId={`service-practice-${activeLangId}`}
+                      >
+                        <Textarea
+                          id={`service-practice-${activeLangId}`}
+                          rows={5}
+                          {...field}
+                        />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`translations.${activeLangId}.visualNodes`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("visualNodes")}
+                        description={t("visualNodesHint")}
+                        inputId={`service-visual-nodes-${activeLangId}`}
+                      >
+                        <Textarea
+                          id={`service-visual-nodes-${activeLangId}`}
+                          rows={5}
+                          value={field.value
+                            .map((node) => node.label)
+                            .join("\n")}
+                          onChange={(event) =>
+                            field.onChange(
+                              event.target.value
+                                .split("\n")
+                                .map((label) => ({ label })),
+                            )
+                          }
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                        />
+                      </FormItem>
+                    )}
+                  />
                   {isNonPrimary && !isCurrentTranslationEmpty && (
                     <AdminFormDeleteTranslation
                       languageName={activeLang?.name ?? activeLang?.code ?? ""}

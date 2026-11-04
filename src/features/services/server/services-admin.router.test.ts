@@ -31,6 +31,7 @@ const serviceRow = {
 
 function createDb() {
   return {
+    skill: { count: jest.fn().mockResolvedValue(1) },
     service: {
       findMany: jest.fn().mockResolvedValue([serviceRow]),
       count: jest.fn().mockResolvedValue(1),
@@ -45,6 +46,7 @@ function createDb() {
       createMany: jest.fn(),
     },
     serviceTranslation: {
+      deleteMany: jest.fn(),
       findFirst: jest.fn().mockResolvedValue(null),
       create: jest.fn(),
       update: jest.fn(),
@@ -56,6 +58,31 @@ function createDb() {
 }
 
 describe("servicesAdminRouter", () => {
+  it("rejects another tenant's skills before writing service data", async () => {
+    const db = createDb();
+    db.skill.count.mockResolvedValue(0);
+    const caller = createRouterCaller(
+      servicesAdminRouter,
+      createTrpcTestContext({ db }),
+    );
+    await expect(
+      caller.createItem({ type: "FRONTEND", skillIds: ["foreign-skill"] }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    expect(db.skill.count).toHaveBeenCalledWith({
+      where: { id: { in: ["foreign-skill"] }, userId: MOCK_OWNER_USER.id },
+    });
+    expect(db.service.create).not.toHaveBeenCalled();
+    await expect(
+      caller.updateItem({
+        id: "sv-1",
+        type: "FRONTEND",
+        skillIds: ["foreign-skill"],
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    expect(db.service.update).not.toHaveBeenCalled();
+    expect(db.serviceSkill.deleteMany).not.toHaveBeenCalled();
+  });
+
   it("lists, creates, updates, and deletes services", async () => {
     const db = createDb();
     const caller = createRouterCaller(
@@ -94,6 +121,8 @@ describe("servicesAdminRouter", () => {
           description: "Apps",
           badge: "",
           statsLabel: "",
+          practicePoints: "Verified tenant result",
+          visualNodes: [{ label: "Tenant API" }],
         },
       },
     });
@@ -115,10 +144,18 @@ describe("servicesAdminRouter", () => {
           description: "Services",
           badge: "",
           statsLabel: "",
+          practicePoints: "Verified tenant result",
+          visualNodes: [{ label: "Tenant API" }],
         },
       },
     });
     expect(db.serviceSkill.createMany).toHaveBeenCalled();
+    expect(db.serviceTranslation.create.mock.calls).toMatchObject([
+      [{ data: { practicePoints: "Verified tenant result" } }],
+    ]);
+    expect(db.serviceTranslation.deleteMany).toHaveBeenCalledWith({
+      where: { serviceId: "sv-1", appLanguageId: { notIn: ["lang-en"] } },
+    });
 
     await caller.toggleActive({ id: "sv-1", isActive: false });
     expect(db.service.update).toHaveBeenCalledWith(

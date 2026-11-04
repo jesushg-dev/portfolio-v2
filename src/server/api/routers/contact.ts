@@ -27,20 +27,34 @@ const ContactMessageSchema = z.object({
 });
 
 export const contactRouter = createTRPCRouter({
-  getPublic: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.tenant) {
-      return {
-        contacts: [],
-        recipientReady: false,
-        emailFormEnabled: false,
-        mapLocation: null,
-      };
-    }
+  getPublic: publicProcedure
+    .input(
+      z.object({ locale: z.enum(["en", "es", "nl"]).optional() }).optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!ctx.tenant) {
+        return {
+          contacts: [],
+          recipientReady: false,
+          emailFormEnabled: false,
+          mapLocation: null,
+          responseTime: null,
+          timezone: null,
+        };
+      }
 
-    const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
+      const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
+      const displayLocale = input?.locale ?? ownerLocale;
 
-    const [appLanguages, rawContacts, profile, user, emailFormEnabled] =
-      await Promise.all([
+      const [
+        appLanguages,
+        rawContacts,
+        profile,
+        user,
+        emailFormEnabled,
+        header,
+        nowSettings,
+      ] = await Promise.all([
         ctx.db.appLanguage.findMany(),
         ctx.db.cvContact.findMany({
           where: { userId: ctx.tenant.userId },
@@ -63,33 +77,51 @@ export const contactRouter = createTRPCRouter({
           select: { email: true, name: true },
         }),
         canDeliverPortfolioContactEmail(ctx.tenant.userId, ownerLocale),
+        ctx.db.portfolioHeader.findUnique({
+          where: { userId: ctx.tenant.userId },
+          include: { translations: true },
+        }),
+        ctx.db.nowSettings.findUnique({
+          where: { userId: ctx.tenant.userId },
+          select: { timezone: true },
+        }),
       ]);
 
-    const field = createLocalizedFieldResolver(appLanguages, ownerLocale);
+      const field = createLocalizedFieldResolver(appLanguages, displayLocale);
 
-    const contacts = rawContacts.map((contact) => ({
-      type: contact.type,
-      value: contact.value,
-      label: field(contact.translations, "label"),
-    }));
+      const contacts = rawContacts.map((contact) => ({
+        type: contact.type,
+        value: contact.value,
+        label: field(contact.translations, "label"),
+      }));
 
-    const locationQuery = locationQueryFromContacts(contacts);
-    const mapLocation = await resolveOwnerMapLocation({
-      mapLatitude: profile?.mapLatitude,
-      mapLongitude: profile?.mapLongitude,
-      mapLocationLabel: profile?.mapLocationLabel,
-      contactQuery: locationQuery,
-    });
+      const locationQuery = locationQueryFromContacts(contacts);
+      const mapLocation = await resolveOwnerMapLocation({
+        mapLatitude: profile?.mapLatitude,
+        mapLongitude: profile?.mapLongitude,
+        mapLocationLabel: profile?.mapLocationLabel,
+        contactQuery: locationQuery,
+      });
 
-    return {
-      contacts,
-      portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
-      displayName: user?.name ?? ctx.tenant.username,
-      recipientReady: Boolean(user?.email),
-      emailFormEnabled,
-      mapLocation,
-    };
-  }),
+      return {
+        contacts,
+        portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
+        displayName: user?.name ?? ctx.tenant.username,
+        recipientReady: Boolean(user?.email),
+        emailFormEnabled,
+        mapLocation,
+        responseTime:
+          header?.translations
+            .find(
+              (row) =>
+                row.appLanguageId ===
+                appLanguages.find((language) => language.code === displayLocale)
+                  ?.id,
+            )
+            ?.contactResponseTime?.trim() ?? null,
+        timezone: nowSettings?.timezone ?? null,
+      };
+    }),
 
   sendMessage: publicProcedure
     .input(ContactMessageSchema)
