@@ -7,8 +7,6 @@ const config = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/test-utils/setup.ts"],
   testMatch: ["<rootDir>/src/**/*.test.{ts,tsx}"],
-  modulePathIgnorePatterns: ["<rootDir>/temp-aceternity/"],
-  watchPathIgnorePatterns: ["<rootDir>/temp-aceternity/"],
   testTimeout: 15000,
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",

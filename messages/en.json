@@ -295,9 +295,9 @@
     }
   },
   "certification": {
-    "title": "Certificates",
-    "subtitle": "Mastery in Diverse Skills",
-    "description": "Empowering projects and ready to take on new challenges!",
+    "title": "All certificates",
+    "subtitle": "Master of multiple skills",
+    "description": "Official certificates and completed programs validating my expertise in frontend, backend, security, and software development.",
     "pagination": {
       "loading": "Loading...",
       "loadMore": "Load More"
@@ -341,15 +341,16 @@
     },
     "catalog": {
       "backToPortfolio": "Back to portfolio",
-      "pageTitle": "All Certifications",
-      "pageSubtitle": "Official credentials and completed programs validating hands-on expertise across frontend, backend, cybersecurity, and engineering practices.",
+      "pageTitle": "All certificates",
+      "pageSubtitle": "Official certificates and completed programs validating my expertise in frontend, backend, security, and software development.",
       "searchPlaceholder": "Search by title, technology, or issuer…",
       "searchLabel": "Search certificates or technologies",
       "sortLabel": "Sort by",
       "sorts": {
         "newest": "Newest first",
         "name": "Name (A–Z)",
-        "issuer": "Issuer (A–Z)"
+        "issuer": "Issuer (A–Z)",
+        "oldest": "Oldest first"
       },
       "issuerLabel": "Issuer / Institution",
       "techLabel": "Technology",
@@ -364,7 +365,12 @@
       "preview": "Preview",
       "verify": "Verify credential",
       "credentialId": "Credential ID",
-      "closeModal": "Close"
+      "closeModal": "Close",
+      "moreFilters": "More filters",
+      "previous": "Previous",
+      "next": "Next",
+      "copyId": "Copy ID",
+      "idCopied": "ID copied!"
     }
   },
   "curriculum": {
@@ -827,6 +833,12 @@
       "availableForOpportunities": "Available for new opportunities",
       "scheduleCall": "Schedule a call",
       "scheduleCallAria": "Schedule a call — go to contact section",
+      "atAGlance": "At a glance",
+      "availability": "Availability",
+      "immediate": "Immediate",
+      "seeProjects": "See projects",
+      "getInTouch": "Get in touch",
+      "openToWork": "Open to work · Remote or Managua",
       "empty": {
         "title": "Hero not configured",
         "description": "Add your profile photo, subtitle, and intro from the admin Profile section."
@@ -834,7 +846,7 @@
     },
     "services": {
       "title": "Engineering Expertise",
-      "subtitle": "Services",
+      "subtitle": "Expertise",
       "description": "Areas where I design, build, and lead production software.",
       "seeMore": "See more",
       "seeLess": "See less",
@@ -1158,8 +1170,8 @@
       },
       "catalog": {
         "backToPortfolio": "Back to portfolio",
-        "pageTitle": "All engineering projects",
-        "pageSubtitle": "Explore by type, category, or technology. Case studies detail decisions, architecture, and outcomes.",
+        "pageTitle": "All projects",
+        "pageSubtitle": "Explore by type, category, or technology. Case studies show decisions, architecture, and outcomes.",
         "searchPlaceholder": "Search projects or technologies…",
         "searchLabel": "Search projects or technologies",
         "sortLabel": "Sort",
@@ -1177,7 +1189,16 @@
         "more": "View more ({count} remaining)",
         "emptyTitle": "No results",
         "emptyDescription": "Try another search term or remove some filters.",
-        "emptyButton": "Clear filters"
+        "emptyButton": "Clear filters",
+        "moreFilters": "More filters",
+        "previous": "Previous",
+        "next": "Next",
+        "closeModal": "Close",
+        "roleAndPeriod": "ROLE & PERIOD",
+        "role": "ROLE",
+        "impact": "IMPACT",
+        "privateRepo": "Private repository",
+        "readCaseStudy": "Read case study"
       }
     },
     "contact": {
@@ -1276,7 +1297,11 @@
       "showingRecent": "Showing most recent roles.",
       "promotion": "Promotion",
       "previousRole": "Previous position",
-      "rolesCount": "{count} roles"
+      "rolesCount": "{count} roles",
+      "description": "From frontend developer to senior engineer and team lead, 7+ years and counting.",
+      "previousPosition": "Previous position",
+      "nextStageTitle": "Next stage: your team",
+      "nextStageSubtitle": "Senior full-stack or tech-lead roles, remote or from Managua. I can start right away."
     },
     "impactStats": {
       "teamSize": {
@@ -1314,6 +1339,28 @@
         },
         "engineersMentored": {
           "label": "Engineers led"
+        }
+      }
+    },
+    "faq": {
+      "title": "Questions?",
+      "titleGradient": "Answers.",
+      "items": {
+        "0": {
+          "question": "Are you available for new roles?",
+          "answer": "Yes. I’m available immediately, and most of my recent work has been remote."
+        },
+        "1": {
+          "question": "Which time zone do you work in?",
+          "answer": "I’m based in Managua, Nicaragua (UTC−6) and have worked with teams in the United States and Costa Rica."
+        },
+        "2": {
+          "question": "What do you work with day to day?",
+          "answer": "React, Next.js and TypeScript on the front end; Node.js, Nest.js and C#/.NET on the back end; SQL and NoSQL databases; CI/CD and testing with Docker, Playwright and Jest."
+        },
+        "3": {
+          "question": "Can I get your CV?",
+          "answer": "Of course. You can read it online or request a PDF by email on the CV page."
         }
       }
     },
@@ -1769,11 +1816,11 @@
         "zoomOutBlocks": "Zoom out",
         "resetBlocks": "Reset view",
         "contributionViews": "Contribution views",
-        "blocks": "3D blocks",
-        "calendar": "Calendar",
+        "calendar": "Flat",
+        "blocks": "3D",
         "breakout": "Breakout",
-        "blocksDescription": "GitHub contributions as an isometric landscape of building blocks.",
-        "blocksHint": "Drag to rotate; enable Move or hold Shift to pan. Arrow keys rotate, +/− zoom, Home resets. Each block represents a day.",
+        "blocksDescription": "GitHub contributions as an interactive terrain.",
+        "blocksHint": "Drag to tilt and rotate into 3D. Press Flat to return to 2D view. Arrow keys navigate days.",
         "languageDistribution": "Languages in public repositories",
         "otherLanguages": "Other",
         "noLanguageData": "No language data is available.",
@@ -1818,7 +1865,11 @@
         "gameLost": "Game over. Restart to try again.",
         "gameReady": "Position your paddle, then press Play or Space to launch.",
         "gamePaused": "Paused.",
-        "gameReduced": "No autoplay or decorative motion. The ball moves only when you choose to play."
+        "gameReduced": "No autoplay or decorative motion. The ball moves only when you choose to play.",
+        "routineAround": "Around this time I’m usually",
+        "routineUsual": "Usual routine {start}–{end}",
+        "routineInWindow": "in the usual window",
+        "routineOutsideWindow": "outside the usual window"
       }
     },
     "colophon": {
@@ -1884,7 +1935,7 @@
       "metaDescription": "Anonymous visitor stats and portfolio highlights — no cookies, unique IDs, or IP addresses.",
       "eyebrow": "Public stats",
       "title": "How this site is used",
-      "description": "Cookieless, first-party audience measurement plus a snapshot of the portfolio. No unique visitors, no tracking across other sites.",
+      "description": "First-party audience measurement without cookies, plus a snapshot of the portfolio. No unique visitors, no tracking across other sites.",
       "highlightsTitle": "Highlights",
       "kpis": {
         "pageviews": "Pageviews (30 days)",
@@ -1902,7 +1953,13 @@
       "emptyTraffic": "No public visits recorded yet.",
       "servicesTitle": "Active services",
       "emptyServices": "No active services right now.",
-      "privacyNote": "Measurement is anonymous and explained in the <link>privacy policy</link>."
+      "privacyNote": "Measurement is anonymous and explained in the <link>privacy policy</link>.",
+      "referrersTitle": "Top Referrers",
+      "portfolioTitle": "The portfolio",
+      "countriesHint": "Last 30 days. Country level only. For {unknownPercent}% of views no country is known.",
+      "countriesHintSimple": "Last 30 days. Country level only.",
+      "pagesHint": "Last 30 days.",
+      "otherCountries": "Other countries ({count})"
     }
   },
   "admin": {
@@ -3673,19 +3730,19 @@
     },
     "uses": {
       "title": "Uses",
-      "subtitle": "Manage everyday gear, software, browser extensions, and page media.",
+      "subtitle": "Daily hardware, software, browser extensions, and site media.",
       "tabsLabel": "Uses sections",
       "tabs": {
         "everyday": "Everyday",
         "software": "Software",
         "browser": "Browser",
-        "settings": "Settings"
+        "settings": "Media & Settings"
       },
       "addNew": "Add item",
       "createDescription": "Add a new item to your Uses inventory.",
       "editTitle": "Edit item",
       "editDescription": "Update this Uses inventory item.",
-      "count": "{count} items",
+      "count": "{count, plural, =1 {1 item} other {# items}} · displayed in this order on the public page",
       "searchTitle": "Search title",
       "deletedSuccess": "Item deleted.",
       "deleteFailed": "Could not delete item.",

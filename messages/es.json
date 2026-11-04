@@ -295,9 +295,9 @@
     }
   },
   "certification": {
-    "title": "Certificados",
-    "subtitle": "Dominio en Diversas Habilidades",
-    "description": "¡Potenciando proyectos y preparandome para el siguiente desafío!",
+    "title": "Todos los certificados",
+    "subtitle": "Maestro en múltiples habilidades",
+    "description": "Certificados oficiales y programas completados que validan mi experiencia en frontend, backend, seguridad y desarrollo de software.",
     "pagination": {
       "loading": "Cargando...",
       "loadMore": "Cargar Más"
@@ -341,15 +341,16 @@
     },
     "catalog": {
       "backToPortfolio": "Volver al portafolio",
-      "pageTitle": "Todas las Certificaciones",
-      "pageSubtitle": "Credenciales oficiales y cursos completados que validan mi experiencia en tecnologías frontend, backend, seguridad y buenas prácticas.",
+      "pageTitle": "Todos los certificados",
+      "pageSubtitle": "Certificados oficiales y programas completados que validan mi experiencia en frontend, backend, seguridad y desarrollo de software.",
       "searchPlaceholder": "Buscar por título, tecnología o emisor…",
       "searchLabel": "Buscar certificados o tecnologías",
       "sortLabel": "Ordenar",
       "sorts": {
         "newest": "Más recientes",
         "name": "Nombre (A–Z)",
-        "issuer": "Emisor (A–Z)"
+        "issuer": "Emisor (A–Z)",
+        "oldest": "Más antiguos primero"
       },
       "issuerLabel": "Emisor / Institución",
       "techLabel": "Tecnología",
@@ -364,7 +365,12 @@
       "preview": "Vista previa",
       "verify": "Ver credencial",
       "credentialId": "ID de credencial",
-      "closeModal": "Cerrar"
+      "closeModal": "Cerrar",
+      "moreFilters": "Más filtros",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "copyId": "Copiar ID",
+      "idCopied": "¡ID copiado!"
     }
   },
   "curriculum": {
@@ -848,6 +854,12 @@
       "availableForOpportunities": "Disponible para nuevas oportunidades",
       "scheduleCall": "Agendar una llamada",
       "scheduleCallAria": "Agendar una llamada — ir a la sección de contacto",
+      "atAGlance": "De un vistazo",
+      "availability": "Disponibilidad",
+      "immediate": "Inmediata",
+      "seeProjects": "Ver proyectos",
+      "getInTouch": "Contactar",
+      "openToWork": "Disponible para trabajar · Remoto o Managua",
       "empty": {
         "title": "Héroe no configurado",
         "description": "Agrega tu foto de perfil, subtítulo y presentación desde la sección Perfil del panel de administración."
@@ -855,7 +867,7 @@
     },
     "services": {
       "title": "Experiencia en Ingeniería",
-      "subtitle": "Servicios",
+      "subtitle": "Especialidades",
       "description": "Áreas donde diseño, construyo y lidero software de producción.",
       "seeMore": "Ver más",
       "seeLess": "Ver menos",
@@ -1180,7 +1192,7 @@
       "catalog": {
         "backToPortfolio": "Volver al portafolio",
         "pageTitle": "Todos los proyectos",
-        "pageSubtitle": "Explora por tipo, categoría o tecnología. Los casos de estudio detallan decisiones, arquitectura y resultados.",
+        "pageSubtitle": "Explora por tipo, categoría o tecnología. Los casos de estudio muestran decisiones, arquitectura y resultados.",
         "searchPlaceholder": "Buscar proyectos o tecnologías…",
         "searchLabel": "Buscar proyectos o tecnologías",
         "sortLabel": "Ordenar",
@@ -1198,7 +1210,16 @@
         "more": "Ver más ({count} restantes)",
         "emptyTitle": "Sin resultados",
         "emptyDescription": "Prueba con otra búsqueda o quita algunos filtros.",
-        "emptyButton": "Limpiar filtros"
+        "emptyButton": "Limpiar filtros",
+        "moreFilters": "Más filtros",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "closeModal": "Cerrar",
+        "roleAndPeriod": "ROL Y PERÍODO",
+        "role": "ROL",
+        "impact": "IMPACTO",
+        "privateRepo": "Repositorio privado",
+        "readCaseStudy": "Leer case study"
       }
     },
     "contact": {
@@ -1297,7 +1318,11 @@
       "showingRecent": "Mostrando los roles más recientes.",
       "promotion": "Ascenso interno",
       "previousRole": "Puesto anterior",
-      "rolesCount": "{count} puestos"
+      "rolesCount": "{count} puestos",
+      "description": "De desarrollador frontend a ingeniero senior y líder técnico, más de 7 años de trayectoria.",
+      "previousPosition": "Puesto anterior",
+      "nextStageTitle": "Siguiente etapa: tu equipo",
+      "nextStageSubtitle": "Roles full-stack senior o líder técnico, remoto o presencial. Disponibilidad inmediata."
     },
     "impactStats": {
       "teamSize": {
@@ -1335,6 +1360,28 @@
         },
         "engineersMentored": {
           "label": "Ingenieros liderados"
+        }
+      }
+    },
+    "faq": {
+      "title": "¿Preguntas?",
+      "titleGradient": "Respuestas.",
+      "items": {
+        "0": {
+          "question": "¿Estás disponible para nuevos roles?",
+          "answer": "Sí. Estoy disponible de inmediato, y la mayor parte de mi trabajo reciente ha sido remoto."
+        },
+        "1": {
+          "question": "¿En qué zona horaria trabajas?",
+          "answer": "Estoy radicado en Managua, Nicaragua (UTC−6) y he trabajado con equipos en Estados Unidos y Costa Rica."
+        },
+        "2": {
+          "question": "¿Con qué tecnologías trabajas en el día a día?",
+          "answer": "React, Next.js y TypeScript en el frontend; Node.js, Nest.js y C#/.NET en el backend; bases de datos SQL y NoSQL; CI/CD y pruebas con Docker, Playwright y Jest."
+        },
+        "3": {
+          "question": "¿Puedo obtener tu CV?",
+          "answer": "Por supuesto. Puedes leerlo en línea o solicitar un PDF por correo en la página del CV."
         }
       }
     },
@@ -1790,11 +1837,11 @@
         "zoomOutBlocks": "Alejar",
         "resetBlocks": "Restablecer vista",
         "contributionViews": "Vistas de contribuciones",
-        "blocks": "Bloques 3D",
-        "calendar": "Calendario",
+        "calendar": "Plano",
+        "blocks": "3D",
         "breakout": "Breakout",
-        "blocksDescription": "Contribuciones de GitHub como un paisaje isométrico de bloques de construcción.",
-        "blocksHint": "Arrastra para girar; activa Mover o mantén Shift para desplazar. Las flechas giran, +/− ajustan el zoom e Inicio restablece. Cada bloque representa un día.",
+        "blocksDescription": "Contribuciones de GitHub como un terreno interactivo.",
+        "blocksHint": "Arrastra para inclinar y rotar en 3D. Presiona Plano para volver a 2D. Las flechas navegan entre días.",
         "languageDistribution": "Lenguajes en repositorios públicos",
         "otherLanguages": "Otros",
         "noLanguageData": "No hay datos de lenguajes disponibles.",
@@ -1839,7 +1886,11 @@
         "gameLost": "Fin de la partida. Reinicia para volver a intentarlo.",
         "gameReady": "Coloca la pala y pulsa Jugar o Espacio para lanzar.",
         "gamePaused": "Partida en pausa.",
-        "gameReduced": "Sin inicio automático ni movimiento decorativo. La pelota se mueve solo cuando eliges jugar."
+        "gameReduced": "Sin inicio automático ni movimiento decorativo. La pelota se mueve solo cuando eliges jugar.",
+        "routineAround": "Por estas horas suelo estar",
+        "routineUsual": "Rutina habitual {start}–{end}",
+        "routineInWindow": "dentro del horario habitual",
+        "routineOutsideWindow": "fuera del horario habitual"
       }
     },
     "colophon": {
@@ -1903,9 +1954,9 @@
     "stats": {
       "metaTitle": "Estadísticas",
       "metaDescription": "Visitas anónimas y highlights del portafolio — sin cookies, IDs únicos ni direcciones IP.",
-      "eyebrow": "Stats públicas",
+      "eyebrow": "Estadísticas públicas",
       "title": "Cómo se usa este sitio",
-      "description": "Medición de audiencia first-party, sin cookies, más un snapshot del portafolio. Sin visitantes únicos ni tracking en otros sitios.",
+      "description": "Medición de audiencia propia sin cookies, más una instantánea del portafolio. Sin visitantes únicos, sin rastreo en otros sitios.",
       "highlightsTitle": "Highlights",
       "kpis": {
         "pageviews": "Pageviews (30 días)",
@@ -1923,7 +1974,13 @@
       "emptyTraffic": "Aún no hay visitas públicas registradas.",
       "servicesTitle": "Servicios activos",
       "emptyServices": "No hay servicios activos ahora.",
-      "privacyNote": "La medición es anónima y está explicada en la <link>política de privacidad</link>."
+      "privacyNote": "La medición es anónima y está explicada en la <link>política de privacidad</link>.",
+      "referrersTitle": "Principales referencias",
+      "portfolioTitle": "El portafolio",
+      "countriesHint": "Últimos 30 días. Solo a nivel de país. En el {unknownPercent}% de las vistas no se conoce el país.",
+      "countriesHintSimple": "Últimos 30 días. Solo a nivel de país.",
+      "pagesHint": "Últimos 30 días.",
+      "otherCountries": "Otros países ({count})"
     }
   },
   "admin": {
@@ -4757,20 +4814,20 @@
       "tailorTemplatePages": "{count, plural, one {# página} other {# páginas}}"
     },
     "uses": {
-      "title": "Uses",
-      "subtitle": "Gestiona equipo diario, software, extensiones y media.",
+      "title": "Usos",
+      "subtitle": "Equipo cotidiano, software, extensiones del navegador y los medios de la página.",
       "tabsLabel": "Secciones Uses",
       "tabs": {
-        "everyday": "Día a día",
+        "everyday": "Cotidiano",
         "software": "Software",
         "browser": "Navegador",
-        "settings": "Ajustes"
+        "settings": "Medios y configuración"
       },
-      "addNew": "Agregar ítem",
+      "addNew": "Añadir elemento",
       "createDescription": "Agrega un ítem al inventario Uses.",
       "editTitle": "Editar ítem",
       "editDescription": "Actualiza este ítem.",
-      "count": "{count} items",
+      "count": "{count, plural, =1 {1 elemento} other {# elementos}} · en este orden se muestran en la página pública",
       "searchTitle": "Buscar título",
       "deletedSuccess": "Ítem eliminado.",
       "deleteFailed": "No se pudo eliminar.",

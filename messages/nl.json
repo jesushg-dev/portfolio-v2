@@ -295,9 +295,9 @@
     }
   },
   "certification": {
-    "title": "Certificeringen",
-    "subtitle": "Meester in Meerdere Vaardigheden",
-    "description": "Jouw projecten naar het hoogste niveau tillen, klaar voor nieuwe uitdagingen!",
+    "title": "Alle certificaten",
+    "subtitle": "Meester in meerdere vaardigheden",
+    "description": "Officiële certificaten en afgeronde programma’s die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
     "pagination": {
       "loading": "Laden...",
       "loadMore": "Meer Laden"
@@ -341,15 +341,16 @@
     },
     "catalog": {
       "backToPortfolio": "Terug naar portfolio",
-      "pageTitle": "Alle Certificaten",
-      "pageSubtitle": "Officiële certificaten en afgeronde programma's die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
+      "pageTitle": "Alle certificaten",
+      "pageSubtitle": "Officiële certificaten en afgeronde programma’s die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
       "searchPlaceholder": "Zoek op titel, technologie of uitgever…",
       "searchLabel": "Zoek certificaten of technologieën",
       "sortLabel": "Sorteren op",
       "sorts": {
         "newest": "Nieuwste eerst",
         "name": "Naam (A–Z)",
-        "issuer": "Uitgever (A–Z)"
+        "issuer": "Uitgever (A–Z)",
+        "oldest": "Oudste eerst"
       },
       "issuerLabel": "Uitgever / Instelling",
       "techLabel": "Technologie",
@@ -364,7 +365,12 @@
       "preview": "Voorbeeld",
       "verify": "Referentie bekijken",
       "credentialId": "Certificaat-ID",
-      "closeModal": "Sluiten"
+      "closeModal": "Sluiten",
+      "moreFilters": "Meer filters",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "copyId": "ID kopiëren",
+      "idCopied": "ID gekopieerd!"
     }
   },
   "curriculum": {
@@ -822,6 +828,12 @@
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
       "scheduleCallAria": "Plan een gesprek — ga naar het contactgedeelte",
+      "atAGlance": "In een oogopslag",
+      "availability": "Beschikbaarheid",
+      "immediate": "Direct",
+      "seeProjects": "Bekijk projecten",
+      "getInTouch": "Neem contact op",
+      "openToWork": "Beschikbaar voor werk · Op afstand of Managua",
       "empty": {
         "title": "Hero niet geconfigureerd",
         "description": "Voeg je profielfoto, ondertitel en introductie toe via het beheerdersprofiel."
@@ -829,7 +841,7 @@
     },
     "services": {
       "title": "Engineering Expertise",
-      "subtitle": "Diensten",
+      "subtitle": "Expertise",
       "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
       "seeMore": "Bekijk meer",
       "seeLess": "Bekijk minder",
@@ -1172,7 +1184,16 @@
         "more": "Meer weergeven ({count} resterend)",
         "emptyTitle": "Geen resultaten",
         "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
-        "emptyButton": "Filters wissen"
+        "emptyButton": "Filters wissen",
+        "moreFilters": "Meer filters",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "closeModal": "Sluiten",
+        "roleAndPeriod": "ROL & PERIODE",
+        "role": "ROL",
+        "impact": "IMPACT",
+        "privateRepo": "Privé repository",
+        "readCaseStudy": "Lees case study"
       }
     },
     "contact": {
@@ -1271,7 +1292,11 @@
       "showingRecent": "Meest recente rollen weergegeven.",
       "promotion": "Interne promotie",
       "previousRole": "Vorige functie",
-      "rolesCount": "{count} functies"
+      "rolesCount": "{count} functies",
+      "description": "Van frontend developer tot senior engineer en team lead, 7+ jaar ervaring.",
+      "previousPosition": "Vorige functie",
+      "nextStageTitle": "Volgende stap: jouw team",
+      "nextStageSubtitle": "Senior full-stack of tech-lead rollen, remote of vanuit Managua. Direct beschikbaar."
     },
     "impactStats": {
       "teamSize": {
@@ -1309,6 +1334,28 @@
         },
         "engineersMentored": {
           "label": "Engineers geleid"
+        }
+      }
+    },
+    "faq": {
+      "title": "Vragen?",
+      "titleGradient": "Antwoorden.",
+      "items": {
+        "0": {
+          "question": "Ben je beschikbaar voor nieuwe rollen?",
+          "answer": "Ja. Ik ben per direct beschikbaar en het grootste deel van mijn recente werk was op afstand."
+        },
+        "1": {
+          "question": "In welke tijdzone werk je?",
+          "answer": "Ik ben gevestigd in Managua, Nicaragua (UTC−6) en heb gewerkt met teams in de Verenigde Staten en Costa Rica."
+        },
+        "2": {
+          "question": "Waar werk je dagelijks mee?",
+          "answer": "React, Next.js en TypeScript aan de frontend; Node.js, Nest.js en C#/.NET aan de backend; SQL en NoSQL databases; CI/CD en testen met Docker, Playwright en Jest."
+        },
+        "3": {
+          "question": "Kan ik je cv ontvangen?",
+          "answer": "Natuurlijk. Je kunt het online lezen of een pdf per e-mail aanvragen op de cv-pagina."
         }
       }
     },
@@ -1764,11 +1811,11 @@
         "zoomOutBlocks": "Uitzoomen",
         "resetBlocks": "Weergave herstellen",
         "contributionViews": "Bijdrageweergaven",
-        "blocks": "3D-blokken",
-        "calendar": "Kalender",
+        "calendar": "Plat",
+        "blocks": "3D",
         "breakout": "Breakout",
-        "blocksDescription": "GitHub-bijdragen als een isometrisch landschap van bouwblokken.",
-        "blocksHint": "Sleep om te draaien; schakel Verplaatsen in of houd Shift ingedrukt om te verschuiven. Pijltjes draaien, +/− zoomen, Home herstelt. Elk blok is een dag.",
+        "blocksDescription": "GitHub-bijdragen als een interactief terrein.",
+        "blocksHint": "Sleep om in 3D te kantelen en draaien. Druk op Plat om terug te keren naar 2D. Pijltoetsen navigeren tussen dagen.",
         "languageDistribution": "Talen in openbare repositories",
         "otherLanguages": "Overige",
         "noLanguageData": "Geen taalgegevens beschikbaar.",
@@ -1813,7 +1860,11 @@
         "gameLost": "Spel afgelopen. Start opnieuw om het nog eens te proberen.",
         "gameReady": "Zet de plank klaar en druk op Spelen of Spatie.",
         "gamePaused": "Gepauzeerd.",
-        "gameReduced": "Geen automatisch afspelen of decoratieve beweging. De bal beweegt alleen wanneer je zelf begint te spelen."
+        "gameReduced": "Geen automatisch afspelen of decoratieve beweging. De bal beweegt alleen wanneer je zelf begint te spelen.",
+        "routineAround": "Rond deze tijd ben ik meestal bezig met",
+        "routineUsual": "Gebruikelijke routine {start}–{end}",
+        "routineInWindow": "binnen het gebruikelijke venster",
+        "routineOutsideWindow": "buiten het gebruikelijke venster"
       }
     },
     "colophon": {
@@ -1897,7 +1948,13 @@
       "emptyTraffic": "Nog geen publieke bezoeken geregistreerd.",
       "servicesTitle": "Actieve diensten",
       "emptyServices": "Er zijn nu geen actieve diensten.",
-      "privacyNote": "De meting is anoniem en uitgelegd in het <link>privacybeleid</link>."
+      "privacyNote": "De meting is anoniem en uitgelegd in het <link>privacybeleid</link>.",
+      "referrersTitle": "Belangrijkste bronnen",
+      "portfolioTitle": "Het portfolio",
+      "countriesHint": "Laatste 30 dagen. Alleen op landniveau. Bij {unknownPercent}% van de weergaven is geen land bekend.",
+      "countriesHintSimple": "Laatste 30 dagen. Alleen op landniveau.",
+      "pagesHint": "Laatste 30 dagen.",
+      "otherCountries": "Overige landen ({count})"
     }
   },
   "admin": {
@@ -4732,19 +4789,19 @@
     },
     "uses": {
       "title": "Uses",
-      "subtitle": "Beheer dagelijkse gear, software, extensies en media.",
+      "subtitle": "Dagelijkse hardware, software, browserextensies en sitemedia.",
       "tabsLabel": "Uses-secties",
       "tabs": {
         "everyday": "Dagelijks",
         "software": "Software",
         "browser": "Browser",
-        "settings": "Instellingen"
+        "settings": "Media & Instellingen"
       },
       "addNew": "Item toevoegen",
       "createDescription": "Voeg een item toe aan je Uses-inventaris.",
       "editTitle": "Item bewerken",
       "editDescription": "Werk dit Uses-item bij.",
-      "count": "{count} items",
+      "count": "{count, plural, =1 {1 item} other {# items}} · in deze volgorde weergegeven op de openbare pagina",
       "searchTitle": "Zoek titel",
       "deletedSuccess": "Item verwijderd.",
       "deleteFailed": "Kon item niet verwijderen.",

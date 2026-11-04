@@ -13,6 +13,7 @@ const routeMainKeys = {
     "experience",
     "portfolio",
     "contact",
+    "faq",
   ],
   now: ["now"],
   timeline: ["timeline"],
