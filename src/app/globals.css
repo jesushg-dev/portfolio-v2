@@ -32,7 +32,6 @@
   --animate-caret-blink: caret-blink 1.25s ease-out infinite;
 
   @keyframes caret-blink {
-
     0%,
     70%,
     100% {
@@ -948,15 +947,21 @@
 
 @utility hero-bg {
   background-image:
-    radial-gradient(1100px circle at 82% 45%,
+    radial-gradient(
+      1100px circle at 82% 45%,
       color-mix(in srgb, var(--primary) 20%, transparent),
-      transparent 60%),
-    radial-gradient(700px circle at 15% 85%,
+      transparent 60%
+    ),
+    radial-gradient(
+      700px circle at 15% 85%,
       color-mix(in srgb, var(--primary) 12%, transparent),
-      transparent 60%),
-    linear-gradient(180deg,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
       var(--background) 0%,
-      color-mix(in srgb, var(--background) 90%, var(--primary)) 100%);
+      color-mix(in srgb, var(--background) 90%, var(--primary)) 100%
+    );
 }
 
 @utility time-dot {
@@ -1058,7 +1063,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .section-header-rise,
   .hero-content-rise {
     animation: none;
@@ -1150,7 +1154,6 @@ video::-webkit-media-controls {
 }
 
 @keyframes caseStudyNodePulse {
-
   0%,
   100% {
     opacity: 0.55;
@@ -1170,7 +1173,6 @@ video::-webkit-media-controls {
 }
 
 @keyframes caseStudyFloaty {
-
   0%,
   100% {
     transform: translateY(0) rotate(var(--case-study-r, 0deg));
@@ -1210,7 +1212,7 @@ video::-webkit-media-controls {
   transform: translateY(0);
 }
 
-.case-study-reveal-stagger>* {
+.case-study-reveal-stagger > * {
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -1218,32 +1220,32 @@ video::-webkit-media-controls {
     transform 0.6s ease;
 }
 
-.case-study-reveal-stagger.case-study-in-view>* {
+.case-study-reveal-stagger.case-study-in-view > * {
   opacity: 1;
   transform: translateY(0);
 }
 
-.case-study-reveal-stagger.case-study-in-view>*:nth-child(1) {
+.case-study-reveal-stagger.case-study-in-view > *:nth-child(1) {
   transition-delay: 0.02s;
 }
 
-.case-study-reveal-stagger.case-study-in-view>*:nth-child(2) {
+.case-study-reveal-stagger.case-study-in-view > *:nth-child(2) {
   transition-delay: 0.1s;
 }
 
-.case-study-reveal-stagger.case-study-in-view>*:nth-child(3) {
+.case-study-reveal-stagger.case-study-in-view > *:nth-child(3) {
   transition-delay: 0.18s;
 }
 
-.case-study-reveal-stagger.case-study-in-view>*:nth-child(4) {
+.case-study-reveal-stagger.case-study-in-view > *:nth-child(4) {
   transition-delay: 0.26s;
 }
 
-.case-study-reveal-stagger.case-study-in-view>*:nth-child(5) {
+.case-study-reveal-stagger.case-study-in-view > *:nth-child(5) {
   transition-delay: 0.34s;
 }
 
-.case-study-reveal-stagger.case-study-in-view>*:nth-child(6) {
+.case-study-reveal-stagger.case-study-in-view > *:nth-child(6) {
   transition-delay: 0.42s;
 }
 
@@ -1297,7 +1299,8 @@ video::-webkit-media-controls {
 
 .case-study-btn-glow:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px -6px color-mix(in srgb, var(--primary) 35%, transparent);
+  box-shadow: 0 8px 30px -6px
+    color-mix(in srgb, var(--primary) 35%, transparent);
 }
 
 .case-study-arrow-hop {
@@ -1309,13 +1312,12 @@ video::-webkit-media-controls {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .case-study-load-1,
   .case-study-load-2,
   .case-study-load-3,
   .case-study-load-img,
   .case-study-reveal,
-  .case-study-reveal-stagger>*,
+  .case-study-reveal-stagger > *,
   .case-study-graph-line,
   .case-study-node,
   .case-study-badge-spin,
@@ -1339,7 +1341,6 @@ video::-webkit-media-controls {
 
 /* ========== Bento Micro-Animations (Untitled-1.html) ========== */
 @keyframes bento-ring {
-
   0%,
   100% {
     opacity: 0;
@@ -1353,7 +1354,6 @@ video::-webkit-media-controls {
 }
 
 @keyframes bento-blink {
-
   0%,
   70%,
   100% {
@@ -1367,7 +1367,6 @@ video::-webkit-media-controls {
 }
 
 @keyframes bento-float {
-
   0%,
   100% {
     transform: translateY(0);
@@ -1461,7 +1460,6 @@ video::-webkit-media-controls {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .a-ring::after,
   .a-blink::after {
     animation: none !important;
@@ -1470,7 +1468,6 @@ video::-webkit-media-controls {
 }
 
 @keyframes bento-pop {
-
   0%,
   60%,
   100% {
@@ -1507,13 +1504,14 @@ video::-webkit-media-controls {
 }
 
 .b-card-glow {
-  background-image: radial-gradient(circle 360px at var(--x, 100%) var(--y, 100%),
-      color-mix(in srgb, var(--primary) 12%, transparent),
-      transparent 70%);
+  background-image: radial-gradient(
+    circle 360px at var(--x, 100%) var(--y, 100%),
+    color-mix(in srgb, var(--primary) 12%, transparent),
+    transparent 70%
+  );
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0);
@@ -1565,7 +1563,6 @@ video::-webkit-media-controls {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .a-float,
   .a-spin,
   .a-dot,
@@ -1711,4 +1708,226 @@ video::-webkit-media-controls {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   Engineering Expertise Carousel & Visuals
+   ========================================================================== */
+
+:root {
+  --rail-inset: 1rem;
+}
+@media (min-width: 40rem) {
+  :root {
+    --rail-inset: 1.5rem;
+  }
+}
+@media (min-width: 64rem) {
+  :root {
+    --rail-inset: max(5rem, calc((100vw - min(100vw, 80rem)) / 2 + 5rem));
+  }
+}
+@media (min-width: 80rem) {
+  :root {
+    --rail-inset: max(5rem, calc((100vw - min(100vw, 80rem)) / 2 + 5rem));
+  }
+}
+@media (min-width: 96rem) {
+  :root {
+    --rail-inset: max(5rem, calc((100vw - min(100vw, 96rem)) / 2 + 5rem));
+  }
+}
+
+@keyframes card-edge-tilt {
+  0% {
+    transform: perspective(1000px) rotateY(-10deg) translateZ(-40px);
+  }
+  15%,
+  85% {
+    transform: perspective(1000px) rotateY(0deg) translateZ(0);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(10deg) translateZ(-40px);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .expertise-card-wrapper {
+    view-timeline: --card-rail inline;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .expertise-card-tilt {
+      animation: card-edge-tilt linear both;
+      animation-timeline: --card-rail;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+  }
+}
+
+.expertise-viz {
+  --viz-ink: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-brand: var(--primary);
+  --viz-brand2: color-mix(in oklab, var(--primary) 70%, white);
+  --viz-bg: var(--card);
+  --viz-window-bg: #ffffff;
+  --viz-window-stroke: color-mix(
+    in srgb,
+    var(--primary) 22%,
+    rgba(0, 0, 0, 0.12)
+  );
+  --viz-tint: color-mix(in srgb, var(--primary) 22%, var(--card));
+  --viz-tint-stroke: color-mix(in srgb, var(--primary) 45%, transparent);
+  --viz-path-stroke: color-mix(in srgb, var(--primary) 45%, transparent);
+  width: 100%;
+  height: 100%;
+}
+[data-theme="main-dark"] .expertise-viz,
+[data-theme="dark"] .expertise-viz {
+  --viz-window-bg: color-mix(in srgb, var(--card) 85%, #1e293b 15%);
+  --viz-window-stroke: color-mix(
+    in srgb,
+    var(--primary) 35%,
+    rgba(255, 255, 255, 0.14)
+  );
+}
+.expertise-viz svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.expertise-viz .zr {
+  fill: #f87171;
+}
+.expertise-viz .za {
+  fill: var(--viz-brand);
+}
+.expertise-viz .zb {
+  fill: var(--viz-brand2);
+}
+.expertise-viz .zg {
+  fill: #22c55e;
+}
+.expertise-viz .zk {
+  fill: var(--viz-brand);
+}
+.expertise-viz .zw {
+  fill: var(--viz-ink);
+}
+.expertise-viz .zs {
+  stroke: var(--viz-path-stroke);
+  stroke-opacity: 1;
+  fill: none;
+}
+.expertise-viz .zc {
+  fill: var(--viz-tint);
+  stroke: var(--viz-tint-stroke);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-window {
+  fill: var(--viz-window-bg);
+  stroke: var(--viz-window-stroke);
+  stroke-width: 1.5px;
+}
+
+.expertise-viz .zc-blue {
+  fill: color-mix(in srgb, #3b82f6 30%, var(--card));
+  stroke: color-mix(in srgb, #3b82f6 65%, transparent);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-indigo {
+  fill: color-mix(in srgb, #6366f1 30%, var(--card));
+  stroke: color-mix(in srgb, #6366f1 65%, transparent);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-purple {
+  fill: color-mix(in srgb, #a855f7 30%, var(--card));
+  stroke: color-mix(in srgb, #a855f7 65%, transparent);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-cyan {
+  fill: color-mix(in srgb, #06b6d4 30%, var(--card));
+  stroke: color-mix(in srgb, #06b6d4 65%, transparent);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-emerald {
+  fill: color-mix(in srgb, #10b981 30%, var(--card));
+  stroke: color-mix(in srgb, #10b981 65%, transparent);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-amber {
+  fill: color-mix(in srgb, #f59e0b 32%, var(--card));
+  stroke: color-mix(in srgb, #f59e0b 70%, transparent);
+  stroke-width: 1.5px;
+}
+.expertise-viz .zc-rose {
+  fill: color-mix(in srgb, #f43f5e 30%, var(--card));
+  stroke: color-mix(in srgb, #f43f5e 65%, transparent);
+  stroke-width: 1.5px;
+}
+
+.expertise-viz .zq {
+  font:
+    600 0.75rem -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    system-ui,
+    sans-serif;
+  fill: var(--viz-muted);
+}
+.expertise-viz .zq-mono {
+  font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+}
+.expertise-viz .zq-brand {
+  fill: var(--viz-brand);
+}
+.expertise-viz .zq-blue {
+  fill: #2563eb;
+}
+.expertise-viz .zq-purple {
+  fill: #9333ea;
+}
+.expertise-viz .zq-emerald {
+  fill: #16a34a;
+}
+.expertise-viz .zq-cyan {
+  fill: #0284c7;
+}
+.expertise-viz .zq-amber {
+  fill: #d97706;
+}
+.expertise-viz .zq-coral {
+  fill: #e11d48;
+}
+
+[data-theme="main-light"] .expertise-viz .zq-blue,
+[data-theme="light"] .expertise-viz .zq-blue {
+  fill: #1d4ed8;
+}
+[data-theme="main-light"] .expertise-viz .zq-purple,
+[data-theme="light"] .expertise-viz .zq-purple {
+  fill: #7c3aed;
+}
+[data-theme="main-light"] .expertise-viz .zq-emerald,
+[data-theme="light"] .expertise-viz .zq-emerald {
+  fill: #15803d;
+}
+[data-theme="main-light"] .expertise-viz .zq-cyan,
+[data-theme="light"] .expertise-viz .zq-cyan {
+  fill: #0e7490;
+}
+[data-theme="main-light"] .expertise-viz .zq-amber,
+[data-theme="light"] .expertise-viz .zq-amber {
+  fill: #b45309;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expertise-viz animate,
+  .expertise-viz animateMotion,
+  .expertise-viz animateTransform {
+    display: none;
+  }
 }
