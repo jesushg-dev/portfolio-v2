@@ -13,9 +13,11 @@ function LanguageItem({
   language: LocalizedCvData["languages"][number];
 }) {
   return (
-    <div>
-      <h3 className="text-sm font-bold text-slate-900">{language.name}</h3>
-      <p className="text-sm text-slate-700">{language.level}</p>
+    <div className="text-muted-foreground mb-3 text-xs leading-relaxed">
+      <b className="text-foreground block text-xs font-semibold sm:text-sm">
+        {language.name}
+      </b>
+      <span>{language.level}</span>
     </div>
   );
 }
@@ -27,11 +29,11 @@ const Languages: FC<ILanguagesProps> = ({ languages }) => {
 
   return (
     <section>
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
+      <h2 className="text-primary before:bg-primary mb-3.5 flex items-center gap-2 font-mono text-xs font-bold tracking-[0.18em] uppercase before:h-3.5 before:w-1 before:rounded-xs before:content-['']">
         {t("header.languages")}
       </h2>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         {languages.map((language) => (
           <LanguageItem key={language.id} language={language} />
         ))}

@@ -27,20 +27,14 @@ const HeaderCV: FC<IHeaderCvProps> = ({
   const initials = getNameInitials(fullName);
 
   return (
-    <header className="relative isolate overflow-hidden bg-gradient-to-br from-[#0f3a8f] to-[#1d4ed8] px-8 py-9 text-white md:px-10 md:py-10">
-      {/* Blueprint Grid Overlay from Prototype */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.07)_1px,transparent_1px)] [mask-image:linear-gradient(90deg,transparent_25%,#000)] bg-[size:2.5rem_2.5rem]"
-      />
-
+    <header className="from-primary to-primary/80 text-primary-foreground relative isolate overflow-hidden bg-gradient-to-br px-8 py-9 md:px-10 md:py-10">
       <div className="flex flex-col-reverse justify-between gap-6 sm:flex-row sm:items-center">
         <div className="min-w-0 flex-1">
-          <h1 className="text-2xl leading-tight font-bold tracking-tight text-white sm:text-3xl lg:text-[2rem]">
+          <h1 className="text-primary-foreground text-2xl leading-tight font-bold tracking-tight sm:text-3xl lg:text-[2rem]">
             {fullName}
           </h1>
           {degree ? (
-            <p className="mt-1.5 text-base font-normal text-white/90 sm:text-lg">
+            <p className="text-primary-foreground/90 mt-1.5 text-base font-normal sm:text-lg">
               {degree}
             </p>
           ) : null}
@@ -54,10 +48,10 @@ const HeaderCV: FC<IHeaderCvProps> = ({
           ) : null}
 
           {availability ? (
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-xs">
+            <div className="bg-primary-foreground/15 text-primary-foreground mt-5 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold backdrop-blur-xs">
               <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-current opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-current" />
               </span>
               <span>{availability}</span>
             </div>
@@ -65,7 +59,7 @@ const HeaderCV: FC<IHeaderCvProps> = ({
         </div>
 
         {/* Profile Avatar / Initials */}
-        <div className="flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(circle_at_35%_30%,#7aa2ff,#1d3fae_70%)] text-3xl font-light text-white shadow-[0_1.125rem_2.5rem_rgba(0,0,0,0.35)] ring-4 ring-white/35 sm:size-28 sm:text-4xl">
+        <div className="bg-primary-foreground/15 text-primary-foreground ring-primary-foreground/35 flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl text-3xl font-light shadow-xl ring-4 sm:size-28 sm:text-4xl">
           {header?.photoUrl ? (
             <ClientImage src={header.photoUrl} alt={alt || fullName} />
           ) : (

@@ -1710,224 +1710,33 @@ video::-webkit-media-controls {
   -webkit-text-fill-color: transparent;
 }
 
-/* ==========================================================================
-   Engineering Expertise Carousel & Visuals
-   ========================================================================== */
-
-:root {
-  --rail-inset: 1rem;
-}
-@media (min-width: 40rem) {
-  :root {
-    --rail-inset: 1.5rem;
+/* Home Tech Marquee */
+@keyframes home-marquee {
+  from {
+    transform: translateX(0);
   }
-}
-@media (min-width: 64rem) {
-  :root {
-    --rail-inset: max(5rem, calc((100vw - min(100vw, 80rem)) / 2 + 5rem));
-  }
-}
-@media (min-width: 80rem) {
-  :root {
-    --rail-inset: max(5rem, calc((100vw - min(100vw, 80rem)) / 2 + 5rem));
-  }
-}
-@media (min-width: 96rem) {
-  :root {
-    --rail-inset: max(5rem, calc((100vw - min(100vw, 96rem)) / 2 + 5rem));
+  to {
+    transform: translateX(-50%);
   }
 }
 
-@keyframes card-edge-tilt {
-  0% {
-    transform: perspective(1000px) rotateY(-10deg) translateZ(-40px);
-  }
-  15%,
-  85% {
-    transform: perspective(1000px) rotateY(0deg) translateZ(0);
-  }
-  100% {
-    transform: perspective(1000px) rotateY(10deg) translateZ(-40px);
-  }
+.a-home-marquee {
+  display: flex;
+  gap: 0.875rem;
+  width: max-content;
+  animation: home-marquee 100s linear infinite;
 }
 
-@supports (animation-timeline: view()) {
-  .expertise-card-wrapper {
-    view-timeline: --card-rail inline;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .expertise-card-tilt {
-      animation: card-edge-tilt linear both;
-      animation-timeline: --card-rail;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-  }
-}
-
-.expertise-viz {
-  --viz-ink: var(--foreground);
-  --viz-muted: var(--muted-foreground);
-  --viz-brand: var(--primary);
-  --viz-brand2: color-mix(in oklab, var(--primary) 70%, white);
-  --viz-bg: var(--card);
-  --viz-window-bg: #ffffff;
-  --viz-window-stroke: color-mix(
-    in srgb,
-    var(--primary) 22%,
-    rgba(0, 0, 0, 0.12)
-  );
-  --viz-tint: color-mix(in srgb, var(--primary) 22%, var(--card));
-  --viz-tint-stroke: color-mix(in srgb, var(--primary) 45%, transparent);
-  --viz-path-stroke: color-mix(in srgb, var(--primary) 45%, transparent);
-  width: 100%;
-  height: 100%;
-}
-[data-theme="main-dark"] .expertise-viz,
-[data-theme="dark"] .expertise-viz {
-  --viz-window-bg: color-mix(in srgb, var(--card) 85%, #1e293b 15%);
-  --viz-window-stroke: color-mix(
-    in srgb,
-    var(--primary) 35%,
-    rgba(255, 255, 255, 0.14)
-  );
-}
-.expertise-viz svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
-.expertise-viz .zr {
-  fill: #f87171;
-}
-.expertise-viz .za {
-  fill: var(--viz-brand);
-}
-.expertise-viz .zb {
-  fill: var(--viz-brand2);
-}
-.expertise-viz .zg {
-  fill: #22c55e;
-}
-.expertise-viz .zk {
-  fill: var(--viz-brand);
-}
-.expertise-viz .zw {
-  fill: var(--viz-ink);
-}
-.expertise-viz .zs {
-  stroke: var(--viz-path-stroke);
-  stroke-opacity: 1;
-  fill: none;
-}
-.expertise-viz .zc {
-  fill: var(--viz-tint);
-  stroke: var(--viz-tint-stroke);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-window {
-  fill: var(--viz-window-bg);
-  stroke: var(--viz-window-stroke);
-  stroke-width: 1.5px;
-}
-
-.expertise-viz .zc-blue {
-  fill: color-mix(in srgb, #3b82f6 30%, var(--card));
-  stroke: color-mix(in srgb, #3b82f6 65%, transparent);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-indigo {
-  fill: color-mix(in srgb, #6366f1 30%, var(--card));
-  stroke: color-mix(in srgb, #6366f1 65%, transparent);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-purple {
-  fill: color-mix(in srgb, #a855f7 30%, var(--card));
-  stroke: color-mix(in srgb, #a855f7 65%, transparent);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-cyan {
-  fill: color-mix(in srgb, #06b6d4 30%, var(--card));
-  stroke: color-mix(in srgb, #06b6d4 65%, transparent);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-emerald {
-  fill: color-mix(in srgb, #10b981 30%, var(--card));
-  stroke: color-mix(in srgb, #10b981 65%, transparent);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-amber {
-  fill: color-mix(in srgb, #f59e0b 32%, var(--card));
-  stroke: color-mix(in srgb, #f59e0b 70%, transparent);
-  stroke-width: 1.5px;
-}
-.expertise-viz .zc-rose {
-  fill: color-mix(in srgb, #f43f5e 30%, var(--card));
-  stroke: color-mix(in srgb, #f43f5e 65%, transparent);
-  stroke-width: 1.5px;
-}
-
-.expertise-viz .zq {
-  font:
-    600 0.75rem -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    system-ui,
-    sans-serif;
-  fill: var(--viz-muted);
-}
-.expertise-viz .zq-mono {
-  font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
-}
-.expertise-viz .zq-brand {
-  fill: var(--viz-brand);
-}
-.expertise-viz .zq-blue {
-  fill: #2563eb;
-}
-.expertise-viz .zq-purple {
-  fill: #9333ea;
-}
-.expertise-viz .zq-emerald {
-  fill: #16a34a;
-}
-.expertise-viz .zq-cyan {
-  fill: #0284c7;
-}
-.expertise-viz .zq-amber {
-  fill: #d97706;
-}
-.expertise-viz .zq-coral {
-  fill: #e11d48;
-}
-
-[data-theme="main-light"] .expertise-viz .zq-blue,
-[data-theme="light"] .expertise-viz .zq-blue {
-  fill: #1d4ed8;
-}
-[data-theme="main-light"] .expertise-viz .zq-purple,
-[data-theme="light"] .expertise-viz .zq-purple {
-  fill: #7c3aed;
-}
-[data-theme="main-light"] .expertise-viz .zq-emerald,
-[data-theme="light"] .expertise-viz .zq-emerald {
-  fill: #15803d;
-}
-[data-theme="main-light"] .expertise-viz .zq-cyan,
-[data-theme="light"] .expertise-viz .zq-cyan {
-  fill: #0e7490;
-}
-[data-theme="main-light"] .expertise-viz .zq-amber,
-[data-theme="light"] .expertise-viz .zq-amber {
-  fill: #b45309;
+.a-home-marquee-reverse {
+  display: flex;
+  gap: 0.875rem;
+  width: max-content;
+  animation: home-marquee 120s linear infinite reverse;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .expertise-viz animate,
-  .expertise-viz animateMotion,
-  .expertise-viz animateTransform {
-    display: none;
+  .a-home-marquee,
+  .a-home-marquee-reverse {
+    animation: none !important;
   }
 }

@@ -8,8 +8,6 @@ import { convertMsToMmSs } from "@/utils/tools/time";
 interface SpotifyFullscreenProgressProps {
   progressMs: number;
   durationMs: number;
-  /** @deprecated Parent should pass a live wall-clock progress value. */
-  isPlaying?: boolean;
 }
 
 /** Displays progress supplied by the parent playback clock. */

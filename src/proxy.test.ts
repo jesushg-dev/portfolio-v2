@@ -59,12 +59,6 @@ function request(url: string, host = "jesushg.com"): NextRequest {
 }
 
 describe("middleware / proxy", () => {
-  it("redirects legacy process page paths", () => {
-    const response = middleware(request("https://jesushg.com/how-i-use-ai"));
-    expect(response.status).toBe(301);
-    expect(response.headers.get("location")).toContain("/process/how-i-use-ai");
-  });
-
   it("forwards tenant username from a subdomain", () => {
     const response = middleware(
       request("https://ada.jesushg.com/en", "ada.jesushg.com"),

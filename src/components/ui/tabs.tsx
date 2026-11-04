@@ -31,6 +31,7 @@ const tabsListVariants = cva(
       variant: {
         line: "min-h-12 bg-transparent",
         pill: "gap-1 rounded-full border border-border bg-background p-1",
+        file: "gap-1 border-b border-border bg-muted/20 px-3 pt-2",
       },
     },
     defaultVariants: {
@@ -62,6 +63,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
         "text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 data-active:text-primary relative inline-flex min-h-10 shrink-0 items-center justify-center gap-2 px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         "group-data-[variant=line]/tabs-list:after:bg-primary group-data-[variant=line]/tabs-list:after:absolute group-data-[variant=line]/tabs-list:after:inset-x-0 group-data-[variant=line]/tabs-list:after:bottom-0 group-data-[variant=line]/tabs-list:after:h-0.5 group-data-[variant=line]/tabs-list:after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
         "group-data-[variant=pill]/tabs-list:data-active:border-border group-data-[variant=pill]/tabs-list:data-active:bg-card group-data-[variant=pill]/tabs-list:data-active:text-foreground group-data-[variant=pill]/tabs-list:rounded-full group-data-[variant=pill]/tabs-list:border group-data-[variant=pill]/tabs-list:border-transparent",
+        "group-data-[variant=file]/tabs-list:data-active:border-border group-data-[variant=file]/tabs-list:data-active:bg-card group-data-[variant=file]/tabs-list:data-active:text-foreground group-data-[variant=file]/tabs-list:rounded-t-xl group-data-[variant=file]/tabs-list:border group-data-[variant=file]/tabs-list:border-b-0 group-data-[variant=file]/tabs-list:border-transparent group-data-[variant=file]/tabs-list:data-active:shadow-[0_0.125rem_0_var(--card)]",
         className,
       )}
       {...props}

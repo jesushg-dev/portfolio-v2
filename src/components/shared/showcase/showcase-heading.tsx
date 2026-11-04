@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { HeadingAccent } from "./heading-accent";
 import { cn } from "@/lib/utils";
 
 export interface ShowcaseHeadingProps {
@@ -44,9 +45,7 @@ export function ShowcaseHeading({
           >
             {title}{" "}
             {titleGradient ? (
-              <span className="from-primary via-primary/80 bg-gradient-to-r to-[var(--brand2)] bg-clip-text text-transparent">
-                {titleGradient}
-              </span>
+              <HeadingAccent>{titleGradient}</HeadingAccent>
             ) : null}
           </h2>
           {description ? (
@@ -80,11 +79,7 @@ export function ShowcaseHeading({
         className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl"
       >
         {title}{" "}
-        {titleGradient ? (
-          <span className="from-primary via-primary/80 bg-gradient-to-r to-[var(--brand2)] bg-clip-text text-transparent">
-            {titleGradient}
-          </span>
-        ) : null}
+        {titleGradient ? <HeadingAccent>{titleGradient}</HeadingAccent> : null}
       </h2>
       {description ? (
         <p

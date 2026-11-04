@@ -2,6 +2,7 @@ export { ShowcaseShell } from "./showcase-shell";
 export { ShowcaseHero, type ShowcaseHeroProps } from "./showcase-hero";
 export { ShowcaseSection, type ShowcaseSectionProps } from "./showcase-section";
 export { ShowcaseHeading, type ShowcaseHeadingProps } from "./showcase-heading";
+export { HeadingAccent } from "./heading-accent";
 export {
   MetricGrid,
   type MetricGridProps,

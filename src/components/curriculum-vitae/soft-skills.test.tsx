@@ -30,6 +30,6 @@ describe("SoftSkills", () => {
     renderWithIntl(
       <SoftSkills softSkills={[getLocalizedSoftSkill(mockSoftSkill, "es")]} />,
     );
-    expect(screen.getByText("Trabajo en equipo.")).toBeInTheDocument();
+    expect(screen.getByText("Trabajo en equipo")).toBeInTheDocument();
   });
 });

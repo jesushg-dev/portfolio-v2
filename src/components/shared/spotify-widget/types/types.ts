@@ -34,9 +34,6 @@ export interface SpotifyPlayback {
   deviceType?: SpotifyDeviceType;
 }
 
-/** @deprecated Use SpotifyPlayback */
-export type SpotifyPlaybackTrack = SpotifyPlayback;
-
 export interface SpotifyPlaybackError {
   status: number;
   message: string;

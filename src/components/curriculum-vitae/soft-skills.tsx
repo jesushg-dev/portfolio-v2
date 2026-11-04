@@ -13,7 +13,7 @@ function SoftSkillItem({
   skill: LocalizedCvData["softSkills"][number];
 }) {
   return (
-    <li className="rounded-lg border border-[#e1e7f5] bg-white px-2.5 py-1 text-xs font-medium text-[#1d293d] shadow-2xs">
+    <li className="border-border bg-card text-foreground rounded-lg border px-2.5 py-1 text-xs font-medium shadow-2xs">
       {skill.name}
     </li>
   );
@@ -26,7 +26,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({ softSkills }) => {
 
   return (
     <section>
-      <h2 className="mb-3.5 flex items-center gap-2 font-mono text-[10.5px] font-bold tracking-[0.18em] text-[#1d3a8a] uppercase before:h-3.5 before:w-1 before:rounded-xs before:bg-[#1d4ed8] before:content-['']">
+      <h2 className="text-primary before:bg-primary mb-3.5 flex items-center gap-2 font-mono text-xs font-bold tracking-[0.18em] uppercase before:h-3.5 before:w-1 before:rounded-xs before:content-['']">
         {t("header.personalSkills")}
       </h2>
 

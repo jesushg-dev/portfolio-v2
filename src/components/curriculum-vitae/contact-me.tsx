@@ -1,4 +1,4 @@
-import type { ComponentType, FC } from "react";
+import type { ComponentProps, ComponentType, FC } from "react";
 import { Calendar, Globe, Mail, MapPin, Phone } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/shared/brand-icons";
 import type { CvContactType } from "@prisma/client";
@@ -24,7 +24,8 @@ const ICONS: Record<CvContactType, ComponentType<{ className?: string }>> = {
   OTHER: Globe,
 };
 
-const buildHref = (type: CvContactType, value: string) => {
+const buildHref = (type: CvContactType, rawValue: string): string | null => {
+  const value = rawValue.trim();
   switch (type) {
     case "EMAIL":
       return value.startsWith("mailto:") ? value : `mailto:${value}`;
@@ -35,7 +36,13 @@ const buildHref = (type: CvContactType, value: string) => {
     case "CALENDLY":
       return SCHEDULE_PATH;
     default:
-      return value;
+      if (/^\/(?![\/\\])/.test(value)) return value;
+      try {
+        const url = new URL(value);
+        return ["https:", "http:"].includes(url.protocol) ? url.href : null;
+      } catch {
+        return null;
+      }
   }
 };
 
@@ -51,74 +58,120 @@ function ContactItem({
   const Icon = ICONS[contact.type] ?? Globe;
   const label = contact.label || contact.value;
   const href = buildHref(contact.type, contact.value);
-  const linkClassName =
-    variant === "header"
-      ? "inline-flex min-h-11 items-center gap-1.5 text-white print:min-h-0 hover:underline text-sm"
-      : "relative z-10 inline-flex min-h-11 items-center gap-1 py-0 text-[#1a1a1a] hover:underline";
-  const iconClassName =
-    variant === "header" ? "size-4 shrink-0 text-white" : "size-3 shrink-0";
+  if (!href) {
+    return (
+      <span className="text-muted-foreground inline-flex min-h-8 items-center gap-2 text-xs">
+        <Icon className="size-3.5 shrink-0" aria-hidden />
+        <span>{label}</span>
+      </span>
+    );
+  }
   const opensInNewTab =
-    !isInternalHref(href) &&
+    !href.startsWith("mailto:") &&
     !href.startsWith("tel:") &&
-    !href.startsWith("mailto:");
+    !isInternalHref(href);
 
-  const content = (
-    <>
-      <Icon className={iconClassName} aria-hidden />
-      <span>{label}</span>
-    </>
-  );
+  if (variant === "header") {
+    const content = (
+      <div className="flex flex-col text-left">
+        {contact.label ? (
+          <span className="text-primary-foreground/60 text-[0.625rem] font-semibold tracking-wider uppercase">
+            {contact.label}
+          </span>
+        ) : null}
+        <span className="text-primary-foreground truncate text-xs font-medium hover:underline">
+          {contact.value}
+        </span>
+      </div>
+    );
 
-  return (
-    <li className={variant === "header" ? "" : "relative -my-3.5"}>
-      {isInternalHref(href) ? (
-        <Link href={href as typeof SCHEDULE_PATH} className={linkClassName}>
+    if (isInternalHref(href)) {
+      return (
+        <Link
+          href={href as ComponentProps<typeof Link>["href"]}
+          className="group flex items-start gap-1.5 py-0.5"
+        >
+          <Icon className="text-primary-foreground/70 group-hover:text-primary-foreground mt-0.5 size-3.5 shrink-0" />
           {content}
         </Link>
-      ) : (
-        <a
-          className={linkClassName}
-          href={href}
-          {...(opensInNewTab
-            ? { target: "_blank", rel: "noopener noreferrer" }
-            : {})}
-        >
-          {content}
-        </a>
-      )}
-    </li>
+      );
+    }
+
+    return (
+      <a
+        href={href}
+        target={opensInNewTab ? "_blank" : undefined}
+        rel={opensInNewTab ? "noopener noreferrer" : undefined}
+        className="group flex items-start gap-1.5 py-0.5"
+      >
+        <Icon className="text-primary-foreground/70 group-hover:text-primary-foreground mt-0.5 size-3.5 shrink-0" />
+        {content}
+      </a>
+    );
+  }
+
+  // Sidebar variant
+  const sidebarClass =
+    "inline-flex min-h-8 items-center gap-2 text-xs text-muted-foreground hover:text-foreground hover:underline";
+
+  if (isInternalHref(href)) {
+    return (
+      <Link
+        href={href as ComponentProps<typeof Link>["href"]}
+        className={sidebarClass}
+      >
+        <Icon className="text-primary size-3.5 shrink-0" />
+        <span className="truncate">{label}</span>
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      target={opensInNewTab ? "_blank" : undefined}
+      rel={opensInNewTab ? "noopener noreferrer" : undefined}
+      className={sidebarClass}
+    >
+      <Icon className="text-primary size-3.5 shrink-0" />
+      <span className="truncate">{label}</span>
+    </a>
   );
 }
 
 const ContactMe: FC<IContactMeProps> = ({ contacts, variant = "sidebar" }) => {
   const t = useTranslations("curriculum");
-
-  if (!contacts.length) return null;
+  if (!contacts || contacts.length === 0) return null;
 
   if (variant === "header") {
     return (
-      <ul className="flex flex-wrap gap-x-5 gap-y-2">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3">
         {contacts.map((contact) => (
-          <ContactItem key={contact.id} contact={contact} variant="header" />
+          <ContactItem
+            key={`${contact.type}-${contact.value}`}
+            contact={contact}
+            variant="header"
+          />
         ))}
-      </ul>
+      </div>
     );
   }
 
   return (
-    <>
-      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+    <section>
+      <h2 className="text-primary before:bg-primary mb-2.5 flex items-center gap-2 font-mono text-xs font-bold tracking-[0.18em] uppercase before:h-3.5 before:w-1 before:rounded-xs before:content-['']">
         {t("header.contact")}
-      </h5>
-
-      <div className="mb-4">
-        <ul className="list-none text-sm leading-none">
-          {contacts.map((contact) => (
-            <ContactItem key={contact.id} contact={contact} variant="sidebar" />
-          ))}
-        </ul>
+      </h2>
+      <div className="flex flex-col gap-1">
+        {contacts.map((contact) => (
+          <ContactItem
+            key={`${contact.type}-${contact.value}`}
+            contact={contact}
+            variant="sidebar"
+          />
+        ))}
       </div>
-    </>
+    </section>
   );
 };
 
