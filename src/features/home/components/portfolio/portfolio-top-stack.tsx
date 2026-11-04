@@ -55,7 +55,7 @@ export const PortfolioTopStack: FC<PortfolioTopStackProps> = ({
               title={techName}
               tile
               size="sm"
-              className="size-5 rounded-md text-[10px]"
+              className="size-5 rounded-md text-[0.625rem]"
             />
             <span>{techName}</span>
             <span className="text-primary font-bold">{data.count}</span>

@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FC } from "react";
+import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronDown, ChevronUp } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { MediaImage } from "@/components/shared/media-image";
 import { ShowcaseSection, ShowcaseHeading } from "@/components/shared/showcase";
 
 export interface TestimonialItem {
@@ -16,207 +15,154 @@ export interface TestimonialItem {
   linkedInUrl?: string | null;
 }
 
-interface SocialProofStats {
-  yearsExperience: number;
-  projectsCount: number;
-  certificationsCount: number;
-  engineersMentored: number;
-}
-
-interface SocialProofProps {
-  stats: SocialProofStats;
-  testimonials: TestimonialItem[];
-}
-
 function AuthorName({
   author,
   linkedInUrl,
-}: {
-  author: string;
-  linkedInUrl?: string | null;
-}) {
-  if (!linkedInUrl) {
-    return <span className="text-foreground font-semibold">{author}</span>;
-  }
-
-  return (
+}: Pick<TestimonialItem, "author" | "linkedInUrl">) {
+  let href: string | null = null;
+  try {
+    const url = new URL(linkedInUrl ?? "");
+    if (["http:", "https:"].includes(url.protocol)) href = url.href;
+  } catch {}
+  return href ? (
     <a
-      href={linkedInUrl}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-foreground hover:text-primary font-semibold underline-offset-2 transition-colors hover:underline"
+      className="text-foreground hover:text-primary font-semibold hover:underline"
     >
       {author}
     </a>
+  ) : (
+    <span className="text-foreground font-semibold">{author}</span>
   );
 }
 
-function SocialProofContent({
-  stats: statsData,
-  items,
+function TestimonialSpotlight({ item }: { item: TestimonialItem }) {
+  const initials = item.author
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("");
+  return (
+    <figure className="grid items-center gap-8 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-12 lg:gap-16">
+      <figcaption className="flex items-center gap-4 md:flex-col md:items-start md:gap-5">
+        <span className="border-border/60 from-primary/15 to-card relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-3xl border bg-linear-to-br text-2xl font-medium shadow-lg md:size-36 md:rounded-[2rem]">
+          {item.avatarUrl ? (
+            <MediaImage
+              src={item.avatarUrl}
+              alt=""
+              fill
+              sizes="(min-width:48rem) 9rem, 5rem"
+              className="object-cover"
+            />
+          ) : (
+            <span className="text-primary" aria-hidden="true">
+              {initials}
+            </span>
+          )}
+        </span>
+        <div className="min-w-0 text-sm">
+          <AuthorName author={item.author} linkedInUrl={item.linkedInUrl} />
+          {item.role && (
+            <p className="text-muted-foreground mt-1.5 max-w-56 text-xs leading-relaxed">
+              {item.role}
+            </p>
+          )}
+        </div>
+      </figcaption>
+      <blockquote className="text-foreground text-lg leading-relaxed font-medium tracking-tight sm:text-xl lg:text-2xl lg:leading-relaxed">
+        <span className="text-primary/70 mr-1 text-3xl" aria-hidden="true">
+          “
+        </span>
+        {item.quote}
+        <span className="text-primary/70 ml-1 text-3xl" aria-hidden="true">
+          ”
+        </span>
+      </blockquote>
+    </figure>
+  );
+}
+
+export default function SocialProof({
+  testimonials,
 }: {
-  stats: SocialProofStats;
-  items: TestimonialItem[];
+  testimonials: TestimonialItem[];
 }) {
   const t = useTranslations("main.socialProof");
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const hasItems = items.length > 0;
-  const activeTestimonial = hasItems
-    ? items[currentIndex % items.length]
-    : null;
-
-  const handleNext = useCallback(() => {
-    if (items.length <= 1) return;
-    setIsExpanded(false);
-    setCurrentIndex((prev) => (prev + 1) % items.length);
-  }, [items.length]);
-
-  const handlePrev = useCallback(() => {
-    if (items.length <= 1) return;
-    setIsExpanded(false);
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  }, [items.length]);
-
-  // Autoplay rotation every 8 seconds if multiple testimonials and not expanded or hovered
-  useEffect(() => {
-    if (items.length <= 1 || isExpanded || isPaused) return;
-    const interval = setInterval(handleNext, 8000);
-    return () => clearInterval(interval);
-  }, [handleNext, isExpanded, isPaused, items.length]);
-
+  const id = useId();
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const activeIndex = Math.max(
+    0,
+    testimonials.findIndex(
+      (item) => item.id === (activeId ?? testimonials[0]?.id),
+    ),
+  );
+  const active = testimonials[activeIndex];
+  if (!active) return null;
   return (
     <ShowcaseSection id="testimonials" ariaLabelledBy="testimonials-heading">
       <ShowcaseHeading
         sectionId="testimonials"
         eyebrow={t("eyebrow")}
-        title={t("title", { count: items.length })}
+        title={t("titleLead")}
+        titleGradient={t("titleGradient")}
         description={t("subtitle")}
+        align="left"
       />
-
-      <div
-        className="mx-auto mt-12 max-w-4xl text-center"
-        onPointerEnter={() => setIsPaused(true)}
-        onPointerLeave={() => setIsPaused(false)}
-      >
-        {activeTestimonial ? (
-          <figure className="relative">
-            <blockquote
-              className={cn(
-                "text-foreground mx-auto max-w-3xl text-xl leading-snug font-medium tracking-tight transition-all duration-300 sm:text-2xl sm:leading-tight lg:text-[2rem]",
-                !isExpanded && "line-clamp-4 sm:line-clamp-none",
-              )}
+      <div className="border-border/60 mx-auto max-w-6xl border-t pt-9 sm:pt-12">
+        <div
+          id={id}
+          aria-live="polite"
+          aria-atomic="true"
+          className="md:min-h-72"
+        >
+          <TestimonialSpotlight item={active} />
+        </div>
+        {testimonials.length > 1 && (
+          <div className="mt-8 flex justify-end md:mt-10">
+            <div
+              role="group"
+              aria-label={t("navigation")}
+              className="glass-card inline-flex items-center gap-4 rounded-full p-1.5"
             >
-              &ldquo;{activeTestimonial.quote}&rdquo;
-            </blockquote>
-
-            {activeTestimonial.quote.length > 140 ? (
               <button
                 type="button"
-                onClick={() => setIsExpanded((prev) => !prev)}
-                aria-expanded={isExpanded}
-                className="text-primary hover:text-primary/80 mt-3 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
+                aria-label={t("previous")}
+                aria-controls={id}
+                onClick={() =>
+                  setActiveId(
+                    testimonials[
+                      (activeIndex - 1 + testimonials.length) %
+                        testimonials.length
+                    ].id,
+                  )
+                }
+                className="text-foreground hover:bg-muted/30 focus-visible:ring-ring grid size-11 cursor-pointer place-items-center rounded-full transition-colors focus-visible:ring-2"
               >
-                <span>{isExpanded ? t("readLess") : t("readMore")}</span>
-                {isExpanded ? (
-                  <ChevronUp className="size-4" aria-hidden="true" />
-                ) : (
-                  <ChevronDown className="size-4" aria-hidden="true" />
-                )}
+                <ArrowLeft className="size-4" aria-hidden="true" />
               </button>
-            ) : null}
-
-            <figcaption className="text-muted-foreground mt-7 text-sm font-normal sm:text-base">
-              <AuthorName
-                author={activeTestimonial.author}
-                linkedInUrl={activeTestimonial.linkedInUrl}
-              />
-              {activeTestimonial.role ? (
-                <span className="text-muted-foreground before:mx-2 before:content-['·']">
-                  {activeTestimonial.role}
-                </span>
-              ) : null}
-            </figcaption>
-
-            {items.length > 1 ? (
-              <div className="mt-6 flex items-center justify-center gap-3">
-                <button
-                  type="button"
-                  aria-label="Previous testimonial"
-                  onClick={handlePrev}
-                  className="border-border/80 bg-card text-foreground hover:border-primary/50 flex size-9 items-center justify-center rounded-full border text-sm shadow-2xs transition"
-                >
-                  ‹
-                </button>
-                <div className="flex items-center gap-1.5">
-                  {items.map((_, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      aria-label={`Go to slide ${idx + 1}`}
-                      onClick={() => {
-                        setIsExpanded(false);
-                        setCurrentIndex(idx);
-                      }}
-                      className={cn(
-                        "h-1.5 rounded-full transition-all duration-300",
-                        idx === currentIndex % items.length
-                          ? "bg-primary w-6"
-                          : "bg-muted-foreground/40 hover:bg-muted-foreground/60 w-1.5",
-                      )}
-                    />
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  aria-label="Next testimonial"
-                  onClick={handleNext}
-                  className="border-border/80 bg-card text-foreground hover:border-primary/50 flex size-9 items-center justify-center rounded-full border text-sm shadow-2xs transition"
-                >
-                  ›
-                </button>
-              </div>
-            ) : null}
-          </figure>
-        ) : null}
-
-        {/* Centered 3-column stats matching prototype: .nums.mini.ct */}
-        <div className="border-border/80 mt-14 flex flex-wrap items-center justify-center gap-10 border-t pt-10 text-center sm:mt-18 sm:gap-16">
-          <div>
-            <b className="text-foreground block text-3xl font-bold tracking-tight tabular-nums sm:text-4xl lg:text-5xl">
-              {statsData.engineersMentored}
-            </b>
-            <span className="text-muted-foreground mt-2 block text-sm sm:text-base">
-              {t("stats.engineersMentored.label") || "Engineers led"}
-            </span>
+              <span className="text-muted-foreground min-w-10 text-center font-mono text-xs tabular-nums">
+                {activeIndex + 1} / {testimonials.length}
+              </span>
+              <button
+                type="button"
+                aria-label={t("next")}
+                aria-controls={id}
+                onClick={() =>
+                  setActiveId(
+                    testimonials[(activeIndex + 1) % testimonials.length].id,
+                  )
+                }
+                className="text-foreground hover:bg-muted/30 focus-visible:ring-ring grid size-11 cursor-pointer place-items-center rounded-full transition-colors focus-visible:ring-2"
+              >
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </button>
+            </div>
           </div>
-          <div>
-            <b className="text-foreground block text-3xl font-bold tracking-tight tabular-nums sm:text-4xl lg:text-5xl">
-              {statsData?.projectsCount ?? 25}+
-            </b>
-            <span className="text-muted-foreground mt-2 block text-sm sm:text-base">
-              {t("stats.projects.label") || "Projects"}
-            </span>
-          </div>
-          <div>
-            <b className="text-foreground block text-3xl font-bold tracking-tight tabular-nums sm:text-4xl lg:text-5xl">
-              {statsData?.yearsExperience ?? 7}+
-            </b>
-            <span className="text-muted-foreground mt-2 block text-sm sm:text-base">
-              {t("stats.experience.label") || "Years of experience"}
-            </span>
-          </div>
-        </div>
+        )}
       </div>
     </ShowcaseSection>
   );
 }
-
-const SocialProof: FC<SocialProofProps> = ({ stats, testimonials }) => (
-  <SocialProofContent stats={stats} items={testimonials} />
-);
-
-export default SocialProof;

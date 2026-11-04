@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor, within } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import type { ProjectType } from "@/utils/interfaces/types";
 import PortfolioGrid from "./portfolio-grid";
@@ -9,7 +9,13 @@ const projects: ProjectType[] = Array.from({ length: 9 }, (_, index) => ({
   description: `Summary ${index + 1}`,
   image: "https://example.com/project.webp",
   type: index < 7 ? "FRONTEND" : "BACKEND",
-  skills: [],
+  skills: [
+    {
+      id: "s1",
+      title: "React",
+      image: "",
+    } as unknown as ProjectType["skills"][0],
+  ],
   highlights: [],
   kind: "PERSONAL",
   isPrivate: false,
@@ -25,27 +31,24 @@ const projects: ProjectType[] = Array.from({ length: 9 }, (_, index) => ({
   csInfo: null,
 }));
 
-it("filters the full server collection beyond the six initial cards without a query provider", async () => {
-  renderWithIntl(
-    <PortfolioGrid projects={projects} totalCount={9} caseStudyCount={0} />,
-  );
+describe("PortfolioGrid", () => {
+  it("renders showcase projects and CTA button", () => {
+    renderWithIntl(
+      <PortfolioGrid
+        projects={projects.slice(0, 7)}
+        totalCount={9}
+        caseStudyCount={0}
+      />,
+    );
 
-  expect(screen.getAllByRole("article")).toHaveLength(6);
-  expect(screen.queryByText("Project 8")).not.toBeInTheDocument();
-  expect(
-    screen.getByRole("tab", { name: /^Frontend \(7\)/ }),
-  ).toBeInTheDocument();
+    // 7 showcase cards (1 hero + 6 grid cards)
+    expect(screen.getByText("Project 1")).toBeInTheDocument();
+    expect(screen.getByText("Project 2")).toBeInTheDocument();
+    expect(screen.getByText("Project 6")).toBeInTheDocument();
+    expect(screen.getByText("Project 7")).toBeInTheDocument();
+    expect(screen.queryByText("Project 8")).not.toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("tab", { name: /^Backend \(2\)/ }));
-
-  const panel = screen.getByRole("tabpanel");
-  expect(within(panel).getAllByRole("article")).toHaveLength(2);
-  expect(within(panel).getByText("Project 8")).toBeInTheDocument();
-  expect(within(panel).getByText("Project 9")).toBeInTheDocument();
-  expect(within(panel).queryByText("Project 1")).not.toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole("tab", { name: /^Mobile \(0\)/ }));
-  await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
-  fireEvent.click(within(screen.getByRole("status")).getByRole("button"));
-  expect(screen.getAllByRole("article")).toHaveLength(6);
+    // CTA button to view all projects
+    expect(screen.getByText(/View all projects/i)).toBeInTheDocument();
+  });
 });

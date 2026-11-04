@@ -7,9 +7,13 @@ import ContactGlobeLazy from "./contact-globe-lazy";
 
 interface ContactIllustrationProps {
   location: OwnerMapLocation | null;
+  timezone?: string | null;
 }
 
-const ContactIllustration: FC<ContactIllustrationProps> = ({ location }) => {
+const ContactIllustration: FC<ContactIllustrationProps> = ({
+  location,
+  timezone,
+}) => {
   if (!location) return null;
 
   return (
@@ -19,7 +23,7 @@ const ContactIllustration: FC<ContactIllustrationProps> = ({ location }) => {
         minHeight="18rem"
         className="h-full"
       >
-        <ContactGlobeLazy location={location} />
+        <ContactGlobeLazy location={location} timezone={timezone} />
       </ViewportSection>
     </div>
   );

@@ -24,7 +24,7 @@ interface HeroProps {
 const Hero: FC<HeroProps> = async ({ stats }) => {
   const locale = await getPublicLocale();
   const t = await getTranslations({
-    locale: await getPublicLocale(),
+    locale,
     namespace: "main.heroMain",
   });
 
@@ -65,16 +65,22 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
       {photoUrl ? <LcpImagePreload href={photoUrl} /> : null}
       <section
         id="top"
-        aria-label="Home"
-        className="bg-card relative flex min-h-screen w-full items-center overflow-hidden"
+        aria-label={fullName}
+        className="relative flex min-h-[calc(100vh-3.25rem)] w-full flex-col justify-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
       >
-        {/* Top radial gradient light effect */}
+        {/* Radial Gradient Glow Effect */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(60%_70%_at_45%_0%,rgba(99,102,241,.18),transparent)]"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)]"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 pt-28 pb-24 sm:px-6 md:pt-36 md:pb-28 lg:container lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:px-20">
+        {/* Subtle Grid Backdrop Overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(var(--border)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,var(--border)_0.0625rem,transparent_0.0625rem)] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,black_15%,transparent_75%)] bg-[size:3rem_3rem] opacity-30"
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 sm:px-6 lg:container lg:grid-cols-[1.25fr_1fr] lg:gap-16 lg:px-20">
           <HeroContent
             heroData={parsedHeroData}
             stats={stats}
@@ -83,17 +89,17 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
           <HeroPhoto heroData={parsedHeroData} />
         </div>
 
-        {/* Scroll Down Indicator matching Untitled-1.html */}
-        <a
-          href="#about"
-          className="text-muted-foreground hover:text-foreground absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-sm transition-colors lg:flex"
-          aria-label={t("scrollDown")}
-        >
-          <span className="border-border flex h-9 w-6 justify-center rounded-full border pt-1.5">
-            <i className="a-wheel bg-muted-foreground h-1.5 w-1 rounded-full" />
-          </span>
-          {t("scrollDown")}
-        </a>
+        {/* Scroll Down Indicator matching Prototype */}
+        <div className="mt-12 hidden justify-center lg:flex">
+          <a
+            href="#portfolio"
+            className="text-muted-foreground hover:text-foreground flex flex-col items-center gap-2 font-mono text-xs tracking-widest uppercase transition-colors"
+            aria-label={t("scrollDown")}
+          >
+            <span>{t("scrollDown")}</span>
+            <span className="from-primary h-9 w-px bg-gradient-to-b to-transparent" />
+          </a>
+        </div>
       </section>
     </>
   );

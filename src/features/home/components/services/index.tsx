@@ -21,6 +21,8 @@ const Services: FC = async () => {
     ? await api.portfolio.getServicesPublic({ locale })
     : [];
 
+  if (services.length === 0) return null;
+
   return (
     <section
       aria-labelledby="services-heading"
@@ -30,8 +32,8 @@ const Services: FC = async () => {
         <ShowcaseHeading
           sectionId="services"
           eyebrow={t("subtitle")}
-          title="Engineering"
-          titleGradient="expertise."
+          title={t("titleLead")}
+          titleGradient={t("titleGradient")}
           description={t("description")}
           align="split"
           action={

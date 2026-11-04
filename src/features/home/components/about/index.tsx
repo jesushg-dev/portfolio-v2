@@ -2,12 +2,11 @@ import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC, ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 
-import { ShowcaseSection } from "@/components/shared/showcase";
+import { HeadingAccent, ShowcaseSection } from "@/components/shared/showcase";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
 import { resolvePublicTenant } from "@/lib/public-site/tenant";
 import AboutTerminalLazy from "./about-terminal-lazy";
-import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
@@ -40,20 +39,13 @@ const About: FC = async () => {
 
   const tenant = await resolvePublicTenant();
 
-  const [aboutData, terminalData, timelineItems] = await Promise.all([
+  const [aboutData, terminalData] = await Promise.all([
     tenant && isLocale(locale)
       ? api.portfolio.getAboutPublic({ locale })
       : Promise.resolve(null),
     tenant && isLocale(locale)
       ? api.terminal.getPublic({ locale })
       : Promise.resolve(null),
-    tenant && isLocale(locale)
-      ? api.portfolio.getTimelinePublic({
-          locale,
-          category: "WORK",
-          limit: 4,
-        })
-      : Promise.resolve([]),
   ]);
 
   const paragraphs = aboutData?.paragraphs ?? [];
@@ -70,7 +62,7 @@ const About: FC = async () => {
             id="about-heading"
             className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl"
           >
-            {t("title")}
+            {t("titleLead")} <HeadingAccent>{t("titleGradient")}</HeadingAccent>
           </h2>
           <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
             {paragraphs[0] ? formatAboutParagraph(paragraphs[0]) : t("title")}
@@ -94,13 +86,6 @@ const About: FC = async () => {
           <AboutTerminalLazy data={terminalData} />
         </div>
       </div>
-
-      {/* 4-column timeline cards at bottom (.g4) */}
-      {timelineItems.length > 0 ? (
-        <div className="mt-16 sm:mt-20">
-          <TimelineHorizontalPreview items={timelineItems} />
-        </div>
-      ) : null}
     </ShowcaseSection>
   );
 };

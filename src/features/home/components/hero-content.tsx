@@ -1,6 +1,7 @@
 import { getPublicLocale } from "@/lib/public-site/locale";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
+import { ArrowRight } from "lucide-react";
 
 interface Stats {
   yearsExperience: number;
@@ -40,14 +41,15 @@ export default async function HeroContent({
 
   return (
     <div className="flex flex-1 flex-col text-left">
-      {/* Availability Status Pill */}
-      <div className="bg-primary/10 text-primary mb-5 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-medium shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--primary)_40%,transparent)] sm:text-sm">
-        <span className="relative flex size-2">
-          <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
-          <span className="bg-primary relative inline-flex size-2 rounded-full" />
-        </span>
-        <span>{heroData.availabilityBadge ?? t("openToWork")}</span>
-      </div>
+      {heroData.availabilityBadge ? (
+        <div className="bg-primary/10 text-primary ring-primary/40 mb-5 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-medium ring-1 ring-inset sm:text-sm">
+          <span className="relative flex size-2">
+            <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+            <span className="bg-primary relative inline-flex size-2 rounded-full" />
+          </span>
+          <span>{heroData.availabilityBadge}</span>
+        </div>
+      ) : null}
 
       <div>
         <h1 className="text-foreground text-4xl leading-[1.06] font-bold tracking-tight sm:text-5xl lg:text-6xl">
@@ -75,21 +77,13 @@ export default async function HeroContent({
         <p className="text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase">
           {t("atAGlance")}
         </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div>
-            <small className="text-muted-foreground block text-xs">
-              {t("availability")}
-            </small>
-            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight">
-              {t("immediate")}
-            </b>
-          </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <div>
             <small className="text-muted-foreground block text-xs">
               {t("yearsExperience")}
             </small>
             <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
-              {stats.yearsExperience}+
+              {stats.yearsExperience}
             </b>
           </div>
           <div>
@@ -97,17 +91,19 @@ export default async function HeroContent({
               {t("projectsDelivered")}
             </small>
             <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
-              {stats.projectsCount}+
+              {stats.projectsCount}
             </b>
           </div>
-          <div>
-            <small className="text-muted-foreground block text-xs">
-              {t("engineersLed")}
-            </small>
-            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
-              {stats.engineersMentored ?? 6}+
-            </b>
-          </div>
+          {stats.engineersMentored != null ? (
+            <div>
+              <small className="text-muted-foreground block text-xs">
+                {t("engineersLed")}
+              </small>
+              <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+                {stats.engineersMentored}
+              </b>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -115,9 +111,10 @@ export default async function HeroContent({
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <a
           href="#portfolio"
-          className="btn-primary-glow focus-visible:ring-ring inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-6 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
+          className="btn-primary-glow focus-visible:ring-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-3 rounded-full px-6 py-2.5 text-sm font-bold focus-visible:ring-2 focus-visible:outline-none"
         >
           {t("seeProjects")}
+          <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
         </a>
         {showCvLink ? (
           <Link

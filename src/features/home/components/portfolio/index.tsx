@@ -37,7 +37,8 @@ const Portfolio: FC = async () => {
       <ShowcaseHeading
         sectionId="portfolio"
         eyebrow={t("subtitle")}
-        title={t("title")}
+        title={t("titleLead")}
+        titleGradient={t("titleGradient")}
         description={t("description")}
       />
       <PortfolioGrid
