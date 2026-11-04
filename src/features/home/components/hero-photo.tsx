@@ -20,20 +20,23 @@ export default function HeroPhoto({ heroData }: HeroPhotoProps) {
 
   return (
     <div className="relative mx-auto w-full max-w-[20rem] sm:max-w-[24rem] lg:max-w-[26rem]">
-      {/* Spinning dashed orbital ring matching hero design */}
-      <span
-        className="a-spin border-primary/30 pointer-events-none absolute -inset-5 rounded-full border border-dashed select-none sm:-inset-6"
+      {/* Ambient Glow Backdrop from Prototype */}
+      <div
+        className="pointer-events-none absolute -inset-[14%] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--primary)_38%,transparent),transparent_68%)] blur-2xl"
         aria-hidden="true"
       />
 
-      {/* Main Avatar Container */}
-      <div className="bg-primary/20 relative aspect-square rounded-full p-2 shadow-[0_24px_70px_-12px_rgba(30,64,175,.35)] sm:p-2.5">
-        <div className="bg-primary/10 relative h-full w-full overflow-hidden rounded-full">
+      {/* Conic Gradient Ring */}
+      <div className="relative aspect-square w-full rounded-full bg-[conic-gradient(from_210deg,var(--primary),color-mix(in_srgb,var(--primary)_35%,transparent),var(--primary))] p-[0.3125rem] shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+        <div className="bg-background relative h-full w-full overflow-hidden rounded-full">
           {photoUrl ? (
             <HeroPhotoImage photoUrl={photoUrl} imageAlt={imageAlt} />
           ) : (
-            <span className="font-display text-primary flex h-full w-full items-center justify-center text-6xl font-bold sm:text-7xl">
-              {initials}
+            <span
+              className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_35%_30%,color-mix(in_srgb,var(--primary)_55%,#fff),var(--primary)_55%,#0b1226)] text-6xl font-light text-white select-none sm:text-7xl lg:text-8xl"
+              aria-label={imageAlt}
+            >
+              {initials || "JH"}
             </span>
           )}
         </div>
