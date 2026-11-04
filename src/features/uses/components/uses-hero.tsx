@@ -1,8 +1,6 @@
 import type { ReactNode } from "react";
 
-import { processEyebrowStyles } from "@/features/process-pages/components/process-page-styles";
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
-import { cn } from "@/lib/utils";
 
 import { UsesWorkspace } from "./uses-workspace";
 import type { UsesWorkspacePublicTag } from "./uses-workspace-hotspots";
@@ -35,27 +33,17 @@ export function UsesHero({
   return (
     <header
       id="hero"
-      className="relative overflow-hidden px-4 pt-8 pb-4 sm:px-6 md:pt-12 lg:px-20"
+      className="relative overflow-hidden bg-[radial-gradient(ellipse_60%_60%_at_50%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)] px-6 pt-28 pb-16 text-center"
     >
-      <div className="from-primary/8 via-background to-background absolute inset-0 -z-10 bg-linear-to-b" />
-
       <ProcessReveal>
-        <div className="mx-auto max-w-[740px] text-center">
-          <p
-            className={cn(
-              processEyebrowStyles,
-              "mb-3 inline-flex items-center gap-2 font-mono tracking-wide normal-case",
-            )}
-          >
-            <span aria-hidden className="bg-primary size-1.5 rounded-sm" />
-            {eyebrow}
-          </p>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-primary mb-3 text-sm font-medium">{eyebrow}</p>
 
-          <h1 className="text-foreground mb-4 text-[clamp(2rem,5vw,3.125rem)] leading-[1.15] font-extrabold tracking-tight">
+          <h1 className="text-foreground mb-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             {title} <span className="text-primary">{titleHighlight}</span>
           </h1>
 
-          <p className="text-muted-foreground mx-auto mb-9 max-w-xl text-lg leading-relaxed">
+          <p className="text-muted-foreground mx-auto mb-9 max-w-xl text-base leading-relaxed sm:text-lg">
             {description}
           </p>
 

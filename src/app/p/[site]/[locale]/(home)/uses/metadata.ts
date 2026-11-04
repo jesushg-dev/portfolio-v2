@@ -1,6 +1,20 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import type { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export function generateMetadata(): Promise<Metadata> {
-  notFound();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: "main.uses",
+  });
+
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
 }
