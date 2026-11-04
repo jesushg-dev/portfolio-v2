@@ -9,6 +9,7 @@ interface ProcessRolesSectionProps {
   description: string;
   myRolesLabel: string;
   myRoles: string[];
+  ecosystemRolesLabel?: string;
   ecosystemRoles: string[];
   testingLabel: string;
   testingTags: string[];
@@ -21,15 +22,19 @@ export function ProcessRolesSection({
   description,
   myRolesLabel,
   myRoles,
+  ecosystemRolesLabel,
   ecosystemRoles,
   testingLabel,
   testingTags,
 }: ProcessRolesSectionProps) {
+  const displayEcosystemRolesLabel =
+    ecosystemRolesLabel?.trim() ?? "I collaborate with";
+
   return (
     <section
       id={id}
       aria-labelledby={processSectionHeadingId(id)}
-      className="bg-muted/50 px-6 py-20"
+      className="border-border/80 border-t px-6 py-20 md:py-28"
     >
       <div className="mx-auto max-w-4xl text-center">
         <ProcessReveal>
@@ -40,36 +45,39 @@ export function ProcessRolesSection({
             description={description}
           />
 
-          <p id="roles-my-roles" className="sr-only">
+          <p className="text-muted-foreground mt-0 mb-4 text-xs font-semibold tracking-widest uppercase">
             {myRolesLabel}
           </p>
-          <ul
-            aria-labelledby="roles-my-roles"
-            className="mb-10 flex list-none flex-wrap justify-center gap-3"
-          >
+          <ul className="mb-14 flex list-none flex-wrap justify-center gap-2">
             {myRoles.map((role) => (
               <li key={role}>
-                <span className="bg-primary text-primary-foreground inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold">
-                  {role}
-                </span>
-              </li>
-            ))}
-            {ecosystemRoles.map((role) => (
-              <li key={role}>
-                <span className="border-border text-muted-foreground inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm">
+                <span className="bg-primary text-primary-foreground inline-flex min-h-11 items-center rounded-full px-5 py-2 text-sm font-medium">
                   {role}
                 </span>
               </li>
             ))}
           </ul>
 
-          <p className="text-muted-foreground mb-3 text-sm font-semibold tracking-widest uppercase">
+          <p className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
+            {displayEcosystemRolesLabel}
+          </p>
+          <ul className="mb-14 flex list-none flex-wrap justify-center gap-2">
+            {ecosystemRoles.map((role) => (
+              <li key={role}>
+                <span className="border-border text-muted-foreground inline-flex min-h-11 items-center rounded-full border px-5 py-2 text-sm font-medium">
+                  {role}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
             {testingLabel}
           </p>
-          <ul className="flex list-none flex-wrap justify-center gap-3">
+          <ul className="flex list-none flex-wrap justify-center gap-2">
             {testingTags.map((tag) => (
               <li key={tag}>
-                <span className="bg-card ring-border/60 text-foreground inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm ring-1">
+                <span className="bg-primary text-primary-foreground inline-flex min-h-11 items-center rounded-full px-5 py-2 text-sm font-medium">
                   {tag}
                 </span>
               </li>
