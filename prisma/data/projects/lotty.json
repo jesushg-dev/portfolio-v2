@@ -980,7 +980,7 @@
     }
   ],
   "skillKeys": ["React", "Bootstrap"],
-  "order": 9,
+  "order": 12,
   "kind": "LEARNING",
   "slug": "lotty",
   "caseStudyEnabled": true

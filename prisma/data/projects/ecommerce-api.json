@@ -904,7 +904,7 @@
     "Mysql",
     "Docker"
   ],
-  "order": 2,
+  "order": 3,
   "kind": "PROFESSIONAL",
   "slug": "ecommerce-api",
   "caseStudyEnabled": true

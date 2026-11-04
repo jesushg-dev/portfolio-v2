@@ -7,7 +7,7 @@
   "isPrivate": false,
   "slug": "rick-and-morty",
   "caseStudyEnabled": true,
-  "order": 6,
+  "order": 9,
   "kind": "LEARNING",
   "skillKeys": ["React", "Bootstrap", "Apollo", "GraphQL", "Redux"],
   "translations": [

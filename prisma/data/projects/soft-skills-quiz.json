@@ -773,7 +773,7 @@
     }
   ],
   "skillKeys": ["React", "Tailwind", "Typescript"],
-  "order": 7,
+  "order": 10,
   "kind": "LEARNING",
   "slug": "soft-skills-quiz",
   "caseStudyEnabled": true

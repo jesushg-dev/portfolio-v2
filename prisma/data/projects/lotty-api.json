@@ -23,7 +23,7 @@
     }
   ],
   "skillKeys": ["Nodejs", "Mysql"],
-  "order": 10,
+  "order": 13,
   "kind": "LEARNING",
   "slug": "lotty-api"
 }
