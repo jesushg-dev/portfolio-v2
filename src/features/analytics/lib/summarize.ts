@@ -1,4 +1,5 @@
 export interface AnalyticsDailyRow {
+  date?: Date;
   path: string;
   country: string;
   referrerHost: string;
@@ -11,14 +12,24 @@ export interface RankedCount {
   pageviews: number;
 }
 
+export interface DailyVisitPoint {
+  date: string;
+  visits: number;
+}
+
 export interface AnalyticsSummary {
   pageviews: number;
   visits: number;
   countryCount: number;
   topPath: string | null;
   countries: RankedCount[];
+  unknownCountryPageviews: number;
+  unknownCountryPercent: number;
+  otherCountriesCount: number;
+  otherCountriesPageviews: number;
   paths: RankedCount[];
   referrers: RankedCount[];
+  dailyVisits: DailyVisitPoint[];
 }
 
 function rankByPageviews(
@@ -35,7 +46,7 @@ export function summarizeAnalyticsRows(
   rows: AnalyticsDailyRow[],
   limits: { countries?: number; paths?: number; referrers?: number } = {},
 ): AnalyticsSummary {
-  const countryLimit = limits.countries ?? 12;
+  const countryLimit = limits.countries ?? 5;
   const pathLimit = limits.paths ?? 10;
   const referrerLimit = limits.referrers ?? 8;
 
@@ -44,14 +55,26 @@ export function summarizeAnalyticsRows(
   const referrers = new Map<string, number>();
   let pageviews = 0;
   let visits = 0;
+  let unknownCountryPageviews = 0;
 
   for (const row of rows) {
     pageviews += row.pageviews;
     visits += row.visits;
-    countries.set(
-      row.country,
-      (countries.get(row.country) ?? 0) + row.pageviews,
-    );
+
+    const isUnknownCountry =
+      !row.country ||
+      row.country === "XX" ||
+      row.country.toLowerCase() === "unknown";
+
+    if (isUnknownCountry) {
+      unknownCountryPageviews += row.pageviews;
+    } else {
+      countries.set(
+        row.country,
+        (countries.get(row.country) ?? 0) + row.pageviews,
+      );
+    }
+
     paths.set(row.path, (paths.get(row.path) ?? 0) + row.pageviews);
     referrers.set(
       row.referrerHost,
@@ -59,11 +82,31 @@ export function summarizeAnalyticsRows(
     );
   }
 
+  const allRankedCountries = rankByPageviews(countries, countries.size);
+  const topCountries = allRankedCountries.slice(0, countryLimit);
+  const restCountries = allRankedCountries.slice(countryLimit);
+
+  const otherCountriesCount = restCountries.length;
+  const otherCountriesPageviews = restCountries.reduce(
+    (sum, c) => sum + c.pageviews,
+    0,
+  );
+
+  const rankedCountries: RankedCount[] = [...topCountries];
+  if (otherCountriesCount > 0) {
+    rankedCountries.push({
+      key: `OTHER:${otherCountriesCount}`,
+      pageviews: otherCountriesPageviews,
+    });
+  }
+
   const rankedPaths = rankByPageviews(paths, pathLimit);
-  const rankedCountries = rankByPageviews(countries, countryLimit);
   const rankedReferrers = rankByPageviews(referrers, referrerLimit).filter(
     (item) => item.key !== "direct",
   );
+
+  const unknownCountryPercent =
+    pageviews > 0 ? Math.round((unknownCountryPageviews / pageviews) * 100) : 0;
 
   return {
     pageviews,
@@ -71,8 +114,13 @@ export function summarizeAnalyticsRows(
     countryCount: countries.size,
     topPath: rankedPaths[0]?.key ?? null,
     countries: rankedCountries,
+    unknownCountryPageviews,
+    unknownCountryPercent,
+    otherCountriesCount,
+    otherCountriesPageviews,
     paths: rankedPaths,
     referrers: rankedReferrers,
+    dailyVisits: [],
   };
 }
 
@@ -83,7 +131,12 @@ export function emptyAnalyticsSummary(): AnalyticsSummary {
     countryCount: 0,
     topPath: null,
     countries: [],
+    unknownCountryPageviews: 0,
+    unknownCountryPercent: 0,
+    otherCountriesCount: 0,
+    otherCountriesPageviews: 0,
     paths: [],
     referrers: [],
+    dailyVisits: [],
   };
 }

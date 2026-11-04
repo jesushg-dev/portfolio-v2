@@ -1,9 +1,16 @@
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 
 import { RankList } from "@/features/analytics/components/rank-list";
+import { DailyVisitsChart } from "@/features/analytics/components/daily-visits-chart";
 import { countryDisplayName } from "@/features/analytics/lib/country-display-name";
 import type { AnalyticsSummary } from "@/features/analytics/lib/summarize";
-import { ProcessPageShell } from "@/features/process-pages/components/process-section-header";
+import {
+  ShowcaseShell,
+  ShowcaseHero,
+  ShowcaseSection,
+  MetricGrid,
+  ServiceList,
+} from "@/components/shared/showcase";
 import { Link } from "@/i18n/routing";
 
 interface PublicStatsViewProps {
@@ -27,7 +34,7 @@ export async function PublicStatsView({
   const formatCount = (value: number) =>
     format.number(value, { maximumFractionDigits: 0 });
 
-  const highlights = [
+  const trafficHighlights = [
     {
       label: t("kpis.pageviews"),
       value: formatCount(traffic.pageviews),
@@ -40,6 +47,9 @@ export async function PublicStatsView({
       label: t("kpis.countries"),
       value: formatCount(traffic.countryCount),
     },
+  ];
+
+  const portfolioHighlights = [
     {
       label: t("kpis.projects"),
       value: formatCount(portfolio.projectsCount),
@@ -55,76 +65,76 @@ export async function PublicStatsView({
   ];
 
   return (
-    <ProcessPageShell>
-      <div className="mx-auto max-w-5xl px-4 lg:container lg:px-20">
-        <header className="mx-auto max-w-2xl text-center">
-          <p className="text-primary text-sm font-semibold tracking-widest uppercase">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-foreground mt-3 text-3xl font-extrabold tracking-tight md:text-5xl">
-            {t("title")}
-          </h1>
-          <p className="text-muted-foreground mt-4 text-sm leading-relaxed md:text-base">
-            {t("description")}
-          </p>
-        </header>
+    <ShowcaseShell>
+      {/* Hero */}
+      <ShowcaseHero
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("description")}
+      />
 
-        <section
-          aria-labelledby="stats-highlights"
-          className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3"
-        >
-          <h2 id="stats-highlights" className="sr-only">
-            {t("highlightsTitle")}
-          </h2>
-          {highlights.map((item) => (
-            <div
-              key={item.label}
-              className="bg-card border-border rounded-2xl border px-4 py-5"
-            >
-              <p className="text-foreground text-2xl font-semibold tabular-nums md:text-3xl">
-                {item.value}
-              </p>
-              <p className="text-muted-foreground mt-1 text-sm">{item.label}</p>
-            </div>
-          ))}
-        </section>
+      {/* Traffic KPI Metrics */}
+      <ShowcaseSection variant="compact" ariaLabelledBy="stats-traffic-kpis">
+        <h2 id="stats-traffic-kpis" className="sr-only">
+          {t("highlightsTitle")}
+        </h2>
+        <MetricGrid items={trafficHighlights} />
 
-        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <DailyVisitsChart
+          dailyVisits={traffic.dailyVisits}
+          totalVisits={traffic.visits}
+        />
+      </ShowcaseSection>
+
+      {/* Traffic Sources & Top Pages */}
+      <ShowcaseSection>
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
           <section aria-labelledby="stats-countries">
             <h2
               id="stats-countries"
-              className="text-foreground text-lg font-semibold tracking-tight"
+              className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl"
             >
               {t("countriesTitle")}
             </h2>
-            <p className="text-muted-foreground mt-1 mb-6 text-sm">
-              {t("windowHint")}
+            <p className="text-muted-foreground mt-2 mb-8 text-sm sm:text-base">
+              {traffic.unknownCountryPercent > 0
+                ? t("countriesHint", {
+                    unknownPercent: traffic.unknownCountryPercent,
+                  })
+                : t("countriesHintSimple")}
             </p>
             <RankList
+              variant="line"
               emptyLabel={t("emptyTraffic")}
-              items={traffic.countries.map((item) => ({
-                key: item.key,
-                pageviews: item.pageviews,
-                label: countryDisplayName(
-                  item.key,
-                  locale,
-                  t("unknownCountry"),
-                ),
-                valueDisplay: t("pageviewsCount", { count: item.pageviews }),
-              }))}
+              items={traffic.countries.map((item) => {
+                const isOther = item.key.startsWith("OTHER:");
+                const count = isOther ? item.key.slice("OTHER:".length) : "0";
+                return {
+                  key: item.key,
+                  pageviews: item.pageviews,
+                  label: isOther
+                    ? t("otherCountries", { count })
+                    : countryDisplayName(item.key, locale, t("unknownCountry")),
+                  valueDisplay: t("pageviewsCount", {
+                    count: item.pageviews,
+                  }),
+                };
+              })}
             />
           </section>
+
           <section aria-labelledby="stats-pages">
             <h2
               id="stats-pages"
-              className="text-foreground text-lg font-semibold tracking-tight"
+              className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl"
             >
               {t("pagesTitle")}
             </h2>
-            <p className="text-muted-foreground mt-1 mb-6 text-sm">
-              {t("windowHint")}
+            <p className="text-muted-foreground mt-2 mb-8 text-sm sm:text-base">
+              {t("pagesHint")}
             </p>
             <RankList
+              variant="line"
               emptyLabel={t("emptyTraffic")}
               items={traffic.paths.map((item) => ({
                 key: item.key,
@@ -135,38 +145,29 @@ export async function PublicStatsView({
             />
           </section>
         </div>
+      </ShowcaseSection>
 
-        <section aria-labelledby="stats-services" className="mt-12">
-          <h2
-            id="stats-services"
-            className="text-foreground text-lg font-semibold tracking-tight"
-          >
-            {t("servicesTitle")}
-          </h2>
-          {services.length === 0 ? (
-            <p className="text-muted-foreground mt-4 text-sm">
-              {t("emptyServices")}
-            </p>
-          ) : (
-            <ul className="mt-4 divide-y rounded-2xl border">
-              {services.map((service) => (
-                <li
-                  key={service.id}
-                  className="flex items-center justify-between gap-3 px-4 py-3"
-                >
-                  <span className="text-foreground text-sm font-medium">
-                    {service.title}
-                  </span>
-                  <span className="text-muted-foreground text-sm tracking-wide uppercase">
-                    {service.type}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+      {/* Portfolio & Services */}
+      <ShowcaseSection>
+        <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
+          {t("portfolioTitle")}
+        </h2>
+        <MetricGrid size="sm" items={portfolioHighlights} className="mt-8" />
 
-        <p className="text-muted-foreground mt-10 text-center text-sm">
+        <h2 className="text-foreground mt-24 text-2xl font-bold tracking-tight sm:text-3xl">
+          {t("servicesTitle")}
+        </h2>
+        <ServiceList
+          items={services.map((service) => ({
+            id: service.id,
+            title: service.title,
+            badge: service.type,
+          }))}
+          emptyLabel={t("emptyServices")}
+          className="mt-8"
+        />
+
+        <p className="text-muted-foreground mt-16 text-center text-sm">
           {t.rich("privacyNote", {
             link: (chunks) => (
               <Link
@@ -178,7 +179,7 @@ export async function PublicStatsView({
             ),
           })}
         </p>
-      </div>
-    </ProcessPageShell>
+      </ShowcaseSection>
+    </ShowcaseShell>
   );
 }

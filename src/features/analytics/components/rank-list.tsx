@@ -22,6 +22,7 @@ export interface RankListProps {
   actionPlacement?: "header" | "footer";
   onToggleExpand?: (isExpanded: boolean) => void;
   headerSlot?: React.ReactNode;
+  variant?: "default" | "line";
 }
 
 export function RankList({
@@ -33,6 +34,7 @@ export function RankList({
   limit,
   showAllLabel,
   showLessLabel,
+  variant = "default",
 }: RankListProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -40,15 +42,16 @@ export function RankList({
     return <p className="text-muted-foreground text-sm">{emptyLabel}</p>;
   }
 
-  const max = items[0]?.pageviews ?? 0;
+  const isLineVariant = variant === "line";
+  const max = Math.max(...items.map((i) => i.pageviews), 1);
   const shouldLimit =
     typeof limit === "number" && limit > 0 && items.length > limit;
   const visibleItems =
     shouldLimit && !isExpanded ? items.slice(0, limit) : items;
 
   return (
-    <div className="space-y-3.5">
-      <ul className="space-y-3.5">
+    <div className={cn(isLineVariant ? "space-y-1" : "space-y-3.5")}>
+      <ul className={cn(isLineVariant ? "space-y-0" : "space-y-3.5")}>
         {visibleItems.map((item) => {
           const isUnknown =
             item.key.toLowerCase() === "unknown" ||
@@ -62,26 +65,44 @@ export function RankList({
               : null;
 
           const barWidth =
-            max > 0 ? Math.max(2, Math.round((item.pageviews / max) * 100)) : 0;
+            max > 0
+              ? Math.max(1.5, Math.round((item.pageviews / max) * 100))
+              : 0;
 
           return (
-            <li key={item.key}>
-              <div className="flex items-baseline justify-between gap-3 text-sm">
+            <li key={item.key} className={isLineVariant ? "py-2.5" : undefined}>
+              <div
+                className={cn(
+                  "flex items-baseline justify-between gap-3",
+                  isLineVariant ? "text-[0.9375rem]" : "text-sm",
+                )}
+              >
                 <span
                   className={cn(
-                    "truncate font-medium",
-                    isUnknown ? "text-muted-foreground" : "text-foreground",
+                    "truncate",
+                    isLineVariant
+                      ? isUnknown
+                        ? "text-muted-foreground font-normal"
+                        : "text-foreground font-normal"
+                      : isUnknown
+                        ? "text-muted-foreground font-medium"
+                        : "text-foreground font-medium",
                   )}
                 >
                   {item.label}
                 </span>
-                <span className="text-muted-foreground shrink-0 text-sm tabular-nums">
-                  <b className="text-foreground font-semibold">
-                    {item.valueDisplay ??
-                      (valueLabel
-                        ? valueLabel(item.pageviews)
-                        : item.pageviews)}
-                  </b>
+                <span className="text-muted-foreground shrink-0 text-sm whitespace-nowrap tabular-nums">
+                  {isLineVariant ? (
+                    (item.valueDisplay ??
+                    (valueLabel ? valueLabel(item.pageviews) : item.pageviews))
+                  ) : (
+                    <b className="text-foreground font-semibold">
+                      {item.valueDisplay ??
+                        (valueLabel
+                          ? valueLabel(item.pageviews)
+                          : item.pageviews)}
+                    </b>
+                  )}
                   {showPercentage && pctOfTotal !== null ? (
                     <span className="text-muted-foreground/80 font-normal">
                       {" · "}
@@ -91,7 +112,12 @@ export function RankList({
                 </span>
               </div>
               <div
-                className="bg-muted/70 mt-1.5 h-1.5 overflow-hidden rounded-full"
+                className={cn(
+                  "overflow-hidden rounded-full",
+                  isLineVariant
+                    ? "bg-border/60 mt-2.5 h-[0.1875rem]"
+                    : "bg-muted/70 mt-1.5 h-1.5",
+                )}
                 aria-hidden
               >
                 <div
