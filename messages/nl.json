@@ -853,7 +853,17 @@
           "subtitle": "Heb je een project in gedachten?",
           "cta": "Neem contact op"
         }
-      }
+      },
+      "carouselInstructions": "Dienstenkaarten. Gebruik de pijltjestoetsen om te navigeren.",
+      "viewDetails": "Details van {title} bekijken",
+      "previousCard": "Vorige kaart",
+      "nextCard": "Volgende kaart",
+      "close": "Sluiten",
+      "technologies": "Technologieën",
+      "pauseMotion": "Diagrammen pauzeren",
+      "resumeMotion": "Diagrammen hervatten",
+      "titleLead": "Technische",
+      "titleGradient": "expertise."
     },
     "timeline": {
       "title": "Mijn reis",
@@ -889,22 +899,13 @@
         "title": "Terminal niet geconfigureerd",
         "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
       },
-      "timeline": {
-        "title": "Mijn tijdslijn",
-        "subtitle": "Continu leren...",
-        "viewAll": "Bekijk volledige tijdlijn",
-        "empty": "Nog geen tijdlijnitems.",
-        "categories": {
-          "WORK": "Werk",
-          "STUDY": "Studie",
-          "COURSE": "Cursus"
-        }
-      }
+      "titleLead": "Hoe ik",
+      "titleGradient": "bouw."
     },
     "skills": {
       "title": "Technische Stack",
       "subtitle": "Vaardigheden",
-      "description": "Technologieën die ik in productie heb ingezet bij enterprise systemen, financiële platforms en sterk gereguleerde omgevingen.",
+      "description": "Technologieën en hulpmiddelen in dit portfolio.",
       "aux": "Elke hier vermelde technologie is gebruikt in echte projecten, niet alleen tutorials. De meeste op schaal, in productie, onder druk.",
       "page": {
         "breadcrumbHome": "Start",
@@ -969,14 +970,14 @@
         "eyebrow": "// skills",
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Zoek technologieën",
+        "categoryLabel": "Verken per specialisatie",
         "noResults": "Geen match in de huidige stack.",
         "noMatch": "grep: geen resultaten voor \"{query}\"",
         "featured": "Uitgelicht",
         "coreLegend": "helderder = uitgelichte stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
         "searchFor": " voor \"{query}\"",
-        "trend": "Trend",
-        "updatedTechPill": "Bijgewerkte technologieën 2024-2026"
+        "trend": "Trend"
       },
       "tabs": {
         "ai": {
@@ -1003,13 +1004,17 @@
           "title": "Kwaliteit & Levering",
           "description": "CI/CD-pipelines, Docker containerisatie, geautomatiseerd testen en veiligheidsscans voor betrouwbare levering."
         }
-      }
+      },
+      "titleLead": "Technische",
+      "titleGradient": "stack."
     },
     "soft-skills": {
       "subtitle": "Leiderschap",
       "title": "Leiderschap & Impact",
       "description": "Technische vaardigheden zijn belangrijk. Maar ook hoe je leidt, samenwerkt en dingen voor elkaar krijgt met echte teams in echte projecten.",
-      "aux": "Dit zijn geen bijvoeglijke naamwoorden op een CV: het is de manier waarop ik in elke rol heb gewerkt."
+      "aux": "Dit zijn geen bijvoeglijke naamwoorden op een CV: het is de manier waarop ik in elke rol heb gewerkt.",
+      "titleLead": "Leiderschap &",
+      "titleGradient": "impact."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -1196,14 +1201,15 @@
         "impact": "IMPACT",
         "privateRepo": "Privé repository",
         "readCaseStudy": "Lees case study"
-      }
+      },
+      "titleLead": "Geselecteerd",
+      "titleGradient": "engineeringwerk."
     },
     "contact": {
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
       "subtitle": "Gebruik het formulier of de kanalen hieronder.",
-      "responseTime": "Antwoord binnen 24u",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
@@ -1226,7 +1232,6 @@
       },
       "form": {
         "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
-        "alternativeContact": "Liever een afspraak? Plan een <schedule>videogesprek</schedule> of stuur een bericht op <linkedin>LinkedIn</linkedin>.",
         "name": {
           "label": "Naam",
           "placeholder": "Jan Jansen",
@@ -1285,54 +1290,30 @@
         "website": "Website bezoeken",
         "location": "Locatie op kaart bekijken",
         "calendly": "Inplannen via Calendly"
-      }
+      },
+      "titleLead": "Laten we",
+      "titleGradient": "praten."
     },
     "experience": {
       "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
-      "showingRecent": "Meest recente rollen weergegeven.",
-      "promotion": "Interne promotie",
-      "previousRole": "Vorige functie",
-      "rolesCount": "{count} functies",
-      "description": "Van frontend developer tot senior engineer en team lead, 7+ jaar ervaring.",
-      "previousPosition": "Vorige functie",
-      "nextStageTitle": "Volgende stap: jouw team",
-      "nextStageSubtitle": "Senior full-stack of tech-lead rollen, remote of vanuit Managua. Direct beschikbaar.",
-      "letsTalk": "Laten we praten",
-      "leadership": {
-        "eyebrow": "Leiderschap",
-        "title": "Leiderschap & impact.",
-        "description": "Technische vaardigheden zijn belangrijk. Net als hoe je leidt, samenwerkt en dingen realiseert met echte teams op echte producten.",
-        "stats": {
-          "engineersLed": "ingenieurs geleid",
-          "engineersMentored": "ingenieurs gementord",
-          "fewerDefects": "minder productiedefecten",
-          "lowerMttr": "lagere MTTR"
-        },
-        "items": {
-          "technicalLeadership": {
-            "title": "Technisch leiderschap",
-            "description": "Leidde teams tot 6 ingenieurs, stelde technische roadmaps en architectuurstandaarden op en leverde enterprise-oplossingen op."
-          },
-          "mentorship": {
-            "title": "Mentorschap & kwaliteit",
-            "description": "Menteerde 4 ingenieurs via rigoureuze code reviews, pair programming en gerichte groeiplannen die defecten in productie met 40% verminderden."
-          },
-          "systemDesign": {
-            "title": "Systeemontwerp",
-            "description": "Werkte direct samen met Product Managers, QA, UX en stakeholders om complexe businessvereisten te vertalen naar schaalbare specificaties."
-          },
-          "incidentReliability": {
-            "title": "Incident- & betrouwbaarheidsleiderschap",
-            "description": "Beheerde kritieke productiestoringen van begin tot eind, voerde post-mortem analyses uit en realiseerde structurele oplossingen die MTTR met 40% verlaagden."
-          },
-          "engineeringExcellence": {
-            "title": "Engineering excellence",
-            "description": "Stelde codeerstandaarden, Architecture Decision Records (ADRs), testpraktijken en CI/CD-verbeteringen vast voor langetermijn-ROI en onderhoudbaarheid."
-          }
-        }
-      }
+      "description": "Functies, verantwoordelijkheden en vaardigheden uit de professionele loopbaan.",
+      "chart": {
+        "eyebrow": "De weg tot nu toe",
+        "monthsShown": "maanden in de getoonde functies",
+        "ariaLabel": "Loopbaanmijlpalen op volgorde van startdatum",
+        "caption": "Elke stap is een vastgelegde functie, gerangschikt op startdatum.",
+        "selectRole": "Werkervaring bekijken",
+        "title": "Een loopbaan in beweging",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "monthsExplanation": "Volledige maanden op basis van de datums van de getoonde functies. Overlappende banen tellen één keer; tussenpozen en onbekende datums tellen niet mee.",
+        "nextStage": "Volgende stap",
+        "letsTalk": "Laten we praten"
+      },
+      "titleLead": "Professionele",
+      "titleGradient": "ervaring."
     },
     "impactStats": {
       "teamSize": {
@@ -1354,46 +1335,17 @@
     },
     "socialProof": {
       "eyebrow": "Vertrouwd door ontwikkelaars",
-      "title": "{count, plural, =0 {Wat senior developers over mij zeggen} =1 {Wat een senior developer over mij zegt} other {Wat senior developers over mij zeggen}}",
+      "title": "Mensen met wie ik samenwerk",
       "subtitle": "Collega's die mijn werk van dichtbij hebben gezien.",
-      "cta": "Neem me aan",
-      "readMore": "Lees meer",
-      "readLess": "Lees minder",
-      "statsLabel": "In cijfers",
-      "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
-      "stats": {
-        "projects": {
-          "label": "Projecten"
-        },
-        "experience": {
-          "label": "Jaar Ervaring"
-        },
-        "engineersMentored": {
-          "label": "Engineers geleid"
-        }
-      }
+      "titleLead": "Mensen met wie",
+      "titleGradient": "ik samenwerk.",
+      "previous": "Vorige aanbeveling",
+      "next": "Volgende aanbeveling",
+      "navigation": "Aanbevelingen bekijken"
     },
     "faq": {
       "title": "Vragen?",
-      "titleGradient": "Antwoorden.",
-      "items": {
-        "0": {
-          "question": "Ben je beschikbaar voor nieuwe rollen?",
-          "answer": "Ja. Ik ben per direct beschikbaar en het grootste deel van mijn recente werk was op afstand."
-        },
-        "1": {
-          "question": "In welke tijdzone werk je?",
-          "answer": "Ik ben gevestigd in Managua, Nicaragua (UTC−6) en heb gewerkt met teams in de Verenigde Staten en Costa Rica."
-        },
-        "2": {
-          "question": "Waar werk je dagelijks mee?",
-          "answer": "React, Next.js en TypeScript aan de frontend; Node.js, Nest.js en C#/.NET aan de backend; SQL en NoSQL databases; CI/CD en testen met Docker, Playwright en Jest."
-        },
-        "3": {
-          "question": "Kan ik je cv ontvangen?",
-          "answer": "Natuurlijk. Je kunt het online lezen of een pdf per e-mail aanvragen op de cv-pagina."
-        }
-      }
+      "titleGradient": "Antwoorden."
     },
     "qaCollaboration": {
       "metaTitle": "QA-samenwerking",
@@ -2009,6 +1961,19 @@
     }
   },
   "admin": {
+    "careerAvailability": {
+      "title": "Beschikbaarheid voor werk",
+      "description": "Toon een uitnodiging voor de volgende stap in de loopbaangrafiek alleen wanneer je openstaat voor nieuwe functies. Voeg een titel en beschrijving toe voor elke publieke taal.",
+      "available": "Open voor nieuwe functies",
+      "language": "Taal",
+      "nextTitle": "Titel van de volgende stap",
+      "nextDescription": "Beschrijving van de volgende stap",
+      "save": "Beschikbaarheid opslaan",
+      "saving": "Opslaan…",
+      "saved": "Beschikbaarheid opgeslagen.",
+      "error": "Beschikbaarheid kon niet worden geladen of opgeslagen.",
+      "loading": "Beschikbaarheid laden…"
+    },
     "shell": {
       "title": "Admin Paneel",
       "signedInAs": "Ingelogd als",
@@ -2822,6 +2787,19 @@
         "atLeastOneLanguage": "Minstens één taal is verplicht"
       },
       "service": {
+        "visualType": "Illustratie",
+        "visualTypeHint": "Kies een diagram voor deze dienst. Een eigen afbeelding heeft voorrang.",
+        "visualNodes": "Diagramlabels",
+        "visualNodesHint": "Eén label per regel, maximaal 16 van 48 tekens, in de volgorde van het gekozen diagram.",
+        "visualTypes": {
+          "network": "API- en servicetopologie",
+          "architecture": "Architectuurlagen",
+          "frontend": "Interface en componenten",
+          "pipeline": "Levering en betrouwbaarheid",
+          "security": "Beveiligingscontroles",
+          "mobile": "Mobiele applicatie",
+          "ai": "AI en kwaliteitscontrole"
+        },
         "generalSection": "Algemene informatie",
         "skillsSection": "Vaardigheden",
         "titleWithLanguage": "Titel ({language})",
@@ -2852,6 +2830,8 @@
         "createFailed": "Dienst aanmaken mislukt",
         "imageRequired": "Afbeelding is verplicht",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
+        "practicePoints": "In de praktijk",
+        "practicePointsHint": "Eén voorbeeld per regel. Vermeld alleen onderbouwde resultaten.",
         "atLeastOneLanguage": "Minstens één taal is verplicht",
         "isActive": "Actief op de publieke site",
         "isActiveHint": "Inactieve diensten blijven in admin maar verdwijnen van de homepage en publieke stats.",
@@ -4923,6 +4903,33 @@
         "widgets": "Widgets",
         "languages": "Talen"
       }
+    },
+    "contactPreferences": {
+      "title": "Contactvoorkeuren",
+      "description": "Stel per taal je eigen reactietijd in. Laat leeg om te verbergen. De lokale klok gebruikt de tijdzone die bij Nu is ingesteld.",
+      "responseTime": "Opmerking over reactietijd",
+      "save": "Contactvoorkeuren opslaan",
+      "saving": "Opslaan…",
+      "saved": "Contactvoorkeuren opgeslagen.",
+      "error": "Contactvoorkeuren konden niet worden opgeslagen.",
+      "loading": "Contactvoorkeuren laden…"
+    },
+    "homeFaq": {
+      "title": "Veelgestelde vragen op de startpagina",
+      "description": "Beheer de vragen voor dit portfolio per taal. Sla deze wijzigingen apart op. De sectie blijft verborgen voor talen zonder vragen.",
+      "question": "Vraag",
+      "answer": "Antwoord",
+      "add": "Vraag toevoegen",
+      "remove": "Vraag verwijderen",
+      "moveUp": "Omhoog",
+      "moveDown": "Omlaag",
+      "save": "Vragen opslaan",
+      "saving": "Opslaan…",
+      "saved": "Vragen opgeslagen.",
+      "error": "De vragen konden niet worden geladen of opgeslagen. Probeer het opnieuw.",
+      "invalid": "Vul elke vraag en elk antwoord in voordat je opslaat.",
+      "loading": "Vragen laden…",
+      "empty": "Geen vragen in deze taal. De sectie blijft verborgen totdat je inhoud toevoegt."
     }
   },
   "auth": {

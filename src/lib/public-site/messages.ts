@@ -10,6 +10,7 @@ const routeMainKeys = {
     "about",
     "socialProof",
     "skills",
+    "services",
     "experience",
     "portfolio",
     "contact",

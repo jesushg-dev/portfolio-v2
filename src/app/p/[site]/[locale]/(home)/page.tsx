@@ -54,7 +54,7 @@ export default async function Home() {
       </HomeSection>
 
       <HomeSection estimatedHeight="28rem">
-        <SocialProof stats={stats} testimonials={testimonials} />
+        <SocialProof testimonials={testimonials} />
       </HomeSection>
 
       <HomeSection estimatedHeight="24rem">

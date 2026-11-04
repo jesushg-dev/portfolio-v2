@@ -879,7 +879,17 @@
           "subtitle": "¿Tienes un proyecto en mente?",
           "cta": "Contáctame"
         }
-      }
+      },
+      "carouselInstructions": "Tarjetas de servicios. Usa las flechas para desplazarte.",
+      "viewDetails": "Ver detalles de {title}",
+      "previousCard": "Tarjeta anterior",
+      "nextCard": "Siguiente tarjeta",
+      "close": "Cerrar",
+      "technologies": "Tecnologías",
+      "pauseMotion": "Pausar diagramas",
+      "resumeMotion": "Reanudar diagramas",
+      "titleLead": "Experiencia",
+      "titleGradient": "en ingeniería."
     },
     "timeline": {
       "title": "Mi recorrido",
@@ -915,22 +925,13 @@
         "title": "Terminal no configurada",
         "description": "Añade una secuencia de terminal animada desde la pestaña Terminal del perfil en el admin."
       },
-      "timeline": {
-        "title": "Línea de tiempo",
-        "subtitle": "En constante aprendizaje...",
-        "viewAll": "Ver línea de tiempo completa",
-        "empty": "Aún no hay entradas en la línea de tiempo.",
-        "categories": {
-          "WORK": "Trabajo",
-          "STUDY": "Estudio",
-          "COURSE": "Curso"
-        }
-      }
+      "titleLead": "Cómo",
+      "titleGradient": "desarrollo."
     },
     "skills": {
       "title": "Stack Técnico",
       "subtitle": "Habilidades",
-      "description": "Tecnologías que he puesto en producción en sistemas corporativos de escala, plataformas financieras y entornos de alto cumplimiento.",
+      "description": "Tecnologías y herramientas de este portafolio.",
       "aux": "Cada tecnología listada aquí ha sido usada en proyectos reales, no solo tutoriales. La mayoría a escala, en producción y bajo presión.",
       "page": {
         "breadcrumbHome": "Inicio",
@@ -995,14 +996,14 @@
         "eyebrow": "// skills",
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Buscar tecnologías",
+        "categoryLabel": "Explorar por especialidad",
         "noResults": "Sin coincidencias en el stack actual.",
         "noMatch": "grep: sin coincidencias para \"{query}\"",
         "featured": "Destacado",
         "coreLegend": "más brillante = stack destacado",
         "matchCount": "{count, plural, =1 {# coincidencia} other {# coincidencias}}",
         "searchFor": " para \"{query}\"",
-        "trend": "Trend",
-        "updatedTechPill": "Tecnologías actualizadas 2024-2026"
+        "trend": "Trend"
       },
       "tabs": {
         "ai": {
@@ -1029,13 +1030,17 @@
           "title": "Calidad y Entrega",
           "description": "Pipelines CI/CD, contenedores Docker, pruebas automatizadas y escaneo de seguridad para entregas fiables."
         }
-      }
+      },
+      "titleLead": "Stack",
+      "titleGradient": "técnico."
     },
     "soft-skills": {
       "subtitle": "Liderazgo",
       "title": "Liderazgo e Impacto",
       "description": "Las habilidades técnicas importan. También importa cómo lideras, colaboras y haces que las cosas sucedan con equipos reales en proyectos reales.",
-      "aux": "Esto no son adjetivos escritos en un CV: es la forma en que he operado en cada rol."
+      "aux": "Esto no son adjetivos escritos en un CV: es la forma en que he operado en cada rol.",
+      "titleLead": "Liderazgo e",
+      "titleGradient": "impacto."
     },
     "portfolio": {
       "subtitle": "Portafolio",
@@ -1222,14 +1227,15 @@
         "impact": "IMPACTO",
         "privateRepo": "Repositorio privado",
         "readCaseStudy": "Leer case study"
-      }
+      },
+      "titleLead": "Trabajo de ingeniería",
+      "titleGradient": "seleccionado."
     },
     "contact": {
       "title": "Hablemos",
       "title2": "Envía un mensaje",
       "eyebrow": "Contacto",
       "subtitle": "Usa el formulario o los canales de abajo.",
-      "responseTime": "Respuesta en menos de 24 h",
       "divider": "o",
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
@@ -1252,7 +1258,6 @@
       },
       "form": {
         "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
-        "alternativeContact": "¿Prefieres una reunión? Agenda una <schedule>videollamada</schedule> o escríbeme por <linkedin>LinkedIn</linkedin>.",
         "name": {
           "label": "Nombre",
           "placeholder": "Jesús Hernández",
@@ -1311,54 +1316,30 @@
         "website": "Visitar sitio web",
         "location": "Ver ubicación en el mapa",
         "calendly": "Agendar en Calendly"
-      }
+      },
+      "titleLead": "¿Lo",
+      "titleGradient": "conversamos?"
     },
     "experience": {
       "title": "Experiencia Profesional",
       "subtitle": "Empresas, roles e impacto medible",
       "viewAll": "Ver CV completo para el historial detallado",
-      "showingRecent": "Mostrando los roles más recientes.",
-      "promotion": "Ascenso interno",
-      "previousRole": "Puesto anterior",
-      "rolesCount": "{count} puestos",
-      "description": "De desarrollador frontend a ingeniero senior y líder técnico, más de 7 años de trayectoria.",
-      "previousPosition": "Puesto anterior",
-      "nextStageTitle": "Siguiente etapa: tu equipo",
-      "nextStageSubtitle": "Roles full-stack senior o líder técnico, remoto o presencial. Disponibilidad inmediata.",
-      "letsTalk": "Hablemos",
-      "leadership": {
-        "eyebrow": "Liderazgo",
-        "title": "Liderazgo e impacto.",
-        "description": "Las habilidades técnicas importan. También cómo lideras, colaboras y haces que las cosas sucedan con equipos reales en productos reales.",
-        "stats": {
-          "engineersLed": "ingenieros liderados",
-          "engineersMentored": "ingenieros mentorizados",
-          "fewerDefects": "menos defectos en producción",
-          "lowerMttr": "menor MTTR"
-        },
-        "items": {
-          "technicalLeadership": {
-            "title": "Liderazgo técnico",
-            "description": "Lideré equipos de hasta 6 ingenieros, estableciendo hojas de ruta técnicas, estándares arquitectónicos y entregando soluciones empresariales."
-          },
-          "mentorship": {
-            "title": "Mentoría y calidad de ingeniería",
-            "description": "Mentoricé a 4 ingenieros mediante revisiones rigurosas de código, pair programming y planes de crecimiento personalizados que redujeron defectos en producción en un 40%."
-          },
-          "systemDesign": {
-            "title": "Diseño de sistemas",
-            "description": "Colaboré directamente con Product Managers, QA, UX y directivos para traducir demandas complejas del negocio en arquitecturas escalables."
-          },
-          "incidentReliability": {
-            "title": "Liderazgo en incidentes y confiabilidad",
-            "description": "Gestioné caídas críticas de producción de inicio a fin, realicé análisis post-mortem de causa raíz e implementé mejoras arquitectónicas que redujeron el MTTR un 40%."
-          },
-          "engineeringExcellence": {
-            "title": "Excelencia en ingeniería",
-            "description": "Establecí estándares de código, Architecture Decision Records (ADRs), prácticas de testing y mejoras de CI/CD para asegurar ROI y mantenibilidad a largo plazo."
-          }
-        }
-      }
+      "description": "Puestos, responsabilidades y habilidades de la trayectoria profesional.",
+      "chart": {
+        "eyebrow": "El camino recorrido",
+        "monthsShown": "meses en los puestos mostrados",
+        "ariaLabel": "Hitos profesionales ordenados por fecha de inicio",
+        "caption": "Cada paso representa un puesto registrado, ordenado por su fecha de inicio.",
+        "selectRole": "Explorar experiencia",
+        "title": "Una trayectoria en movimiento",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "monthsExplanation": "Meses completos calculados con las fechas de los puestos mostrados. Los empleos simultáneos cuentan una sola vez; se excluyen los periodos sin empleo y las fechas desconocidas.",
+        "nextStage": "Próxima etapa",
+        "letsTalk": "Hablemos"
+      },
+      "titleLead": "Experiencia",
+      "titleGradient": "profesional."
     },
     "impactStats": {
       "teamSize": {
@@ -1380,46 +1361,17 @@
     },
     "socialProof": {
       "eyebrow": "Respaldado por desarrolladores",
-      "title": "{count, plural, =0 {Lo que dicen los seniors sobre mí} =1 {Lo que dice un senior sobre mí} other {Lo que dicen los seniors sobre mí}}",
+      "title": "Lo que dicen mis colegas",
       "subtitle": "Colegas que han visto mi trabajo de cerca.",
-      "cta": "Contrátame",
-      "readMore": "Ver más",
-      "readLess": "Ver menos",
-      "statsLabel": "En números",
-      "statsNote": "Números acumulados en compromisos profesionales.",
-      "stats": {
-        "projects": {
-          "label": "Proyectos"
-        },
-        "experience": {
-          "label": "Años de Experiencia"
-        },
-        "engineersMentored": {
-          "label": "Ingenieros liderados"
-        }
-      }
+      "titleLead": "Voces de",
+      "titleGradient": "mis colegas.",
+      "previous": "Recomendación anterior",
+      "next": "Siguiente recomendación",
+      "navigation": "Explorar recomendaciones"
     },
     "faq": {
       "title": "¿Preguntas?",
-      "titleGradient": "Respuestas.",
-      "items": {
-        "0": {
-          "question": "¿Estás disponible para nuevos roles?",
-          "answer": "Sí. Estoy disponible de inmediato, y la mayor parte de mi trabajo reciente ha sido remoto."
-        },
-        "1": {
-          "question": "¿En qué zona horaria trabajas?",
-          "answer": "Estoy radicado en Managua, Nicaragua (UTC−6) y he trabajado con equipos en Estados Unidos y Costa Rica."
-        },
-        "2": {
-          "question": "¿Con qué tecnologías trabajas en el día a día?",
-          "answer": "React, Next.js y TypeScript en el frontend; Node.js, Nest.js y C#/.NET en el backend; bases de datos SQL y NoSQL; CI/CD y pruebas con Docker, Playwright y Jest."
-        },
-        "3": {
-          "question": "¿Puedo obtener tu CV?",
-          "answer": "Por supuesto. Puedes leerlo en línea o solicitar un PDF por correo en la página del CV."
-        }
-      }
+      "titleGradient": "Respuestas."
     },
     "qaCollaboration": {
       "metaTitle": "Colaboración con QA",
@@ -2035,6 +1987,19 @@
     }
   },
   "admin": {
+    "careerAvailability": {
+      "title": "Disponibilidad profesional",
+      "description": "Muestra una invitación a la próxima etapa en el gráfico solo cuando estés aceptando nuevos puestos. Añade un título y una descripción para cada idioma público.",
+      "available": "Disponible para nuevos puestos",
+      "language": "Idioma",
+      "nextTitle": "Título de la próxima etapa",
+      "nextDescription": "Descripción de la próxima etapa",
+      "save": "Guardar disponibilidad",
+      "saving": "Guardando…",
+      "saved": "Disponibilidad guardada.",
+      "error": "No se pudo cargar o guardar la disponibilidad.",
+      "loading": "Cargando disponibilidad…"
+    },
     "shell": {
       "title": "Panel Admin",
       "signedInAs": "Sesión iniciada como",
@@ -2848,6 +2813,19 @@
         "atLeastOneLanguage": "Se requiere al menos un idioma"
       },
       "service": {
+        "visualType": "Ilustración",
+        "visualTypeHint": "Elige un diagrama para este servicio. Una imagen personalizada tiene prioridad.",
+        "visualNodes": "Etiquetas del diagrama",
+        "visualNodesHint": "Una etiqueta por línea, hasta 16 de 48 caracteres, en el orden del diagrama seleccionado.",
+        "visualTypes": {
+          "network": "Topología de APIs y servicios",
+          "architecture": "Capas de arquitectura",
+          "frontend": "Interfaz y componentes",
+          "pipeline": "Entrega y confiabilidad",
+          "security": "Controles de seguridad",
+          "mobile": "Aplicación móvil",
+          "ai": "IA y revisión de calidad"
+        },
         "generalSection": "Información general",
         "skillsSection": "Habilidades",
         "titleWithLanguage": "Título ({language})",
@@ -2878,6 +2856,8 @@
         "createFailed": "No se pudo crear el servicio",
         "imageRequired": "La imagen es obligatoria",
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
+        "practicePoints": "En la práctica",
+        "practicePointsHint": "Un ejemplo por línea. Incluye solo afirmaciones que puedas respaldar.",
         "atLeastOneLanguage": "Se requiere al menos un idioma",
         "isActive": "Activo en el sitio público",
         "isActiveHint": "Los servicios inactivos siguen en el admin pero se ocultan en la home y en las stats públicas.",
@@ -4949,6 +4929,33 @@
         "widgets": "Widgets",
         "languages": "Idiomas"
       }
+    },
+    "contactPreferences": {
+      "title": "Preferencias de contacto",
+      "description": "Define tu tiempo de respuesta por idioma. Déjalo vacío para ocultarlo. El reloj local usa la zona horaria configurada en Ahora.",
+      "responseTime": "Nota sobre tiempo de respuesta",
+      "save": "Guardar preferencias de contacto",
+      "saving": "Guardando…",
+      "saved": "Preferencias de contacto guardadas.",
+      "error": "No se pudieron guardar las preferencias.",
+      "loading": "Cargando preferencias de contacto…"
+    },
+    "homeFaq": {
+      "title": "Preguntas frecuentes del inicio",
+      "description": "Gestiona las preguntas de este portafolio en cada idioma. Guarda estos cambios por separado. Los idiomas vacíos no muestran la sección pública.",
+      "question": "Pregunta",
+      "answer": "Respuesta",
+      "add": "Añadir pregunta",
+      "remove": "Eliminar pregunta",
+      "moveUp": "Subir",
+      "moveDown": "Bajar",
+      "save": "Guardar preguntas",
+      "saving": "Guardando…",
+      "saved": "Preguntas guardadas.",
+      "error": "No se pudieron cargar o guardar las preguntas. Inténtalo de nuevo.",
+      "invalid": "Completa cada pregunta y respuesta antes de guardar.",
+      "loading": "Cargando preguntas…",
+      "empty": "No hay preguntas en este idioma. La sección permanecerá oculta hasta que añadas contenido."
     }
   },
   "auth": {

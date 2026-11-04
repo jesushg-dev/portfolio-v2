@@ -858,7 +858,17 @@
           "subtitle": "Have a project in mind?",
           "cta": "Contact Me"
         }
-      }
+      },
+      "carouselInstructions": "Service cards. Use the arrow keys to move.",
+      "viewDetails": "View details for {title}",
+      "previousCard": "Previous card",
+      "nextCard": "Next card",
+      "close": "Close",
+      "technologies": "Technologies",
+      "pauseMotion": "Pause diagrams",
+      "resumeMotion": "Resume diagrams",
+      "titleLead": "Engineering",
+      "titleGradient": "expertise."
     },
     "timeline": {
       "title": "My Journey",
@@ -894,22 +904,13 @@
         "title": "Terminal not configured",
         "description": "Add an animated terminal sequence from the admin profile console tab."
       },
-      "timeline": {
-        "title": "My timeline",
-        "subtitle": "Continuous learning...",
-        "viewAll": "View full timeline",
-        "empty": "No timeline entries yet.",
-        "categories": {
-          "WORK": "Work",
-          "STUDY": "Study",
-          "COURSE": "Course"
-        }
-      }
+      "titleLead": "How I",
+      "titleGradient": "engineer."
     },
     "skills": {
       "title": "Technical Stack",
       "subtitle": "Skills",
-      "description": "Technologies I've shipped in production across corporate-scale systems, financial platforms, and high-compliance environments.",
+      "description": "Technologies and tools in this portfolio.",
       "aux": "Every technology listed here has been used in real-world projects, not just tutorials. Most at scale, in production, under pressure.",
       "page": {
         "breadcrumbHome": "Home",
@@ -974,14 +975,14 @@
         "eyebrow": "// skills",
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Search technologies",
+        "categoryLabel": "Explore by specialty",
         "noResults": "No match in the current stack.",
         "noMatch": "grep: no match for \"{query}\"",
         "featured": "Featured",
         "coreLegend": "brighter = featured stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
         "searchFor": " for \"{query}\"",
-        "trend": "Trend",
-        "updatedTechPill": "Updated technologies 2024-2026"
+        "trend": "Trend"
       },
       "tabs": {
         "ai": {
@@ -1008,13 +1009,17 @@
           "title": "Quality & Delivery",
           "description": "CI/CD pipelines, Docker containerization, automated testing, and security scanning for reliable delivery."
         }
-      }
+      },
+      "titleLead": "Technical",
+      "titleGradient": "stack."
     },
     "soft-skills": {
       "subtitle": "Leadership",
       "title": "Leadership & Impact",
       "description": "Technical skills matter. So does how you lead, collaborate, and make things happen with real teams on real projects.",
-      "aux": "These aren't adjectives claimed on a resume: they represent how I operate across every role."
+      "aux": "These aren't adjectives claimed on a resume: they represent how I operate across every role.",
+      "titleLead": "Leadership &",
+      "titleGradient": "impact."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -1201,14 +1206,15 @@
         "impact": "IMPACT",
         "privateRepo": "Private repository",
         "readCaseStudy": "Read case study"
-      }
+      },
+      "titleLead": "Selected engineering",
+      "titleGradient": "work."
     },
     "contact": {
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
       "subtitle": "Use the form or the channels below.",
-      "responseTime": "Reply within 24h",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
       "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
@@ -1231,7 +1237,6 @@
       },
       "form": {
         "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",
-        "alternativeContact": "Prefer a meeting? Schedule a <schedule>video call</schedule> or reach out on <linkedin>LinkedIn</linkedin>.",
         "name": {
           "label": "Name",
           "placeholder": "John Doe",
@@ -1290,54 +1295,30 @@
         "website": "Visit website",
         "location": "View location on map",
         "calendly": "Schedule on Calendly"
-      }
+      },
+      "titleLead": "Let’s",
+      "titleGradient": "talk."
     },
     "experience": {
       "title": "Professional Experience",
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
-      "showingRecent": "Showing most recent roles.",
-      "promotion": "Promotion",
-      "previousRole": "Previous position",
-      "rolesCount": "{count} roles",
-      "description": "From frontend developer to senior engineer and team lead, 7+ years and counting.",
-      "previousPosition": "Previous position",
-      "nextStageTitle": "Next stage: your team",
-      "nextStageSubtitle": "Senior full-stack or tech-lead roles, remote or from Managua. I can start right away.",
-      "letsTalk": "Let’s talk",
-      "leadership": {
-        "eyebrow": "Leadership",
-        "title": "Leadership & impact.",
-        "description": "Technical skills matter. So does how you lead, collaborate, and make things happen with real teams on real products.",
-        "stats": {
-          "engineersLed": "engineers led",
-          "engineersMentored": "engineers mentored",
-          "fewerDefects": "fewer production defects",
-          "lowerMttr": "lower MTTR"
-        },
-        "items": {
-          "technicalLeadership": {
-            "title": "Technical leadership",
-            "description": "Led teams of up to 6 engineers, establishing technical roadmaps, architectural standards, and delivering enterprise solutions."
-          },
-          "mentorship": {
-            "title": "Mentorship & engineering quality",
-            "description": "Mentored 4 engineers through rigorous code reviews, pair programming, and tailored technical growth plans that cut production defects by 40%."
-          },
-          "systemDesign": {
-            "title": "System design",
-            "description": "Partnered directly with Product Managers, QA, UX, and executive stakeholders to translate complex business demands into scalable architecture specs."
-          },
-          "incidentReliability": {
-            "title": "Incident & reliability leadership",
-            "description": "Owned critical production outages end-to-end, conducted post-mortem root-cause analyses, and introduced permanent architectural fixes that lowered MTTR by 40%."
-          },
-          "engineeringExcellence": {
-            "title": "Engineering excellence",
-            "description": "Established coding standards, Architecture Decision Records (ADRs), testing practices, and CI/CD improvements to ensure long-term ROI and maintainability."
-          }
-        }
-      }
+      "description": "Roles, responsibilities, and skills from professional experience.",
+      "chart": {
+        "eyebrow": "The journey so far",
+        "monthsShown": "months across the roles shown",
+        "ariaLabel": "Career milestones ordered by start date",
+        "caption": "Each step marks a recorded role, ordered by its start date.",
+        "selectRole": "Explore experience",
+        "title": "A career in motion",
+        "previous": "Previous",
+        "next": "Next",
+        "monthsExplanation": "Complete months from the dates of the roles shown. Overlapping jobs count once; gaps and unknown dates are excluded.",
+        "nextStage": "Next stage",
+        "letsTalk": "Let’s talk"
+      },
+      "titleLead": "Professional",
+      "titleGradient": "experience."
     },
     "impactStats": {
       "teamSize": {
@@ -1359,46 +1340,17 @@
     },
     "socialProof": {
       "eyebrow": "Trusted by developers",
-      "title": "{count, plural, =0 {What senior developers say about me} =1 {What a senior developer says about me} other {What senior developers say about me}}",
+      "title": "People I’ve worked with",
       "subtitle": "Colleagues who have seen my work up close.",
-      "cta": "Hire me",
-      "readMore": "Read more",
-      "readLess": "Read less",
-      "statsLabel": "By the numbers",
-      "statsNote": "Numbers accumulated across professional engagements.",
-      "stats": {
-        "projects": {
-          "label": "Projects"
-        },
-        "experience": {
-          "label": "Years of experience"
-        },
-        "engineersMentored": {
-          "label": "Engineers led"
-        }
-      }
+      "titleLead": "People I’ve",
+      "titleGradient": "worked with.",
+      "previous": "Previous recommendation",
+      "next": "Next recommendation",
+      "navigation": "Explore recommendations"
     },
     "faq": {
       "title": "Questions?",
-      "titleGradient": "Answers.",
-      "items": {
-        "0": {
-          "question": "Are you available for new roles?",
-          "answer": "Yes. I’m available immediately, and most of my recent work has been remote."
-        },
-        "1": {
-          "question": "Which time zone do you work in?",
-          "answer": "I’m based in Managua, Nicaragua (UTC−6) and have worked with teams in the United States and Costa Rica."
-        },
-        "2": {
-          "question": "What do you work with day to day?",
-          "answer": "React, Next.js and TypeScript on the front end; Node.js, Nest.js and C#/.NET on the back end; SQL and NoSQL databases; CI/CD and testing with Docker, Playwright and Jest."
-        },
-        "3": {
-          "question": "Can I get your CV?",
-          "answer": "Of course. You can read it online or request a PDF by email on the CV page."
-        }
-      }
+      "titleGradient": "Answers."
     },
     "qaCollaboration": {
       "metaTitle": "QA Collaboration",
@@ -2014,6 +1966,19 @@
     }
   },
   "admin": {
+    "careerAvailability": {
+      "title": "Career availability",
+      "description": "Show a next-stage invitation in the career chart only when you are accepting new roles. Add a title and description for each public language.",
+      "available": "Open to new roles",
+      "language": "Language",
+      "nextTitle": "Next-stage title",
+      "nextDescription": "Next-stage description",
+      "save": "Save availability",
+      "saving": "Saving…",
+      "saved": "Availability saved.",
+      "error": "Could not load or save availability.",
+      "loading": "Loading availability…"
+    },
     "shell": {
       "title": "Admin Panel",
       "signedInAs": "Signed in as",
@@ -2827,6 +2792,19 @@
         "atLeastOneLanguage": "At least one language is required"
       },
       "service": {
+        "visualType": "Illustration",
+        "visualTypeHint": "Choose a diagram for this service. A custom image takes precedence.",
+        "visualNodes": "Diagram labels",
+        "visualNodesHint": "One label per line, up to 16 labels of 48 characters, in the order used by the selected diagram.",
+        "visualTypes": {
+          "network": "API and service topology",
+          "architecture": "Architecture layers",
+          "frontend": "Interface and components",
+          "pipeline": "Delivery and reliability",
+          "security": "Security controls",
+          "mobile": "Mobile application",
+          "ai": "AI and quality review"
+        },
         "generalSection": "General Information",
         "skillsSection": "Skills",
         "titleWithLanguage": "Title ({language})",
@@ -2857,6 +2835,8 @@
         "createFailed": "Failed to create service",
         "imageRequired": "Image is required",
         "titleRequiredPrimary": "Title is required for the primary language",
+        "practicePoints": "In practice",
+        "practicePointsHint": "One example per line. Only include claims you can substantiate.",
         "atLeastOneLanguage": "At least one language is required",
         "isActive": "Active on the public site",
         "isActiveHint": "Inactive services stay in admin but are hidden from the homepage and public stats.",
@@ -4928,6 +4908,33 @@
       "tailorOutputLanguage": "Output language",
       "tailorOutputLanguageAuto": "Automatic (job description)",
       "tailorTemplatePages": "{count, plural, one {# page} other {# pages}}"
+    },
+    "contactPreferences": {
+      "title": "Contact preferences",
+      "description": "Set your own response-time note for each language. Leave it empty to hide it. Your local clock uses the timezone configured in Now.",
+      "responseTime": "Response-time note",
+      "save": "Save contact preferences",
+      "saving": "Saving…",
+      "saved": "Contact preferences saved.",
+      "error": "Could not save contact preferences.",
+      "loading": "Loading contact preferences…"
+    },
+    "homeFaq": {
+      "title": "Home FAQ",
+      "description": "Manage questions for this portfolio in each language. Save FAQ changes separately. Empty languages stay hidden on the public site.",
+      "question": "Question",
+      "answer": "Answer",
+      "add": "Add question",
+      "remove": "Remove question",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "save": "Save FAQ",
+      "saving": "Saving…",
+      "saved": "FAQ saved.",
+      "error": "Could not load or save the FAQ. Try again.",
+      "invalid": "Complete every question and answer before saving.",
+      "loading": "Loading FAQ…",
+      "empty": "No questions in this language. The section is hidden until you add content."
     }
   },
   "auth": {
