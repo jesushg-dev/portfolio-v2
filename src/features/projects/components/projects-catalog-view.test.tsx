@@ -150,4 +150,24 @@ describe("ProjectsCatalogView", () => {
     expect(screen.getByText("Musa Ecommerce")).toBeInTheDocument();
     expect(screen.getByText("Tienda API")).toBeInTheDocument();
   });
+
+  it("opens modal dialog on project click and supports navigation and closing", () => {
+    renderWithIntl(<ProjectsCatalogView initialProjects={mockProjects} />);
+
+    // Click on Musa Ecommerce
+    const projectCard = screen.getByRole("button", { name: /musa ecommerce/i });
+    fireEvent.click(projectCard);
+
+    // Dialog should now be visible with project details
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveAttribute("aria-label", "Musa Ecommerce");
+
+    // Close button
+    const closeBtn = screen.getByRole("button", {
+      name: /close|sluiten|cerrar/i,
+    });
+    fireEvent.click(closeBtn);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
 });
