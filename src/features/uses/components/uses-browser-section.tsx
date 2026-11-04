@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Globe } from "lucide-react";
 
 import { processSectionHeadingId } from "@/features/process-pages/components/process-page-styles";
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
@@ -27,11 +26,8 @@ export function UsesBrowserSection({
         <ProcessReveal>
           <h2
             id={processSectionHeadingId("browser")}
-            className="text-foreground mb-8 flex items-center gap-3.5 text-2xl font-extrabold tracking-tight sm:text-[27px]"
+            className="text-foreground mb-8 text-2xl font-bold tracking-tight sm:text-3xl"
           >
-            <span className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-xl text-base">
-              <Globe aria-hidden className="size-4" />
-            </span>
             {title}
           </h2>
         </ProcessReveal>

@@ -1,6 +1,14 @@
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ExternalLink,
+  Loader2,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { AppLanguage, UsesItemType } from "@prisma/client";
@@ -89,6 +97,21 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
 
   const deleteItem = api.usesAdmin.deleteItem.useMutation();
   const deleteMany = api.usesAdmin.deleteMany.useMutation();
+  const reorderItem = api.usesAdmin.reorderItem.useMutation();
+
+  const handleReorder = useCallback(
+    (id: string, direction: "up" | "down") => {
+      startTransition(async () => {
+        try {
+          await reorderItem.mutateAsync({ id, direction });
+          await utils.usesAdmin.getMine.invalidate();
+        } catch {
+          toast.error("Failed to reorder");
+        }
+      });
+    },
+    [reorderItem, utils],
+  );
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -158,7 +181,36 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columns.order")} />
         ),
-        cell: ({ row }) => row.original.order,
+        cell: ({ row }) => {
+          const item = row.original;
+          return (
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground w-4 text-center font-mono text-xs tabular-nums">
+                {item.order}
+              </span>
+              <div className="flex flex-col">
+                <button
+                  type="button"
+                  aria-label="Move up"
+                  disabled={isPending}
+                  onClick={() => handleReorder(item.id, "up")}
+                  className="text-muted-foreground hover:text-foreground hover:bg-muted rounded p-0.5 disabled:opacity-30"
+                >
+                  <ArrowUp className="size-3" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Move down"
+                  disabled={isPending}
+                  onClick={() => handleReorder(item.id, "down")}
+                  className="text-muted-foreground hover:text-foreground hover:bg-muted rounded p-0.5 disabled:opacity-30"
+                >
+                  <ArrowDown className="size-3" />
+                </button>
+              </div>
+            </div>
+          );
+        },
       },
       {
         id: "title",
@@ -166,6 +218,21 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columns.title")} />
         ),
+        cell: ({ row }) => {
+          const trans = Object.values(row.original.translations)[0];
+          return (
+            <div className="flex flex-col py-0.5">
+              <span className="text-foreground text-sm font-semibold">
+                {trans?.title || "—"}
+              </span>
+              {trans?.description ? (
+                <span className="text-muted-foreground line-clamp-1 text-xs">
+                  {trans.description}
+                </span>
+              ) : null}
+            </div>
+          );
+        },
         meta: {
           label: t("columns.title"),
           placeholder: t("searchTitle"),
@@ -178,11 +245,28 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columns.href")} />
         ),
-        cell: ({ row }) => (
-          <span className="text-muted-foreground max-w-55 truncate text-xs">
-            {row.original.href}
-          </span>
-        ),
+        cell: ({ row }) => {
+          const href = row.original.href;
+          if (!href) return null;
+          let hostname = href;
+          try {
+            hostname = new URL(href).hostname.replace(/^www\./, "");
+          } catch {
+            // retain raw href if unparseable
+          }
+          return (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary group inline-flex max-w-55 items-center gap-1.5 text-xs transition-colors"
+              title={href}
+            >
+              <span className="truncate font-medium">{hostname}</span>
+              <ExternalLink className="size-3 shrink-0 opacity-60 group-hover:opacity-100" />
+            </a>
+          );
+        },
       },
       ...(languages && languages.length > 0
         ? [
@@ -238,7 +322,7 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
         },
       },
     ],
-    [t, deletingId, isPending, handleDelete, languages, type],
+    [t, deletingId, isPending, handleDelete, handleReorder, languages, type],
   );
 
   const { table } = useDataTable({
