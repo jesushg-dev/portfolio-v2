@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { nowSettingsEditorInclude } from "@/features/now/lib/now-editor-dto";
+import { serializeFaq } from "./faq-serialize";
 
 import {
   SEED_EXPORT_FILENAMES,
@@ -28,6 +29,17 @@ function payload(fileName: string, data: unknown) {
 }
 
 export const seedExportRouter = createTRPCRouter({
+  faq: protectedProcedure.query(async ({ ctx }) => {
+    const [header, languages] = await Promise.all([
+      ctx.db.portfolioHeader.findUnique({
+        where: { userId: ctx.user.id },
+        include: { translations: true },
+      }),
+      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+    ]);
+    return payload(SEED_EXPORT_FILENAMES.faq, serializeFaq(header, languages));
+  }),
+
   skills: protectedProcedure.query(async ({ ctx }) => {
     const [skills, languages] = await Promise.all([
       ctx.db.skill.findMany({
@@ -68,7 +80,10 @@ export const seedExportRouter = createTRPCRouter({
     const [services, languages] = await Promise.all([
       ctx.db.service.findMany({
         where: { userId: ctx.user.id },
-        include: { ServiceTranslation: true },
+        include: {
+          ServiceTranslation: true,
+          ServiceSkill: { include: { Skill: { select: { title: true } } } },
+        },
       }),
       ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     ]);
@@ -219,6 +234,7 @@ export const seedExportRouter = createTRPCRouter({
       nowSettings,
       nowFocuses,
       processPages,
+      portfolioHeader,
     ] = await Promise.all([
       ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
       ctx.db.skill.findMany({
@@ -234,7 +250,10 @@ export const seedExportRouter = createTRPCRouter({
       }),
       ctx.db.service.findMany({
         where: { userId },
-        include: { ServiceTranslation: true },
+        include: {
+          ServiceTranslation: true,
+          ServiceSkill: { include: { Skill: { select: { title: true } } } },
+        },
       }),
       ctx.db.certification.findMany({
         where: { userId },
@@ -295,6 +314,10 @@ export const seedExportRouter = createTRPCRouter({
         include: { ProcessPageTranslation: true },
         orderBy: { order: "asc" },
       }),
+      ctx.db.portfolioHeader.findUnique({
+        where: { userId },
+        include: { translations: true },
+      }),
     ]);
 
     const skillKeyByTitle = buildSkillKeyByTitle(skills);
@@ -317,6 +340,7 @@ export const seedExportRouter = createTRPCRouter({
       uses: serializeUses(usesSettings, usesItems, languages),
       now: serializeNow(nowSettings, nowFocuses, languages),
       processPages: serializeProcessPages(processPages, languages),
+      faq: serializeFaq(portfolioHeader, languages),
     });
 
     return {

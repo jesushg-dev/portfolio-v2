@@ -1,4 +1,20 @@
 {
+  "availableForWork": true,
+  "careerNextTitle": {
+    "en": "Your team",
+    "es": "Tu equipo",
+    "nl": "Jouw team"
+  },
+  "careerNextDescription": {
+    "en": "Looking for a senior software engineer who can own complex systems, guide technical decisions, and help your team deliver? Let’s talk about what we can build together.",
+    "es": "¿Buscas un ingeniero de software senior que se responsabilice de sistemas complejos, guíe decisiones técnicas y ayude a tu equipo a entregar resultados? Hablemos de lo que podemos construir juntos.",
+    "nl": "Zoek je een senior software engineer die verantwoordelijkheid neemt voor complexe systemen, technische beslissingen begeleidt en je team helpt resultaten te leveren? Laten we bespreken wat we samen kunnen bouwen."
+  },
+  "contactResponseTime": {
+    "en": "Reply within 24h",
+    "es": "Respuesta en menos de 24 h",
+    "nl": "Antwoord binnen 24u"
+  },
   "backgroundImageUrl": "https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp",
   "heroSubtitle": {
     "es": "Senior Software Engineer",
@@ -39,9 +55,9 @@
           "nl": "cat ~/profile.json"
         },
         "output": {
-          "es": "{\n  \"nombre\": \"Jesús Hernández\",\n  \"enfoque\": \"Sistemas Distribuidos y Escalabilidad\",\n  \"logros_clave\": [\n    \"Reducción del MTTR crítico en 40% mediante análisis de causa raíz y prevención de recurrencias.\",\n    \"Reducción de retrabajo en 25% estableciendo gobernanza técnica.\",\n    \"Liderazgo de equipos de hasta 6 ingenieros en todo el SDLC.\"\n  ],\n  \"idiomas\": {\n    \"español\": \"Nativo\",\n    \"inglés\": \"B2+\"\n  }\n}",
-          "en": "{\n  \"name\": \"Jesús Hernández\",\n  \"focus\": \"Distributed Systems & Scalability\",\n  \"key_achievements\": [\n    \"Reduced critical incident MTTR by 40% through root-cause analysis and recurrence prevention.\",\n    \"Cut rework by 25% by establishing technical governance.\",\n    \"Led teams of up to 6 engineers across end-to-end SDLC.\"\n  ],\n  \"languages\": {\n    \"spanish\": \"Native\",\n    \"english\": \"B2+\"\n  }\n}",
-          "nl": "{\n  \"naam\": \"Jesús Hernández\",\n  \"focus\": \"Gedistribueerde Systemen & Schaalbaarheid\",\n  \"belangrijkste_prestaties\": [\n    \"MTTR van kritieke incidenten met 40% verminderd door root-cause analyse en preventie.\",\n    \"25% minder herbewerking door technische governance.\",\n    \"Leiden van teams tot 6 engineers over de volledige SDLC.\"\n  ],\n  \"talen\": {\n    \"spaans\": \"Moedertaal\",\n    \"engels\": \"B2+\"\n  }\n}"
+          "es": "{\n  \"enfoque\": \"Sistemas distribuidos\",\n  \"impacto\": [\n    \"40% menos MTTR en incidentes\",\n    \"25% menos retrabajo\",\n    \"Equipos de hasta 6 ingenieros\"\n  ]\n}",
+          "en": "{\n  \"focus\": \"Distributed systems\",\n  \"impact\": [\n    \"40% lower incident MTTR\",\n    \"25% less rework\",\n    \"Teams of up to 6 engineers\"\n  ]\n}",
+          "nl": "{\n  \"focus\": \"Gedistribueerde systemen\",\n  \"impact\": [\n    \"40% kortere incident-MTTR\",\n    \"25% minder herbewerking\",\n    \"Teams van maximaal 6 engineers\"\n  ]\n}"
         }
       }
     ]

@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { seedPortfolioCv } from "./seed-portfolio-cv";
 import { seedPortfolioHome } from "./seed-portfolio-home";
+import { seedPortfolioFaq } from "./seed-portfolio-faq";
 import { seedPortfolioTimeline } from "./seed-portfolio-timeline";
 import { seedPortfolioSoftSkills } from "./seed-portfolio-soft-skills";
 import { seedPortfolioUser } from "./seed-portfolio-user";
@@ -54,9 +55,6 @@ async function main() {
 
   const skillsByKey = await seedPortfolioSkills(prisma, langIds, userId);
 
-  // services
-  await prisma.service.deleteMany({ where: { userId } });
-
   console.log("Seeding services...");
   await seedPortfolioServices(
     prisma,
@@ -71,6 +69,7 @@ async function main() {
   await seedPortfolioCv(prisma, userId, skillsByKey);
 
   await seedPortfolioHome(prisma, userId, langIds);
+  await seedPortfolioFaq(prisma, userId, langIds);
 
   await seedPortfolioTimeline(prisma, userId);
 

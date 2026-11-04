@@ -149,6 +149,7 @@ model Service {
   type               StackType
   icon               String?              @default("code")
   statsValue         String?              @default("")
+  visualType         String               @default("network")
   featured           Boolean              @default(false)
   isActive           Boolean              @default(true)
   order              Int                  @default(0)
@@ -164,6 +165,8 @@ model ServiceTranslation {
   description   String
   badge         String?     @default("")
   statsLabel    String?     @default("")
+  practicePoints String?    @default("")
+  visualNodes   Json?
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
   Service       Service?    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId     String?     @db.ObjectId

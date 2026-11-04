@@ -8,6 +8,7 @@ export const SEED_EXPORT_ENTITIES = [
   "uses",
   "now",
   "processPages",
+  "faq",
 ] as const;
 
 export type SeedExportEntity = (typeof SEED_EXPORT_ENTITIES)[number];
@@ -22,6 +23,7 @@ export const SEED_EXPORT_FILENAMES: Record<SeedExportEntity, string> = {
   uses: "portfolio-uses.json",
   now: "portfolio-now.json",
   processPages: "portfolio-process-pages.json",
+  faq: "portfolio-faq.json",
 };
 
 export const SEED_EXPORT_ZIP_FILENAME = "portfolio-seed.json.zip";

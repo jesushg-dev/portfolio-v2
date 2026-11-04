@@ -11,11 +11,15 @@ interface TerminalStepSeed {
 }
 
 interface PortfolioHomeSeed {
+  availableForWork: boolean;
+  careerNextTitle: LocaleMap;
+  careerNextDescription: LocaleMap;
   backgroundImageUrl: string;
   heroSubtitle: LocaleMap;
   heroTagline: LocaleMap;
   about: LocaleMap;
   availabilityBadge?: LocaleMap;
+  contactResponseTime?: LocaleMap;
   terminal: {
     username: string;
     typingSpeed: number;
@@ -45,8 +49,12 @@ export async function seedPortfolioHome(
       fullName: portfolioProfile.name,
       photoUrl: portfolioProfile.photoUrl,
       backgroundImageUrl: data.backgroundImageUrl,
+      availableForWork: data.availableForWork,
     },
-    update: { backgroundImageUrl: data.backgroundImageUrl },
+    update: {
+      backgroundImageUrl: data.backgroundImageUrl,
+      availableForWork: data.availableForWork,
+    },
   });
 
   const header = await prisma.portfolioHeader.findUnique({ where: { userId } });
@@ -69,6 +77,9 @@ export async function seedPortfolioHome(
               data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
             heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
             heroSummary: null,
+            careerNextTitle: data.careerNextTitle[code] ?? null,
+            careerNextDescription: data.careerNextDescription[code] ?? null,
+            contactResponseTime: data.contactResponseTime?.[code] ?? null,
             portfolioAbout: data.about[code] ?? "",
             availabilityBadge:
               data.availabilityBadge?.[code] ??
@@ -80,6 +91,9 @@ export async function seedPortfolioHome(
               data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
             heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
             heroSummary: null,
+            careerNextTitle: data.careerNextTitle[code] ?? null,
+            careerNextDescription: data.careerNextDescription[code] ?? null,
+            contactResponseTime: data.contactResponseTime?.[code] ?? null,
             portfolioAbout: data.about[code] ?? "",
             availabilityBadge:
               data.availabilityBadge?.[code] ??

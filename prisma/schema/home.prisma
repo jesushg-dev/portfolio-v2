@@ -10,6 +10,7 @@ model PortfolioHeader {
   fullName           String
   photoUrl           String?
   backgroundImageUrl String?
+  availableForWork   Boolean @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   translations       PortfolioHeaderTranslation[]
@@ -25,7 +26,11 @@ model PortfolioHeaderTranslation {
   heroTagline       String?
   heroSummary       String?
   portfolioAbout    String?
+  faqItems          Json?
+  contactResponseTime String?
   availabilityBadge String?
+  careerNextTitle   String?
+  careerNextDescription String?
   clientImageAlt    String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

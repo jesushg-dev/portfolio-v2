@@ -116,6 +116,15 @@ export interface ServiceSeedRecord {
   key: string;
   type: StackType;
   icon?: string;
+  visualType?:
+    | "network"
+    | "architecture"
+    | "frontend"
+    | "pipeline"
+    | "security"
+    | "mobile"
+    | "ai";
+  skillTitles?: string[];
   statsValue?: string;
   featured?: boolean;
   isActive?: boolean;
@@ -127,6 +136,8 @@ export interface ServiceSeedRecord {
     description: string;
     badge?: string;
     statsLabel?: string;
+    practicePoints?: string;
+    visualNodes?: { label: string }[];
   }[];
 }
 
