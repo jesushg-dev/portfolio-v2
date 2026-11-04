@@ -34,6 +34,7 @@ export default async function NowPage({ params }: NowRouteProps) {
         title={t("hero.title")}
         titleHighlight={t("hero.titleHighlight")}
         description={t("hero.description")}
+        snapshotLabel={t("hero.snapshot")}
       >
         <NowRoutine
           schedule={data.statusSchedule}

@@ -7,8 +7,8 @@ import Tab from "@/components/custom-ui/custom-tab";
 import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 import type { GitHubContributions } from "../lib/github-contributions";
 
-const NowContribBlocks = dynamic(() => import("./now-contrib-blocks"));
 const NowContribCalendar = dynamic(() => import("./now-contrib-calendar"));
+const NowContribBlocks = dynamic(() => import("./now-contrib-blocks"));
 const NowContribBreakout = dynamic(() => import("./now-contrib-breakout"));
 const NowContribStats = dynamic(() => import("./now-contrib-stats"));
 function ContributionLoading() {
@@ -32,6 +32,7 @@ export function NowContribGraph({
   const [view, setView] = useState(0);
   const id = useId();
   const panelId = id + "-panel";
+
   if (calendar.status !== "ready")
     return (
       <div className="text-muted-foreground text-sm">
@@ -72,13 +73,16 @@ export function NowContribGraph({
     <div className="w-full min-w-0">
       <dl className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
         {metrics.map((metric) => (
-          <div key={metric.label} className="flex min-w-0 flex-col">
+          <div
+            key={metric.label}
+            className="border-border/80 flex min-w-0 flex-col border-t pt-6"
+          >
+            <dd className="text-foreground order-first font-mono text-[clamp(2rem,5vw,3.5rem)] leading-none font-semibold tracking-tighter">
+              {metric.value.toLocaleString(locale)}
+            </dd>
             <dt className="text-muted-foreground mt-2 text-sm">
               {metric.label}
             </dt>
-            <dd className="text-foreground order-first font-mono text-[clamp(2.5rem,6vw,4.5rem)] leading-none font-semibold tracking-tighter">
-              {metric.value.toLocaleString(locale)}
-            </dd>
           </div>
         ))}
       </dl>
@@ -91,12 +95,12 @@ export function NowContribGraph({
             ariaLabel={t("contributionViews")}
             className="max-w-full"
           >
-            <TabItem icon={Blocks} title={t("blocks")} panelId={panelId} />
             <TabItem
               icon={CalendarDays}
               title={t("calendar")}
               panelId={panelId}
             />
+            <TabItem icon={Blocks} title={t("blocks")} panelId={panelId} />
             <TabItem icon={Gamepad2} title={t("breakout")} panelId={panelId} />
           </Tab>
         </div>
@@ -113,8 +117,8 @@ export function NowContribGraph({
           className="focus-visible:ring-ring min-w-0 outline-none focus-visible:ring-2"
         >
           <Suspense fallback={<ContributionLoading />}>
-            {view === 0 ? <NowContribBlocks calendar={calendar} /> : null}
-            {view === 1 ? <NowContribCalendar calendar={calendar} /> : null}
+            {view === 0 ? <NowContribCalendar calendar={calendar} /> : null}
+            {view === 1 ? <NowContribBlocks calendar={calendar} /> : null}
             {view === 2 ? (
               <NowContribBreakout key={calendar.username} calendar={calendar} />
             ) : null}
