@@ -1,5 +1,3 @@
-import { ArrowRight, ChevronDown } from "lucide-react";
-
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -7,7 +5,6 @@ import type { ProcessHeroAction, ProcessScheduleAction } from "../types";
 import {
   processEyebrowStyles,
   processInteractiveStyles,
-  processTextLinkStyles,
 } from "./process-page-styles";
 import { ProcessReveal } from "./process-reveal";
 
@@ -30,51 +27,41 @@ export function ProcessHero({
   description,
   primaryAction,
   secondaryAction,
-  scrollHint,
   visual,
   id = "hero",
 }: ProcessHeroProps) {
   return (
-    <section id={id} className="relative overflow-hidden px-6 py-16 md:py-24">
+    <section
+      id={id}
+      className="relative overflow-hidden bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)] pt-28 pb-20 md:pt-36 md:pb-24"
+    >
       <div
         className={cn(
-          "mx-auto grid max-w-6xl items-center gap-12",
-          visual ? "md:grid-cols-2" : "",
+          "mx-auto grid w-full items-center gap-12 px-4 sm:px-6 lg:container lg:px-20",
+          visual ? "lg:grid-cols-[1.25fr_1fr] lg:gap-16" : "",
         )}
       >
         <ProcessReveal>
           <div>
-            <p
-              className={cn(
-                processEyebrowStyles,
-                "mb-6 inline-flex items-center gap-2",
-              )}
-            >
-              <span
-                aria-hidden
-                className="bg-primary-900 size-1.5 rounded-full"
-              />
-              {eyebrow}
-            </p>
+            <p className={cn(processEyebrowStyles, "mb-4")}>{eyebrow}</p>
 
-            <h1 className="text-foreground mb-6 text-4xl leading-tight font-extrabold tracking-tight md:text-5xl">
-              {title} <span className="text-primary-900">{titleHighlight}</span>
+            <h1 className="text-foreground text-4xl leading-[1.08] font-bold tracking-tight sm:text-5xl lg:text-6xl">
+              {title} <span className="text-primary">{titleHighlight}</span>
             </h1>
 
-            <p className="text-foreground mb-8 max-w-xl text-lg leading-relaxed">
+            <p className="text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed sm:text-xl">
               {description}
             </p>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href={primaryAction.href}
                 className={cn(
                   processInteractiveStyles,
-                  "bg-primary-900 text-primary-foreground hover:bg-primary-900/90 gap-2",
+                  "bg-primary text-primary-foreground hover:brightness-110",
                 )}
               >
                 {primaryAction.label}
-                <ArrowRight aria-hidden className="size-4" />
               </a>
               <Link
                 href={
@@ -82,7 +69,7 @@ export function ProcessHero({
                 }
                 className={cn(
                   processInteractiveStyles,
-                  "border-border bg-background text-foreground hover:bg-muted border",
+                  "border-border text-foreground hover:bg-muted/40 border bg-transparent",
                 )}
               >
                 {secondaryAction.label}
@@ -92,22 +79,6 @@ export function ProcessHero({
         </ProcessReveal>
 
         {visual ? <ProcessReveal delay={0.12}>{visual}</ProcessReveal> : null}
-      </div>
-
-      <div className="mt-6 hidden justify-center md:flex">
-        <a
-          href={primaryAction.href}
-          className={cn(
-            processTextLinkStyles,
-            "text-foreground hover:text-primary-900 min-w-11 rounded-full px-3",
-          )}
-        >
-          <span className="sr-only">{scrollHint}</span>
-          <ChevronDown
-            aria-hidden
-            className="size-6 motion-safe:animate-bounce"
-          />
-        </a>
       </div>
     </section>
   );

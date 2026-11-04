@@ -82,8 +82,8 @@ export function ProcessPageNav({ items, label }: ProcessPageNavProps) {
                   processTextLinkStyles,
                   "block min-h-11 justify-start rounded-none border-l-2 py-2 pl-4",
                   isActive
-                    ? "border-primary-900 text-primary-900 font-semibold"
-                    : "text-foreground hover:text-primary-900 border-border",
+                    ? "border-primary text-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground border-border",
                 )}
               >
                 {item.label}

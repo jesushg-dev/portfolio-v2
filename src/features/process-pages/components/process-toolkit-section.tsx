@@ -37,9 +37,9 @@ export function ProcessToolkitSection({
     <section
       id={id}
       aria-labelledby={processSectionHeadingId(id)}
-      className="bg-muted/50 px-6 py-20"
+      className="border-border/80 border-t px-6 py-20 md:py-28"
     >
-      <div className="mx-auto max-w-4xl px-0 text-center">
+      <div className="mx-auto max-w-4xl text-center">
         <ProcessReveal>
           <ProcessSectionHeader
             sectionId={id}
@@ -49,9 +49,9 @@ export function ProcessToolkitSection({
           />
 
           <div
-            role="radiogroup"
+            role="tablist"
             aria-label={title}
-            className="flex flex-wrap justify-center gap-3"
+            className="flex flex-wrap justify-center gap-2"
           >
             {tools.map((tool) => {
               const isActive = tool.id === selected?.id;
@@ -59,28 +59,17 @@ export function ProcessToolkitSection({
                 <button
                   key={tool.id}
                   type="button"
-                  role="radio"
-                  aria-checked={isActive}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setSelectedId(tool.id)}
                   className={cn(
                     processInteractiveStyles,
-                    "gap-2 rounded-full border py-2 pr-4 pl-2",
+                    "rounded-full px-5 py-2 text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-card text-foreground border-border",
+                      ? "bg-foreground text-background"
+                      : "border-border text-muted-foreground hover:text-foreground border",
                   )}
                 >
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "flex size-6 items-center justify-center rounded-full text-[10px] font-bold",
-                      isActive
-                        ? "bg-primary-foreground/25 text-primary-foreground"
-                        : "bg-primary/10 text-primary",
-                    )}
-                  >
-                    {tool.initials}
-                  </span>
                   {tool.name}
                 </button>
               );
@@ -89,31 +78,22 @@ export function ProcessToolkitSection({
 
           {selected ? (
             <div
-              role="status"
+              role="tabpanel"
               aria-live="polite"
-              aria-atomic="true"
-              className="border-border bg-card mt-8 rounded-2xl border p-6 text-left shadow-sm"
+              className="mx-auto mt-12 min-h-24 max-w-xl text-center"
             >
-              <div className="flex items-start gap-4">
-                <span
-                  aria-hidden
-                  className="bg-primary/10 text-primary flex size-11 shrink-0 items-center justify-center rounded-xl text-sm font-bold"
-                >
-                  {selected.initials}
-                </span>
-                <div>
-                  <p className="text-foreground mb-1 font-semibold">
-                    {selected.name}
-                  </p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {selected.description}
-                  </p>
-                </div>
-              </div>
+              <h3 className="text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
+                {selected.name}
+              </h3>
+              <p className="text-muted-foreground mt-3 text-base leading-relaxed sm:text-lg">
+                {selected.description}
+              </p>
             </div>
           ) : null}
 
-          <p className="text-muted-foreground mt-6 text-sm">{footnote}</p>
+          <p className="text-muted-foreground mx-auto mt-10 max-w-lg text-center text-sm leading-relaxed">
+            {footnote}
+          </p>
         </ProcessReveal>
       </div>
     </section>

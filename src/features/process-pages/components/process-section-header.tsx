@@ -29,7 +29,7 @@ export function ProcessSectionHeader({
   return (
     <div
       className={cn(
-        "mb-14",
+        "mb-16 md:mb-18",
         align === "center" && "mx-auto max-w-2xl text-center",
         className,
       )}
@@ -37,12 +37,12 @@ export function ProcessSectionHeader({
       <p className={cn(processEyebrowStyles, "mb-3")}>{eyebrow}</p>
       <h2
         id={headingId}
-        className="text-foreground text-3xl font-extrabold tracking-tight md:text-4xl"
+        className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
       >
         {title}
       </h2>
       {description ? (
-        <p className="text-muted-foreground mt-4 text-sm leading-relaxed md:text-base">
+        <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-base leading-relaxed sm:text-lg">
           {description}
         </p>
       ) : null}
@@ -56,7 +56,7 @@ interface ProcessPageShellProps {
 
 export function ProcessPageShell({ children }: ProcessPageShellProps) {
   return (
-    <main className="bg-background text-foreground min-h-screen pt-24 pb-8">
+    <main className="bg-background text-foreground min-h-screen">
       {children}
     </main>
   );

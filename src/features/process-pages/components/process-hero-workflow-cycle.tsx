@@ -35,10 +35,10 @@ export function ProcessHeroWorkflowCycle({
 
   return (
     <>
-      <p className="mb-5 text-sm font-semibold tracking-widest text-slate-100 uppercase">
+      <p className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
         {title}
       </p>
-      <ol className="space-y-4" aria-label={title}>
+      <ol className="space-y-3.5" aria-label={title}>
         {steps.map((step, index) => {
           const isComplete = index < current;
           const isActive = index === current;
@@ -48,16 +48,16 @@ export function ProcessHeroWorkflowCycle({
               <span
                 aria-hidden
                 className={cn(
-                  "flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-bold",
-                  isComplete && "bg-orange-300 text-slate-950",
-                  isActive && "bg-orange-400 text-slate-950",
+                  "flex size-5.5 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                  isComplete && "bg-primary/20 text-primary",
+                  isActive && "bg-primary text-primary-foreground",
                   !isComplete &&
                     !isActive &&
-                    "border border-slate-400 text-slate-100",
+                    "border-border text-muted-foreground border",
                 )}
               >
                 {isComplete ? (
-                  <Check aria-hidden className="size-3.5" strokeWidth={3} />
+                  <Check aria-hidden className="size-3" strokeWidth={3} />
                 ) : (
                   String(index + 1).padStart(2, "0")
                 )}
@@ -65,7 +65,9 @@ export function ProcessHeroWorkflowCycle({
               <span
                 className={cn(
                   "text-sm",
-                  isActive ? "font-medium text-white" : "text-slate-100",
+                  isActive
+                    ? "text-foreground font-semibold"
+                    : "text-muted-foreground",
                 )}
               >
                 {step.label}
