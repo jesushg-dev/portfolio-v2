@@ -246,11 +246,11 @@ const EditableCvModernLayout: FC<CvLayoutContentProps> = ({
             canHoverEdit={canHoverEdit}
           >
             <section className="mb-7">
-              <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
+              <h2 className="text-primary before:bg-primary mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] uppercase before:h-4 before:w-1 before:rounded-full before:content-['']">
                 {t("sections.aboutMe")}
               </h2>
               {aboutMeText ? (
-                <p className="text-sm leading-relaxed text-slate-800">
+                <p className="text-foreground/90 text-sm leading-relaxed">
                   {aboutMeText}
                 </p>
               ) : null}
@@ -273,7 +273,7 @@ const EditableCvModernLayout: FC<CvLayoutContentProps> = ({
         </div>
 
         {/* Right sidebar: Technical skills, Education, Languages, Soft skills, Additional, References */}
-        <aside className="space-y-7 border-t border-slate-200 bg-[#f1f5fb] px-6 py-6 md:border-t-0 md:border-l md:px-7 md:py-8">
+        <aside className="border-border/60 bg-muted/30 space-y-7 border-t px-6 py-6 md:border-t-0 md:border-l md:px-7 md:py-8">
           <EditableSection
             id="skills"
             title={t("sections.technicalSkills")}

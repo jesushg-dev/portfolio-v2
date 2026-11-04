@@ -33,6 +33,10 @@ const mockData: AdminOverviewData = {
       { key: "US", pageviews: 26 },
       { key: "Unknown", pageviews: 137 },
     ],
+    unknownCountryPageviews: 137,
+    unknownCountryPercent: 55,
+    otherCountriesCount: 7,
+    otherCountriesPageviews: 32,
     paths: [
       { key: "/", pageviews: 136 },
       { key: "/curriculum-vitae", pageviews: 20 },
@@ -40,6 +44,10 @@ const mockData: AdminOverviewData = {
     referrers: [
       { key: "google.com", pageviews: 4 },
       { key: "instagram.com", pageviews: 7 },
+    ],
+    dailyVisits: [
+      { date: "2026-03-01", visits: 10 },
+      { date: "2026-03-02", visits: 15 },
     ],
   },
   jobs: {

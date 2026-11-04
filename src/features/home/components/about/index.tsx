@@ -1,58 +1,42 @@
 import { getPublicLocale } from "@/lib/public-site/locale";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 
-import HeaderArticle from "@/components/shared/header-article";
-import { cn } from "@/lib/utils";
-
-import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
-import AboutTerminalLazy from "./about-terminal-lazy";
-
-import { resolvePublicTenant } from "@/lib/public-site/tenant";
+import { ShowcaseSection } from "@/components/shared/showcase";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
+import { resolvePublicTenant } from "@/lib/public-site/tenant";
+import AboutTerminalLazy from "./about-terminal-lazy";
+import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
-function formatAboutParagraph(paragraph: string): React.ReactNode {
-  const regex = /(?:\*\*|<b>|<strong>)(.*?)(?:\*\*|<\/b>|<\/strong>)/g;
+/**
+ * Parses markdown-style **bold** text into strong elements with primary styling.
+ */
+function formatAboutParagraph(text: string): ReactNode {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
 
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  while ((match = regex.exec(paragraph)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(paragraph.slice(lastIndex, match.index));
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const boldText = part.slice(2, -2);
+      return (
+        <strong key={index} className="text-primary font-semibold">
+          {boldText}
+        </strong>
+      );
     }
-
-    const content = match[1];
-    parts.push(
-      <strong
-        key={`${match.index}-${content}`}
-        className="text-primary font-bold"
-      >
-        {content}
-      </strong>,
-    );
-
-    lastIndex = match.index + match[0].length;
-  }
-
-  if (lastIndex < paragraph.length) {
-    parts.push(paragraph.slice(lastIndex));
-  }
-
-  return parts.length > 0 ? parts : paragraph;
+    return part;
+  });
 }
 
 const About: FC = async () => {
+  const locale = await getPublicLocale();
   const t = await getTranslations({
-    locale: await getPublicLocale(),
+    locale,
     namespace: "main.about",
   });
-  const locale = await getPublicLocale();
 
   const tenant = await resolvePublicTenant();
 
@@ -73,51 +57,51 @@ const About: FC = async () => {
   ]);
 
   const paragraphs = aboutData?.paragraphs ?? [];
-  const hasTerminal = aboutData?.hasTerminal ?? false;
-  const showTerminalColumn = Boolean(tenant && (hasTerminal || terminalData));
 
   return (
-    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
-      <section className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
-        <HeaderArticle
-          title={t("title")}
-          subtitle={t("subtitle")}
-          className="mb-12 sm:mb-14"
-        />
-
-        <article
-          className={cn(
-            "grid items-center gap-10 lg:gap-14",
-            showTerminalColumn
-              ? "lg:grid-cols-[1fr_1.1fr]"
-              : "mx-auto max-w-4xl",
-          )}
-        >
-          {paragraphs.length > 0 ? (
-            <div className="space-y-4">
-              {paragraphs.map((paragraph) => (
+    <ShowcaseSection variant="tile-dark" ariaLabelledBy="about-heading">
+      {/* 2-column layout matching prototype: Info on left, Terminal on right */}
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
+        <div>
+          <p className="text-primary mb-3 font-mono text-xs font-semibold tracking-wider uppercase sm:text-sm">
+            {t("subtitle")}
+          </p>
+          <h2
+            id="about-heading"
+            className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl"
+          >
+            {t("title")}
+          </h2>
+          <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
+            {paragraphs[0] ? formatAboutParagraph(paragraphs[0]) : t("title")}
+          </p>
+          {paragraphs.length > 1 ? (
+            <div className="mt-4 space-y-4">
+              {paragraphs.slice(1).map((paragraph) => (
                 <p
                   key={paragraph}
-                  className="text-muted-foreground text-center text-base leading-relaxed sm:text-lg sm:leading-8 lg:text-start"
+                  className="text-muted-foreground text-base leading-relaxed sm:text-lg"
                 >
                   {formatAboutParagraph(paragraph)}
                 </p>
               ))}
             </div>
           ) : null}
+        </div>
 
-          {showTerminalColumn ? (
-            <AboutTerminalLazy data={terminalData} />
-          ) : null}
-        </article>
+        {/* Right column: Terminal window */}
+        <div className="w-full">
+          <AboutTerminalLazy data={terminalData} />
+        </div>
+      </div>
 
-        {timelineItems.length > 0 ? (
-          <div className="mt-16 sm:mt-20">
-            <TimelineHorizontalPreview items={timelineItems} />
-          </div>
-        ) : null}
-      </section>
-    </div>
+      {/* 4-column timeline cards at bottom (.g4) */}
+      {timelineItems.length > 0 ? (
+        <div className="mt-16 sm:mt-20">
+          <TimelineHorizontalPreview items={timelineItems} />
+        </div>
+      ) : null}
+    </ShowcaseSection>
   );
 };
 

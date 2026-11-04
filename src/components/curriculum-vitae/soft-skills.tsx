@@ -12,10 +12,9 @@ function SoftSkillItem({
 }: {
   skill: LocalizedCvData["softSkills"][number];
 }) {
-  const label = skill.name.endsWith(".") ? skill.name : `${skill.name}.`;
   return (
-    <li className="rounded-md border border-[#0a3d7a]/20 bg-white px-2 py-0.5 text-sm leading-[1.35] text-slate-800">
-      {label}
+    <li className="rounded-lg border border-[#e1e7f5] bg-white px-2.5 py-1 text-xs font-medium text-[#1d293d] shadow-2xs">
+      {skill.name}
     </li>
   );
 }
@@ -27,7 +26,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({ softSkills }) => {
 
   return (
     <section>
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
+      <h2 className="mb-3.5 flex items-center gap-2 font-mono text-[10.5px] font-bold tracking-[0.18em] text-[#1d3a8a] uppercase before:h-3.5 before:w-1 before:rounded-xs before:bg-[#1d4ed8] before:content-['']">
         {t("header.personalSkills")}
       </h2>
 

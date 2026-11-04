@@ -2,20 +2,22 @@ import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
 
-import HeaderArticle from "@/components/shared/header-article";
+import { ShowcaseHeading, ShowcaseSection } from "@/components/shared/showcase";
 import { api } from "@/trpc/server";
-import { type Locale, locales } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
+import { CareerClimbChart } from "./career-climb-chart";
 import { ExperienceAccordion } from "./experience-accordion";
+import { HomeLeadershipSection } from "./home-leadership-section";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
 const Experience: FC = async () => {
+  const locale = await getPublicLocale();
   const t = await getTranslations({
-    locale: await getPublicLocale(),
+    locale,
     namespace: "main.experience",
   });
-  const locale = await getPublicLocale();
 
   const experiences = isLocale(locale)
     ? await api.portfolio.getExperiencesPublic({ locale, limit: 4 })
@@ -24,19 +26,44 @@ const Experience: FC = async () => {
   if (experiences.length === 0) return null;
 
   return (
-    <div className="bg-card relative w-full overflow-hidden">
-      <section className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
-        <HeaderArticle
-          title={t("title")}
-          subtitle={t("subtitle")}
-          className="mb-12 sm:mb-14"
+    <>
+      <ShowcaseSection id="experience" ariaLabelledBy="experience-heading">
+        <ShowcaseHeading
+          sectionId="experience"
+          eyebrow={t("subtitle") || "Companies, roles, and measurable impact"}
+          title="The"
+          titleGradient="climb."
+          description={t("description")}
         />
+
+        <CareerClimbChart />
+
         <ExperienceAccordion
           experiences={experiences}
           viewAllLabel={t("viewAll")}
         />
-      </section>
-    </div>
+
+        {/* Next stage callout banner from prototype */}
+        <div className="border-primary/30 bg-primary/10 mt-14 flex flex-wrap items-center justify-between gap-6 rounded-3xl border p-6 sm:p-8">
+          <div>
+            <b className="text-foreground block text-lg font-bold tracking-tight sm:text-xl">
+              {t("nextStageTitle")}
+            </b>
+            <span className="text-muted-foreground mt-1 block text-sm sm:text-base">
+              {t("nextStageSubtitle")}
+            </span>
+          </div>
+          <a
+            href="#contact"
+            className="btn-primary-glow focus-visible:ring-ring inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
+          >
+            {t("letsTalk")}
+          </a>
+        </div>
+      </ShowcaseSection>
+
+      <HomeLeadershipSection />
+    </>
   );
 };
 

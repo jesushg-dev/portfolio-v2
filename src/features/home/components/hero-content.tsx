@@ -1,8 +1,6 @@
 import { getPublicLocale } from "@/lib/public-site/locale";
-import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-
-import { LinkPreview } from "@/components/ui/link-preview";
+import { Link } from "@/i18n/routing";
 
 interface Stats {
   yearsExperience: number;
@@ -42,94 +40,98 @@ export default async function HeroContent({
 
   return (
     <div className="flex flex-1 flex-col text-left">
-      {/* Availability badge */}
-      {heroData.availabilityBadge ? (
-        <div className="border-primary/25 bg-primary/10 text-primary mb-6 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold">
-          <i
-            className="a-dot bg-primary size-2 rounded-full"
-            aria-hidden="true"
-          />
-          <span>{heroData.availabilityBadge}</span>
-        </div>
-      ) : null}
+      {/* Availability Status Pill */}
+      <div className="bg-primary/10 text-primary mb-5 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-medium shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--primary)_40%,transparent)] sm:text-sm">
+        <span className="relative flex size-2">
+          <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+          <span className="bg-primary relative inline-flex size-2 rounded-full" />
+        </span>
+        <span>{heroData.availabilityBadge ?? t("openToWork")}</span>
+      </div>
 
       <div>
-        <p className="text-muted-foreground text-base sm:text-lg">
-          {t("greeting")}
-        </p>
-        <h1 className="text-foreground mt-1 text-5xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-          {firstName}{" "}
-          {lastName ? <span className="text-primary">{lastName}</span> : null}
-          {heroSubtitle ? (
-            <span className="sr-only"> — {heroSubtitle}</span>
-          ) : null}
+        <h1 className="text-foreground text-4xl leading-[1.06] font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          {t("greeting")}{" "}
+          <span className="text-primary font-bold">
+            {firstName} {lastName}
+          </span>
         </h1>
+
         {heroSubtitle ? (
-          <h2 className="text-foreground mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+          <p className="text-foreground mt-3 text-xl font-semibold sm:text-2xl">
             {heroSubtitle}
-          </h2>
-        ) : null}
-        {heroTagline ? (
-          <p className="text-foreground mt-5 max-w-2xl text-base leading-relaxed font-medium sm:text-lg sm:leading-8">
-            {heroTagline}
           </p>
         ) : null}
-        {heroSummary ? (
-          <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed sm:text-base sm:leading-8">
-            {heroSummary}
+
+        {heroSummary || heroTagline ? (
+          <p className="text-muted-foreground mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
+            {heroSummary || heroTagline}
           </p>
         ) : null}
       </div>
 
-      {/* 3-Column Stats Card */}
-      <dl className="border-border/80 bg-card divide-border/80 mt-8 grid w-full max-w-2xl grid-cols-3 divide-x rounded-2xl border shadow-xs sm:rounded-3xl">
-        <div className="p-4 sm:p-5">
-          <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-            {stats.yearsExperience}+
-          </dd>
-          <dt className="text-muted-foreground mt-1 text-sm font-medium">
-            {t("yearsExperience")}
-          </dt>
+      {/* At A Glance Card matching Prototype */}
+      <div className="glass-card mt-7 max-w-lg rounded-2xl p-4.5 sm:p-5">
+        <p className="text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase">
+          {t("atAGlance")}
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div>
+            <small className="text-muted-foreground block text-xs">
+              {t("availability")}
+            </small>
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight">
+              {t("immediate")}
+            </b>
+          </div>
+          <div>
+            <small className="text-muted-foreground block text-xs">
+              {t("yearsExperience")}
+            </small>
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+              {stats.yearsExperience}+
+            </b>
+          </div>
+          <div>
+            <small className="text-muted-foreground block text-xs">
+              {t("projectsDelivered")}
+            </small>
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+              {stats.projectsCount}+
+            </b>
+          </div>
+          <div>
+            <small className="text-muted-foreground block text-xs">
+              {t("engineersLed")}
+            </small>
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+              {stats.engineersMentored ?? 6}+
+            </b>
+          </div>
         </div>
-        <div className="p-4 sm:p-5">
-          <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-            {stats.projectsCount}+
-          </dd>
-          <dt className="text-muted-foreground mt-1 text-sm font-medium">
-            {t("projectsDelivered")}
-          </dt>
-        </div>
-        <div className="p-4 sm:p-5">
-          <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-            {stats.engineersMentored ?? 6}
-          </dd>
-          <dt className="text-muted-foreground mt-1 text-sm font-medium">
-            {t("engineersLed")}
-          </dt>
-        </div>
-      </dl>
+      </div>
 
       {/* Action Buttons */}
       <div className="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href="#portfolio"
+          className="btn-primary-glow focus-visible:ring-ring inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-6 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
+        >
+          {t("seeProjects")}
+        </a>
         {showCvLink ? (
-          <LinkPreview
-            url="/curriculum-vitae"
-            prefetch={false}
-            className="group bg-primary text-primary-foreground hover:bg-primary/95 inline-flex items-center gap-3 rounded-full py-2 pr-2 pl-7 font-bold shadow-sm transition"
+          <Link
+            href="/curriculum-vitae"
+            className="btn-glass focus-visible:ring-ring inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-6 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
           >
             {t("viewCV")}
-            <span className="bg-primary-foreground text-primary flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-0.5">
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </span>
-          </LinkPreview>
+          </Link>
         ) : null}
         <a
           href="#contact"
-          aria-label={t("scheduleCallAria")}
-          className="border-border/80 bg-card text-foreground hover:border-primary hover:text-primary inline-flex items-center gap-3 rounded-full border px-7 py-3.5 font-bold shadow-xs transition"
+          className="btn-glass focus-visible:ring-ring inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-6 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
         >
-          {t("scheduleCall")}
-          <ArrowRight className="size-4" aria-hidden="true" />
+          {t("getInTouch")}
         </a>
       </div>
     </div>

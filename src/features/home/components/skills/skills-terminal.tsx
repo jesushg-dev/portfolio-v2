@@ -23,11 +23,15 @@ export type CompactSkillType = Pick<
   "id" | "title" | "image" | "type" | "featured" | "trend"
 >;
 
-interface SkillsTerminalProps {
+export interface SkillsTerminalProps {
   initialSkills: (SkillType | CompactSkillType)[];
+  showHeader?: boolean;
 }
 
-const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
+const SkillsTerminal: FC<SkillsTerminalProps> = ({
+  initialSkills,
+  showHeader = false,
+}) => {
   const t = useTranslations("main.skills");
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -96,11 +100,13 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
 
   return (
     <div className="relative z-10 mx-auto w-full py-6">
-      <HeaderArticle
-        subtitle={t("terminal.eyebrow")}
-        title={t("title")}
-        description={t("description")}
-      />
+      {showHeader ? (
+        <HeaderArticle
+          subtitle={t("terminal.eyebrow")}
+          title={t("title")}
+          description={t("description")}
+        />
+      ) : null}
 
       <div className="bg-card border-border/30 hover:border-primary/30 relative overflow-hidden rounded-3xl border shadow-xs transition-all duration-300">
         {/* Terminal Chrome Bar */}

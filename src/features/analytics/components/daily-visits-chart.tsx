@@ -43,7 +43,6 @@ export function DailyVisitsChart({
             d.visits > 0 ? Math.max(4, Math.round((d.visits / max) * 100)) : 2,
         })),
         peakIndex: max > 1 ? peakIdx : -1,
-        maxVisits: max,
         startDate: parsedDays[0]?.formattedDate ?? "",
         endDate: parsedDays[parsedDays.length - 1]?.formattedDate ?? "",
       };
@@ -65,7 +64,6 @@ export function DailyVisitsChart({
         heightPercent: 2,
       })),
       peakIndex: -1,
-      maxVisits: 0,
       startDate: formatter.format(dates[0]),
       endDate: formatter.format(dates[N - 1]),
     };
