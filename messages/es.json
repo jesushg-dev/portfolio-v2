@@ -871,6 +871,8 @@
       "description": "Áreas donde diseño, construyo y lidero software de producción.",
       "seeMore": "Ver más",
       "seeLess": "Ver menos",
+      "seeStack": "Ver el stack ›",
+      "inPractice": "En la práctica ›",
       "items": {
         "contact": {
           "title": "Construyamos juntos",
@@ -1322,7 +1324,41 @@
       "description": "De desarrollador frontend a ingeniero senior y líder técnico, más de 7 años de trayectoria.",
       "previousPosition": "Puesto anterior",
       "nextStageTitle": "Siguiente etapa: tu equipo",
-      "nextStageSubtitle": "Roles full-stack senior o líder técnico, remoto o presencial. Disponibilidad inmediata."
+      "nextStageSubtitle": "Roles full-stack senior o líder técnico, remoto o presencial. Disponibilidad inmediata.",
+      "letsTalk": "Hablemos",
+      "leadership": {
+        "eyebrow": "Liderazgo",
+        "title": "Liderazgo e impacto.",
+        "description": "Las habilidades técnicas importan. También cómo lideras, colaboras y haces que las cosas sucedan con equipos reales en productos reales.",
+        "stats": {
+          "engineersLed": "ingenieros liderados",
+          "engineersMentored": "ingenieros mentorizados",
+          "fewerDefects": "menos defectos en producción",
+          "lowerMttr": "menor MTTR"
+        },
+        "items": {
+          "technicalLeadership": {
+            "title": "Liderazgo técnico",
+            "description": "Lideré equipos de hasta 6 ingenieros, estableciendo hojas de ruta técnicas, estándares arquitectónicos y entregando soluciones empresariales."
+          },
+          "mentorship": {
+            "title": "Mentoría y calidad de ingeniería",
+            "description": "Mentoricé a 4 ingenieros mediante revisiones rigurosas de código, pair programming y planes de crecimiento personalizados que redujeron defectos en producción en un 40%."
+          },
+          "systemDesign": {
+            "title": "Diseño de sistemas",
+            "description": "Colaboré directamente con Product Managers, QA, UX y directivos para traducir demandas complejas del negocio en arquitecturas escalables."
+          },
+          "incidentReliability": {
+            "title": "Liderazgo en incidentes y confiabilidad",
+            "description": "Gestioné caídas críticas de producción de inicio a fin, realicé análisis post-mortem de causa raíz e implementé mejoras arquitectónicas que redujeron el MTTR un 40%."
+          },
+          "engineeringExcellence": {
+            "title": "Excelencia en ingeniería",
+            "description": "Establecí estándares de código, Architecture Decision Records (ADRs), prácticas de testing y mejoras de CI/CD para asegurar ROI y mantenibilidad a largo plazo."
+          }
+        }
+      }
     },
     "impactStats": {
       "teamSize": {
@@ -1486,6 +1522,7 @@
           "0": "Full-Stack Developer",
           "1": "Software Architect"
         },
+        "ecosystemRolesLabel": "Colaboro con",
         "ecosystem": {
           "0": "QA Engineer",
           "1": "QA Automation Engineer",
@@ -1776,7 +1813,8 @@
         "eyebrow": "Ahora",
         "title": "Lo que estoy haciendo",
         "titleHighlight": "ahora mismo.",
-        "description": "Un vistazo a lo que me ocupa, lo que leo y lo que construyo. Actualizado cuando me acuerdo."
+        "description": "Un vistazo a lo que me ocupa, lo que leo y lo que construyo. Actualizado cuando me acuerdo.",
+        "snapshot": "Una instantánea, actualizada cuando me acuerdo."
       },
       "list": {
         "localTimeLabel": "Hora local",
@@ -1872,6 +1910,11 @@
         },
         "awayHeading": "Lejos del teclado.",
         "shippingHeading": "Construyendo en público.",
+        "shippingDescription": "Commits, pull requests y código enviado a través de repositorios.",
+        "collaborateTitle": "¿Quieres colaborar?",
+        "collaborateSubtitle": "Abierto a roles de tiempo completo, contratos y consultoría de arquitectura.",
+        "scheduleCall": "Agendar una llamada",
+        "sendEmail": "Enviar un correo",
         "contributionCount": "Contribuciones",
         "gameInstructions": "Mueve la pala con el ratón, arrastrando o con ←/→ (A/D). Espacio inicia o pausa; Esc pausa. Rompe los bloques de contribuciones sin dejar caer la pelota.",
         "gameScore": "Puntos: {score}",
@@ -1925,7 +1968,9 @@
       "colors": {
         "title": "Diseño y colores",
         "body": "Los colores viven en custom properties de Tailwind CSS y se cambian con un atributo <code>data-theme</code>: tres paletas (Main, Orange, Christmas), cada una con variante clara y oscura — seis en total.",
-        "currentBadge": "actual"
+        "currentBadge": "actual",
+        "viewing": "Viendo:",
+        "clickToCopy": "Haz clic en cualquier muestra para copiar HEX"
       },
       "palettes": {
         "orangeLight": "Orange · Light",
@@ -1948,6 +1993,12 @@
           "co2": "{grams}g de CO₂/vista",
           "brand": "Website Carbon",
           "cleaner": "Calificación A+ en Website Carbon"
+        },
+        "metrics": {
+          "firstVisit": "CO₂, primera visita",
+          "returnVisits": "CO₂, visitas de retorno",
+          "websiteCarbon": "Website Carbon",
+          "digitalBeacon": "Digital Beacon"
         }
       }
     },

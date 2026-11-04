@@ -845,6 +845,8 @@
       "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
       "seeMore": "Bekijk meer",
       "seeLess": "Bekijk minder",
+      "seeStack": "Bekijk de stack ›",
+      "inPractice": "In de praktijk ›",
       "items": {
         "contact": {
           "title": "Laten we samen bouwen",
@@ -1296,7 +1298,41 @@
       "description": "Van frontend developer tot senior engineer en team lead, 7+ jaar ervaring.",
       "previousPosition": "Vorige functie",
       "nextStageTitle": "Volgende stap: jouw team",
-      "nextStageSubtitle": "Senior full-stack of tech-lead rollen, remote of vanuit Managua. Direct beschikbaar."
+      "nextStageSubtitle": "Senior full-stack of tech-lead rollen, remote of vanuit Managua. Direct beschikbaar.",
+      "letsTalk": "Laten we praten",
+      "leadership": {
+        "eyebrow": "Leiderschap",
+        "title": "Leiderschap & impact.",
+        "description": "Technische vaardigheden zijn belangrijk. Net als hoe je leidt, samenwerkt en dingen realiseert met echte teams op echte producten.",
+        "stats": {
+          "engineersLed": "ingenieurs geleid",
+          "engineersMentored": "ingenieurs gementord",
+          "fewerDefects": "minder productiedefecten",
+          "lowerMttr": "lagere MTTR"
+        },
+        "items": {
+          "technicalLeadership": {
+            "title": "Technisch leiderschap",
+            "description": "Leidde teams tot 6 ingenieurs, stelde technische roadmaps en architectuurstandaarden op en leverde enterprise-oplossingen op."
+          },
+          "mentorship": {
+            "title": "Mentorschap & kwaliteit",
+            "description": "Menteerde 4 ingenieurs via rigoureuze code reviews, pair programming en gerichte groeiplannen die defecten in productie met 40% verminderden."
+          },
+          "systemDesign": {
+            "title": "Systeemontwerp",
+            "description": "Werkte direct samen met Product Managers, QA, UX en stakeholders om complexe businessvereisten te vertalen naar schaalbare specificaties."
+          },
+          "incidentReliability": {
+            "title": "Incident- & betrouwbaarheidsleiderschap",
+            "description": "Beheerde kritieke productiestoringen van begin tot eind, voerde post-mortem analyses uit en realiseerde structurele oplossingen die MTTR met 40% verlaagden."
+          },
+          "engineeringExcellence": {
+            "title": "Engineering excellence",
+            "description": "Stelde codeerstandaarden, Architecture Decision Records (ADRs), testpraktijken en CI/CD-verbeteringen vast voor langetermijn-ROI en onderhoudbaarheid."
+          }
+        }
+      }
     },
     "impactStats": {
       "teamSize": {
@@ -1460,6 +1496,7 @@
           "0": "Full-Stack Developer",
           "1": "Software Architect"
         },
+        "ecosystemRolesLabel": "Ik werk samen met",
         "ecosystem": {
           "0": "QA Engineer",
           "1": "QA Automation Engineer",
@@ -1750,7 +1787,8 @@
         "eyebrow": "Nu",
         "title": "Wat ik",
         "titleHighlight": "nu doe.",
-        "description": "Een kijkje in waar ik me op richt, wat ik lees en wat ik bouw. Bijgewerkt wanneer ik eraan denk."
+        "description": "Een kijkje in waar ik me op richt, wat ik lees en wat ik bouw. Bijgewerkt wanneer ik eraan denk.",
+        "snapshot": "Een momentopname, bijgewerkt wanneer ik eraan denk."
       },
       "list": {
         "localTimeLabel": "Lokale tijd",
@@ -1846,6 +1884,11 @@
         },
         "awayHeading": "Weg van het toetsenbord.",
         "shippingHeading": "Bouwen in het openbaar.",
+        "shippingDescription": "Commits, pull requests en code verscheept over repositories.",
+        "collaborateTitle": "Samenwerken?",
+        "collaborateSubtitle": "Open voor fulltime functies, contracten en architectuuradvies.",
+        "scheduleCall": "Plan een gesprek",
+        "sendEmail": "Stuur een e-mail",
         "contributionCount": "Bijdragen",
         "gameInstructions": "Beweeg de plank met de muis, door te slepen of met ←/→ (A/D). Spatie start of pauzeert; Esc pauzeert. Breek de bijdragestenen zonder de bal te laten vallen.",
         "gameScore": "Score: {score}",
@@ -1899,7 +1942,9 @@
       "colors": {
         "title": "Ontwerp & kleuren",
         "body": "Kleuren draaien op Tailwind CSS custom properties, geschakeld via een <code>data-theme</code>-attribuut — drie paletten (Main, Orange, Christmas), elk met een lichte en donkere variant, zes in totaal.",
-        "currentBadge": "actueel"
+        "currentBadge": "actueel",
+        "viewing": "Weergave:",
+        "clickToCopy": "Klik op een kleurstaal om HEX te kopiëren"
       },
       "palettes": {
         "orangeLight": "Orange · Light",
@@ -1922,6 +1967,12 @@
           "co2": "{grams}g CO₂/weergave",
           "brand": "Website Carbon",
           "cleaner": "Beoordeling A+ op Website Carbon"
+        },
+        "metrics": {
+          "firstVisit": "CO₂, eerste bezoek",
+          "returnVisits": "CO₂, terugkerende bezoeken",
+          "websiteCarbon": "Website Carbon",
+          "digitalBeacon": "Digital Beacon"
         }
       }
     },

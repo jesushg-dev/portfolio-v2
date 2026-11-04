@@ -850,6 +850,8 @@
       "description": "Areas where I design, build, and lead production software.",
       "seeMore": "See more",
       "seeLess": "See less",
+      "seeStack": "See the stack ›",
+      "inPractice": "In practice ›",
       "items": {
         "contact": {
           "title": "Let's build together",
@@ -1301,7 +1303,41 @@
       "description": "From frontend developer to senior engineer and team lead, 7+ years and counting.",
       "previousPosition": "Previous position",
       "nextStageTitle": "Next stage: your team",
-      "nextStageSubtitle": "Senior full-stack or tech-lead roles, remote or from Managua. I can start right away."
+      "nextStageSubtitle": "Senior full-stack or tech-lead roles, remote or from Managua. I can start right away.",
+      "letsTalk": "Let’s talk",
+      "leadership": {
+        "eyebrow": "Leadership",
+        "title": "Leadership & impact.",
+        "description": "Technical skills matter. So does how you lead, collaborate, and make things happen with real teams on real products.",
+        "stats": {
+          "engineersLed": "engineers led",
+          "engineersMentored": "engineers mentored",
+          "fewerDefects": "fewer production defects",
+          "lowerMttr": "lower MTTR"
+        },
+        "items": {
+          "technicalLeadership": {
+            "title": "Technical leadership",
+            "description": "Led teams of up to 6 engineers, establishing technical roadmaps, architectural standards, and delivering enterprise solutions."
+          },
+          "mentorship": {
+            "title": "Mentorship & engineering quality",
+            "description": "Mentored 4 engineers through rigorous code reviews, pair programming, and tailored technical growth plans that cut production defects by 40%."
+          },
+          "systemDesign": {
+            "title": "System design",
+            "description": "Partnered directly with Product Managers, QA, UX, and executive stakeholders to translate complex business demands into scalable architecture specs."
+          },
+          "incidentReliability": {
+            "title": "Incident & reliability leadership",
+            "description": "Owned critical production outages end-to-end, conducted post-mortem root-cause analyses, and introduced permanent architectural fixes that lowered MTTR by 40%."
+          },
+          "engineeringExcellence": {
+            "title": "Engineering excellence",
+            "description": "Established coding standards, Architecture Decision Records (ADRs), testing practices, and CI/CD improvements to ensure long-term ROI and maintainability."
+          }
+        }
+      }
     },
     "impactStats": {
       "teamSize": {
@@ -1465,6 +1501,7 @@
           "0": "Full-Stack Developer",
           "1": "Software Architect"
         },
+        "ecosystemRolesLabel": "I collaborate with",
         "ecosystem": {
           "0": "QA Engineer",
           "1": "QA Automation Engineer",
@@ -1755,7 +1792,8 @@
         "eyebrow": "Now",
         "title": "What I’m doing",
         "titleHighlight": "right now.",
-        "description": "A snapshot of what I’m focused on, reading and shipping. Updated whenever I remember to."
+        "description": "A snapshot of what I’m focused on, reading and shipping. Updated whenever I remember to.",
+        "snapshot": "A snapshot, updated whenever I remember to."
       },
       "list": {
         "localTimeLabel": "Local time",
@@ -1851,6 +1889,11 @@
         },
         "awayHeading": "Away from the keyboard.",
         "shippingHeading": "Shipping, in public.",
+        "shippingDescription": "Commits, pull requests and code shipped across repositories.",
+        "collaborateTitle": "Want to collaborate?",
+        "collaborateSubtitle": "Open to full-time roles, contracts, and architecture consulting.",
+        "scheduleCall": "Schedule a call",
+        "sendEmail": "Send an email",
         "contributionCount": "Contributions",
         "gameInstructions": "Move the paddle with your mouse, by dragging, or with ←/→ (A/D). Space starts or pauses; Esc pauses. Clear the contribution bricks without dropping the ball.",
         "gameScore": "Score: {score}",
@@ -1904,7 +1947,9 @@
       "colors": {
         "title": "Design & Colors",
         "body": "Colors run on Tailwind CSS custom properties, switched through a <code>data-theme</code> attribute — three palettes (Main, Orange, Christmas), each with a light and dark variant, six in total.",
-        "currentBadge": "current"
+        "currentBadge": "current",
+        "viewing": "Viewing:",
+        "clickToCopy": "Click any swatch to copy HEX"
       },
       "palettes": {
         "orangeLight": "Orange · Light",
@@ -1927,6 +1972,12 @@
           "co2": "{grams}g of CO₂/view",
           "brand": "Website Carbon",
           "cleaner": "Rated A+ on Website Carbon"
+        },
+        "metrics": {
+          "firstVisit": "CO₂, first visit",
+          "returnVisits": "CO₂, return visits",
+          "websiteCarbon": "Website Carbon",
+          "digitalBeacon": "Digital Beacon"
         }
       }
     },
