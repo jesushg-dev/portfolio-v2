@@ -32,7 +32,6 @@ function ExpertiseCard({
       <button
         type="button"
         onClick={() => onSelect(item)}
-        aria-label={t("viewDetails", { title: item.title })}
         className="from-card via-primary/5 to-primary/10 border-border/60 hover:border-primary/40 focus-visible:ring-ring group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border bg-linear-to-br text-left shadow-sm transition focus-visible:ring-2 focus-visible:outline-none motion-safe:hover:-translate-y-1"
       >
         <div className="w-full px-7 pt-7">

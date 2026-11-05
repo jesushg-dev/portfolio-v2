@@ -164,7 +164,15 @@
     },
     {
       "category": "BACKEND",
-      "items": ["C#", ".NET", "Nest.js", "Python", "Node.js", "PHP", "GraphQL"],
+      "items": [
+        "C#",
+        ".NET",
+        "Nest.js",
+        "Python",
+        "Node.js",
+        "PHP",
+        "GraphQL"
+      ],
       "order": 1
     },
     {
@@ -181,7 +189,13 @@
     },
     {
       "category": "TOOLS",
-      "items": ["Git", "Azure", "Docker", "GCP", "AWS"],
+      "items": [
+        "Git",
+        "Azure",
+        "Docker",
+        "GCP",
+        "AWS"
+      ],
       "order": 3
     }
   ],
@@ -212,14 +226,24 @@
           "Regresión 7 → 4 días",
           "~40% mejor MTTR"
         ],
-        "en": ["~25% less rework", "Regression 7 → 4 days", "~40% better MTTR"],
+        "en": [
+          "~25% less rework",
+          "Regression 7 → 4 days",
+          "~40% better MTTR"
+        ],
         "nl": [
           "~25% minder herwerk",
           "Regressie 7 → 4 dagen",
           "~40% betere MTTR"
         ]
       },
-      "skillKeys": ["React", "Nextjs", "GraphQL", "Typescript", "Git"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "GraphQL",
+        "Typescript",
+        "Git"
+      ],
       "responsibilities": [
         {
           "text": {
@@ -289,7 +313,11 @@
           "120+ horas ahorradas/mes",
           "Automatización total"
         ],
-        "en": ["~80% traceability", "120+ hours saved/mo", "Full automation"],
+        "en": [
+          "~80% traceability",
+          "120+ hours saved/mo",
+          "Full automation"
+        ],
         "nl": [
           "~80% traceerbaarheid",
           "120+ uur bespaard/mnd",
@@ -364,14 +392,25 @@
           "5+ proyectos dirigidos",
           "CI/CD empresarial"
         ],
-        "en": ["2 Hackathons won", "5+ projects led", "Enterprise CI/CD"],
+        "en": [
+          "2 Hackathons won",
+          "5+ projects led",
+          "Enterprise CI/CD"
+        ],
         "nl": [
           "2 Hackathons gewonnen",
           "5+ projecten geleid",
           "Enterprise CI/CD"
         ]
       },
-      "skillKeys": ["React", "Nextjs", "Dotnet", "Azure", "Typescript", "Git"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "Dotnet",
+        "Azure",
+        "Typescript",
+        "Git"
+      ],
       "responsibilities": [
         {
           "text": {
@@ -450,7 +489,11 @@
           "5+ proyectos dirigidos",
           "CI/CD empresarial"
         ],
-        "en": ["2 Hackathons won", "5+ projects led", "Enterprise CI/CD"],
+        "en": [
+          "2 Hackathons won",
+          "5+ projects led",
+          "Enterprise CI/CD"
+        ],
         "nl": [
           "2 Hackathons gewonnen",
           "5+ projecten geleid",
@@ -514,6 +557,7 @@
     {
       "key": "experience4",
       "company": "Musa",
+      "companyLogoUrl": "https://res.cloudinary.com/js-media/image/upload/v1793075691/portfolio/Musa_Banana_Swoosh_Logo-removebg-preview_zkqz61.png",
       "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador Full Stack",
@@ -619,6 +663,7 @@
     {
       "key": "experience5",
       "company": "Telo Group",
+      "companyLogoUrl": "https://res.cloudinary.com/js-media/image/upload/v1793075596/portfolio/telo_technology_logo_esmaeq.jpg",
       "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador de aplicaciones móviles",
@@ -716,6 +761,7 @@
       "key": "experience6",
       "company": "Asociación de Iglesias Reformadas",
       "employmentType": "FULL_TIME",
+      "companyLogoUrl": "https://res.cloudinary.com/js-media/image/upload/v1793076121/portfolio/ChatGPT_Image_Oct_26_2026_10_41_43_PM_brbpc4.png",
       "role": {
         "es": "Desarrollador Frontend y Técnico de TI",
         "en": "Frontend Developer and IT Technician",
@@ -731,7 +777,13 @@
         "en": "Nonprofit organization: institutional website, IT support, and foundational computer education.",
         "nl": "Non-profitorganisatie: institutionele website, IT-support en basale computeropleiding."
       },
-      "skillKeys": ["React", "Nextjs", "Javascript", "Css", "Typescript"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "Javascript",
+        "Css",
+        "Typescript"
+      ],
       "responsibilities": [
         {
           "text": {
@@ -838,7 +890,13 @@
   "skills": [
     {
       "category": "Core Engineering",
-      "items": ["C#", ".NET", "Node.js", "NestJS", "TypeScript"],
+      "items": [
+        "C#",
+        ".NET",
+        "Node.js",
+        "NestJS",
+        "TypeScript"
+      ],
       "order": 0
     },
     {
@@ -879,7 +937,13 @@
     },
     {
       "category": "DevOps & Quality",
-      "items": ["Docker", "CI/CD", "Playwright", "Unit Testing", "Snyk"],
+      "items": [
+        "Docker",
+        "CI/CD",
+        "Playwright",
+        "Unit Testing",
+        "Snyk"
+      ],
       "order": 4
     }
   ]
