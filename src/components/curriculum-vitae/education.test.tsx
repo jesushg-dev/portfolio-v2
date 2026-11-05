@@ -54,7 +54,7 @@ describe("Education", () => {
 
     renderWithIntl(<Education educations={[getLocalizedEdu(eduWithYears)]} />);
 
-    expect(screen.getByText("2018 \u2013 2022")).toBeInTheDocument();
+    expect(screen.getByText("2018 - 2022")).toBeInTheDocument();
     expect(screen.getByText(/Madrid, Spain/)).toBeInTheDocument();
   });
 

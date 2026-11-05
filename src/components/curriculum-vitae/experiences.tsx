@@ -34,23 +34,21 @@ export default function Experiences({
 
   return (
     <section>
-      <h2 className="text-primary before:bg-primary mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-[0.18em] uppercase before:h-3.5 before:w-1 before:rounded-xs before:content-['']">
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
         {t("header.experience")}
       </h2>
 
-      <div className="divide-border divide-y">
-        {groups.map((group) => (
-          <ExperienceCompanyGroup
-            key={`${group.company}-${group.roles[0]?.id ?? "group"}`}
-            company={group.company}
-            overallStart={group.overallStart}
-            overallEnd={group.overallEnd}
-            overallCurrent={group.overallCurrent}
-            roles={group.roles}
-            locale={dateLocale}
-          />
-        ))}
-      </div>
+      {groups.map((group) => (
+        <ExperienceCompanyGroup
+          key={`${group.company}-${group.roles[0]?.id ?? "group"}`}
+          company={group.company}
+          overallStart={group.overallStart}
+          overallEnd={group.overallEnd}
+          overallCurrent={group.overallCurrent}
+          roles={group.roles}
+          locale={dateLocale}
+        />
+      ))}
     </section>
   );
 }
@@ -66,14 +64,14 @@ function CompanyLogo({
   const initials = getCompanyInitials(name);
 
   return (
-    <span className="border-border from-primary to-primary/80 text-primary-foreground flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border bg-gradient-to-br text-xs font-bold shadow-2xs">
+    <span className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border border-slate-200 bg-white text-sm font-bold text-[#0a3d7a]">
       {logoUrl && !hasError ? (
         <MediaImage
           src={logoUrl}
           alt=""
-          width={40}
-          height={40}
-          className="bg-card size-full object-contain p-1"
+          width={36}
+          height={36}
+          className="size-full object-contain"
           onError={() => setHasError(true)}
         />
       ) : (
@@ -106,38 +104,34 @@ function ExperienceCompanyGroup({
   const blurb = roles[0]?.companyBlurb;
 
   return (
-    <article className="py-6 first:pt-1 last:pb-0">
-      <div className="flex items-start gap-3.5">
+    <article className="mb-6 last:mb-0">
+      <div className="flex items-start gap-3">
         <CompanyLogo name={company} logoUrl={logoUrl} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-            <h3 className="text-foreground text-base font-bold tracking-tight">
+            <h3 className="text-[1.0625rem] leading-tight font-bold text-slate-900">
               {company}
             </h3>
             {overallDates ? (
-              <p className="text-muted-foreground font-mono text-xs tabular-nums">
+              <p className="text-sm text-slate-600 tabular-nums">
                 {overallDates}
               </p>
             ) : null}
           </div>
           {blurb ? (
-            <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed italic">
-              {blurb}
-            </p>
+            <p className="mt-0.5 text-sm text-slate-600 italic">{blurb}</p>
           ) : null}
         </div>
       </div>
 
-      <div className="mt-3">
-        {roles.map((role) => (
-          <RoleBlock
-            key={role.id}
-            experience={role}
-            locale={locale}
-            isMultiRole={isMultiRole}
-          />
-        ))}
-      </div>
+      {roles.map((role) => (
+        <RoleBlock
+          key={role.id}
+          experience={role}
+          locale={locale}
+          isMultiRole={isMultiRole}
+        />
+      ))}
     </article>
   );
 }
@@ -164,23 +158,19 @@ function RoleBlock({
 
   return (
     <div
-      className={`${isMultiRole ? "border-primary/20 ml-4 border-l-2 pl-4" : "ml-13.5"} mt-3`}
+      className={`${isMultiRole ? "border-l-2 border-[#0a3d7a]/20 pl-4" : ""} mt-3`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-        <h4 className="text-foreground text-sm font-semibold">
+        <h4 className="text-[0.9375rem] font-bold text-slate-900">
           {experience.role}
         </h4>
-        <p className="text-muted-foreground font-mono text-xs tabular-nums">
-          {dates}
-        </p>
+        <p className="text-sm text-slate-600 tabular-nums">{dates}</p>
       </div>
 
-      {meta ? (
-        <p className="text-muted-foreground mt-0.5 text-xs">{meta}</p>
-      ) : null}
+      {meta ? <p className="text-sm text-slate-600">{meta}</p> : null}
 
       {experience.responsibilities.length > 0 ? (
-        <ul className="mt-2.5 space-y-1.5">
+        <ul className="mt-2 space-y-1.5">
           {experience.responsibilities.map((resp) => (
             <ResponsibilityItem key={resp.id} responsibility={resp} />
           ))}
@@ -196,7 +186,7 @@ function ResponsibilityItem({
   responsibility: CvExperience["responsibilities"][number];
 }) {
   return (
-    <li className="text-foreground/90 before:bg-primary relative pl-4 text-xs leading-[1.55] before:absolute before:top-[0.55em] before:left-0 before:size-1.5 before:rounded-full before:content-['']">
+    <li className="relative pl-4 text-sm leading-[1.45] text-slate-800 before:absolute before:top-[0.6em] before:left-0 before:size-1.5 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
       <HighlightMetrics text={responsibility.text} />
     </li>
   );

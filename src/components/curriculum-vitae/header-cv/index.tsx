@@ -27,46 +27,43 @@ const HeaderCV: FC<IHeaderCvProps> = ({
   const initials = getNameInitials(fullName);
 
   return (
-    <header className="from-primary to-primary/80 text-primary-foreground relative isolate overflow-hidden bg-gradient-to-br px-8 py-9 md:px-10 md:py-10">
-      <div className="flex flex-col-reverse justify-between gap-6 sm:flex-row sm:items-center">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-primary-foreground text-2xl leading-tight font-bold tracking-tight sm:text-3xl lg:text-[2rem]">
-            {fullName}
-          </h1>
-          {degree ? (
-            <p className="text-primary-foreground/90 mt-1.5 text-base font-normal sm:text-lg">
-              {degree}
-            </p>
-          ) : null}
+    <header className="flex items-start justify-between gap-6 bg-[#0a3d7a] px-6 py-6 text-white md:px-10 md:py-9">
+      <div className="min-w-0 flex-1">
+        <h1 className="text-3xl leading-[1.1] font-bold text-white md:text-4xl">
+          {fullName}
+        </h1>
+        {degree ? (
+          <p className="mt-1.5 text-lg text-white md:text-[1.3125rem]">
+            {degree}
+          </p>
+        ) : null}
 
-          {contactsSlot ? (
-            <div className="mt-5">{contactsSlot}</div>
-          ) : contacts && contacts.length > 0 ? (
-            <div className="mt-5">
-              <ContactMe contacts={contacts} variant="header" />
-            </div>
-          ) : null}
+        {contactsSlot ? (
+          <div className="mt-5">{contactsSlot}</div>
+        ) : contacts && contacts.length > 0 ? (
+          <div className="mt-5">
+            <ContactMe contacts={contacts} variant="header" />
+          </div>
+        ) : null}
 
-          {availability ? (
-            <div className="bg-primary-foreground/15 text-primary-foreground mt-5 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold backdrop-blur-xs">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-current opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-current" />
-              </span>
-              <span>{availability}</span>
-            </div>
-          ) : null}
-        </div>
-
-        {/* Profile Avatar / Initials */}
-        <div className="bg-primary-foreground/15 text-primary-foreground ring-primary-foreground/35 flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl text-3xl font-light shadow-xl ring-4 sm:size-28 sm:text-4xl">
-          {header?.photoUrl ? (
-            <ClientImage src={header.photoUrl} alt={alt || fullName} />
-          ) : (
-            <span>{initials}</span>
-          )}
-        </div>
+        {availability ? (
+          <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1 text-sm font-bold text-white">
+            <i
+              className="block size-2 rounded-full bg-emerald-300"
+              aria-hidden="true"
+            />
+            <span>{availability}</span>
+          </p>
+        ) : null}
       </div>
+
+      <span className="flex size-28 shrink-0 items-center justify-center overflow-hidden bg-white text-4xl font-bold text-slate-800">
+        {header?.photoUrl ? (
+          <ClientImage src={header.photoUrl} alt={alt || fullName} />
+        ) : (
+          <span>{initials}</span>
+        )}
+      </span>
     </header>
   );
 };

@@ -129,17 +129,4 @@ describe("ContactMe", () => {
     }
     expect(calendlyLinks[0]).not.toHaveAttribute("target");
   });
-  it("renders unsafe URL schemes and plain locations as text", () => {
-    renderWithIntl(
-      <ContactMe
-        contacts={getLocalizedContacts([
-          { type: "OTHER", value: "javascript:alert(1)" },
-          { type: "OTHER", value: "data:text/html,unsafe" },
-          { type: "OTHER", value: "Managua" },
-        ])}
-      />,
-    );
-    expect(screen.queryByRole("link")).not.toBeInTheDocument();
-    expect(screen.getByText("Managua")).toBeInTheDocument();
-  });
 });

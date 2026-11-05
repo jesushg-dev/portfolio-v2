@@ -43,17 +43,17 @@ const CvPreview: FC<ICvPreviewProps> = ({
       <div
         className={
           pdfMode
-            ? "grid grid-cols-1 px-5 pt-2 md:grid-cols-[1.9fr_1fr]"
-            : "grid grid-cols-1 md:grid-cols-[1.9fr_1fr]"
+            ? "grid grid-cols-1 px-5 pt-2 md:grid-cols-[1fr_17rem]"
+            : "grid grid-cols-1 md:grid-cols-[1fr_17rem]"
         }
       >
-        <div className="px-6 py-8 md:px-10 md:py-9">
+        <div className="px-6 py-6 md:px-10 md:py-8">
           {aboutMeText ? (
-            <section className="mb-8">
-              <h2 className="text-primary before:bg-primary mb-3.5 flex items-center gap-2 font-mono text-xs font-bold tracking-[0.18em] uppercase before:h-3.5 before:w-1 before:rounded-xs before:content-['']">
+            <section className="mb-7">
+              <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
                 {t("header.aboutMe")}
               </h2>
-              <p className="text-foreground/90 text-sm leading-relaxed">
+              <p className="text-sm leading-relaxed text-slate-800">
                 {aboutMeText}
               </p>
             </section>
@@ -62,7 +62,7 @@ const CvPreview: FC<ICvPreviewProps> = ({
           <Experience experiences={data.experiences} locale={locale} />
         </div>
 
-        <aside className="border-border/60 bg-muted/30 space-y-7 border-t px-6 py-8 md:border-t-0 md:border-l md:px-7 md:py-9">
+        <aside className="space-y-7 border-t border-slate-200 bg-[#f1f5fb] px-6 py-6 md:border-t-0 md:border-l md:px-7 md:py-8">
           <TechnicalSkills technicalSkills={data.technicalSkills} />
           <Education educations={data.educations} />
           <Languages languages={data.languages} />
