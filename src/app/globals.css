@@ -209,8 +209,8 @@
     --input: var(--color-divider-50);
     --ring: var(--color-primary-400);
 
-    --brand: #3b78f0;
-    --brand2: #7aa2ff;
+    --brand: var(--primary);
+    --brand2: var(--primary);
     --bar: #1c3fae;
     --gl1: rgba(255, 255, 255, 0.13);
     --gl2: rgba(255, 255, 255, 0.04);
@@ -237,25 +237,7 @@
 
   /*========== GLOBAL VARIABLES ==========*/
   /*========== MAIN-LIGHT THEME ==========*/
-  [data-theme="main-light"],
-  [data-theme="light"] {
-    --brand: #1d4ed8;
-    --brand2: #1d3fae;
-    --bar: #1b3aa8;
-    --gl1: rgba(255, 255, 255, 0.8);
-    --gl2: rgba(255, 255, 255, 0.45);
-    --gb: rgba(11, 18, 32, 0.12);
-    --gh: #ffffff;
-    --gs: 0 0.875rem 2.5rem rgba(30, 58, 138, 0.14);
-
-    --background: #fbfcff;
-    --card: #ffffff;
-    --foreground: #0b1220;
-    --card-foreground: #0b1220;
-    --muted-foreground: #5d6985;
-    --primary: #1d4ed8;
-    --border: rgba(11, 18, 32, 0.12);
-    --input: rgba(11, 18, 32, 0.12);
+  [data-theme="main-light"] {
     /*========== REDUDANT OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #eff7ff;
     --color-primary-100: #dbeafe;
@@ -347,36 +329,17 @@
   }
 
   /*========== MAIN-DARK THEME ==========*/
-  [data-theme="main-dark"],
-  [data-theme="dark"],
-  [data-color-mode="dark"] {
-    --brand: #3b78f0;
-    --brand2: #7aa2ff;
-    --bar: #1c3fae;
-    --gl1: rgba(255, 255, 255, 0.13);
-    --gl2: rgba(255, 255, 255, 0.04);
-    --gb: rgba(255, 255, 255, 0.17);
-    --gh: rgba(255, 255, 255, 0.34);
-    --gs: 0 1.125rem 3.125rem rgba(0, 0, 0, 0.3);
-
-    --background: #070b16;
-    --card: #0b1226;
-    --foreground: #f5f7ff;
-    --card-foreground: #f5f7ff;
-    --muted-foreground: #8b97b8;
-    --primary: #3b78f0;
-    --border: rgba(255, 255, 255, 0.1);
-    --input: rgba(255, 255, 255, 0.1);
+  [data-theme="main-dark"] {
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #0d1221;
     --color-primary-100: #1b2346;
     --color-primary-200: #29418e;
     --color-primary-300: #365dc9;
     --color-primary-400: #3b70e3;
-    --color-primary-500: #3b78f0;
+    --color-primary-500: #3c82f6;
     --color-primary-600: #3c8eff;
     --color-primary-700: #3480f4;
-    --color-primary-800: #3b78f0;
+    --color-primary-800: #2b6dc8;
     --color-primary-900: #23519a;
 
     --color-primaryDark-50: #95d2eb;
@@ -403,10 +366,10 @@
 
     --color-primaryText-50: #ffffff;
     --color-primaryText-100: #f9f9f9;
-    --color-primaryText-200: #8b97b8;
+    --color-primaryText-200: #f2f2f2;
     --color-primaryText-300: #ebebeb;
     --color-primaryText-400: #e2e2e2;
-    --color-primaryText-500: #f5f7ff;
+    --color-primaryText-500: #d9d9d9;
     --color-primaryText-600: #cccccc;
     --color-primaryText-700: #bfbfbf;
     --color-primaryText-800: #b3b3b3;
@@ -445,9 +408,9 @@
     --color-divider-800: #020306;
     --color-divider-900: #000000;
 
-    --color-background-50: #0b1226;
-    --color-background-100: #070b16;
-    --color-background-200: #050810;
+    --color-background-50: #141414;
+    --color-background-100: #0d0d0d;
+    --color-background-200: #070707;
     --color-background-300: #050505;
     --color-background-400: #030303;
     --color-background-500: #000000;
@@ -459,24 +422,6 @@
 
   /*========== ORANGE-LIGHT THEME ==========*/
   [data-theme="orange-light"] {
-    --brand: #ea580c;
-    --brand2: #f97316;
-    --bar: #c2410c;
-    --gl1: rgba(255, 255, 255, 0.85);
-    --gl2: rgba(255, 255, 255, 0.5);
-    --gb: rgba(124, 45, 18, 0.15);
-    --gh: #ffffff;
-    --gs: 0 0.875rem 2.5rem rgba(234, 88, 12, 0.14);
-
-    --background: #fffbf7;
-    --card: #ffffff;
-    --foreground: #201309;
-    --card-foreground: #201309;
-    --muted-foreground: #7c6f64;
-    --primary: #ea580c;
-    --primary-foreground: #ffffff;
-    --border: rgba(124, 45, 18, 0.14);
-    --input: rgba(124, 45, 18, 0.14);
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #fff7ed;
     --color-primary-100: #ffefd1;
@@ -569,24 +514,6 @@
 
   /*========== ORANGE-DARK THEME ==========*/
   [data-theme="orange-dark"] {
-    --brand: #f97316;
-    --brand2: #fb923c;
-    --bar: #ea580c;
-    --gl1: rgba(255, 255, 255, 0.12);
-    --gl2: rgba(255, 255, 255, 0.03);
-    --gb: rgba(249, 115, 22, 0.22);
-    --gh: rgba(255, 255, 255, 0.3);
-    --gs: 0 1.125rem 3.125rem rgba(0, 0, 0, 0.45);
-
-    --background: #0f0a06;
-    --card: #18110b;
-    --foreground: #fef7ee;
-    --card-foreground: #fef7ee;
-    --muted-foreground: #bda89b;
-    --primary: #f97316;
-    --primary-foreground: #ffffff;
-    --border: rgba(249, 115, 22, 0.18);
-    --input: rgba(249, 115, 22, 0.18);
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #0d1221;
     --color-primary-100: #1b2346;
@@ -679,24 +606,6 @@
 
   /*========== CHRISTMAS-LIGHT THEME ==========*/
   [data-theme="christmas-light"] {
-    --brand: #dc2626;
-    --brand2: #ef4444;
-    --bar: #b91c1c;
-    --gl1: rgba(255, 255, 255, 0.85);
-    --gl2: rgba(255, 255, 255, 0.5);
-    --gb: rgba(153, 27, 27, 0.15);
-    --gh: #ffffff;
-    --gs: 0 0.875rem 2.5rem rgba(220, 38, 38, 0.14);
-
-    --background: #fffafa;
-    --card: #ffffff;
-    --foreground: #1c0d0d;
-    --card-foreground: #1c0d0d;
-    --muted-foreground: #786565;
-    --primary: #dc2626;
-    --primary-foreground: #ffffff;
-    --border: rgba(153, 27, 27, 0.14);
-    --input: rgba(153, 27, 27, 0.14);
     --color-primary-50: #ffeeee;
     --color-primary-100: #fed7d7;
     --color-primary-200: #feb2b2;
@@ -788,24 +697,6 @@
 
   /*========== CHRISTMAS-DARK THEME ==========*/
   [data-theme="christmas-dark"] {
-    --brand: #ef4444;
-    --brand2: #f87171;
-    --bar: #dc2626;
-    --gl1: rgba(255, 255, 255, 0.12);
-    --gl2: rgba(255, 255, 255, 0.03);
-    --gb: rgba(239, 68, 68, 0.22);
-    --gh: rgba(255, 255, 255, 0.3);
-    --gs: 0 1.125rem 3.125rem rgba(0, 0, 0, 0.45);
-
-    --background: #100606;
-    --card: #1c0d0d;
-    --foreground: #fff5f5;
-    --card-foreground: #fff5f5;
-    --muted-foreground: #bda2a2;
-    --primary: #ef4444;
-    --primary-foreground: #ffffff;
-    --border: rgba(239, 68, 68, 0.18);
-    --input: rgba(239, 68, 68, 0.18);
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #ffeeee;
     --color-primary-100: #fed7d7;
@@ -1677,8 +1568,8 @@ video::-webkit-media-controls {
 }
 
 .btn-primary-glow {
-  background: var(--brand) !important;
-  color: #ffffff !important;
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
   box-shadow:
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.4),
     0 0.5rem 1.5rem color-mix(in srgb, var(--brand) 45%, transparent) !important;

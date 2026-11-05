@@ -47,7 +47,7 @@ export function ServiceList({
             ) : null}
           </div>
           {item.badge ? (
-            <span className="text-muted-foreground shrink-0 font-mono text-xs font-semibold tracking-wider uppercase">
+            <span className="text-muted-foreground shrink-0 font-mono text-sm font-semibold tracking-wider uppercase">
               {item.badge}
             </span>
           ) : null}
