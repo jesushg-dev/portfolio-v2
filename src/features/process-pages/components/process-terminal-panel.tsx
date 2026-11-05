@@ -27,7 +27,7 @@ export function ProcessTerminalPanel({
         <span aria-hidden className="size-2.5 rounded-full bg-red-500/80" />
         <span aria-hidden className="size-2.5 rounded-full bg-yellow-500/80" />
         <span aria-hidden className="size-2.5 rounded-full bg-green-500/80" />
-        <span className="text-muted-foreground ml-auto font-mono text-xs">
+        <span className="text-muted-foreground ml-auto font-mono text-sm">
           {title}
         </span>
         {badge}
@@ -47,7 +47,7 @@ export function ProcessTestRunnerOutput({
   cursorLabel = "",
 }: ProcessTestRunnerOutputProps) {
   return (
-    <div className="overflow-x-auto font-mono text-xs leading-relaxed sm:text-sm">
+    <div className="overflow-x-auto font-mono text-sm leading-relaxed">
       {lines.map((line, index) => (
         <p
           key={`${line}-${index}`}

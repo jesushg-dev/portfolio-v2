@@ -122,14 +122,14 @@ export function DailyVisitsChart({
       </div>
 
       {/* Date Axis */}
-      <div className="text-muted-foreground mt-2.5 flex justify-between font-mono text-xs">
+      <div className="text-muted-foreground mt-2.5 flex justify-between font-mono text-sm">
         <span>{startDate}</span>
         <span>{endDate}</span>
       </div>
 
       {/* Peak Info Note */}
       {peakDay && peakDay.visits > 0 ? (
-        <p className="text-muted-foreground mt-3.5 text-xs sm:text-sm">
+        <p className="text-muted-foreground mt-3.5 text-sm">
           {locale === "es"
             ? `Pico: ${peakDay.visits} visitas el ${peakDay.formattedDate}.`
             : locale === "nl"

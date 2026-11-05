@@ -91,13 +91,13 @@ export function ProcessStepsAccordion({
                     <p className="leading-relaxed">{step.description}</p>
                     {step.detail ? (
                       <div className="border-primary text-foreground mt-5 border-l-2 pl-4 text-sm sm:text-base">
-                        <small className="text-primary mb-1.5 block text-xs font-semibold tracking-wider uppercase">
+                        <small className="text-primary mb-1.5 block text-sm font-semibold tracking-wider uppercase">
                           {inPracticeLabel}
                         </small>
                         <p className="leading-relaxed">{step.detail}</p>
                         {step.tools ? (
-                          <div className="text-muted-foreground mt-2 text-xs">
-                            Tooling: {step.tools}
+                          <div className="text-muted-foreground mt-2 text-sm">
+                            {step.tools}
                           </div>
                         ) : null}
                       </div>

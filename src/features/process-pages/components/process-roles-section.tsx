@@ -45,7 +45,7 @@ export function ProcessRolesSection({
             description={description}
           />
 
-          <p className="text-muted-foreground mt-0 mb-4 text-xs font-semibold tracking-widest uppercase">
+          <p className="text-muted-foreground mt-0 mb-4 text-sm font-semibold tracking-widest uppercase">
             {myRolesLabel}
           </p>
           <ul className="mb-14 flex list-none flex-wrap justify-center gap-2">
@@ -58,7 +58,7 @@ export function ProcessRolesSection({
             ))}
           </ul>
 
-          <p className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
+          <p className="text-muted-foreground mb-4 text-sm font-semibold tracking-widest uppercase">
             {displayEcosystemRolesLabel}
           </p>
           <ul className="mb-14 flex list-none flex-wrap justify-center gap-2">
@@ -71,7 +71,7 @@ export function ProcessRolesSection({
             ))}
           </ul>
 
-          <p className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
+          <p className="text-muted-foreground mb-4 text-sm font-semibold tracking-widest uppercase">
             {testingLabel}
           </p>
           <ul className="flex list-none flex-wrap justify-center gap-2">

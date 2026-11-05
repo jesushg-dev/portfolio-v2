@@ -162,7 +162,7 @@ export function IssuerChips({
         type="button"
         aria-pressed={selectedIssuer === "ALL"}
         onClick={() => onSelect("ALL")}
-        className={`inline-flex min-h-9 cursor-pointer items-center rounded-full border px-3.5 py-1 text-xs font-medium transition-colors sm:text-sm ${
+        className={`inline-flex min-h-11 cursor-pointer items-center rounded-full border px-3.5 py-1 text-sm font-medium transition-colors ${
           selectedIssuer === "ALL"
             ? "border-primary bg-primary text-primary-foreground font-semibold"
             : "border-border/80 text-muted-foreground hover:text-foreground bg-transparent"
@@ -179,14 +179,14 @@ export function IssuerChips({
             type="button"
             aria-pressed={isSelected}
             onClick={() => onSelect(isSelected ? "ALL" : name)}
-            className={`inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1 text-xs font-medium transition-colors sm:text-sm ${
+            className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1 text-sm font-medium transition-colors ${
               isSelected
                 ? "border-primary bg-primary text-primary-foreground font-semibold"
                 : "border-border/80 text-muted-foreground hover:text-foreground bg-transparent"
             }`}
           >
             <span>{name}</span>
-            <span className="text-xs opacity-70">({count})</span>
+            <span className="text-sm text-muted-foreground">({count})</span>
           </button>
         );
       })}
@@ -215,7 +215,7 @@ export function TechChips({ topTech, selectedTech, onToggle }: TechChipsProps) {
             type="button"
             aria-pressed={isSelected}
             onClick={() => onToggle(name)}
-            className={`inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1 text-xs font-medium transition-colors sm:text-sm ${
+            className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1 text-sm font-medium transition-colors ${
               isSelected
                 ? "border-primary bg-primary text-primary-foreground font-semibold"
                 : "border-border/80 text-muted-foreground hover:text-foreground bg-transparent"
@@ -229,7 +229,7 @@ export function TechChips({ topTech, selectedTech, onToggle }: TechChipsProps) {
               className="size-4 rounded-xs text-[0.625rem]"
             />
             <span>{name}</span>
-            <span className="text-xs opacity-70">({count})</span>
+            <span className="text-sm text-muted-foreground">({count})</span>
           </button>
         );
       })}
@@ -727,7 +727,7 @@ export function CertificatesCatalogView({
                 autoComplete="off"
                 className="border-border/80 bg-background/80 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 w-full rounded-full border py-3 pr-11 pl-11 text-sm outline-hidden transition-all focus:ring-2"
               />
-              <kbd className="border-border text-muted-foreground pointer-events-none absolute top-1/2 right-4 hidden -translate-y-1/2 rounded border px-1.5 py-0.5 font-mono text-xs sm:block">
+              <kbd className="border-border text-muted-foreground pointer-events-none absolute top-1/2 right-4 hidden -translate-y-1/2 rounded border px-1.5 py-0.5 font-mono text-sm sm:block">
                 /
               </kbd>
             </label>
@@ -754,7 +754,7 @@ export function CertificatesCatalogView({
             </summary>
             <div className="border-border/60 mt-4 space-y-5 border-t pt-4">
               <div>
-                <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase">
+                <p className="text-muted-foreground mb-2 text-sm font-semibold tracking-wider uppercase">
                   {t("catalog.issuerLabel")}
                 </p>
                 <IssuerChips
@@ -766,7 +766,7 @@ export function CertificatesCatalogView({
               </div>
 
               <div>
-                <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase">
+                <p className="text-muted-foreground mb-2 text-sm font-semibold tracking-wider uppercase">
                   {t("catalog.techLabel")}
                 </p>
                 <TechChips
@@ -782,7 +782,12 @@ export function CertificatesCatalogView({
 
       {/* Main Catalog Content */}
       <section className="mx-auto w-full px-4 pb-28 sm:px-6 md:pb-36 lg:container lg:px-20">
-        <div>
+        <div
+          id={CATALOG_PANEL_ID}
+          role="tabpanel"
+          aria-labelledby={`${CATALOG_TAB_ID}-tab-${CERT_TYPES.indexOf(selectedType)}`}
+          tabIndex={0}
+        >
           {/* Status Bar */}
           <div className="text-muted-foreground mt-8 mb-6 flex min-h-8 flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm">
             <p role="status" aria-live="polite">
@@ -855,7 +860,7 @@ export function CertificatesCatalogView({
           >
             {/* Top Header Bar (.dh) */}
             <div className="border-border/60 flex items-center justify-between border-b pb-4">
-              <span className="text-muted-foreground font-mono text-xs sm:text-sm">
+              <span className="text-muted-foreground font-mono text-sm">
                 {(activePreviewIndex ?? 0) + 1} / {filteredCertificates.length}
               </span>
               <div className="flex items-center gap-1.5">
@@ -904,7 +909,7 @@ export function CertificatesCatalogView({
 
               {/* Right: Certificate Information (.di) */}
               <div>
-                <p className="text-muted-foreground text-xs font-normal sm:text-sm">
+                <p className="text-muted-foreground text-sm font-normal">
                   {activeCert.company}
                   {activeCert.issuedDate
                     ? ` · ${formatIssuedDate(activeCert.issuedDate, locale)}`
@@ -920,7 +925,7 @@ export function CertificatesCatalogView({
                     {activeCert.skills.map((skill) => (
                       <span
                         key={skill.id}
-                        className="border-border/80 bg-muted/40 text-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs"
+                        className="border-border/80 bg-muted/40 text-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm"
                       >
                         <SkillIcon
                           image={skill.image}
@@ -937,7 +942,7 @@ export function CertificatesCatalogView({
 
                 {activeCert.idCredential ? (
                   <div className="mt-6">
-                    <p className="text-muted-foreground mb-1 text-xs font-semibold tracking-wider uppercase">
+                    <p className="text-muted-foreground mb-1 text-sm font-semibold tracking-wider uppercase">
                       {t("catalog.credentialId")}
                     </p>
                     <p className="text-foreground font-mono text-sm break-all select-all">

@@ -68,7 +68,7 @@ const CertificateItem: FC<CertificateItemProps> = (props) => {
       </div>
 
       {/* Meta: Company · Date */}
-      <p className="text-muted-foreground mt-4 flex items-center gap-1.5 text-xs font-normal sm:text-sm">
+      <p className="text-muted-foreground mt-4 flex items-center gap-1.5 text-sm font-normal">
         <Building2
           className="text-primary size-3.5 shrink-0"
           aria-hidden="true"
@@ -97,7 +97,7 @@ const CertificateItem: FC<CertificateItemProps> = (props) => {
           {skills.slice(0, 4).map((skill) => (
             <span
               key={skill.id}
-              className="border-border/80 bg-muted/40 text-muted-foreground inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs"
+              className="border-border/80 bg-muted/40 text-muted-foreground inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-sm"
             >
               <SkillIcon
                 image={skill.image}
@@ -110,13 +110,13 @@ const CertificateItem: FC<CertificateItemProps> = (props) => {
             </span>
           ))}
           {skills.length > 4 ? (
-            <span className="text-muted-foreground/80 pl-0.5 text-xs">
+            <span className="text-muted-foreground/80 pl-0.5 text-sm">
               +{skills.length - 4}
             </span>
           ) : null}
         </div>
       ) : techNames.length > 0 ? (
-        <p className="text-muted-foreground mt-1.5 line-clamp-1 text-xs sm:text-sm">
+        <p className="text-muted-foreground mt-1.5 line-clamp-1 text-sm">
           {techNames.join(" · ")}
         </p>
       ) : null}

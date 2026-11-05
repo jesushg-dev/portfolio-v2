@@ -35,7 +35,7 @@ export function ProcessHeroWorkflowCycle({
 
   return (
     <>
-      <p className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
+      <p className="text-muted-foreground mb-4 text-sm font-semibold tracking-widest uppercase">
         {title}
       </p>
       <ol className="space-y-3.5" aria-label={title}>
@@ -48,7 +48,7 @@ export function ProcessHeroWorkflowCycle({
               <span
                 aria-hidden
                 className={cn(
-                  "flex size-5.5 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                  "flex size-5.5 shrink-0 items-center justify-center rounded-full text-sm font-bold",
                   isComplete && "bg-primary/20 text-primary",
                   isActive && "bg-primary text-primary-foreground",
                   !isComplete &&
