@@ -74,12 +74,12 @@ export default async function HeroContent({
 
       {/* At A Glance Card matching Prototype */}
       <div className="glass-card mt-7 max-w-lg rounded-2xl p-4.5 sm:p-5">
-        <p className="text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase">
+        <p className="text-muted-foreground mb-3 text-sm font-medium tracking-wider uppercase">
           {t("atAGlance")}
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <div>
-            <small className="text-muted-foreground block text-xs">
+            <small className="text-muted-foreground block text-sm">
               {t("yearsExperience")}
             </small>
             <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
@@ -87,7 +87,7 @@ export default async function HeroContent({
             </b>
           </div>
           <div>
-            <small className="text-muted-foreground block text-xs">
+            <small className="text-muted-foreground block text-sm">
               {t("projectsDelivered")}
             </small>
             <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
@@ -96,7 +96,7 @@ export default async function HeroContent({
           </div>
           {stats.engineersMentored != null ? (
             <div>
-              <small className="text-muted-foreground block text-xs">
+              <small className="text-muted-foreground block text-sm">
                 {t("engineersLed")}
               </small>
               <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">

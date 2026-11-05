@@ -37,7 +37,7 @@ function ExpertiseCard({
       >
         <div className="w-full px-7 pt-7">
           {item.badge && (
-            <span className="text-primary mb-2 block text-xs font-semibold tracking-wider uppercase">
+            <span className="text-primary mb-2 block text-sm font-semibold tracking-wider uppercase">
               {item.badge}
             </span>
           )}
@@ -84,7 +84,7 @@ function ExpertiseDetails({
   return (
     <>
       <div className="text-muted-foreground flex items-center justify-between px-5 pt-4 sm:px-7">
-        <span className="font-mono text-xs tabular-nums">
+        <span className="font-mono text-sm tabular-nums">
           {String(index + 1).padStart(2, "0")} /{" "}
           {String(total).padStart(2, "0")}
         </span>
@@ -135,7 +135,7 @@ function ExpertiseDetails({
           </DialogDescription>
           {item.practicePoints.length > 0 && (
             <div className="mt-6">
-              <h4 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+              <h4 className="text-muted-foreground text-sm font-semibold tracking-widest uppercase">
                 {t("inPractice")}
               </h4>
               <ul className="text-foreground marker:text-primary mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed">
@@ -158,7 +158,7 @@ function ExpertiseDetails({
               {item.technologies.map((tech) => (
                 <li
                   key={tech.id}
-                  className="border-border text-muted-foreground rounded-full border px-2.5 py-1 text-xs"
+                  className="border-border text-muted-foreground rounded-full border px-2.5 py-1 text-sm"
                 >
                   {tech.title}
                 </li>
@@ -282,7 +282,7 @@ export function ServicesCarousel({
             type="button"
             variant="ghost"
             size="icon"
-            className="rounded-full"
+            className="min-h-11 min-w-11 size-11 rounded-full"
             aria-label={t(motionPaused ? "resumeMotion" : "pauseMotion")}
             onClick={() => setMotionPaused((previous) => !previous)}
           >
@@ -298,7 +298,7 @@ export function ServicesCarousel({
             aria-label={t("previousCard")}
             disabled={!canScrollLeft}
             onClick={() => scroll(-1)}
-            className="rounded-full"
+            className="min-h-11 min-w-11 size-11 rounded-full"
           >
             <ChevronLeft className="size-5" />
           </Button>
@@ -308,7 +308,7 @@ export function ServicesCarousel({
             aria-label={t("nextCard")}
             disabled={!canScrollRight}
             onClick={() => scroll(1)}
-            className="rounded-full"
+            className="min-h-11 min-w-11 size-11 rounded-full"
           >
             <ChevronRight className="size-5" />
           </Button>

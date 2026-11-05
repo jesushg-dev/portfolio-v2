@@ -142,7 +142,7 @@ export function CareerClimbChart({
         <div className="min-w-0 p-5 sm:p-8 lg:p-10">
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div>
-              <p className="text-primary text-xs font-semibold tracking-widest uppercase">
+              <p className="text-primary text-sm font-semibold tracking-widest uppercase">
                 {t("chart.eyebrow")}
               </p>
               <p className="text-foreground mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -154,7 +154,7 @@ export function CareerClimbChart({
                 <p className="text-primary text-4xl font-semibold tracking-tighter tabular-nums sm:text-5xl">
                   {months}
                 </p>
-                <p className="text-muted-foreground mt-1 max-w-36 text-xs leading-relaxed">
+                <p className="text-muted-foreground mt-1 max-w-36 text-sm leading-relaxed">
                   {t("chart.monthsShown")}
                 </p>
               </div>
@@ -261,7 +261,7 @@ export function CareerClimbChart({
                     />
                     <span
                       className={cn(
-                        "text-muted-foreground absolute top-10 hidden max-w-24 truncate text-center text-xs font-medium sm:block",
+                        "text-muted-foreground absolute top-10 hidden max-w-24 truncate text-center text-sm font-medium sm:block",
                         point.experience.id === selectedId &&
                           "text-primary font-semibold",
                       )}
@@ -290,18 +290,18 @@ export function CareerClimbChart({
                   </button>
                 ) : null}
               </div>
-              <div className="text-muted-foreground mt-5 flex justify-between gap-4 font-mono text-xs tabular-nums">
+              <div className="text-muted-foreground mt-5 flex justify-between gap-4 font-mono text-sm tabular-nums">
                 <span>{earliest?.getUTCFullYear()}</span>
                 <span>{finalYear}</span>
               </div>
-              <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
+              <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
                 {t("chart.caption")}
               </p>
             </>
           ) : null}
 
           {months > 0 ? (
-            <p className="text-muted-foreground mt-5 text-xs leading-relaxed">
+            <p className="text-muted-foreground mt-5 text-sm leading-relaxed">
               {t("chart.monthsExplanation")}
             </p>
           ) : null}
@@ -323,7 +323,7 @@ export function CareerClimbChart({
                 <span className="bg-primary/10 text-primary mb-6 flex size-14 items-center justify-center rounded-2xl">
                   <Flag className="size-6" aria-hidden="true" />
                 </span>
-                <p className="text-primary text-xs font-semibold tracking-widest uppercase">
+                <p className="text-primary text-sm font-semibold tracking-widest uppercase">
                   {t("chart.nextStage")}
                 </p>
                 <h3
@@ -345,7 +345,7 @@ export function CareerClimbChart({
               </div>
             ) : selected ? (
               <>
-                <p className="text-primary text-xs font-semibold tracking-widest uppercase">
+                <p className="text-primary text-sm font-semibold tracking-widest uppercase">
                   {selected.company}
                 </p>
                 <h3
@@ -374,7 +374,7 @@ export function CareerClimbChart({
                     {selected.skills.map((skill) => (
                       <li
                         key={skill}
-                        className="border-border bg-muted/40 text-foreground rounded-lg border px-2.5 py-1.5 text-xs font-medium"
+                        className="border-border bg-muted/40 text-foreground rounded-lg border px-2.5 py-1.5 text-sm font-medium"
                       >
                         {skill}
                       </li>
@@ -401,8 +401,8 @@ export function CareerClimbChart({
             <Button
               type="button"
               variant="ghost"
-              size="sm"
-              className="btn-glass min-h-11 rounded-full px-4"
+              size="default"
+              className="btn-glass min-h-11 rounded-full px-4 text-sm"
               disabled={selectedIndex === 0}
               onClick={() => setSelection(choices[selectedIndex - 1])}
               aria-controls={`${id}-content`}
@@ -411,7 +411,7 @@ export function CareerClimbChart({
               {t("chart.previous")}
             </Button>
             <span
-              className="text-muted-foreground text-xs tabular-nums"
+              className="text-muted-foreground text-sm tabular-nums"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -420,8 +420,8 @@ export function CareerClimbChart({
             <Button
               type="button"
               variant="ghost"
-              size="sm"
-              className="btn-glass min-h-11 max-w-full rounded-full px-4"
+              size="default"
+              className="btn-glass min-h-11 max-w-full rounded-full px-4 text-sm"
               disabled={selectedIndex === choices.length - 1}
               onClick={() => setSelection(choices[selectedIndex + 1])}
               aria-controls={`${id}-content`}

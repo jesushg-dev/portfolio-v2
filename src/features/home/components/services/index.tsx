@@ -39,7 +39,7 @@ const Services: FC = async () => {
           action={
             <a
               href="#skills"
-              className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--brand2)] transition-colors hover:underline hover:opacity-85"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-primary transition-colors hover:underline hover:opacity-85"
             >
               {t("seeStack")}
             </a>

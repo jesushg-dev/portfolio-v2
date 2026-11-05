@@ -165,7 +165,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
             <TabsTrigger
               key={category.id}
               value={category.id}
-              className="min-h-10 flex-none px-4 text-xs"
+              className="min-h-11 flex-none px-4 text-sm"
               onFocus={(event) =>
                 event.currentTarget.scrollIntoView?.({
                   block: "nearest",
@@ -174,7 +174,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
               }
             >
               <span>{t(`tabs.${category.id}.title`)}</span>
-              <span className="text-muted-foreground font-mono text-xs">
+              <span className="text-muted-foreground font-mono text-sm">
                 {counts[category.id]}
               </span>
             </TabsTrigger>
@@ -191,7 +191,6 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
         {/* Chips & Cards */}
         <TabsContent
           value={activeCategory}
-          id="home-skills-results"
           className="p-6 pt-4"
         >
           {visibleSkills.length === 0 ? (

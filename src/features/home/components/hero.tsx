@@ -93,7 +93,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
         <div className="mt-12 hidden justify-center lg:flex">
           <a
             href="#portfolio"
-            className="text-muted-foreground hover:text-foreground flex flex-col items-center gap-2 font-mono text-xs tracking-widest uppercase transition-colors"
+            className="text-muted-foreground hover:text-foreground flex flex-col items-center justify-center min-h-11 min-w-11 gap-2 font-mono text-sm tracking-widest uppercase transition-colors"
             aria-label={t("scrollDown")}
           >
             <span>{t("scrollDown")}</span>

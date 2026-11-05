@@ -29,7 +29,7 @@ function AuthorName({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-foreground hover:text-primary font-semibold hover:underline"
+      className="text-foreground hover:text-primary inline-flex min-h-11 items-center font-semibold hover:underline"
     >
       {author}
     </a>
@@ -66,7 +66,7 @@ function TestimonialSpotlight({ item }: { item: TestimonialItem }) {
         <div className="min-w-0 text-sm">
           <AuthorName author={item.author} linkedInUrl={item.linkedInUrl} />
           {item.role && (
-            <p className="text-muted-foreground mt-1.5 max-w-56 text-xs leading-relaxed">
+            <p className="text-muted-foreground mt-1.5 max-w-56 text-sm leading-relaxed">
               {item.role}
             </p>
           )}
@@ -143,7 +143,7 @@ export default function SocialProof({
               >
                 <ArrowLeft className="size-4" aria-hidden="true" />
               </button>
-              <span className="text-muted-foreground min-w-10 text-center font-mono text-xs tabular-nums">
+              <span className="text-muted-foreground min-w-10 text-center font-mono text-sm tabular-nums">
                 {activeIndex + 1} / {testimonials.length}
               </span>
               <button
