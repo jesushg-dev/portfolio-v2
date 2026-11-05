@@ -232,6 +232,17 @@ export async function seedPortfolioCv(
   }
 
   // 7. CvExperience & Responsibilities
+  // MongoDB does not enforce foreign keys. Remove the old skill links before
+  // replacing experiences so a later build cannot hydrate dangling relations.
+  const ownerSkillIds = await prisma.skill.findMany({
+    where: { userId },
+    select: { id: true },
+  });
+  if (ownerSkillIds.length > 0) {
+    await prisma.cvExperienceSkill.deleteMany({
+      where: { skillId: { in: ownerSkillIds.map(({ id }) => id) } },
+    });
+  }
   await prisma.cvExperience.deleteMany({ where: { userId } });
   for (const experience of data.experiences) {
     const skillIds = resolveSkillIds(
