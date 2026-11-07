@@ -26,7 +26,6 @@ function ExpertiseCard({
   paused: boolean;
   onSelect: (item: ExpertiseItem) => void;
 }) {
-  const t = useTranslations("main.services");
   return (
     <li className="w-[min(21rem,85vw)] flex-none snap-start">
       <button
@@ -281,7 +280,7 @@ export function ServicesCarousel({
             type="button"
             variant="ghost"
             size="icon"
-            className="min-h-11 min-w-11 size-11 rounded-full"
+            className="size-11 min-h-11 min-w-11 rounded-full"
             aria-label={t(motionPaused ? "resumeMotion" : "pauseMotion")}
             onClick={() => setMotionPaused((previous) => !previous)}
           >
@@ -297,7 +296,7 @@ export function ServicesCarousel({
             aria-label={t("previousCard")}
             disabled={!canScrollLeft}
             onClick={() => scroll(-1)}
-            className="min-h-11 min-w-11 size-11 rounded-full"
+            className="size-11 min-h-11 min-w-11 rounded-full"
           >
             <ChevronLeft className="size-5" />
           </Button>
@@ -307,7 +306,7 @@ export function ServicesCarousel({
             aria-label={t("nextCard")}
             disabled={!canScrollRight}
             onClick={() => scroll(1)}
-            className="min-h-11 min-w-11 size-11 rounded-full"
+            className="size-11 min-h-11 min-w-11 rounded-full"
           >
             <ChevronRight className="size-5" />
           </Button>

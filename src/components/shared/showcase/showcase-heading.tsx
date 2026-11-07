@@ -35,7 +35,7 @@ export function ShowcaseHeading({
       >
         <div>
           {eyebrow ? (
-            <p className="mb-3 text-sm font-semibold tracking-normal text-primary">
+            <p className="text-primary mb-3 text-sm font-semibold tracking-normal">
               {eyebrow}
             </p>
           ) : null}
@@ -70,7 +70,7 @@ export function ShowcaseHeading({
       )}
     >
       {eyebrow ? (
-        <p className="mb-3 text-sm font-semibold tracking-normal text-primary">
+        <p className="text-primary mb-3 text-sm font-semibold tracking-normal">
           {eyebrow}
         </p>
       ) : null}

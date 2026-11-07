@@ -238,6 +238,7 @@
   /*========== GLOBAL VARIABLES ==========*/
   /*========== MAIN-LIGHT THEME ==========*/
   [data-theme="main-light"] {
+    --brand2: #1d3fae;
     /*========== REDUDANT OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #eff7ff;
     --color-primary-100: #dbeafe;
@@ -330,6 +331,7 @@
 
   /*========== MAIN-DARK THEME ==========*/
   [data-theme="main-dark"] {
+    --brand2: #7aa2ff;
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #0d1221;
     --color-primary-100: #1b2346;
@@ -366,10 +368,10 @@
 
     --color-primaryText-50: #ffffff;
     --color-primaryText-100: #f9f9f9;
-    --color-primaryText-200: #f2f2f2;
+    --color-primaryText-200: #aab5d0;
     --color-primaryText-300: #ebebeb;
     --color-primaryText-400: #e2e2e2;
-    --color-primaryText-500: #d9d9d9;
+    --color-primaryText-500: #f5f7ff;
     --color-primaryText-600: #cccccc;
     --color-primaryText-700: #bfbfbf;
     --color-primaryText-800: #b3b3b3;
@@ -408,9 +410,9 @@
     --color-divider-800: #020306;
     --color-divider-900: #000000;
 
-    --color-background-50: #141414;
-    --color-background-100: #0d0d0d;
-    --color-background-200: #070707;
+    --color-background-50: #0b1226;
+    --color-background-100: #070b16;
+    --color-background-200: #050810;
     --color-background-300: #050505;
     --color-background-400: #030303;
     --color-background-500: #000000;

@@ -186,7 +186,7 @@ export function IssuerChips({
             }`}
           >
             <span>{name}</span>
-            <span className="text-sm text-muted-foreground">({count})</span>
+            <span className="text-muted-foreground text-sm">({count})</span>
           </button>
         );
       })}
@@ -229,7 +229,7 @@ export function TechChips({ topTech, selectedTech, onToggle }: TechChipsProps) {
               className="size-4 rounded-xs text-[0.625rem]"
             />
             <span>{name}</span>
-            <span className="text-sm text-muted-foreground">({count})</span>
+            <span className="text-muted-foreground text-sm">({count})</span>
           </button>
         );
       })}

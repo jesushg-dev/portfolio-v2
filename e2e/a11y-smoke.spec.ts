@@ -66,4 +66,3 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
     });
   }
 });
-

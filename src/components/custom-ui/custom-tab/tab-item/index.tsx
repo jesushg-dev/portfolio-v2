@@ -82,7 +82,7 @@ const TabItem: FC<TabItemProps> = ({
             <span className="block text-sm leading-tight whitespace-nowrap">
               {title}
               {typeof count === "number" ? (
-                <small className="ml-1.5 text-sm font-normal text-muted-foreground">
+                <small className="text-muted-foreground ml-1.5 text-sm font-normal">
                   {count}
                 </small>
               ) : null}

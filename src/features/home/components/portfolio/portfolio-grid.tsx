@@ -61,7 +61,7 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({
               isFeaturedHero={idx === 0}
               onPreview={handlePreview}
               showSkills={false}
-              showCaseStudyLink={false}
+              showCaseStudyLink
               metaText={getProjectMetaText(
                 project,
                 t as unknown as (key: string) => string,

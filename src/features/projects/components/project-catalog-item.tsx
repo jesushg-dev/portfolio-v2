@@ -138,6 +138,9 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
   showCaseStudyLink = true,
 }) => {
   const { title, description, skills, image, caseStudyEnabled, slug } = project;
+  const hasCaseStudyLink = Boolean(
+    showCaseStudyLink && caseStudyEnabled && slug,
+  );
 
   const initials = useMemo(() => getProjectInitials(title), [title]);
   const gradient = useMemo(() => getProjectGradient(title), [title]);
@@ -165,10 +168,10 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
 
   return (
     <article
-      tabIndex={0}
-      role="button"
+      tabIndex={hasCaseStudyLink ? undefined : 0}
+      role={hasCaseStudyLink ? undefined : "button"}
       onClick={handleCardClick}
-      onKeyDown={handleKeyDown}
+      onKeyDown={hasCaseStudyLink ? undefined : handleKeyDown}
       className={cn(
         "group focus-visible:ring-primary w-full cursor-pointer text-left transition-all duration-300 focus-visible:ring-2 focus-visible:outline-hidden",
         isFeaturedHero
@@ -248,7 +251,7 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
           </div>
         ) : null}
 
-        {showCaseStudyLink && caseStudyEnabled && slug ? (
+        {hasCaseStudyLink && slug ? (
           <div className="mt-auto pt-3.5">
             <Link
               href={{
@@ -256,7 +259,7 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
                 params: { slug },
               }}
               onClick={(e) => e.stopPropagation()}
-              className="text-primary inline-flex items-center gap-1 text-sm font-medium transition-colors hover:underline"
+              className="text-primary inline-flex min-h-11 items-center gap-1 py-3 text-sm font-medium transition-colors hover:underline"
             >
               <span>{readCaseStudyLabel}</span>
               <ArrowUpRight className="size-3.5" aria-hidden="true" />

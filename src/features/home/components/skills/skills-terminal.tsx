@@ -189,10 +189,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
         </div>
 
         {/* Chips & Cards */}
-        <TabsContent
-          value={activeCategory}
-          className="p-6 pt-4"
-        >
+        <TabsContent value={activeCategory} className="p-6 pt-4">
           {visibleSkills.length === 0 ? (
             <p className="text-muted-foreground py-10 text-center font-mono text-sm">
               {t("terminal.noMatch", { query: search })}
