@@ -154,14 +154,18 @@ describe("ProjectsCatalogView", () => {
   it("opens modal dialog on project click and supports navigation and closing", () => {
     renderWithIntl(<ProjectsCatalogView initialProjects={mockProjects} />);
 
-    // Click on Musa Ecommerce
-    const projectCard = screen.getByRole("button", { name: /musa ecommerce/i });
+    // Musa Ecommerce has a case study, so it renders as a direct link
+    const musaLink = screen.getByRole("link", { name: /musa ecommerce/i });
+    expect(musaLink).toHaveAttribute("href", "/projects/musa-ecommerce");
+
+    // Tienda API has no case study, so it opens the preview modal dialog
+    const projectCard = screen.getByRole("button", { name: /tienda api/i });
     fireEvent.click(projectCard);
 
     // Dialog should now be visible with project details
     const dialog = screen.getByRole("dialog");
     expect(dialog).toBeInTheDocument();
-    expect(dialog).toHaveAttribute("aria-label", "Musa Ecommerce");
+    expect(dialog).toHaveAttribute("aria-label", "Tienda API");
 
     // Close button
     const closeBtn = screen.getByRole("button", {

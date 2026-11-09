@@ -17,157 +17,7 @@ import type { RouterOutputs } from "@/trpc/react";
 export type ExpertiseItem =
   RouterOutputs["portfolio"]["getServicesPublic"][number];
 
-function ExpertiseCard({
-  item,
-  onSelect,
-  paused,
-}: {
-  item: ExpertiseItem;
-  paused: boolean;
-  onSelect: (item: ExpertiseItem) => void;
-}) {
-  return (
-    <li className="w-[min(21rem,85vw)] flex-none snap-start">
-      <button
-        type="button"
-        onClick={() => onSelect(item)}
-        className="from-card via-primary/5 to-primary/10 border-border/60 hover:border-primary/40 focus-visible:ring-ring group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border bg-linear-to-br text-left shadow-sm transition focus-visible:ring-2 focus-visible:outline-none motion-safe:hover:-translate-y-1"
-      >
-        <div className="w-full px-7 pt-7">
-          {item.badge && (
-            <span className="text-primary mb-2 block text-sm font-semibold tracking-wider uppercase">
-              {item.badge}
-            </span>
-          )}
-          <h3 className="text-foreground text-2xl leading-tight font-bold tracking-tight">
-            {item.title}
-          </h3>
-          <p className="text-muted-foreground mt-3 line-clamp-3 text-sm leading-relaxed">
-            {item.description}
-          </p>
-        </div>
-        <div className="relative mt-auto h-64 w-full p-4">
-          <ExpertiseVisual
-            image={item.image}
-            visualType={item.visualType}
-            nodes={item.visualNodes}
-            paused={paused}
-          />
-          <span
-            aria-hidden="true"
-            className="bg-muted text-foreground group-hover:bg-primary group-hover:text-primary-foreground absolute right-5 bottom-5 grid size-8 place-items-center rounded-full transition-colors"
-          >
-            <Plus className="size-4" />
-          </span>
-        </div>
-      </button>
-    </li>
-  );
-}
-
-function ExpertiseDetails({
-  item,
-  index,
-  total,
-  paused,
-  onToggleMotion,
-}: {
-  item: ExpertiseItem;
-  index: number;
-  total: number;
-  paused: boolean;
-  onToggleMotion: () => void;
-}) {
-  const t = useTranslations("main.services");
-  return (
-    <>
-      <div className="text-muted-foreground flex items-center justify-between px-5 pt-4 sm:px-7">
-        <span className="font-mono text-sm tabular-nums">
-          {String(index + 1).padStart(2, "0")} /{" "}
-          {String(total).padStart(2, "0")}
-        </span>
-        <div className="flex gap-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={t(paused ? "resumeMotion" : "pauseMotion")}
-            onClick={onToggleMotion}
-          >
-            {paused ? (
-              <Play className="size-4" />
-            ) : (
-              <Pause className="size-4" />
-            )}
-          </Button>
-          <DialogClose
-            render={
-              <Button variant="ghost" size="icon" className="rounded-full" />
-            }
-            aria-label={t("close")}
-          >
-            <X className="size-4" />
-          </DialogClose>
-        </div>
-      </div>
-      <div className="grid items-center gap-7 px-5 pt-2 pb-7 md:grid-cols-[1fr_1.2fr] md:gap-9 md:px-8 md:pb-9">
-        <div className="from-muted via-primary/5 to-primary/10 border-border/60 aspect-[4/3] overflow-hidden rounded-2xl border bg-linear-to-br p-3">
-          <ExpertiseVisual
-            image={item.image}
-            visualType={item.visualType}
-            nodes={item.visualNodes}
-            paused={paused}
-          />
-        </div>
-        <div className="min-w-0">
-          {item.badge && (
-            <p className="text-primary mb-2 text-sm font-semibold">
-              {item.badge}
-            </p>
-          )}
-          <DialogTitle className="text-2xl font-bold tracking-tight sm:text-3xl">
-            {item.title}
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
-            {item.description}
-          </DialogDescription>
-          {item.practicePoints.length > 0 && (
-            <div className="mt-6">
-              <h4 className="text-muted-foreground text-sm font-semibold tracking-widest uppercase">
-                {t("inPractice")}
-              </h4>
-              <ul className="text-foreground marker:text-primary mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed">
-                {item.practicePoints.map((point, index) => (
-                  <li key={`${index}-${point}`}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {item.statsValue && (
-            <p className="text-primary mt-5 text-lg font-semibold">
-              {item.statsValue} {item.statsLabel}
-            </p>
-          )}
-          {item.technologies.length > 0 && (
-            <ul
-              aria-label={t("technologies")}
-              className="mt-5 flex flex-wrap gap-2"
-            >
-              {item.technologies.map((tech) => (
-                <li
-                  key={tech.id}
-                  className="border-border text-muted-foreground rounded-full border px-2.5 py-1 text-sm"
-                >
-                  {tech.title}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
+type ServicesTranslations = ReturnType<typeof useTranslations<"main.services">>;
 
 export function ServicesCarousel({
   dbServices,
@@ -262,6 +112,7 @@ export function ServicesCarousel({
                 key={item.id}
                 item={item}
                 paused={motionPaused}
+                t={t}
                 onSelect={(next) => {
                   triggerRef.current = document.activeElement as HTMLElement;
                   setSelected(next);
@@ -329,11 +180,168 @@ export function ServicesCarousel({
               index={dbServices.findIndex((item) => item.id === selected.id)}
               total={dbServices.length}
               paused={motionPaused}
+              t={t}
               onToggleMotion={() => setMotionPaused((previous) => !previous)}
             />
           )}
         </DialogContent>
       </Dialog>
+    </>
+  );
+}
+
+function ExpertiseCard({
+  item,
+  onSelect,
+  paused,
+  t,
+}: {
+  item: ExpertiseItem;
+  paused: boolean;
+  t: ServicesTranslations;
+  onSelect: (item: ExpertiseItem) => void;
+}) {
+  return (
+    <li className="w-[min(21rem,85vw)] flex-none snap-start">
+      <button
+        type="button"
+        onClick={() => onSelect(item)}
+        aria-label={t("viewDetails", { title: item.title })}
+        className="from-card via-primary/5 to-primary/10 border-border/60 hover:border-primary/40 focus-visible:ring-ring group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border bg-linear-to-br text-left shadow-sm transition focus-visible:ring-2 focus-visible:outline-none motion-safe:hover:-translate-y-1"
+      >
+        <div className="w-full px-7 pt-7">
+          {item.badge && (
+            <span className="text-primary mb-2 block text-sm font-semibold tracking-wider uppercase">
+              {item.badge}
+            </span>
+          )}
+          <h3 className="text-foreground text-2xl leading-tight font-bold tracking-tight">
+            {item.title}
+          </h3>
+          <p className="text-muted-foreground mt-3 line-clamp-3 text-sm leading-relaxed">
+            {item.description}
+          </p>
+        </div>
+        <div className="relative mt-auto h-64 w-full p-4">
+          <ExpertiseVisual
+            image={item.image}
+            visualType={item.visualType}
+            nodes={item.visualNodes}
+            paused={paused}
+          />
+          <span
+            aria-hidden="true"
+            className="bg-muted text-foreground group-hover:bg-primary group-hover:text-primary-foreground absolute right-5 bottom-5 grid size-8 place-items-center rounded-full transition-colors"
+          >
+            <Plus className="size-4" />
+          </span>
+        </div>
+      </button>
+    </li>
+  );
+}
+
+function ExpertiseDetails({
+  item,
+  index,
+  total,
+  paused,
+  t,
+  onToggleMotion,
+}: {
+  item: ExpertiseItem;
+  index: number;
+  total: number;
+  paused: boolean;
+  t: ServicesTranslations;
+  onToggleMotion: () => void;
+}) {
+  return (
+    <>
+      <div className="text-muted-foreground flex items-center justify-between px-5 pt-4 sm:px-7">
+        <span className="font-mono text-sm tabular-nums">
+          {String(index + 1).padStart(2, "0")} /{" "}
+          {String(total).padStart(2, "0")}
+        </span>
+        <div className="flex gap-1">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={t(paused ? "resumeMotion" : "pauseMotion")}
+            onClick={onToggleMotion}
+          >
+            {paused ? (
+              <Play className="size-4" />
+            ) : (
+              <Pause className="size-4" />
+            )}
+          </Button>
+          <DialogClose
+            render={
+              <Button variant="ghost" size="icon" className="rounded-full" />
+            }
+            aria-label={t("close")}
+          >
+            <X className="size-4" />
+          </DialogClose>
+        </div>
+      </div>
+      <div className="grid items-center gap-7 px-5 pt-2 pb-7 md:grid-cols-[1fr_1.2fr] md:gap-9 md:px-8 md:pb-9">
+        <div className="from-muted via-primary/5 to-primary/10 border-border/60 aspect-[4/3] overflow-hidden rounded-2xl border bg-linear-to-br p-3">
+          <ExpertiseVisual
+            image={item.image}
+            visualType={item.visualType}
+            nodes={item.visualNodes}
+            paused={paused}
+          />
+        </div>
+        <div className="min-w-0">
+          {item.badge && (
+            <p className="text-primary mb-2 text-sm font-semibold">
+              {item.badge}
+            </p>
+          )}
+          <DialogTitle className="text-2xl font-bold tracking-tight sm:text-3xl">
+            {item.title}
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
+            {item.description}
+          </DialogDescription>
+          {item.practicePoints.length > 0 && (
+            <div className="mt-6">
+              <h4 className="text-muted-foreground text-sm font-semibold tracking-widest uppercase">
+                {t("inPractice")}
+              </h4>
+              <ul className="text-foreground marker:text-primary mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed">
+                {item.practicePoints.map((point, index) => (
+                  <li key={`${index}-${point}`}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {item.statsValue && (
+            <p className="text-primary mt-5 text-lg font-semibold">
+              {item.statsValue} {item.statsLabel}
+            </p>
+          )}
+          {item.technologies.length > 0 && (
+            <ul
+              aria-label={t("technologies")}
+              className="mt-5 flex flex-wrap gap-2"
+            >
+              {item.technologies.map((tech) => (
+                <li
+                  key={tech.id}
+                  className="border-border text-muted-foreground rounded-full border px-2.5 py-1 text-sm"
+                >
+                  {tech.title}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </>
   );
 }

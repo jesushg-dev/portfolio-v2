@@ -93,7 +93,7 @@ Key files: `src/lib/email/resend.ts`, contact / CV / job-tracker routers.
 
 **Used for:** resume DOCX/PDF exports, CV PDF CDN cache, Job Tracker / import uploads.
 
-`getTenantUploadThingClient(userId)` builds a `UTApi` from the tenant token (or app id + secret). Missing config → `UploadThingNotConfiguredError` / UI notice pointing to Credentials.
+`getTenantUploadThingClient(userId)` builds a `UTApi` from the tenant token (`UPLOADTHING_TOKEN`). Missing config → `UploadThingNotConfiguredError` / UI notice pointing to Credentials.
 
 Platform `UPLOADTHING_TOKEN` remains in `src/env.ts` as optional legacy schema only; runtime upload paths do not read it.
 

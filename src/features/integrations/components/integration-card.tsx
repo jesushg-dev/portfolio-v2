@@ -332,17 +332,6 @@ function ConnectedInfoBox({
     }
 
     case "uploadthing": {
-      const appId = configs?.uploadthing?.appId;
-      if (appId) {
-        return (
-          <dl className="space-y-1.5">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-xs sm:text-sm">
-              <dt className="text-muted-foreground">{t("summary.appId")}</dt>
-              <dd className="text-foreground font-medium">{appId}</dd>
-            </div>
-          </dl>
-        );
-      }
       return (
         <div className="text-foreground flex items-center gap-2 text-xs sm:text-sm">
           <CheckCircle2 className="size-4 text-emerald-500" aria-hidden />

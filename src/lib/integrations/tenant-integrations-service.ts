@@ -24,9 +24,7 @@ export interface SpotifyIntegrationConfig {
 }
 
 export interface UploadThingIntegrationConfig {
-  token?: string;
-  appId?: string;
-  secret?: string;
+  token: string;
 }
 
 export interface AiIntegrationConfig {

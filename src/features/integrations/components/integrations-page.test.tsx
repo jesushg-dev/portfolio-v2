@@ -32,9 +32,7 @@ const mockConfigs = {
   },
   uploadthing: {
     isConfigured: false,
-    appId: "",
     maskedToken: "",
-    maskedSecret: "",
   },
   ai: {
     isConfigured: true,

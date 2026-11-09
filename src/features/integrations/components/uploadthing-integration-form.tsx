@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useState, useTransition } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
+import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { api, type RouterOutputs } from "@/trpc/react";
@@ -20,9 +21,7 @@ import {
 } from "@/components/shared/form-root";
 
 const uploadThingFormSchema = z.object({
-  token: z.string(),
-  appId: z.string(),
-  secret: z.string(),
+  token: z.string().trim().min(1),
 });
 
 type UploadThingFormValues = z.infer<typeof uploadThingFormSchema>;
@@ -43,25 +42,50 @@ export function UploadThingIntegrationForm({
   const t = useTranslations("adminCredentials");
   const utils = api.useUtils();
   const [isPending, startTransition] = useTransition();
+  const [isTesting, setIsTesting] = useState(false);
+
   const saveUploadThing = api.integrationsAdmin.saveUploadThing.useMutation();
+  const testUploadThing = api.integrationsAdmin.testUploadThing.useMutation();
 
   const form = useForm<UploadThingFormValues>({
     resolver: zodResolver(uploadThingFormSchema),
-    defaultValues: { token: "", appId: "", secret: "" },
+    defaultValues: { token: "" },
   });
+
+  const tokenValue = useWatch({ control: form.control, name: "token" });
+
+  const handleTestConnection = useCallback(async () => {
+    const values = form.getValues();
+    const token = values.token.trim() || undefined;
+
+    if (!token && !status.isConfigured) {
+      toast.error(t("uploadthing.missingTokenToTest"));
+      return;
+    }
+
+    setIsTesting(true);
+    try {
+      await testUploadThing.mutateAsync({ token });
+      toast.success(t("uploadthing.testSuccess"));
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : t("uploadthing.testFailed"),
+      );
+    } finally {
+      setIsTesting(false);
+    }
+  }, [form, status.isConfigured, testUploadThing, t]);
 
   const handleSubmit = useCallback(
     (values: UploadThingFormValues) => {
       startTransition(async () => {
         try {
           await saveUploadThing.mutateAsync({
-            token: values.token || undefined,
-            appId: values.appId || undefined,
-            secret: values.secret || undefined,
+            token: values.token,
           });
 
           await utils.integrationsAdmin.getConfigs.invalidate();
-          form.reset({ token: "", appId: "", secret: "" });
+          form.reset({ token: "" });
           toast.success(t("uploadthing.saveSuccess"));
           onSuccess();
         } catch (err) {
@@ -79,7 +103,7 @@ export function UploadThingIntegrationForm({
   return (
     <Form {...form}>
       <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
-        <FormContent>
+        <FormContent error={saveUploadThing.error}>
           <FormSection
             title={t("uploadthing.title")}
             description={t("uploadthing.description")}
@@ -93,6 +117,8 @@ export function UploadThingIntegrationForm({
                     {...field}
                     id="uploadthing-token"
                     type="password"
+                    autoComplete="new-password"
+                    spellCheck={false}
                     placeholder={
                       status.maskedToken !== ""
                         ? status.maskedToken
@@ -103,56 +129,41 @@ export function UploadThingIntegrationForm({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="appId"
-              render={({ field }) => (
-                <FormItem label={t("uploadthing.appIdLabel")}>
-                  <Input
-                    {...field}
-                    id="uploadthing-app-id"
-                    type="text"
-                    placeholder={
-                      status.appId !== ""
-                        ? status.appId
-                        : t("uploadthing.appIdPlaceholder")
-                    }
-                  />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="secret"
-              render={({ field }) => (
-                <FormItem label={t("uploadthing.secretLabel")}>
-                  <Input
-                    {...field}
-                    id="uploadthing-secret"
-                    type="password"
-                    placeholder={
-                      status.maskedSecret !== ""
-                        ? status.maskedSecret
-                        : t("uploadthing.secretPlaceholder")
-                    }
-                  />
-                </FormItem>
-              )}
-            />
+            <div className="flex items-center gap-2 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  void handleTestConnection();
+                }}
+                disabled={
+                  isTesting ||
+                  isPending ||
+                  (!tokenValue?.trim() && !status.isConfigured)
+                }
+              >
+                {isTesting ? (
+                  <Loader2 className="mr-1.5 size-3.5 animate-spin" />
+                ) : (
+                  <Sparkles className="mr-1.5 size-3.5" />
+                )}
+                {t("uploadthing.testButton")}
+              </Button>
+            </div>
           </FormSection>
         </FormContent>
 
-        <div className="mt-4 flex w-full items-center justify-end gap-2">
+        <FormActions
+          isPending={isPending}
+          disabled={!tokenValue?.trim() || isPending || isTesting}
+          title={t("uploadthing.saveButton")}
+          submitId="save-uploadthing-btn"
+        >
           <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
             {t("actions.cancel")}
           </Button>
-          <FormActions
-            isPending={isPending}
-            title={t("uploadthing.saveButton")}
-            submitId="save-uploadthing-btn"
-          />
-        </div>
+        </FormActions>
       </FormRoot>
     </Form>
   );

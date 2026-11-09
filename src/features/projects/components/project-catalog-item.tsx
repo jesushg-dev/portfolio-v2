@@ -127,58 +127,35 @@ function ProjectThumbnail({
   );
 }
 
-export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
-  project,
-  onPreview,
-  readCaseStudyLabel = "Read case study",
-  kindLabel,
-  metaText,
-  isFeaturedHero = false,
-  showSkills = true,
-  showCaseStudyLink = true,
-}) => {
-  const { title, description, skills, image, caseStudyEnabled, slug } = project;
-  const hasCaseStudyLink = Boolean(
-    showCaseStudyLink && caseStudyEnabled && slug,
-  );
+interface ProjectCatalogContentProps {
+  image?: string | null;
+  title: string;
+  isFeaturedHero: boolean;
+  gradient: string;
+  initials: string;
+  displayMeta: string;
+  description: string;
+  skills?: ProjectType["skills"];
+  showSkills: boolean;
+  hasCaseStudyLink: boolean;
+  readCaseStudyLabel: string;
+}
 
-  const initials = useMemo(() => getProjectInitials(title), [title]);
-  const gradient = useMemo(() => getProjectGradient(title), [title]);
-
-  const handleCardClick = useCallback(() => {
-    if (onPreview) {
-      onPreview(project as ProjectType);
-    }
-  }, [onPreview, project]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleCardClick();
-      }
-    },
-    [handleCardClick],
-  );
-
-  const displayMeta = useMemo(() => {
-    if (metaText) return metaText;
-    return kindLabel ?? "";
-  }, [kindLabel, metaText]);
-
+function ProjectCatalogContent({
+  image,
+  title,
+  isFeaturedHero,
+  gradient,
+  initials,
+  displayMeta,
+  description,
+  skills,
+  showSkills,
+  hasCaseStudyLink,
+  readCaseStudyLabel,
+}: ProjectCatalogContentProps) {
   return (
-    <article
-      tabIndex={hasCaseStudyLink ? undefined : 0}
-      role={hasCaseStudyLink ? undefined : "button"}
-      onClick={handleCardClick}
-      onKeyDown={hasCaseStudyLink ? undefined : handleKeyDown}
-      className={cn(
-        "group focus-visible:ring-primary w-full cursor-pointer text-left transition-all duration-300 focus-visible:ring-2 focus-visible:outline-hidden",
-        isFeaturedHero
-          ? "from-primary/20 via-foreground/[0.04] hover:border-primary/40 grid grid-cols-1 items-center gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br to-transparent p-5 shadow-xl sm:gap-10 sm:p-7 md:grid-cols-[1.3fr_1fr]"
-          : "flex flex-col rounded-2xl hover:-translate-y-1",
-      )}
-    >
+    <>
       {/* 16:9 Thumbnail (Real Image first, initials gradient as fallback) */}
       <ProjectThumbnail
         image={image}
@@ -251,22 +228,114 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
           </div>
         ) : null}
 
-        {hasCaseStudyLink && slug ? (
+        {hasCaseStudyLink ? (
           <div className="mt-auto pt-3.5">
-            <Link
-              href={{
-                pathname: "/projects/[slug]",
-                params: { slug },
-              }}
-              onClick={(e) => e.stopPropagation()}
-              className="text-primary inline-flex min-h-11 items-center gap-1 py-3 text-sm font-medium transition-colors hover:underline"
-            >
+            <span className="text-primary inline-flex min-h-11 items-center gap-1 py-3 text-sm font-medium transition-colors group-hover:underline">
               <span>{readCaseStudyLabel}</span>
               <ArrowUpRight className="size-3.5" aria-hidden="true" />
-            </Link>
+            </span>
           </div>
         ) : null}
       </div>
+    </>
+  );
+}
+
+export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
+  project,
+  onPreview,
+  readCaseStudyLabel = "Read case study",
+  kindLabel,
+  metaText,
+  isFeaturedHero = false,
+  showSkills = true,
+  showCaseStudyLink = true,
+}) => {
+  const { title, description, skills, image, caseStudyEnabled, slug } = project;
+  const hasCaseStudyLink = Boolean(
+    showCaseStudyLink && caseStudyEnabled && slug,
+  );
+
+  const initials = useMemo(() => getProjectInitials(title), [title]);
+  const gradient = useMemo(() => getProjectGradient(title), [title]);
+
+  const handleCardClick = useCallback(() => {
+    if (onPreview) {
+      onPreview(project as ProjectType);
+    }
+  }, [onPreview, project]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCardClick();
+      }
+    },
+    [handleCardClick],
+  );
+
+  const displayMeta = useMemo(() => {
+    if (metaText) return metaText;
+    return kindLabel ?? "";
+  }, [kindLabel, metaText]);
+
+  const cardClassName = cn(
+    "group focus-visible:ring-primary w-full text-left transition-all duration-300 focus-visible:ring-2 focus-visible:outline-hidden",
+    isFeaturedHero
+      ? "from-primary/20 via-foreground/[0.04] hover:border-primary/40 grid grid-cols-1 items-center gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br to-transparent p-5 shadow-xl sm:gap-10 sm:p-7 md:grid-cols-[1.3fr_1fr]"
+      : "flex flex-col rounded-2xl hover:-translate-y-1",
+  );
+
+  if (hasCaseStudyLink && slug) {
+    return (
+      <article className="h-full w-full">
+        <Link
+          href={{
+            pathname: "/projects/[slug]",
+            params: { slug },
+          }}
+          className={cardClassName}
+        >
+          <ProjectCatalogContent
+            image={image}
+            title={title}
+            isFeaturedHero={isFeaturedHero}
+            gradient={gradient}
+            initials={initials}
+            displayMeta={displayMeta}
+            description={description}
+            skills={skills}
+            showSkills={showSkills}
+            hasCaseStudyLink={hasCaseStudyLink}
+            readCaseStudyLabel={readCaseStudyLabel}
+          />
+        </Link>
+      </article>
+    );
+  }
+
+  return (
+    <article
+      tabIndex={0}
+      role="button"
+      onClick={handleCardClick}
+      onKeyDown={handleKeyDown}
+      className={cn(cardClassName, "cursor-pointer")}
+    >
+      <ProjectCatalogContent
+        image={image}
+        title={title}
+        isFeaturedHero={isFeaturedHero}
+        gradient={gradient}
+        initials={initials}
+        displayMeta={displayMeta}
+        description={description}
+        skills={skills}
+        showSkills={showSkills}
+        hasCaseStudyLink={hasCaseStudyLink}
+        readCaseStudyLabel={readCaseStudyLabel}
+      />
     </article>
   );
 };

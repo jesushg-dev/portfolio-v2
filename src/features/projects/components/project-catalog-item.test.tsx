@@ -77,11 +77,35 @@ describe("ProjectCatalogItem", () => {
     expect(screen.getByText("React")).toBeInTheDocument();
   });
 
-  it("triggers onPreview when clicked or Enter pressed", () => {
+  it("renders as a direct link when case study is enabled", () => {
     const handlePreview = jest.fn();
     renderWithIntl(
       <ProjectCatalogItem
         project={mockProject}
+        onPreview={handlePreview}
+        readCaseStudyLabel="Read case study"
+        kindLabel="Client work"
+      />,
+    );
+
+    const link = screen.getByRole("link", { name: /musa ecommerce/i });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", "/projects/musa-ecommerce");
+    expect(screen.getByText("Read case study")).toBeInTheDocument();
+
+    fireEvent.click(link);
+    expect(handlePreview).not.toHaveBeenCalled();
+  });
+
+  it("triggers onPreview when project has no case study", () => {
+    const handlePreview = jest.fn();
+    const projectWithoutCs: ProjectCatalogItemData = {
+      ...mockProject,
+      caseStudyEnabled: false,
+    };
+    renderWithIntl(
+      <ProjectCatalogItem
+        project={projectWithoutCs}
         onPreview={handlePreview}
         readCaseStudyLabel="Read case study"
         kindLabel="Client work"
@@ -94,21 +118,6 @@ describe("ProjectCatalogItem", () => {
 
     fireEvent.keyDown(card, { key: "Enter" });
     expect(handlePreview).toHaveBeenCalledTimes(2);
-  });
-
-  it("renders case study link when case study is enabled", () => {
-    renderWithIntl(
-      <ProjectCatalogItem
-        project={mockProject}
-        onPreview={jest.fn()}
-        readCaseStudyLabel="Read case study"
-        kindLabel="Client work"
-      />,
-    );
-
-    const csLink = screen.getByRole("link", { name: /read case study/i });
-    expect(csLink).toBeInTheDocument();
-    expect(csLink).toHaveAttribute("href", "/projects/musa-ecommerce");
   });
 
   it("renders initials placeholder when project has no image", () => {

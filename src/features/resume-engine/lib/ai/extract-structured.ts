@@ -73,17 +73,9 @@ async function extractWithGemini(
   const client = new GoogleGenAI({ apiKey });
   const response = await client.models.generateContent({
     model: AI_PROVIDER_MODELS.gemini,
-    contents: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: `${IMPORT_SYSTEM_PROMPT}\n\n${buildImportUserPrompt(sections)}`,
-          },
-        ],
-      },
-    ],
+    contents: buildImportUserPrompt(sections),
     config: {
+      systemInstruction: IMPORT_SYSTEM_PROMPT,
       responseMimeType: "application/json",
     },
   });

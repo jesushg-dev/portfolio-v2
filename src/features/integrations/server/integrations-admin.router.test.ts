@@ -11,6 +11,7 @@ jest.mock("@/lib/uploadthing/upload-buffer", () => ({
 }));
 jest.mock("@/lib/uploadthing/tenant-uploadthing", () => ({
   UploadThingNotConfiguredError: class UploadThingNotConfiguredError extends Error {},
+  testUploadThingConnection: jest.fn().mockResolvedValue({ success: true }),
 }));
 
 import {
@@ -20,6 +21,7 @@ import {
 } from "@/lib/integrations/tenant-integrations-service";
 import { syncResendTemplatesForTenant } from "@/lib/integrations/resend-tenant-publisher";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
+import { testUploadThingConnection } from "@/lib/uploadthing/tenant-uploadthing";
 import { integrationsAdminRouter } from "./integrations-admin.router";
 import {
   createRouterCaller,
@@ -122,8 +124,6 @@ describe("integrationsAdminRouter", () => {
     });
     await caller.saveUploadThing({
       token: "ut_token",
-      appId: "app",
-      secret: "secret",
     });
     await caller.saveAi({
       geminiApiKey: "gem-key",
@@ -140,6 +140,24 @@ describe("integrationsAdminRouter", () => {
     await expect(
       caller.saveAi({ defaultProvider: "gemini" }),
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  it("tests UploadThing connection and rejects invalid token", async () => {
+    const caller = createRouterCaller(
+      integrationsAdminRouter,
+      createTrpcTestContext({ db: createDb() }),
+    );
+    jest.mocked(testUploadThingConnection).mockResolvedValueOnce({
+      success: false,
+      error: "Invalid API key",
+    });
+
+    await expect(
+      caller.testUploadThing({ token: "invalid_token" }),
+    ).rejects.toMatchObject({
+      code: "BAD_REQUEST",
+      message: "Invalid API key",
+    });
   });
 
   it("uploads a file through UploadThing", async () => {

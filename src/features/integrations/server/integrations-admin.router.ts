@@ -17,7 +17,10 @@ import {
 } from "@/lib/integrations/tenant-integrations-service";
 import { syncResendTemplatesForTenant } from "@/lib/integrations/resend-tenant-publisher";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
-import { UploadThingNotConfiguredError } from "@/lib/uploadthing/tenant-uploadthing";
+import {
+  UploadThingNotConfiguredError,
+  testUploadThingConnection,
+} from "@/lib/uploadthing/tenant-uploadthing";
 import { testILovePdfConnection } from "@/lib/ilovepdf/ilovepdf-service";
 
 function maskSecret(value?: string | null): string {
@@ -100,13 +103,8 @@ export const integrationsAdminRouter = createTRPCRouter({
         maskedRefreshToken: maskSecret(spotifyConfig?.refreshToken),
       },
       uploadthing: {
-        isConfigured: Boolean(
-          uploadthingConfig?.token ??
-          (uploadthingConfig?.appId && uploadthingConfig?.secret),
-        ),
-        appId: uploadthingConfig?.appId ?? "",
+        isConfigured: Boolean(uploadthingConfig?.token),
         maskedToken: maskSecret(uploadthingConfig?.token),
-        maskedSecret: maskSecret(uploadthingConfig?.secret),
       },
       ai: {
         isConfigured: Boolean(
@@ -275,22 +273,63 @@ export const integrationsAdminRouter = createTRPCRouter({
       return { ok: true as const };
     }),
 
-  /** Saves UploadThing credentials. */
-  saveUploadThing: protectedProcedure
+  /** Tests UploadThing credentials against the UploadThing API. */
+  testUploadThing: protectedProcedure
     .input(
       z.object({
         token: z.string().trim().optional(),
-        appId: z.string().trim().optional(),
-        secret: z.string().trim().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let token = input.token?.trim();
+      if (!token) {
+        const current = await getTenantIntegrationConfig(
+          ctx.user.id,
+          "uploadthing",
+        );
+        token = current?.token;
+      }
+
+      if (!token) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "UploadThing token is required to test connection.",
+        });
+      }
+
+      const result = await testUploadThingConnection(token);
+      if (!result.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: result.error ?? "Failed to connect to UploadThing",
+        });
+      }
+
+      return { ok: true as const };
+    }),
+
+  /** Saves UploadThing credentials. Validates token before persisting. */
+  saveUploadThing: protectedProcedure
+    .input(
+      z.object({
+        token: z.string().trim().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
 
+      const testResult = await testUploadThingConnection(input.token);
+      if (!testResult.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            testResult.error ??
+            "Invalid UploadThing token. Could not authenticate with UploadThing.",
+        });
+      }
+
       const config: UploadThingIntegrationConfig = {
-        token: input.token ?? undefined,
-        appId: input.appId ?? undefined,
-        secret: input.secret ?? undefined,
+        token: input.token,
       };
 
       await saveTenantIntegrationConfig(userId, "uploadthing", config);
