@@ -32,6 +32,7 @@ export function ServicesCarousel({
   const [railInset, setRailInset] = useState<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const heading = document.getElementById("services-heading");
@@ -53,7 +54,17 @@ export function ServicesCarousel({
     if (!el) return;
     setCanScrollLeft(el.scrollLeft > 1);
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-  }, []);
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll > 0) {
+      const progress = el.scrollLeft / maxScroll;
+      setActiveIndex(
+        Math.min(
+          dbServices.length - 1,
+          Math.max(0, Math.round(progress * (dbServices.length - 1))),
+        ),
+      );
+    }
+  }, [dbServices.length]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -125,13 +136,19 @@ export function ServicesCarousel({
           style={
             railInset === null ? undefined : { paddingInline: `${railInset}px` }
           }
-          className="mt-5 flex justify-end gap-3 px-4 sm:px-6 lg:px-20"
+          className="mt-5 flex items-center justify-end gap-3 px-4 sm:px-6 lg:px-20"
         >
+          {/* Counter 01 / 07 */}
+          <span className="text-muted-foreground mr-1 font-mono text-sm whitespace-nowrap tabular-nums select-none">
+            {String(activeIndex + 1).padStart(2, "0")} /{" "}
+            {String(dbServices.length).padStart(2, "0")}
+          </span>
+
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="size-11 min-h-11 min-w-11 rounded-full"
+            className="bg-card size-11 min-h-11 min-w-11 rounded-full"
             aria-label={t(motionPaused ? "resumeMotion" : "pauseMotion")}
             onClick={() => setMotionPaused((previous) => !previous)}
           >
@@ -147,7 +164,7 @@ export function ServicesCarousel({
             aria-label={t("previousCard")}
             disabled={!canScrollLeft}
             onClick={() => scroll(-1)}
-            className="size-11 min-h-11 min-w-11 rounded-full"
+            className="bg-card size-11 min-h-11 min-w-11 rounded-full"
           >
             <ChevronLeft className="size-5" />
           </Button>
@@ -157,7 +174,7 @@ export function ServicesCarousel({
             aria-label={t("nextCard")}
             disabled={!canScrollRight}
             onClick={() => scroll(1)}
-            className="size-11 min-h-11 min-w-11 rounded-full"
+            className="bg-card size-11 min-h-11 min-w-11 rounded-full"
           >
             <ChevronRight className="size-5" />
           </Button>
@@ -202,27 +219,29 @@ function ExpertiseCard({
   onSelect: (item: ExpertiseItem) => void;
 }) {
   return (
-    <li className="w-[min(21rem,85vw)] flex-none snap-start">
+    <li className="w-[min(23.25rem,82vw)] flex-none snap-start">
       <button
         type="button"
         onClick={() => onSelect(item)}
-        aria-label={t("viewDetails", { title: item.title })}
-        className="from-card via-primary/5 to-primary/10 border-border/60 hover:border-primary/40 focus-visible:ring-ring group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border bg-linear-to-br text-left shadow-sm transition focus-visible:ring-2 focus-visible:outline-none motion-safe:hover:-translate-y-1"
+        className="bg-card border-border/60 hover:border-primary/40 focus-visible:ring-ring group flex h-full min-h-[30rem] w-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] border text-left shadow-sm transition-all duration-300 focus-visible:ring-2 focus-visible:outline-none motion-safe:hover:-translate-y-1"
       >
+        <span className="sr-only">
+          {t("viewDetails", { title: item.title })}
+        </span>
         <div className="w-full px-7 pt-7">
           {item.badge && (
             <span className="text-primary mb-2 block text-sm font-semibold tracking-wider uppercase">
               {item.badge}
             </span>
           )}
-          <h3 className="text-foreground text-2xl leading-tight font-bold tracking-tight">
+          <h3 className="text-foreground text-[1.5625rem] leading-[1.15] font-bold tracking-[-0.025em]">
             {item.title}
           </h3>
-          <p className="text-muted-foreground mt-3 line-clamp-3 text-sm leading-relaxed">
+          <p className="text-muted-foreground mt-3 line-clamp-3 text-[0.9375rem] leading-[1.45]">
             {item.description}
           </p>
         </div>
-        <div className="relative mt-auto h-64 w-full p-4">
+        <div className="relative mt-auto h-[15.625rem] w-full p-4">
           <ExpertiseVisual
             image={item.image}
             visualType={item.visualType}

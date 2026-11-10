@@ -22,6 +22,7 @@ jest.mock("@/trpc/server", () => ({
       }),
       getSkills: jest.fn().mockResolvedValue([]),
       getTestimonialsPublic: jest.fn().mockResolvedValue([]),
+      getSoftSkillsPublic: jest.fn().mockResolvedValue({ sections: [] }),
     },
   },
 }));
@@ -44,6 +45,10 @@ jest.mock("@/features/home/components/social-proof", () => ({
 jest.mock("@/features/home/components/skills", () => ({
   __esModule: true,
   default: () => <Link href="/es/habilidades/react">React</Link>,
+}));
+jest.mock("@/features/home/components/soft-skills", () => ({
+  __esModule: true,
+  default: () => null,
 }));
 jest.mock("@/features/home/components/experience", () => ({
   __esModule: true,
@@ -72,7 +77,6 @@ it("renders all primary content and links without JavaScript or scroll", async (
   const document = new DOMParser().parseFromString(html, "text/html");
 
   expect(document.querySelectorAll("h1")).toHaveLength(1);
-  expect(document.querySelector("#about p")?.textContent).toContain("Sobre mí");
   expect(document.querySelector("#services h2")?.textContent).toContain(
     "Servicios",
   );

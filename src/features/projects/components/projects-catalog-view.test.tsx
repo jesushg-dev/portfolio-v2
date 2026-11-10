@@ -10,12 +10,20 @@ jest.mock("@/i18n/routing", () => ({
     ...props
   }: {
     children: React.ReactNode;
-    href: string | { pathname: string };
-  }) => (
-    <a href={typeof href === "string" ? href : href.pathname} {...props}>
-      {children}
-    </a>
-  ),
+    href: string | { pathname: string; params?: Record<string, string> };
+  }) => {
+    let target = typeof href === "string" ? href : href.pathname;
+    if (typeof href === "object" && href.params) {
+      for (const [key, val] of Object.entries(href.params)) {
+        target = target.replace(`[${key}]`, val);
+      }
+    }
+    return (
+      <a href={target} {...props}>
+        {children}
+      </a>
+    );
+  },
 }));
 
 describe("ProjectsCatalogView", () => {

@@ -52,7 +52,7 @@ export default async function HeroContent({
       ) : null}
 
       <div>
-        <h1 className="text-foreground text-4xl leading-[1.06] font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        <h1 className="text-foreground text-[clamp(2.375rem,6vw,4.25rem)] leading-[1.05] font-bold tracking-[-0.035em]">
           {t("greeting")}{" "}
           <span className="text-primary font-bold">
             {firstName} {lastName}
@@ -60,46 +60,54 @@ export default async function HeroContent({
         </h1>
 
         {heroSubtitle ? (
-          <p className="text-foreground mt-3 text-xl font-semibold sm:text-2xl">
+          <p className="text-foreground mt-3.5 text-[1.375rem] font-semibold tracking-tight">
             {heroSubtitle}
           </p>
         ) : null}
 
         {heroSummary || heroTagline ? (
-          <p className="text-muted-foreground mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
+          <p className="text-muted-foreground mt-6 max-w-[46ch] text-[clamp(1.0625rem,2vw,1.25rem)] leading-normal">
             {heroSummary || heroTagline}
           </p>
         ) : null}
       </div>
 
       {/* At A Glance Card matching Prototype */}
-      <div className="glass-card mt-7 max-w-lg rounded-2xl p-4.5 sm:p-5">
+      <div className="glass-card mt-7 max-w-[32.5rem] rounded-[1.25rem] px-[1.375rem] py-[1.125rem]">
         <p className="text-muted-foreground mb-3 text-sm font-medium tracking-wider uppercase">
           {t("atAGlance")}
         </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div>
-            <small className="text-muted-foreground block text-sm">
+            <small className="text-muted-foreground block text-[0.6875rem]">
+              {t("availability")}
+            </small>
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em]">
+              {t("immediate")}
+            </b>
+          </div>
+          <div>
+            <small className="text-muted-foreground block text-[0.6875rem]">
               {t("yearsExperience")}
             </small>
-            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em] tabular-nums">
               {stats.yearsExperience}
             </b>
           </div>
           <div>
-            <small className="text-muted-foreground block text-sm">
+            <small className="text-muted-foreground block text-[0.6875rem]">
               {t("projectsDelivered")}
             </small>
-            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+            <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em] tabular-nums">
               {stats.projectsCount}
             </b>
           </div>
           {stats.engineersMentored != null ? (
             <div>
-              <small className="text-muted-foreground block text-sm">
+              <small className="text-muted-foreground block text-[0.6875rem]">
                 {t("engineersLed")}
               </small>
-              <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-tight tabular-nums">
+              <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em] tabular-nums">
                 {stats.engineersMentored}
               </b>
             </div>

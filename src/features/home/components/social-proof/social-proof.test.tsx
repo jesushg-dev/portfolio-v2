@@ -1,8 +1,8 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import SocialProof from "./index";
 
-it("shows a manually controlled recommendation without repeated portfolio metrics", () => {
+it("shows published recommendations together without repeated portfolio metrics", () => {
   renderWithIntl(
     <SocialProof
       testimonials={[
@@ -21,16 +21,11 @@ it("shows a manually controlled recommendation without repeated portfolio metric
     />,
   );
   expect(screen.getByText("First colleague")).toBeInTheDocument();
-  expect(screen.queryByText("Second colleague")).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Next recommendation" }));
   expect(screen.getByText("Second colleague")).toBeInTheDocument();
-  fireEvent.click(
-    screen.getByRole("button", { name: "Previous recommendation" }),
-  );
-  expect(screen.getByText("Software engineer")).toBeInTheDocument();
+  expect(screen.getByText(/Software engineer/)).toBeInTheDocument();
   expect(screen.queryByText("Projects")).not.toBeInTheDocument();
   expect(screen.queryByText("Years of experience")).not.toBeInTheDocument();
-  expect(screen.getAllByRole("button")).toHaveLength(2);
+  expect(screen.queryByRole("button")).not.toBeInTheDocument();
 });
 
 it("renders full quoted content safely and rejects unsafe author links", () => {
@@ -49,7 +44,13 @@ it("renders full quoted content safely and rejects unsafe author links", () => {
       ]}
     />,
   );
-  expect(screen.getByText(quote.trim())).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      (_, element) =>
+        element?.tagName === "BLOCKQUOTE" &&
+        element.textContent?.includes(quote.trim()) === true,
+    ),
+  ).toBeInTheDocument();
   expect(container.querySelector("script")).toBeNull();
   expect(screen.queryByRole("link")).not.toBeInTheDocument();
   expect(screen.queryByRole("button")).not.toBeInTheDocument();

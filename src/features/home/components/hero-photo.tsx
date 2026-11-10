@@ -19,15 +19,9 @@ export default function HeroPhoto({ heroData }: HeroPhotoProps) {
   const initials = `${firstName.charAt(0).toUpperCase()}${lastName ? lastName.charAt(0).toUpperCase() : ""}`;
 
   return (
-    <div className="relative mx-auto w-full max-w-[20rem] sm:max-w-[24rem] lg:max-w-[26rem]">
-      {/* Ambient Glow Backdrop from Prototype */}
-      <div
-        className="pointer-events-none absolute -inset-[14%] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--primary)_38%,transparent),transparent_68%)] blur-2xl"
-        aria-hidden="true"
-      />
-
+    <div className="relative mx-auto aspect-square w-[min(23.75rem,82%)] before:pointer-events-none before:absolute before:-inset-[14%] before:rounded-full before:bg-[radial-gradient(circle,color-mix(in_srgb,var(--primary)_38%,transparent),transparent_68%)] before:blur-2xl">
       {/* Conic Gradient Ring */}
-      <div className="relative aspect-square w-full rounded-full bg-[conic-gradient(from_210deg,var(--primary),color-mix(in_srgb,var(--primary)_35%,transparent),var(--primary))] p-[0.3125rem] shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+      <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_210deg,var(--primary),color-mix(in_srgb,var(--brand2)_35%,transparent),var(--primary))] p-[0.3125rem] shadow-[0_1.875rem_5rem_rgba(0,0,0,0.35)]">
         <div className="bg-background relative h-full w-full overflow-hidden rounded-full">
           {photoUrl ? (
             <HeroPhotoImage photoUrl={photoUrl} imageAlt={imageAlt} />

@@ -40,7 +40,7 @@ describe("ServicesCarousel", () => {
     renderWithIntl(<ServicesCarousel dbServices={[service]} />);
     fireEvent.click(
       screen.getByRole("button", {
-        name: "View details for Tenant engineering",
+        name: /View details for Tenant engineering/,
       }),
     );
     expect(

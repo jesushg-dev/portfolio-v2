@@ -7,39 +7,39 @@
   },
   "metrics": [
     {
-      "value": "6",
+      "value": "~40%",
       "order": 0,
       "label": {
-        "en": "engineers led",
-        "es": "ingenieros liderados",
-        "nl": "engineers geleid"
+        "en": "faster recovery on critical production incidents (MTTR)",
+        "es": "recuperación más rápida ante incidentes críticos de producción (MTTR)",
+        "nl": "sneller herstel bij kritieke productie-incidenten (MTTR)"
       }
     },
     {
-      "value": "4",
+      "value": "5+",
       "order": 1,
       "label": {
-        "en": "engineers mentored",
-        "es": "ingenieros mentoreados",
-        "nl": "ingenieurs gecoacht"
+        "en": "concurrent enterprise projects",
+        "es": "proyectos empresariales simultáneos",
+        "nl": "gelijktijdige enterpriseprojecten"
       }
     },
     {
-      "value": "40%",
+      "value": "4+",
       "order": 2,
       "label": {
-        "en": "fewer production defects in the team",
-        "es": "menos defectos de producción en el equipo",
-        "nl": "minder productiedefecten in het team"
+        "en": "developers mentored; team velocity up ~40%",
+        "es": "desarrolladores mentoreados; velocidad del equipo aumentó ~40%",
+        "nl": "ontwikkelaars begeleid; teamsnelheid steeg ~40%"
       }
     },
     {
-      "value": "40%",
+      "value": "7 → 4",
       "order": 3,
       "label": {
-        "en": "lower MTTR",
-        "es": "menor MTTR",
-        "nl": "lagere MTTR"
+        "en": "days per release regression cycle, with E2E tests in place",
+        "es": "días por ciclo de regresión de cada versión, con pruebas E2E",
+        "nl": "dagen per regressiecyclus per release, met E2E-tests"
       }
     }
   ],
@@ -54,9 +54,9 @@
         "nl": "Technisch Leiderschap"
       },
       "description": {
-        "en": "Led teams of up to 6 engineers, establishing technical roadmaps, architectural standards, and unblocking delivery across multiple enterprise releases.",
-        "es": "Lideré equipos de hasta 6 ingenieros, estableciendo hojas de ruta técnicas, estándares arquitectónicos y desbloqueando entregas en múltiples lanzamientos empresariales.",
-        "nl": "Leidde teams tot 6 engineers, stelde technische roadmaps en architectuurstandaarden vast en deblokkeerde opleveringen in meerdere enterprise releases."
+        "en": "Coordinated delivery across concurrent enterprise projects, aligning engineering, design, and product teams.",
+        "es": "Coordiné entregas de proyectos empresariales simultáneos, alineando a los equipos de ingeniería, diseño y producto.",
+        "nl": "Coördineerde de oplevering van gelijktijdige enterpriseprojecten en bracht engineering-, design- en productteams op één lijn."
       },
       "badge": {
         "en": "Teams up to 6",

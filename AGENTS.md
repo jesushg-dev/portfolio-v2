@@ -16,6 +16,10 @@ JS numbers from `getBoundingClientRect` (and similar) may stay in CSS pixels. De
 
 Applies to new and touched code — do not mass-rewrite historical `px`.
 
+# Preserve existing maximum widths
+
+Do not change, add, remove, or override any existing maximum width (`max-width`, Tailwind `max-w-*`, container limits, or equivalent) unless the user explicitly asks for a maximum-width change. Preserve the current width constraints while adjusting layout, spacing, or content.
+
 # Forbidden: inline helper render functions inside components
 
 Do not create `const renderFoo = () => ...` or nested component functions inside component bodies. Decompose into standalone top-level components or dedicated files with explicit typed props.

@@ -41,7 +41,7 @@ export function ShowcaseHeading({
           ) : null}
           <h2
             id={headingId}
-            className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl"
+            className="text-foreground text-[clamp(1.875rem,4.6vw,3.25rem)] leading-[1.08] font-bold tracking-[-0.03em]"
           >
             {title}{" "}
             {titleGradient ? (
@@ -49,7 +49,7 @@ export function ShowcaseHeading({
             ) : null}
           </h2>
           {description ? (
-            <p className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">
+            <p className="text-muted-foreground mt-[1.125rem] max-w-[48ch] text-lg leading-relaxed">
               {description}
             </p>
           ) : null}
@@ -76,7 +76,7 @@ export function ShowcaseHeading({
       ) : null}
       <h2
         id={headingId}
-        className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl"
+        className="text-foreground text-[clamp(1.875rem,4.6vw,3.25rem)] leading-[1.08] font-bold tracking-[-0.03em]"
       >
         {title}{" "}
         {titleGradient ? <HeadingAccent>{titleGradient}</HeadingAccent> : null}
@@ -84,8 +84,8 @@ export function ShowcaseHeading({
       {description ? (
         <p
           className={cn(
-            "text-muted-foreground mt-4 text-base leading-relaxed sm:text-lg",
-            !isLeft && "mx-auto max-w-xl",
+            "text-muted-foreground mt-[1.125rem] text-lg leading-relaxed",
+            !isLeft && "mx-auto max-w-[48ch]",
           )}
         >
           {description}

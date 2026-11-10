@@ -898,14 +898,14 @@
       "techAria": "Technologies"
     },
     "about": {
-      "subtitle": "How I engineer",
-      "title": "Engineering Approach",
+      "subtitle": "About me",
+      "title": "A little about me",
       "terminalEmpty": {
         "title": "Terminal not configured",
         "description": "Add an animated terminal sequence from the admin profile console tab."
       },
-      "titleLead": "How I",
-      "titleGradient": "engineer."
+      "titleLead": "A little about",
+      "titleGradient": "me."
     },
     "skills": {
       "title": "Technical Stack",
@@ -1214,7 +1214,7 @@
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "Use the form or the channels below.",
+      "subtitle": "Hiring for a senior engineering role or planning a complex build? Tell me what you need.",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
       "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
@@ -1236,7 +1236,7 @@
         "distanceFromVisitor": "I'm from {place}, roughly <km>{distance}</km> away from your current location, according to your IP address."
       },
       "form": {
-        "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",
+        "helper": "Share the role or project, its biggest challenge, and your timeline. I’ll reply with a clear next step.",
         "name": {
           "label": "Name",
           "placeholder": "John Doe",
@@ -1260,7 +1260,7 @@
         },
         "message": {
           "label": "Message",
-          "placeholder": "Tell me about your project...",
+          "placeholder": "What are you building or hiring for?",
           "success": "Message entered correctly",
           "errors": {
             "required": "Please enter your message",
@@ -1303,7 +1303,7 @@
       "title": "Professional Experience",
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
-      "description": "Roles, responsibilities, and skills from professional experience.",
+      "description": "From frontend developer to senior engineer and team lead, with years of work and learning along the way.",
       "chart": {
         "eyebrow": "The journey so far",
         "monthsShown": "months across the roles shown",
@@ -1317,8 +1317,8 @@
         "nextStage": "Next stage",
         "letsTalk": "Let’s talk"
       },
-      "titleLead": "Professional",
-      "titleGradient": "experience."
+      "titleLead": "The",
+      "titleGradient": "climb."
     },
     "impactStats": {
       "teamSize": {
@@ -1339,14 +1339,27 @@
       "subtitle": "What colleagues say"
     },
     "socialProof": {
-      "eyebrow": "Trusted by developers",
-      "title": "People I’ve worked with",
-      "subtitle": "Colleagues who have seen my work up close.",
-      "titleLead": "People I’ve",
-      "titleGradient": "worked with.",
-      "previous": "Previous recommendation",
-      "next": "Next recommendation",
-      "navigation": "Explore recommendations"
+      "subtitle": "What my colleagues say, and the proof behind it.",
+      "titleLead": "Working",
+      "titleGradient": "with me.",
+      "cards": {
+        "ownership": {
+          "eyebrow": "Ownership",
+          "title": "End to end, without hand-holding."
+        },
+        "delivery": {
+          "eyebrow": "Delivery",
+          "title": "Predictable, even when it’s a lot."
+        },
+        "growing": {
+          "eyebrow": "Growing others",
+          "title": "I make the people around me better."
+        },
+        "judgment": {
+          "eyebrow": "Judgment",
+          "title": "Good calls that don’t cost quality."
+        }
+      }
     },
     "faq": {
       "title": "Questions?",

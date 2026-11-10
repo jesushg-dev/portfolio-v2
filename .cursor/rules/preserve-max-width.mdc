@@ -1,0 +1,8 @@
+---
+description: Preserve existing maximum widths unless the user explicitly requests a change
+alwaysApply: true
+---
+
+# Maximum widths are fixed by default
+
+Do not change, add, remove, or override any existing maximum width (`max-width`, Tailwind `max-w-*`, container limits, or equivalent) unless the user explicitly asks for a maximum-width change. Preserve the current width constraints while adjusting layout, spacing, or content.
