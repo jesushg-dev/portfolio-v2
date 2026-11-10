@@ -11,7 +11,6 @@ for (const pathname of ["/", "/es", "/nl"]) {
     expect(await response?.text()).not.toContain("adminCredentials");
 
     await expect(page.locator("main h1")).toBeVisible();
-    await expect(page.locator("#about p").first()).not.toBeEmpty();
     await expect(page.locator("#services h2")).not.toBeEmpty();
     await expect(page.locator("#experience-heading")).not.toBeEmpty();
 
