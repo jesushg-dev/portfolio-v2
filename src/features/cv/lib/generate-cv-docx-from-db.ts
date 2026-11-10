@@ -9,6 +9,10 @@ import {
 import { TailoredResumeDocumentSchema } from "@/features/resume-engine/lib/tailored-resume-document";
 import { renderResumeTemplate } from "@/features/resume-engine/lib/docx/render-template";
 import { loadResumeImages } from "@/features/resume-engine/lib/docx/resume-photo";
+import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
 
 export async function generateCvDocxFromDb(
   db: PrismaClient,
@@ -45,7 +49,12 @@ export async function generateCvDocxFromDb(
     images.photo,
     images.companyLogos,
   );
-  const fileName = `CV_${draft.header.fullName.replace(/[^\w.-]+/g, "_")}_${locale}.docx`;
+  const fileName = buildAtsCvFileName({
+    fullName: draft.header.fullName,
+    roleTrack: inferCvRoleTrack(draft.header.degree ?? ""),
+    locale,
+    extension: "docx",
+  });
   return {
     buffer,
     fileName,

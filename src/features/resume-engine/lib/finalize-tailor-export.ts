@@ -113,6 +113,7 @@ async function persistResumeExport(
   return {
     exportId: resumeExport.id,
     export: resumeExport,
+    fileName: resumeExport.fileName,
     downloadUrl: url,
     aiScore: input.aiScore ?? null,
     matchNotes: input.matchNotes ?? null,

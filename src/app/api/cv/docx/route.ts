@@ -49,11 +49,12 @@ export async function GET(request: Request) {
           tenant.defaultLocale,
         );
         if (styled?.buffer) {
+          const encodedFileName = encodeURIComponent(styled.fileName);
           return new NextResponse(new Uint8Array(styled.buffer), {
             headers: {
               "Content-Type":
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-              "Content-Disposition": `attachment; filename="${styled.fileName}"`,
+              "Content-Disposition": `attachment; filename="${styled.fileName}"; filename*=UTF-8''${encodedFileName}`,
               "Cache-Control": "no-store",
             },
           });

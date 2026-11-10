@@ -21,7 +21,7 @@ export default function HeroPhoto({ heroData }: HeroPhotoProps) {
   return (
     <div className="relative mx-auto aspect-square w-[min(23.75rem,82%)] before:pointer-events-none before:absolute before:-inset-[14%] before:rounded-full before:bg-[radial-gradient(circle,color-mix(in_srgb,var(--primary)_38%,transparent),transparent_68%)] before:blur-2xl">
       {/* Conic Gradient Ring */}
-      <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_210deg,var(--primary),color-mix(in_srgb,var(--brand2)_35%,transparent),var(--primary))] p-[0.3125rem] shadow-[0_1.875rem_5rem_rgba(0,0,0,0.35)]">
+      <div className="hero-portrait-ring absolute inset-0 rounded-full bg-[conic-gradient(from_210deg,var(--primary),color-mix(in_srgb,var(--brand2)_35%,transparent),var(--primary))] p-[0.3125rem] shadow-[0_1.875rem_5rem_rgba(0,0,0,0.35)]">
         <div className="bg-background relative h-full w-full overflow-hidden rounded-full">
           {photoUrl ? (
             <HeroPhotoImage photoUrl={photoUrl} imageAlt={imageAlt} />
