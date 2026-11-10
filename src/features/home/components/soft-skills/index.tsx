@@ -16,7 +16,6 @@ const SoftSkills: FC = async () => {
     : null;
 
   const items = data?.items ?? [];
-  const metrics = data?.metrics ?? [];
 
   if (items.length === 0) return null;
 
@@ -26,7 +25,7 @@ const SoftSkills: FC = async () => {
         id="leadership"
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
       >
-        <SoftSkillsBento items={items} metrics={metrics} />
+        <SoftSkillsBento items={items} />
       </section>
     </div>
   );

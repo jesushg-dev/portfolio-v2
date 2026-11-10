@@ -1,20 +1,21 @@
 import type { ReactNode } from "react";
 
-import { processEyebrowStyles } from "@/features/process-pages/components/process-page-styles";
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
 import { cn } from "@/lib/utils";
 import type { ETheme } from "@/utils/constants/theme";
-
-import { COLOPHON_PALETTES, COLOPHON_STACK, COLOPHON_WEIGHTS } from "../data";
-import { ColophonCarbonBadge } from "./colophon-carbon-badge";
 import {
-  colophonContainerClassName,
-  colophonSectionClassName,
-} from "./colophon-layout";
-import { ColophonPaletteRow } from "./colophon-palette-row";
+  ShowcaseShell,
+  ShowcaseHero,
+  ShowcaseSection,
+  MetricGrid,
+} from "@/components/shared/showcase";
+
+import { COLOPHON_STACK, COLOPHON_WEIGHTS } from "../data";
+import { ColophonCarbonBadge } from "./colophon-carbon-badge";
+import { ColophonInteractivePalette } from "./colophon-interactive-palette";
 
 export const colophonLinkClassName =
-  "text-foreground underline decoration-border underline-offset-2 transition-colors hover:text-primary";
+  "text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary";
 
 interface ColophonPageProps {
   labels: {
@@ -42,188 +43,153 @@ interface ColophonPageProps {
       brandLabel: string;
       cleanerLabel: string;
     };
+    carbonMetrics: {
+      firstVisit: string;
+      returnVisits: string;
+      websiteCarbon: string;
+      digitalBeacon: string;
+    };
   };
 }
 
 export function ColophonPage({ labels }: ColophonPageProps) {
   return (
-    <div className={cn(colophonContainerClassName, "py-8 sm:py-12")}>
-      <ProcessReveal>
-        <header className={colophonSectionClassName(true)}>
-          <p className={cn(processEyebrowStyles, "mb-3")}>{labels.eyebrow}</p>
-          <h1 className="text-foreground mb-4 text-[clamp(2rem,5vw,3.125rem)] leading-[1.15] font-extrabold tracking-tight">
-            {labels.title}
-          </h1>
-          <p className="text-muted-foreground max-w-3xl text-lg leading-relaxed">
-            {labels.description}
-          </p>
-        </header>
-      </ProcessReveal>
+    <ShowcaseShell>
+      {/* Hero */}
+      <ShowcaseHero
+        eyebrow={labels.eyebrow}
+        title={labels.title}
+        description={labels.description}
+      />
 
-      <ProcessReveal>
-        <section
-          aria-labelledby="colophon-stack-heading"
-          className={colophonSectionClassName()}
-        >
-          <h2
-            id="colophon-stack-heading"
-            className="text-foreground mb-4 text-2xl font-bold tracking-tight"
-          >
+      {/* Tech Stack */}
+      <ShowcaseSection>
+        <ProcessReveal>
+          <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
             {labels.stackTitle}
           </h2>
-          <p className="text-muted-foreground max-w-3xl leading-relaxed">
+          <div className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">
             {labels.stackBody}
-          </p>
-          <div className="text-muted-foreground mt-10 flex flex-wrap items-center gap-x-10 gap-y-4 sm:gap-x-14">
+          </div>
+          <div className="mt-8 flex flex-wrap gap-2.5">
             {COLOPHON_STACK.map((item) => (
               <a
                 key={item.id}
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground hover:text-primary text-2xl font-bold tracking-tight transition-colors sm:text-3xl"
+                className="border-border/80 bg-card/60 text-foreground hover:border-primary/50 hover:text-primary rounded-full border px-5 py-2 text-sm font-medium transition-colors"
               >
-                {labels.stackMarks[item.id]}
+                {item.label}
               </a>
             ))}
           </div>
-        </section>
-      </ProcessReveal>
+        </ProcessReveal>
+      </ShowcaseSection>
 
-      <ProcessReveal>
-        <section
-          aria-labelledby="colophon-type-heading"
-          className={colophonSectionClassName()}
-        >
-          <h2
-            id="colophon-type-heading"
-            className="text-foreground mb-4 text-2xl font-bold tracking-tight"
-          >
+      {/* Typography */}
+      <ShowcaseSection>
+        <ProcessReveal>
+          <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
             {labels.typeTitle}
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-3xl leading-relaxed">
+          <p className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">
             {labels.typeBody}
           </p>
-          <div className="border-border grid grid-cols-2 divide-x divide-dashed overflow-hidden rounded-lg border border-dashed sm:grid-cols-4">
-            {COLOPHON_WEIGHTS.map((weight, index) => (
-              <div
-                key={weight.id}
-                className={cn(
-                  "border-border py-8 text-center sm:py-10",
-                  index >= 2 && "border-t border-dashed sm:border-t-0",
-                )}
-              >
-                <p
+          <div className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
+            {COLOPHON_WEIGHTS.map((weight) => (
+              <div key={weight.id} className="border-border/80 border-t pt-5">
+                <span
                   className={cn(
-                    "text-foreground text-lg sm:text-xl",
+                    "text-foreground block text-4xl leading-none sm:text-5xl lg:text-6xl",
                     weight.className,
                   )}
                 >
+                  Aa
+                </span>
+                <small className="text-muted-foreground mt-3 block font-mono text-xs">
                   {labels.weightLabels[weight.id]}
-                </p>
+                </small>
               </div>
             ))}
           </div>
-        </section>
-      </ProcessReveal>
+        </ProcessReveal>
+      </ShowcaseSection>
 
-      <ProcessReveal>
-        <section
-          aria-labelledby="colophon-colors-heading"
-          className={colophonSectionClassName()}
-        >
-          <h2
-            id="colophon-colors-heading"
-            className="text-foreground mb-4 text-2xl font-bold tracking-tight"
-          >
+      {/* Design & Colors */}
+      <ShowcaseSection>
+        <ProcessReveal>
+          <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
             {labels.colorsTitle}
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-3xl leading-relaxed">
+          <div className="text-muted-foreground mt-3 mb-8 max-w-2xl text-base leading-relaxed sm:text-lg">
             {labels.colorsBody}
-          </p>
-
-          <div className="border-border divide-border divide-y overflow-hidden rounded-lg border">
-            <div className="px-4 pt-3 pb-1.5 sm:px-5">
-              <div className="flex">
-                {labels.shadeLabels.map((shade) => (
-                  <div
-                    key={shade}
-                    className="text-muted-foreground flex-1 text-center text-[10px] sm:text-xs"
-                  >
-                    {shade}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {COLOPHON_PALETTES.map((palette) => (
-              <ColophonPaletteRow
-                key={palette.id}
-                themeId={palette.id}
-                label={labels.paletteLabels[palette.id]}
-                swatches={palette.swatches}
-              />
-            ))}
           </div>
-        </section>
-      </ProcessReveal>
 
-      <ProcessReveal>
-        <section
-          aria-labelledby="colophon-logo-heading"
-          className={colophonSectionClassName()}
-        >
-          <h2
-            id="colophon-logo-heading"
-            className="text-foreground mb-4 text-2xl font-bold tracking-tight"
-          >
+          <ColophonInteractivePalette />
+        </ProcessReveal>
+      </ShowcaseSection>
+
+      {/* Logo */}
+      <ShowcaseSection>
+        <ProcessReveal>
+          <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
             {labels.logoTitle}
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-3xl leading-relaxed">
+          <p className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">
             {labels.logoBody}
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div
-              className="border-border bg-background-50 flex h-40 items-center justify-center rounded-lg border sm:h-48"
+              className="border-border/80 bg-card text-card-foreground flex h-40 items-center justify-center rounded-2xl border sm:h-48"
               aria-label={labels.logoLightAlt}
             >
-              <div className="bg-primary-500 text-secondaryText-50 flex size-16 items-center justify-center rounded-2xl text-2xl font-extrabold sm:size-20 sm:text-3xl">
+              <b className="text-foreground text-5xl font-light tracking-tight sm:text-6xl">
                 JH
-              </div>
+              </b>
             </div>
             <div
-              className="border-border bg-background-900 flex h-40 items-center justify-center rounded-lg border sm:h-48"
+              className="border-border/80 bg-muted/60 text-muted-foreground flex h-40 items-center justify-center rounded-2xl border sm:h-48"
               aria-label={labels.logoDarkAlt}
             >
-              <div className="bg-primary-500 text-secondaryText-50 flex size-16 items-center justify-center rounded-2xl text-2xl font-extrabold sm:size-20 sm:text-3xl">
+              <b className="text-foreground text-5xl font-light tracking-tight sm:text-6xl">
                 JH
-              </div>
+              </b>
             </div>
           </div>
-        </section>
-      </ProcessReveal>
+        </ProcessReveal>
+      </ShowcaseSection>
 
-      <ProcessReveal>
-        <section
-          aria-labelledby="colophon-carbon-heading"
-          className={cn(colophonSectionClassName(), "mb-8")}
-        >
-          <h2
-            id="colophon-carbon-heading"
-            className="text-foreground mb-4 text-2xl font-bold tracking-tight"
-          >
+      {/* Carbon Footprint */}
+      <ShowcaseSection>
+        <ProcessReveal>
+          <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
             {labels.carbonTitle}
           </h2>
-          <p className="text-muted-foreground max-w-3xl leading-relaxed">
+          <div className="text-muted-foreground mt-3 mb-10 max-w-2xl text-base leading-relaxed sm:text-lg">
             {labels.carbonBody}
-          </p>
-          <ColophonCarbonBadge
-            co2Label={labels.carbonBadge.co2Label}
-            brandLabel={labels.carbonBadge.brandLabel}
-            cleanerLabel={labels.carbonBadge.cleanerLabel}
+          </div>
+
+          <MetricGrid
+            columns={4}
+            size="sm"
+            items={[
+              { label: labels.carbonMetrics.firstVisit, value: "0.234g" },
+              { label: labels.carbonMetrics.returnVisits, value: "0.018g" },
+              { label: labels.carbonMetrics.websiteCarbon, value: "A+" },
+              { label: labels.carbonMetrics.digitalBeacon, value: "B" },
+            ]}
           />
-        </section>
-      </ProcessReveal>
-    </div>
+
+          <div className="mt-12">
+            <ColophonCarbonBadge
+              co2Label={labels.carbonBadge.co2Label}
+              brandLabel={labels.carbonBadge.brandLabel}
+              cleanerLabel={labels.carbonBadge.cleanerLabel}
+            />
+          </div>
+        </ProcessReveal>
+      </ShowcaseSection>
+    </ShowcaseShell>
   );
 }

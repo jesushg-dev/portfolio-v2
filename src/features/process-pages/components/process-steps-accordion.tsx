@@ -1,18 +1,17 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 import type { ProcessStep } from "../types";
 import {
-  processEyebrowStyles,
   processMotionCollapseClass,
   processPanelId,
   processSectionHeadingId,
 } from "./process-page-styles";
-import { ProcessReveal, ProcessRevealStaggerItem } from "./process-reveal";
+import { ProcessReveal } from "./process-reveal";
 import { ProcessSectionHeader } from "./process-section-header";
 
 interface ProcessStepsAccordionProps {
@@ -39,9 +38,9 @@ export function ProcessStepsAccordion({
     <section
       id={id}
       aria-labelledby={processSectionHeadingId(id)}
-      className="px-6 py-20"
+      className="border-border/80 border-t py-20 md:py-28"
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto w-full px-4 sm:px-6 lg:container lg:px-20">
         <ProcessReveal>
           <ProcessSectionHeader
             sectionId={id}
@@ -51,84 +50,61 @@ export function ProcessStepsAccordion({
           />
         </ProcessReveal>
 
-        <div className="space-y-0">
+        <div className="border-border/80 divide-border/80 mx-auto max-w-3xl divide-y border-t border-b">
           {steps.map((step, index) => {
             const isOpen = openIndex === index;
-            const isLast = index === steps.length - 1;
             const panelId = processPanelId(`${baseId}-${id}`, index);
             const triggerId = `${panelId}-trigger`;
 
             return (
-              <ProcessRevealStaggerItem
-                key={step.number}
-                index={index}
-                className={cn(!isLast && "pb-10")}
-              >
-                <div className="flex gap-6">
-                  <div aria-hidden className="flex flex-col items-center">
-                    <span className="bg-primary text-primary-foreground flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold">
-                      {step.number}
-                    </span>
-                    {!isLast ? (
-                      <span className="bg-border my-2 w-px flex-1" />
-                    ) : null}
-                  </div>
+              <div key={step.number} className="group">
+                <button
+                  id={triggerId}
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  onClick={() => setOpenIndex(isOpen ? -1 : index)}
+                  className="focus-visible:ring-ring/35 flex min-h-11 w-full cursor-pointer items-baseline gap-6 py-7 text-left focus-visible:ring-2 focus-visible:outline-none"
+                >
+                  <span className="text-primary w-7 shrink-0 pt-1 font-mono text-sm font-semibold">
+                    {step.number}
+                  </span>
+                  <span className="text-foreground flex-1 text-xl font-semibold tracking-tight sm:text-2xl">
+                    {step.title}
+                  </span>
+                  <Plus
+                    aria-hidden
+                    className={cn(
+                      "text-muted-foreground size-5 shrink-0 transition-transform duration-200",
+                      isOpen && "rotate-45",
+                    )}
+                  />
+                </button>
 
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-foreground text-lg font-semibold">
-                      <button
-                        id={triggerId}
-                        type="button"
-                        aria-expanded={isOpen}
-                        aria-controls={step.detail ? panelId : undefined}
-                        onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                        className="group focus-visible:ring-ring/35 flex min-h-11 w-full cursor-pointer items-start justify-between gap-4 rounded-lg py-2 text-left focus-visible:ring-2 focus-visible:outline-none"
-                      >
-                        <span className="min-w-0">
-                          <span className="mb-1.5 block">{step.title}</span>
-                          <span className="text-muted-foreground block text-sm leading-relaxed font-normal">
-                            {step.description}
-                          </span>
-                        </span>
-                        {step.detail ? (
-                          <ChevronDown
-                            aria-hidden
-                            className={cn(
-                              "text-muted-foreground mt-1 size-5 shrink-0 motion-safe:transition-transform",
-                              isOpen && "rotate-180",
-                            )}
-                          />
-                        ) : null}
-                      </button>
-                    </h3>
-
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={triggerId}
+                  className={processMotionCollapseClass(isOpen)}
+                >
+                  <div className="text-muted-foreground overflow-hidden pb-8 pl-13 text-base">
+                    <p className="leading-relaxed">{step.description}</p>
                     {step.detail ? (
-                      <div
-                        id={panelId}
-                        role="region"
-                        aria-labelledby={triggerId}
-                        className={processMotionCollapseClass(isOpen)}
-                      >
-                        <div className="overflow-hidden">
-                          <div className="border-border bg-muted/40 mt-4 rounded-xl border p-4">
-                            <p className={cn(processEyebrowStyles, "mb-1.5")}>
-                              {inPracticeLabel}
-                            </p>
-                            <p className="text-muted-foreground text-sm leading-relaxed">
-                              {step.detail}
-                            </p>
-                            {step.tools ? (
-                              <p className="text-muted-foreground mt-3 text-sm">
-                                {step.tools}
-                              </p>
-                            ) : null}
+                      <div className="border-primary text-foreground mt-5 border-l-2 pl-4 text-sm sm:text-base">
+                        <small className="text-primary mb-1.5 block text-sm font-semibold tracking-wider uppercase">
+                          {inPracticeLabel}
+                        </small>
+                        <p className="leading-relaxed">{step.detail}</p>
+                        {step.tools ? (
+                          <div className="text-muted-foreground mt-2 text-sm">
+                            {step.tools}
                           </div>
-                        </div>
+                        ) : null}
                       </div>
                     ) : null}
                   </div>
                 </div>
-              </ProcessRevealStaggerItem>
+              </div>
             );
           })}
         </div>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 const KEY_SOUNDS_DOWN: Record<string, [number, number]> = {
@@ -247,15 +248,15 @@ function tokenizeBash(text: string): Token[] {
 }
 
 const tokenColors: Record<TokenType, string> = {
-  command: "text-emerald-400",
-  flag: "text-sky-400",
-  string: "text-amber-300",
+  command: "text-primary",
+  flag: "text-primary",
+  string: "text-foreground/90",
   number: "text-purple-400",
   operator: "text-red-400",
-  path: "text-cyan-300",
+  path: "text-primary",
   variable: "text-pink-400",
-  comment: "text-neutral-500",
-  default: "text-neutral-300",
+  comment: "text-muted-foreground",
+  default: "text-foreground/80",
 };
 
 function SyntaxHighlightedText({ text }: { text: string }) {
@@ -276,7 +277,7 @@ function OutputText({ content }: { content: string }) {
   const trimmed = content.trim();
 
   if (trimmed === "{" || trimmed === "}") {
-    return <span className="text-neutral-300">{content}</span>;
+    return <span className="text-foreground/80">{content}</span>;
   }
 
   const keyValueMatch = /^(\s*)(".*?")(:?)(\s*)(.*)$/.exec(content);
@@ -284,18 +285,18 @@ function OutputText({ content }: { content: string }) {
     const [, indent, key, colon, spacing, value] = keyValueMatch;
     return (
       <>
-        <span className="text-neutral-300">{indent}</span>
-        <span className="text-sky-400">{key}</span>
-        <span className="text-neutral-300">
+        <span className="text-foreground/80">{indent}</span>
+        <span className="text-primary">{key}</span>
+        <span className="text-foreground/80">
           {colon}
           {spacing}
         </span>
-        <span className="text-amber-300">{value}</span>
+        <span className="text-foreground/90">{value}</span>
       </>
     );
   }
 
-  return <span className="text-neutral-200">{content}</span>;
+  return <span className="text-foreground">{content}</span>;
 }
 
 interface TerminalLine {
@@ -324,6 +325,7 @@ export function Terminal({
   initialDelay = 500,
   enableSound = true,
 }: TerminalProps) {
+  const reducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const inView = useInView(containerRef);
@@ -347,13 +349,13 @@ export function Terminal({
   const isLastCommand = commandIdx === commands.length - 1;
 
   useEffect(() => {
-    if (!inView || phase !== "idle") return;
+    if (reducedMotion || !inView || phase !== "idle") return;
     const t = setTimeout(() => setPhase("typing"), initialDelay);
     return () => clearTimeout(t);
-  }, [inView, phase, initialDelay]);
+  }, [reducedMotion, inView, phase, initialDelay]);
 
   useEffect(() => {
-    if (phase !== "typing") return;
+    if (reducedMotion || phase !== "typing") return;
 
     if (charIdx < currentCommand.length) {
       const char = currentCommand[charIdx];
@@ -389,6 +391,7 @@ export function Terminal({
       return () => clearTimeout(t);
     }
   }, [
+    reducedMotion,
     phase,
     charIdx,
     currentCommand,
@@ -400,7 +403,7 @@ export function Terminal({
   ]);
 
   useEffect(() => {
-    if (phase !== "outputting") return;
+    if (reducedMotion || phase !== "outputting") return;
 
     if (outputIdx >= 0 && outputIdx < currentOutputs.length) {
       const t = setTimeout(() => {
@@ -421,10 +424,10 @@ export function Terminal({
       }, 300);
       return () => clearTimeout(t);
     }
-  }, [phase, outputIdx, currentOutputs, isLastCommand]);
+  }, [reducedMotion, phase, outputIdx, currentOutputs, isLastCommand]);
 
   useEffect(() => {
-    if (phase !== "pausing") return;
+    if (reducedMotion || phase !== "pausing") return;
     const t = setTimeout(() => {
       setCharIdx(0);
       setOutputIdx(-1);
@@ -432,12 +435,13 @@ export function Terminal({
       setPhase("typing");
     }, delayBetweenCommands);
     return () => clearTimeout(t);
-  }, [phase, delayBetweenCommands]);
+  }, [reducedMotion, phase, delayBetweenCommands]);
 
   useEffect(() => {
+    if (reducedMotion) return;
     const interval = setInterval(() => setCursorVisible((v) => !v), 530);
     return () => clearInterval(interval);
-  }, []);
+  }, [reducedMotion]);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -446,42 +450,57 @@ export function Terminal({
   }, [lines, phase]);
 
   const prompt = (
-    <span className="text-neutral-500">
-      <span className="text-sky-500">{username}</span>
-      <span className="text-emerald-600">:</span>
-      <span className="text-sky-400">~</span>
-      <span className="text-neutral-500">$</span>{" "}
+    <span className="text-muted-foreground">
+      <span className="text-primary">{username}</span>
+      <span className="text-muted-foreground">:</span>
+      <span className="text-primary">~</span>
+      <span className="text-muted-foreground">$</span>{" "}
     </span>
   );
 
   return (
     <div
       ref={containerRef}
-      className={cn("mx-auto w-full max-w-xl font-mono text-sm", className)}
+      className={cn("mx-auto w-full max-w-xl font-mono text-xs", className)}
     >
-      <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 shadow-2xl">
+      <div className="border-border/60 bg-card/70 overflow-hidden rounded-2xl border shadow-xl backdrop-blur-xl">
         {/* Title Bar */}
-        <div className="flex items-center gap-2 bg-neutral-800 px-4 py-3">
+        <div className="border-border/40 bg-muted/40 flex items-center gap-2 border-b px-4 py-3">
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-red-500 transition-colors hover:bg-red-600" />
-            <div className="h-3 w-3 rounded-full bg-yellow-400 transition-colors hover:bg-yellow-500" />
-            <div className="h-3 w-3 rounded-full bg-green-400 transition-colors hover:bg-green-500" />
+            <div className="size-2.5 rounded-full bg-red-500 transition-colors hover:bg-red-600" />
+            <div className="size-2.5 rounded-full bg-yellow-400 transition-colors hover:bg-yellow-500" />
+            <div className="size-2.5 rounded-full bg-green-400 transition-colors hover:bg-green-500" />
           </div>
           <div className="flex-1 text-center">
-            <span className="truncate text-sm text-neutral-300">
+            <span className="text-muted-foreground truncate text-xs">
               {username} — bash
             </span>
           </div>
-          <div className="w-[52px]" />
+          <div className="w-12" />
         </div>
 
         {/* Terminal Content */}
         <div
           ref={contentRef}
-          className="no-visible-scrollbar h-80 overflow-y-auto p-4 font-mono text-neutral-200"
+          tabIndex={0}
+          role="region"
+          aria-label={`${username} — bash`}
+          className="text-foreground h-72 [scrollbar-width:thin] overflow-y-auto p-4 font-mono sm:p-5"
         >
-          {lines.map((line, i) => (
-            <div key={i} className="leading-relaxed whitespace-pre-wrap">
+          {(reducedMotion
+            ? commands.flatMap((command, index): TerminalLine[] => [
+                { type: "command", content: command },
+                ...(outputs[index] ?? []).map((content): TerminalLine => ({
+                  type: "output",
+                  content,
+                })),
+              ])
+            : lines
+          ).map((line, i) => (
+            <div
+              key={i}
+              className="leading-relaxed break-words whitespace-pre-wrap"
+            >
               {line.type === "command" ? (
                 <span>
                   {prompt}
@@ -493,23 +512,24 @@ export function Terminal({
             </div>
           ))}
 
-          {phase === "typing" && (
-            <div className="leading-relaxed whitespace-pre-wrap">
+          {!reducedMotion && phase === "typing" && (
+            <div className="leading-relaxed break-words whitespace-pre-wrap">
               {prompt}
               <SyntaxHighlightedText text={currentText} />
-              <span className="ml-0.5 inline-block h-4 w-2 bg-neutral-300 align-middle" />
+              <span className="bg-primary ml-0.5 inline-block h-3.5 w-1.5 align-middle" />
             </div>
           )}
 
-          {(phase === "done" ||
+          {(reducedMotion === true ||
+            phase === "done" ||
             phase === "pausing" ||
             phase === "outputting") && (
-            <div className="leading-relaxed whitespace-pre-wrap">
+            <div className="leading-relaxed break-words whitespace-pre-wrap">
               {prompt}
               <span
                 className={cn(
-                  "inline-block h-4 w-2 bg-neutral-300 align-middle transition-opacity duration-100",
-                  !cursorVisible && "opacity-0",
+                  "bg-primary inline-block h-3.5 w-1.5 align-middle transition-opacity duration-100",
+                  (!cursorVisible || reducedMotion) && "opacity-0",
                 )}
               />
             </div>

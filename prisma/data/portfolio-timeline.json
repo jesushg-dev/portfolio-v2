@@ -87,9 +87,9 @@
     {
       "key": "work-contollo",
       "title": {
-        "es": "Senior Software Engineer",
-        "en": "Senior Software Engineer",
-        "nl": "Senior Software Engineer"
+        "es": "Development Team Lead",
+        "en": "Development Team Lead",
+        "nl": "Development Team Lead"
       },
       "description": {
         "es": "Desarrollo full stack con C#, Nest.js, Angular y React/Next.js. Creación de APIs seguras integradas con sistemas empresariales como QuickBooks.",
@@ -127,9 +127,9 @@
     {
       "key": "work-claro",
       "title": {
-        "es": "Senior Software Engineer",
-        "en": "Senior Software Engineer",
-        "nl": "Senior Software Engineer"
+        "es": "Full Stack Engineer",
+        "en": "Full Stack Engineer",
+        "nl": "Full Stack Engineer"
       },
       "description": {
         "es": "Diseño y desarrollo de un sistema interno de Gestión de Solicitudes de Servicio para Claro Nicaragua con React, Next.js, Prisma y SQL Server.",
@@ -158,7 +158,7 @@
         "nl": "Deel van het technologieteam van Walmart (Imagemaker). Bouwt kritieke features in React, Flutter en VTEX, E2E-automatisering met Playwright en productie-incidentondersteuning."
       },
       "category": "WORK",
-      "organization": "Imagemaker",
+      "organization": "Walmart (via Imagemaker)",
       "location": "Remote",
       "startDate": "2025-08-01",
       "endDate": "2026-08-01",

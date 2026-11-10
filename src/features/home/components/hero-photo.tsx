@@ -19,21 +19,18 @@ export default function HeroPhoto({ heroData }: HeroPhotoProps) {
   const initials = `${firstName.charAt(0).toUpperCase()}${lastName ? lastName.charAt(0).toUpperCase() : ""}`;
 
   return (
-    <div className="relative mx-auto w-full max-w-[20rem] sm:max-w-[24rem] lg:max-w-[26rem]">
-      {/* Spinning dashed orbital ring matching hero design */}
-      <span
-        className="a-spin border-primary/30 pointer-events-none absolute -inset-5 rounded-full border border-dashed select-none sm:-inset-6"
-        aria-hidden="true"
-      />
-
-      {/* Main Avatar Container */}
-      <div className="bg-primary/20 relative aspect-square rounded-full p-2 shadow-[0_24px_70px_-12px_rgba(30,64,175,.35)] sm:p-2.5">
-        <div className="bg-primary/10 relative h-full w-full overflow-hidden rounded-full">
+    <div className="relative mx-auto aspect-square w-[min(23.75rem,82%)] before:pointer-events-none before:absolute before:-inset-[14%] before:rounded-full before:bg-[radial-gradient(circle,color-mix(in_srgb,var(--primary)_38%,transparent),transparent_68%)] before:blur-2xl">
+      {/* Conic Gradient Ring */}
+      <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_210deg,var(--primary),color-mix(in_srgb,var(--brand2)_35%,transparent),var(--primary))] p-[0.3125rem] shadow-[0_1.875rem_5rem_rgba(0,0,0,0.35)]">
+        <div className="bg-background relative h-full w-full overflow-hidden rounded-full">
           {photoUrl ? (
             <HeroPhotoImage photoUrl={photoUrl} imageAlt={imageAlt} />
           ) : (
-            <span className="font-display text-primary flex h-full w-full items-center justify-center text-6xl font-bold sm:text-7xl">
-              {initials}
+            <span
+              className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_35%_30%,color-mix(in_srgb,var(--primary)_55%,#fff),var(--primary)_55%,#0b1226)] text-6xl font-light text-white select-none sm:text-7xl lg:text-8xl"
+              aria-label={imageAlt}
+            >
+              {initials || "JH"}
             </span>
           )}
         </div>

@@ -41,8 +41,12 @@ function NowLastPlayedContent({
           {isLive ? (
             <span
               aria-hidden
-              className="bg-success ml-2 inline-block size-1.5 rounded-full"
-            />
+              className="ml-2 inline-flex h-3 items-end gap-0.5 align-middle"
+            >
+              <span className="bg-primary h-full w-0.5 origin-bottom animate-pulse" />
+              <span className="bg-primary h-2/3 w-0.5 origin-bottom animate-pulse" />
+              <span className="bg-primary h-full w-0.5 origin-bottom animate-pulse" />
+            </span>
           ) : null}
         </h3>
         <p className="text-foreground mt-2 text-xl leading-tight font-semibold tracking-tight">

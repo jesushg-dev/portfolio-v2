@@ -27,12 +27,6 @@ function createUtApiFromConfig(
     return new UTApi({ token });
   }
 
-  const appId = config.appId?.trim();
-  const secret = config.secret?.trim();
-  if (appId && secret) {
-    return new UTApi({ token: secret, appId } as { token: string });
-  }
-
   return null;
 }
 
@@ -55,7 +49,7 @@ export async function getTenantUploadThingClient(
   const utapi = createUtApiFromConfig(config);
   if (!utapi) return null;
 
-  const token = config.token?.trim() ?? config.secret?.trim();
+  const token = config.token?.trim();
   if (!token) return null;
 
   return { token, utapi };
@@ -70,4 +64,31 @@ export async function requireTenantUploadThingClient(
     throw new UploadThingNotConfiguredError();
   }
   return client;
+}
+
+export interface UploadThingTestResult {
+  success: boolean;
+  error?: string;
+}
+
+/** Verifies that a token can authenticate against the UploadThing API. */
+export async function testUploadThingConnection(
+  token: string,
+): Promise<UploadThingTestResult> {
+  const trimmed = token.trim();
+  if (!trimmed) {
+    return { success: false, error: "UploadThing token is required." };
+  }
+
+  try {
+    const utapi = new UTApi({ token: trimmed });
+    await utapi.listFiles({ limit: 1 });
+    return { success: true };
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to authenticate with UploadThing.";
+    return { success: false, error: message };
+  }
 }

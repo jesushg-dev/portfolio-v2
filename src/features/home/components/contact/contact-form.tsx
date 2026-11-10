@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Send, Zap } from "lucide-react";
+import { Send, LoaderCircle } from "lucide-react";
 
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -17,10 +17,20 @@ import { TurnstileWidget } from "@/components/shared/turnstile-widget";
 import { env } from "@/env";
 import { api, TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/sonner";
-import { Link } from "@/i18n/routing";
-import { SCHEDULE_PATH } from "@/utils/calendly-url";
+import {
+  ContactAlternativeLinks,
+  type ContactAlternativeLinksProps,
+} from "./contact-alternative-links";
 
-const ContactForm: FC = () => {
+export interface ContactFormProps extends ContactAlternativeLinksProps {
+  responseTime?: string | null;
+}
+
+const ContactForm: FC<ContactFormProps> = ({
+  linkedinUrl,
+  schedulingEnabled,
+  responseTime,
+}) => {
   const t = useTranslations("main.contact");
   const [isPending, startTransition] = useTransition();
   const [turnstileToken, setTurnstileToken] = useState<string>("");
@@ -109,32 +119,40 @@ const ContactForm: FC = () => {
     <Form {...form}>
       <FormRoot
         id="contact-form"
-        className="text-card-foreground mx-auto box-border h-full w-full max-w-lg min-w-0 flex-none flex-col justify-center gap-5 overflow-visible p-0"
+        className="text-foreground box-border w-full min-w-0 flex-1 flex-col gap-7 overflow-visible p-0"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="space-y-2 text-left">
-          <div className="border-primary/20 bg-primary/10 text-primary inline-flex w-fit items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold backdrop-blur-xs">
-            <Zap className="fill-primary/20 text-primary size-3.5 shrink-0" />
-            <span>{t("responseTime")}</span>
-          </div>
+        <div className="text-left">
+          {responseTime && (
+            <p className="text-primary mb-3 text-sm font-semibold">
+              {responseTime}
+            </p>
+          )}
 
-          <h3 className="text-foreground text-2xl font-bold tracking-tight">
+          <h3 className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl">
             {t("title2")}
           </h3>
-          <p className="text-muted-foreground text-sm">{t("form.helper")}</p>
+          <p className="text-muted-foreground mt-4 text-base leading-relaxed sm:text-lg">
+            {t("form.helper")}
+          </p>
         </div>
 
-        <div className="min-w-0 space-y-4">
+        <div className="border-border/50 bg-background/25 divide-border/50 flex min-w-0 flex-1 flex-col divide-y overflow-hidden rounded-3xl border">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem label={t("form.name.label")} inputId="contact-name">
+              <FormItem
+                label={t("form.name.label")}
+                inputId="contact-name"
+                className="[&_label]:text-muted-foreground gap-1 p-4 pb-3 [&_label]:text-xs [&_label]:font-medium"
+              >
                 <Input
                   {...field}
                   autoComplete="name"
                   placeholder={t("form.name.placeholder")}
-                  className="border-border/80 bg-background/80 focus-visible:border-primary focus-visible:ring-primary/10 h-12 rounded-2xl px-4.5 text-base transition-all focus-visible:ring-4"
+                  maxLength={80}
+                  className="focus-visible:bg-primary/5 focus-visible:ring-primary/20 h-11 rounded-xl border-0 bg-transparent px-3 text-base shadow-none transition-colors focus-visible:ring-2 md:text-base"
                 />
               </FormItem>
             )}
@@ -144,13 +162,18 @@ const ContactForm: FC = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem label={t("form.email.label")} inputId="contact-email">
+              <FormItem
+                label={t("form.email.label")}
+                inputId="contact-email"
+                className="[&_label]:text-muted-foreground gap-1 p-4 pb-3 [&_label]:text-xs [&_label]:font-medium"
+              >
                 <Input
                   {...field}
                   type="email"
                   autoComplete="email"
                   placeholder={t("form.email.placeholder")}
-                  className="border-border/80 bg-background/80 focus-visible:border-primary focus-visible:ring-primary/10 h-12 rounded-2xl px-4.5 text-base transition-all focus-visible:ring-4"
+                  maxLength={120}
+                  className="focus-visible:bg-primary/5 focus-visible:ring-primary/20 h-11 rounded-xl border-0 bg-transparent px-3 text-base shadow-none transition-colors focus-visible:ring-2 md:text-base"
                 />
               </FormItem>
             )}
@@ -163,12 +186,14 @@ const ContactForm: FC = () => {
               <FormItem
                 label={t("form.message.label")}
                 inputId="contact-message"
+                className="[&_label]:text-muted-foreground flex flex-1 flex-col gap-1 p-4 [&_label]:text-xs [&_label]:font-medium"
               >
                 <Textarea
                   {...field}
                   rows={4}
+                  maxLength={2000}
                   placeholder={t("form.message.placeholder")}
-                  className="border-border/80 bg-background/80 focus-visible:border-primary focus-visible:ring-primary/10 min-h-28 resize-none rounded-2xl px-4.5 py-3.5 text-base transition-all focus-visible:ring-4"
+                  className="focus-visible:bg-primary/5 focus-visible:ring-primary/20 min-h-32 flex-1 resize-y rounded-xl border-0 bg-transparent px-3 py-3 text-base shadow-none transition-colors focus-visible:ring-2 md:text-base"
                 />
               </FormItem>
             )}
@@ -188,69 +213,34 @@ const ContactForm: FC = () => {
         <button
           type="submit"
           disabled={isPending || sendMessage.isPending}
-          className="group bg-primary text-primary-foreground shadow-primary/25 hover:bg-primary/90 relative box-border flex w-full max-w-full min-w-0 cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-2xl py-4 text-sm font-bold tracking-[0.2em] uppercase shadow-lg transition-all hover:-translate-y-0.5 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-primary-glow group focus-visible:outline-ring relative box-border inline-flex min-h-11 w-fit max-w-full cursor-pointer items-center justify-center gap-3 self-center rounded-full px-6 py-2.5 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {!(isPending || sendMessage.isPending) && (
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent"
-            />
-          )}
-
-          {isPending || sendMessage.isPending ? (
-            <svg
-              className="size-5 animate-spin"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" className="opacity-25" />
-              <path
-                d="M4 12a8 8 0 1 0 16 0 8 8 0 1 0-16 0"
-                className="opacity-75"
-              />
-            </svg>
-          ) : (
-            <Send className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          )}
           {t("form.submit")}
+          <span className="inline-flex shrink-0">
+            {isPending || sendMessage.isPending ? (
+              <LoaderCircle aria-hidden className="size-4 animate-spin" />
+            ) : (
+              <Send
+                aria-hidden
+                className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            )}
+          </span>
         </button>
 
-        <p className="text-muted-foreground mt-2 text-center text-[0.8125rem] leading-relaxed">
-          {t.rich("form.alternativeContact", {
-            schedule: (chunks) => (
-              <Link
-                href={SCHEDULE_PATH}
-                className="text-primary hover:text-primary/80 font-semibold underline underline-offset-4 transition-colors"
-              >
-                {chunks}
-              </Link>
-            ),
-            linkedin: (chunks) => (
-              <a
-                href="https://www.linkedin.com/in/jesushg-dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-primary/80 font-semibold underline underline-offset-4 transition-colors"
-              >
-                {chunks}
-              </a>
-            ),
-          })}
-        </p>
+        <ContactAlternativeLinks
+          linkedinUrl={linkedinUrl}
+          schedulingEnabled={schedulingEnabled}
+        />
       </FormRoot>
     </Form>
   );
 };
 
-export default function ContactFormWithProvider() {
+export default function ContactFormWithProvider(props: ContactFormProps) {
   return (
     <TRPCReactProvider>
-      <ContactForm />
+      <ContactForm {...props} />
       <Toaster />
     </TRPCReactProvider>
   );

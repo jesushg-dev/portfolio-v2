@@ -2,15 +2,15 @@
 export interface UsesEverydayItem {
   id: string;
   href: string;
-  image: string;
+  image: string | null;
   title: string;
-  description: string;
+  description: string | null;
 }
 
 export interface UsesSoftwareItem {
   id: string;
   href: string;
-  image: string;
+  image: string | null;
   title: string;
 }
 

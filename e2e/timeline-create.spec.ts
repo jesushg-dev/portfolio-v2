@@ -49,7 +49,13 @@ test.describe("timeline create", () => {
       portfolioTimeline.items.filter((row) => row.current).length,
     );
 
-    const imagemaker = items.find((row) => row.organization === "Imagemaker");
+    const imagemakerFixture = portfolioTimeline.items.find(
+      (row) => row.key === "work-imagemaker",
+    );
+    expect(imagemakerFixture).toBeDefined();
+    const imagemaker = items.find(
+      (row) => row.organization === imagemakerFixture?.organization,
+    );
     expect(imagemaker).toBeDefined();
     expect(extractLocalizedText(imagemaker, languages, "en", "title")).toBe(
       "Senior Software Engineer",

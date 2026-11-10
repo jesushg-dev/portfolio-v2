@@ -54,13 +54,15 @@ const UsesAdminPage: FC<Props> = async ({ params, searchParams }) => {
   ]);
 
   return (
-    <div className="flex h-full flex-col gap-6">
-      <div className="flex shrink-0 items-start justify-between gap-4">
+    <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-6 py-2">
+      <div className="flex shrink-0 flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             {t("title")}
           </h1>
-          <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
+          <p className="text-muted-foreground mt-2 max-w-2xl text-sm sm:text-base">
+            {t("subtitle")}
+          </p>
         </div>
         <ExportSeedJsonButton entity="uses" />
       </div>

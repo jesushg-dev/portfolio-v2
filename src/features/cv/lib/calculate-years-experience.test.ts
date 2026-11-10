@@ -7,9 +7,7 @@ describe("calculateCumulativeYearsExperience", () => {
 
   it("returns 0 when experiences have no valid start dates", () => {
     expect(
-      calculateCumulativeYearsExperience([
-        { startDate: null, endDate: null },
-      ]),
+      calculateCumulativeYearsExperience([{ startDate: null, endDate: null }]),
     ).toBe(0);
   });
 

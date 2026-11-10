@@ -965,7 +965,7 @@
     }
   ],
   "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
-  "order": 8,
+  "order": 11,
   "kind": "PERSONAL",
   "slug": "covid19",
   "caseStudyEnabled": true

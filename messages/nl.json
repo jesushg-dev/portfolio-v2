@@ -250,12 +250,12 @@
     "uploadthing": {
       "title": "UploadThing Opslaggegevens",
       "description": "Configureer aangepaste UploadThing-inloggegevens voor het uploaden van bestanden.",
-      "tokenLabel": "Geheime token",
-      "tokenPlaceholder": "UploadThing Secret Token",
-      "appIdLabel": "App ID (optioneel)",
-      "appIdPlaceholder": "UploadThing App ID",
-      "secretLabel": "Geheime sleutel (optioneel)",
-      "secretPlaceholder": "UploadThing Secret Key",
+      "tokenLabel": "UploadThing-token",
+      "tokenPlaceholder": "Plak je UPLOADTHING_TOKEN (begint met eyJ...)",
+      "testButton": "Verbinding testen",
+      "testSuccess": "UploadThing-verbinding succesvol geverifieerd!",
+      "testFailed": "Authenticatie met UploadThing mislukt. Controleer je token.",
+      "missingTokenToTest": "Voer een token in om de verbinding te testen.",
       "saveButton": "Opslaggegevens opslaan",
       "saveSuccess": "UploadThing-inloggegevens succesvol opgeslagen!",
       "requiredTitle": "Bestandsopslag niet gekoppeld",
@@ -295,9 +295,9 @@
     }
   },
   "certification": {
-    "title": "Certificeringen",
-    "subtitle": "Meester in Meerdere Vaardigheden",
-    "description": "Jouw projecten naar het hoogste niveau tillen, klaar voor nieuwe uitdagingen!",
+    "title": "Alle certificaten",
+    "subtitle": "Meester in meerdere vaardigheden",
+    "description": "Officiële certificaten en afgeronde programma’s die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
     "pagination": {
       "loading": "Laden...",
       "loadMore": "Meer Laden"
@@ -341,15 +341,16 @@
     },
     "catalog": {
       "backToPortfolio": "Terug naar portfolio",
-      "pageTitle": "Alle Certificaten",
-      "pageSubtitle": "Officiële certificaten en afgeronde programma's die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
+      "pageTitle": "Alle certificaten",
+      "pageSubtitle": "Officiële certificaten en afgeronde programma’s die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
       "searchPlaceholder": "Zoek op titel, technologie of uitgever…",
       "searchLabel": "Zoek certificaten of technologieën",
       "sortLabel": "Sorteren op",
       "sorts": {
         "newest": "Nieuwste eerst",
         "name": "Naam (A–Z)",
-        "issuer": "Uitgever (A–Z)"
+        "issuer": "Uitgever (A–Z)",
+        "oldest": "Oudste eerst"
       },
       "issuerLabel": "Uitgever / Instelling",
       "techLabel": "Technologie",
@@ -364,7 +365,12 @@
       "preview": "Voorbeeld",
       "verify": "Referentie bekijken",
       "credentialId": "Certificaat-ID",
-      "closeModal": "Sluiten"
+      "closeModal": "Sluiten",
+      "moreFilters": "Meer filters",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "copyId": "ID kopiëren",
+      "idCopied": "ID gekopieerd!"
     }
   },
   "curriculum": {
@@ -822,6 +828,12 @@
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
       "scheduleCallAria": "Plan een gesprek — ga naar het contactgedeelte",
+      "atAGlance": "In een oogopslag",
+      "availability": "Beschikbaarheid",
+      "immediate": "Direct",
+      "seeProjects": "Bekijk projecten",
+      "getInTouch": "Neem contact op",
+      "openToWork": "Beschikbaar voor werk · Op afstand of Managua",
       "empty": {
         "title": "Hero niet geconfigureerd",
         "description": "Voeg je profielfoto, ondertitel en introductie toe via het beheerdersprofiel."
@@ -829,17 +841,29 @@
     },
     "services": {
       "title": "Engineering Expertise",
-      "subtitle": "Diensten",
+      "subtitle": "Expertise",
       "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
       "seeMore": "Bekijk meer",
       "seeLess": "Bekijk minder",
+      "seeStack": "Bekijk de stack ›",
+      "inPractice": "In de praktijk ›",
       "items": {
         "contact": {
           "title": "Laten we samen bouwen",
           "subtitle": "Heb je een project in gedachten?",
           "cta": "Neem contact op"
         }
-      }
+      },
+      "carouselInstructions": "Dienstenkaarten. Gebruik de pijltjestoetsen om te navigeren.",
+      "viewDetails": "Details van {title} bekijken",
+      "previousCard": "Vorige kaart",
+      "nextCard": "Volgende kaart",
+      "close": "Sluiten",
+      "technologies": "Technologieën",
+      "pauseMotion": "Diagrammen pauzeren",
+      "resumeMotion": "Diagrammen hervatten",
+      "titleLead": "Technische",
+      "titleGradient": "expertise."
     },
     "timeline": {
       "title": "Mijn reis",
@@ -869,28 +893,19 @@
       "techAria": "Technologieën"
     },
     "about": {
-      "title": "Engineering Aanpak",
-      "subtitle": "Hoe ik ontwikkel",
+      "title": "Iets over mij",
+      "subtitle": "Over mij",
       "terminalEmpty": {
         "title": "Terminal niet geconfigureerd",
         "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
       },
-      "timeline": {
-        "title": "Mijn tijdslijn",
-        "subtitle": "Continu leren...",
-        "viewAll": "Bekijk volledige tijdlijn",
-        "empty": "Nog geen tijdlijnitems.",
-        "categories": {
-          "WORK": "Werk",
-          "STUDY": "Studie",
-          "COURSE": "Cursus"
-        }
-      }
+      "titleLead": "Iets over",
+      "titleGradient": "mij."
     },
     "skills": {
       "title": "Technische Stack",
       "subtitle": "Vaardigheden",
-      "description": "Technologieën die ik in productie heb ingezet bij enterprise systemen, financiële platforms en sterk gereguleerde omgevingen.",
+      "description": "Technologieën en hulpmiddelen in dit portfolio.",
       "aux": "Elke hier vermelde technologie is gebruikt in echte projecten, niet alleen tutorials. De meeste op schaal, in productie, onder druk.",
       "page": {
         "breadcrumbHome": "Start",
@@ -955,14 +970,14 @@
         "eyebrow": "// skills",
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Zoek technologieën",
+        "categoryLabel": "Verken per specialisatie",
         "noResults": "Geen match in de huidige stack.",
         "noMatch": "grep: geen resultaten voor \"{query}\"",
         "featured": "Uitgelicht",
         "coreLegend": "helderder = uitgelichte stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
         "searchFor": " voor \"{query}\"",
-        "trend": "Trend",
-        "updatedTechPill": "Bijgewerkte technologieën 2024-2026"
+        "trend": "Trend"
       },
       "tabs": {
         "ai": {
@@ -989,13 +1004,17 @@
           "title": "Kwaliteit & Levering",
           "description": "CI/CD-pipelines, Docker containerisatie, geautomatiseerd testen en veiligheidsscans voor betrouwbare levering."
         }
-      }
+      },
+      "titleLead": "Technische",
+      "titleGradient": "stack."
     },
     "soft-skills": {
       "subtitle": "Leiderschap",
       "title": "Leiderschap & Impact",
       "description": "Technische vaardigheden zijn belangrijk. Maar ook hoe je leidt, samenwerkt en dingen voor elkaar krijgt met echte teams in echte projecten.",
-      "aux": "Dit zijn geen bijvoeglijke naamwoorden op een CV: het is de manier waarop ik in elke rol heb gewerkt."
+      "aux": "Dit zijn geen bijvoeglijke naamwoorden op een CV: het is de manier waarop ik in elke rol heb gewerkt.",
+      "titleLead": "Leiderschap &",
+      "titleGradient": "impact."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -1172,15 +1191,25 @@
         "more": "Meer weergeven ({count} resterend)",
         "emptyTitle": "Geen resultaten",
         "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
-        "emptyButton": "Filters wissen"
-      }
+        "emptyButton": "Filters wissen",
+        "moreFilters": "Meer filters",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "closeModal": "Sluiten",
+        "roleAndPeriod": "ROL & PERIODE",
+        "role": "ROL",
+        "impact": "IMPACT",
+        "privateRepo": "Privé repository",
+        "readCaseStudy": "Lees case study"
+      },
+      "titleLead": "Geselecteerd",
+      "titleGradient": "engineeringwerk."
     },
     "contact": {
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Gebruik het formulier of de kanalen hieronder.",
-      "responseTime": "Antwoord binnen 24u",
+      "subtitle": "Zoek je een senior engineer of plan je een complex project? Vertel me wat je nodig hebt.",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
@@ -1202,8 +1231,7 @@
         "distanceFromVisitor": "Ik kom uit {place}, ongeveer <km>{distance}</km> van je huidige locatie, volgens je IP-adres."
       },
       "form": {
-        "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
-        "alternativeContact": "Liever een afspraak? Plan een <schedule>videogesprek</schedule> of stuur een bericht op <linkedin>LinkedIn</linkedin>.",
+        "helper": "Vertel me over de rol of het project, de grootste uitdaging en je planning. Ik reageer met een concrete volgende stap.",
         "name": {
           "label": "Naam",
           "placeholder": "Jan Jansen",
@@ -1227,7 +1255,7 @@
         },
         "message": {
           "label": "Bericht",
-          "placeholder": "Vertel me over je project...",
+          "placeholder": "Aan welke rol of welk project denk je?",
           "success": "Bericht correct ingevoerd",
           "errors": {
             "required": "Voer je bericht in",
@@ -1262,16 +1290,30 @@
         "website": "Website bezoeken",
         "location": "Locatie op kaart bekijken",
         "calendly": "Inplannen via Calendly"
-      }
+      },
+      "titleLead": "Laten we",
+      "titleGradient": "praten."
     },
     "experience": {
       "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
-      "showingRecent": "Meest recente rollen weergegeven.",
-      "promotion": "Interne promotie",
-      "previousRole": "Vorige functie",
-      "rolesCount": "{count} functies"
+      "description": "Van frontendontwikkelaar tot senior engineer en teamleider, met jaren werk en groei onderweg.",
+      "chart": {
+        "eyebrow": "De weg tot nu toe",
+        "monthsShown": "maanden in de getoonde functies",
+        "ariaLabel": "Loopbaanmijlpalen op volgorde van startdatum",
+        "caption": "Elke stap is een vastgelegde functie, gerangschikt op startdatum.",
+        "selectRole": "Werkervaring bekijken",
+        "title": "Een loopbaan in beweging",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "monthsExplanation": "Volledige maanden op basis van de datums van de getoonde functies. Overlappende banen tellen één keer; tussenpozen en onbekende datums tellen niet mee.",
+        "nextStage": "Volgende stap",
+        "letsTalk": "Laten we praten"
+      },
+      "titleLead": "De",
+      "titleGradient": "klim."
     },
     "impactStats": {
       "teamSize": {
@@ -1292,25 +1334,31 @@
       "subtitle": "Wat collega's zeggen"
     },
     "socialProof": {
-      "eyebrow": "Vertrouwd door ontwikkelaars",
-      "title": "{count, plural, =0 {Wat senior developers over mij zeggen} =1 {Wat een senior developer over mij zegt} other {Wat senior developers over mij zeggen}}",
-      "subtitle": "Collega's die mijn werk van dichtbij hebben gezien.",
-      "cta": "Neem me aan",
-      "readMore": "Lees meer",
-      "readLess": "Lees minder",
-      "statsLabel": "In cijfers",
-      "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
-      "stats": {
-        "projects": {
-          "label": "Projecten"
+      "subtitle": "Wat mijn collega’s zeggen, en de resultaten die dat onderbouwen.",
+      "titleLead": "Samenwerken",
+      "titleGradient": "met mij.",
+      "cards": {
+        "ownership": {
+          "eyebrow": "Eigenaarschap",
+          "title": "Van begin tot eind, zelfstandig."
         },
-        "experience": {
-          "label": "Jaar Ervaring"
+        "delivery": {
+          "eyebrow": "Oplevering",
+          "title": "Voorspelbaar, ook als er veel tegelijk speelt."
         },
-        "engineersMentored": {
-          "label": "Engineers geleid"
+        "growing": {
+          "eyebrow": "Anderen laten groeien",
+          "title": "Ik help de mensen om me heen beter te worden."
+        },
+        "judgment": {
+          "eyebrow": "Inzicht",
+          "title": "Goede keuzes zonder in te leveren op kwaliteit."
         }
       }
+    },
+    "faq": {
+      "title": "Vragen?",
+      "titleGradient": "Antwoorden."
     },
     "qaCollaboration": {
       "metaTitle": "QA-samenwerking",
@@ -1413,6 +1461,7 @@
           "0": "Full-Stack Developer",
           "1": "Software Architect"
         },
+        "ecosystemRolesLabel": "Ik werk samen met",
         "ecosystem": {
           "0": "QA Engineer",
           "1": "QA Automation Engineer",
@@ -1703,7 +1752,8 @@
         "eyebrow": "Nu",
         "title": "Wat ik",
         "titleHighlight": "nu doe.",
-        "description": "Een kijkje in waar ik me op richt, wat ik lees en wat ik bouw. Bijgewerkt wanneer ik eraan denk."
+        "description": "Een kijkje in waar ik me op richt, wat ik lees en wat ik bouw. Bijgewerkt wanneer ik eraan denk.",
+        "snapshot": "Een momentopname, bijgewerkt wanneer ik eraan denk."
       },
       "list": {
         "localTimeLabel": "Lokale tijd",
@@ -1764,11 +1814,11 @@
         "zoomOutBlocks": "Uitzoomen",
         "resetBlocks": "Weergave herstellen",
         "contributionViews": "Bijdrageweergaven",
-        "blocks": "3D-blokken",
-        "calendar": "Kalender",
+        "calendar": "Plat",
+        "blocks": "3D",
         "breakout": "Breakout",
-        "blocksDescription": "GitHub-bijdragen als een isometrisch landschap van bouwblokken.",
-        "blocksHint": "Sleep om te draaien; schakel Verplaatsen in of houd Shift ingedrukt om te verschuiven. Pijltjes draaien, +/− zoomen, Home herstelt. Elk blok is een dag.",
+        "blocksDescription": "GitHub-bijdragen als een interactief terrein.",
+        "blocksHint": "Sleep om in 3D te kantelen en draaien. Druk op Plat om terug te keren naar 2D. Pijltoetsen navigeren tussen dagen.",
         "languageDistribution": "Talen in openbare repositories",
         "otherLanguages": "Overige",
         "noLanguageData": "Geen taalgegevens beschikbaar.",
@@ -1799,6 +1849,11 @@
         },
         "awayHeading": "Weg van het toetsenbord.",
         "shippingHeading": "Bouwen in het openbaar.",
+        "shippingDescription": "Commits, pull requests en code verscheept over repositories.",
+        "collaborateTitle": "Samenwerken?",
+        "collaborateSubtitle": "Open voor fulltime functies, contracten en architectuuradvies.",
+        "scheduleCall": "Plan een gesprek",
+        "sendEmail": "Stuur een e-mail",
         "contributionCount": "Bijdragen",
         "gameInstructions": "Beweeg de plank met de muis, door te slepen of met ←/→ (A/D). Spatie start of pauzeert; Esc pauzeert. Breek de bijdragestenen zonder de bal te laten vallen.",
         "gameScore": "Score: {score}",
@@ -1813,7 +1868,11 @@
         "gameLost": "Spel afgelopen. Start opnieuw om het nog eens te proberen.",
         "gameReady": "Zet de plank klaar en druk op Spelen of Spatie.",
         "gamePaused": "Gepauzeerd.",
-        "gameReduced": "Geen automatisch afspelen of decoratieve beweging. De bal beweegt alleen wanneer je zelf begint te spelen."
+        "gameReduced": "Geen automatisch afspelen of decoratieve beweging. De bal beweegt alleen wanneer je zelf begint te spelen.",
+        "routineAround": "Rond deze tijd ben ik meestal bezig met",
+        "routineUsual": "Gebruikelijke routine {start}–{end}",
+        "routineInWindow": "binnen het gebruikelijke venster",
+        "routineOutsideWindow": "buiten het gebruikelijke venster"
       }
     },
     "colophon": {
@@ -1848,7 +1907,9 @@
       "colors": {
         "title": "Ontwerp & kleuren",
         "body": "Kleuren draaien op Tailwind CSS custom properties, geschakeld via een <code>data-theme</code>-attribuut — drie paletten (Main, Orange, Christmas), elk met een lichte en donkere variant, zes in totaal.",
-        "currentBadge": "actueel"
+        "currentBadge": "actueel",
+        "viewing": "Weergave:",
+        "clickToCopy": "Klik op een kleurstaal om HEX te kopiëren"
       },
       "palettes": {
         "orangeLight": "Orange · Light",
@@ -1871,6 +1932,12 @@
           "co2": "{grams}g CO₂/weergave",
           "brand": "Website Carbon",
           "cleaner": "Beoordeling A+ op Website Carbon"
+        },
+        "metrics": {
+          "firstVisit": "CO₂, eerste bezoek",
+          "returnVisits": "CO₂, terugkerende bezoeken",
+          "websiteCarbon": "Website Carbon",
+          "digitalBeacon": "Digital Beacon"
         }
       }
     },
@@ -1897,10 +1964,29 @@
       "emptyTraffic": "Nog geen publieke bezoeken geregistreerd.",
       "servicesTitle": "Actieve diensten",
       "emptyServices": "Er zijn nu geen actieve diensten.",
-      "privacyNote": "De meting is anoniem en uitgelegd in het <link>privacybeleid</link>."
+      "privacyNote": "De meting is anoniem en uitgelegd in het <link>privacybeleid</link>.",
+      "referrersTitle": "Belangrijkste bronnen",
+      "portfolioTitle": "Het portfolio",
+      "countriesHint": "Laatste 30 dagen. Alleen op landniveau. Bij {unknownPercent}% van de weergaven is geen land bekend.",
+      "countriesHintSimple": "Laatste 30 dagen. Alleen op landniveau.",
+      "pagesHint": "Laatste 30 dagen.",
+      "otherCountries": "Overige landen ({count})"
     }
   },
   "admin": {
+    "careerAvailability": {
+      "title": "Beschikbaarheid voor werk",
+      "description": "Toon een uitnodiging voor de volgende stap in de loopbaangrafiek alleen wanneer je openstaat voor nieuwe functies. Voeg een titel en beschrijving toe voor elke publieke taal.",
+      "available": "Open voor nieuwe functies",
+      "language": "Taal",
+      "nextTitle": "Titel van de volgende stap",
+      "nextDescription": "Beschrijving van de volgende stap",
+      "save": "Beschikbaarheid opslaan",
+      "saving": "Opslaan…",
+      "saved": "Beschikbaarheid opgeslagen.",
+      "error": "Beschikbaarheid kon niet worden geladen of opgeslagen.",
+      "loading": "Beschikbaarheid laden…"
+    },
     "shell": {
       "title": "Admin Paneel",
       "signedInAs": "Ingelogd als",
@@ -2714,6 +2800,19 @@
         "atLeastOneLanguage": "Minstens één taal is verplicht"
       },
       "service": {
+        "visualType": "Illustratie",
+        "visualTypeHint": "Kies een diagram voor deze dienst. Een eigen afbeelding heeft voorrang.",
+        "visualNodes": "Diagramlabels",
+        "visualNodesHint": "Eén label per regel, maximaal 16 van 48 tekens, in de volgorde van het gekozen diagram.",
+        "visualTypes": {
+          "network": "API- en servicetopologie",
+          "architecture": "Architectuurlagen",
+          "frontend": "Interface en componenten",
+          "pipeline": "Levering en betrouwbaarheid",
+          "security": "Beveiligingscontroles",
+          "mobile": "Mobiele applicatie",
+          "ai": "AI en kwaliteitscontrole"
+        },
         "generalSection": "Algemene informatie",
         "skillsSection": "Vaardigheden",
         "titleWithLanguage": "Titel ({language})",
@@ -2744,6 +2843,8 @@
         "createFailed": "Dienst aanmaken mislukt",
         "imageRequired": "Afbeelding is verplicht",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
+        "practicePoints": "In de praktijk",
+        "practicePointsHint": "Eén voorbeeld per regel. Vermeld alleen onderbouwde resultaten.",
         "atLeastOneLanguage": "Minstens één taal is verplicht",
         "isActive": "Actief op de publieke site",
         "isActiveHint": "Inactieve diensten blijven in admin maar verdwijnen van de homepage en publieke stats.",
@@ -4732,19 +4833,19 @@
     },
     "uses": {
       "title": "Uses",
-      "subtitle": "Beheer dagelijkse gear, software, extensies en media.",
+      "subtitle": "Dagelijkse hardware, software, browserextensies en sitemedia.",
       "tabsLabel": "Uses-secties",
       "tabs": {
         "everyday": "Dagelijks",
         "software": "Software",
         "browser": "Browser",
-        "settings": "Instellingen"
+        "settings": "Media & Instellingen"
       },
       "addNew": "Item toevoegen",
       "createDescription": "Voeg een item toe aan je Uses-inventaris.",
       "editTitle": "Item bewerken",
       "editDescription": "Werk dit Uses-item bij.",
-      "count": "{count} items",
+      "count": "{count, plural, =1 {1 item} other {# items}} · in deze volgorde weergegeven op de openbare pagina",
       "searchTitle": "Zoek titel",
       "deletedSuccess": "Item verwijderd.",
       "deleteFailed": "Kon item niet verwijderen.",
@@ -4815,6 +4916,33 @@
         "widgets": "Widgets",
         "languages": "Talen"
       }
+    },
+    "contactPreferences": {
+      "title": "Contactvoorkeuren",
+      "description": "Stel per taal je eigen reactietijd in. Laat leeg om te verbergen. De lokale klok gebruikt de tijdzone die bij Nu is ingesteld.",
+      "responseTime": "Opmerking over reactietijd",
+      "save": "Contactvoorkeuren opslaan",
+      "saving": "Opslaan…",
+      "saved": "Contactvoorkeuren opgeslagen.",
+      "error": "Contactvoorkeuren konden niet worden opgeslagen.",
+      "loading": "Contactvoorkeuren laden…"
+    },
+    "homeFaq": {
+      "title": "Veelgestelde vragen op de startpagina",
+      "description": "Beheer de vragen voor dit portfolio per taal. Sla deze wijzigingen apart op. De sectie blijft verborgen voor talen zonder vragen.",
+      "question": "Vraag",
+      "answer": "Antwoord",
+      "add": "Vraag toevoegen",
+      "remove": "Vraag verwijderen",
+      "moveUp": "Omhoog",
+      "moveDown": "Omlaag",
+      "save": "Vragen opslaan",
+      "saving": "Opslaan…",
+      "saved": "Vragen opgeslagen.",
+      "error": "De vragen konden niet worden geladen of opgeslagen. Probeer het opnieuw.",
+      "invalid": "Vul elke vraag en elk antwoord in voordat je opslaat.",
+      "loading": "Vragen laden…",
+      "empty": "Geen vragen in deze taal. De sectie blijft verborgen totdat je inhoud toevoegt."
     }
   },
   "auth": {

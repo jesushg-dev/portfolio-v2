@@ -32,6 +32,7 @@ const service = {
       description: "Build UIs",
       badge: "Core",
       statsLabel: null,
+      practicePoints: "Verified tenant result",
     },
   ],
   ServiceSkill: [{ skillId: "sk-1" }],
@@ -44,6 +45,9 @@ describe("service editor dto", () => {
   it("applies defaults for null fields", () => {
     const dto = mapServiceToEditorDto(service, languages);
     expect(dto.icon).toBe("code");
+    expect(dto.translations["lang-en"]?.practicePoints).toBe(
+      "Verified tenant result",
+    );
     expect(dto.isActive).toBe(true);
     expect(dto.order).toBe(0);
     expect(dto.skillIds).toEqual(["sk-1"]);

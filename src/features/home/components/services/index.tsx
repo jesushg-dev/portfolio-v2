@@ -2,19 +2,20 @@ import { getPublicLocale } from "@/lib/public-site/locale";
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
 
+import { ShowcaseHeading } from "@/components/shared/showcase";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
-import { ServicesBento } from "./services-bento";
+import { ServicesCarousel } from "./services-carousel";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
 const Services: FC = async () => {
+  const locale = await getPublicLocale();
   const t = await getTranslations({
-    locale: await getPublicLocale(),
+    locale,
     namespace: "main.services",
   });
-  const locale = await getPublicLocale();
 
   const services = isLocale(locale)
     ? await api.portfolio.getServicesPublic({ locale })
@@ -23,25 +24,32 @@ const Services: FC = async () => {
   if (services.length === 0) return null;
 
   return (
-    <div className="bg-card relative w-full overflow-hidden">
-      <section
-        aria-label={t("title")}
-        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
-      >
-        <div className="mx-auto mb-12 max-w-2xl text-center lg:mb-14">
-          <p className="text-primary text-base font-semibold tracking-wide sm:text-lg">
-            {t("subtitle")}
-          </p>
-          <h2 className="text-foreground mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
-            {t("title")}
-          </h2>
-          <p className="text-muted-foreground mt-4 text-base leading-relaxed sm:text-lg">
-            {t("description")}
-          </p>
-        </div>
-        <ServicesBento dbServices={services} />
-      </section>
-    </div>
+    <section
+      aria-labelledby="services-heading"
+      className="border-border/80 relative w-full overflow-hidden border-t py-20 md:py-28"
+    >
+      <div className="mx-auto mb-8 w-full px-4 sm:mb-10 sm:px-6 lg:container lg:px-20">
+        <ShowcaseHeading
+          sectionId="services"
+          eyebrow={t("subtitle")}
+          title={t("titleLead")}
+          titleGradient={t("titleGradient")}
+          description={t("description")}
+          align="split"
+          action={
+            <a
+              href="#skills"
+              className="text-primary inline-flex min-h-11 items-center text-sm font-semibold transition-colors hover:underline hover:opacity-85"
+            >
+              {t("seeStack")}
+            </a>
+          }
+        />
+      </div>
+      <div className="w-full">
+        <ServicesCarousel dbServices={services} />
+      </div>
+    </section>
   );
 };
 

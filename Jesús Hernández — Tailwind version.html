@@ -1,0 +1,2340 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Jesús Hernández — Senior Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "var(--bg)",
+              ink: "var(--ink)",
+              muted: "var(--muted)",
+              line: "var(--line)",
+              brand: "var(--brand)",
+              acc: "var(--brand2)",
+              card: "var(--card)",
+            },
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+              mono: ["JetBrains Mono", "ui-monospace", "Menlo", "monospace"],
+            },
+            borderRadius: { "4xl": "2rem" },
+            animation: {
+              xin: "xin .5s ease both",
+              mqf: "mqv 60s linear infinite",
+              mqr: "mqv 72s linear infinite reverse",
+              drift: "drift 26s ease-in-out infinite alternate",
+              ping2: "ping2 1.8s ease-out infinite",
+              eqk: "eqk 1s ease-in-out infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --bg: #070b16;
+          --ink: #f5f7ff;
+          --muted: #8b97b8;
+          --line: rgba(255, 255, 255, 0.1);
+          --brand: #3b78f0;
+          --brand2: #7aa2ff;
+          --bar: #1c3fae;
+          --panel: #0b1226;
+          --card: color-mix(
+            in srgb,
+            var(--brand) 9%,
+            color-mix(in srgb, var(--ink) 6%, var(--bg))
+          );
+          --gl1: rgba(255, 255, 255, 0.13);
+          --gl2: rgba(255, 255, 255, 0.04);
+          --gb: rgba(255, 255, 255, 0.17);
+          --gh: rgba(255, 255, 255, 0.34);
+          --gs: 0 18px 50px rgba(0, 0, 0, 0.3);
+          color-scheme: dark;
+          padding-top: env(safe-area-inset-top, 0px);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        @media (prefers-color-scheme: light) {
+          :root:not([data-theme="dark"]) {
+            --bg: #fbfcff;
+            --ink: #0b1220;
+            --muted: #5d6985;
+            --line: rgba(11, 18, 32, 0.12);
+            --brand: #1d4fd8;
+            --brand2: #1d3fae;
+            --bar: #1b3aa8;
+            --panel: #fff;
+            --gl1: rgba(255, 255, 255, 0.8);
+            --gl2: rgba(255, 255, 255, 0.45);
+            --gb: rgba(11, 18, 32, 0.12);
+            --gh: #fff;
+            --gs: 0 14px 40px rgba(30, 58, 138, 0.14);
+            color-scheme: light;
+          }
+        }
+        :root[data-theme="light"] {
+          --bg: #fbfcff;
+          --ink: #0b1220;
+          --muted: #5d6985;
+          --line: rgba(11, 18, 32, 0.12);
+          --brand: #1d4fd8;
+          --brand2: #1d3fae;
+          --bar: #1b3aa8;
+          --panel: #fff;
+          --gl1: rgba(255, 255, 255, 0.8);
+          --gl2: rgba(255, 255, 255, 0.45);
+          --gb: rgba(11, 18, 32, 0.12);
+          --gh: #fff;
+          --gs: 0 14px 40px rgba(30, 58, 138, 0.14);
+          color-scheme: light;
+        }
+        html {
+          scroll-behavior: smooth;
+          scroll-padding-top: env(safe-area-inset-top, 0px);
+        }
+        body::before {
+          content: "";
+          position: fixed;
+          inset: 0 0 auto;
+          height: env(safe-area-inset-top, 0px);
+          background: var(--bg);
+          z-index: 60;
+        }
+        :focus-visible {
+          outline: 2px solid var(--brand2);
+          outline-offset: 3px;
+        }
+      }
+      @layer components {
+        @keyframes xin {
+          from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        @keyframes mqv {
+          to {
+            transform: translateX(-50%);
+          }
+        }
+        @keyframes drift {
+          to {
+            transform: translate(8vmax, 6vmax) scale(1.1);
+          }
+        }
+        @keyframes ping2 {
+          to {
+            transform: scale(2.8);
+            opacity: 0;
+          }
+        }
+        @keyframes eqk {
+          0%,
+          100% {
+            transform: scaleY(0.3);
+          }
+          50% {
+            transform: scaleY(1);
+          }
+        }
+        @keyframes pg2 {
+          from {
+            transform: scale(1);
+            opacity: 0.9;
+          }
+          to {
+            transform: scale(4.5);
+            opacity: 0;
+          }
+        }
+        .zc {
+          fill: var(--ink);
+          fill-opacity: 0.12;
+        }
+        .za {
+          fill: var(--brand);
+        }
+        .zb {
+          fill: var(--brand2);
+        }
+        .zk {
+          fill: var(--ink);
+        }
+        .zg {
+          fill: #4ade80;
+        }
+        .zr {
+          fill: #f87171;
+        }
+        .zs {
+          stroke: var(--ink);
+          stroke-opacity: 0.3;
+          fill: none;
+        }
+        .zq {
+          font:
+            600 10px "JetBrains Mono",
+            monospace;
+          fill: var(--muted);
+        }
+        .zw {
+          fill: var(--ink);
+        }
+        .pt .dot {
+          fill: var(--bg);
+          stroke: var(--brand2);
+          stroke-width: 3;
+          transform-box: fill-box;
+          transform-origin: center;
+          transition:
+            transform 0.35s,
+            fill 0.35s;
+        }
+        .pt.on .dot {
+          transform: scale(1.7);
+          fill: var(--brand2);
+        }
+        .gr path {
+          fill: none;
+          stroke: var(--line);
+          stroke-width: 1;
+        }
+        .ld path {
+          fill: color-mix(in srgb, var(--ink) 10%, var(--bg));
+          stroke: var(--line);
+        }
+        .pd {
+          fill: var(--brand);
+        }
+        .pr {
+          fill: none;
+          stroke: var(--brand);
+          stroke-width: 2;
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: pg2 2.4s ease-out infinite;
+        }
+        .mapt text {
+          fill: var(--ink);
+          font:
+            600 13px Inter,
+            sans-serif;
+        }
+        .ln {
+          display: block;
+          padding: 3px 14px;
+          white-space: nowrap;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-bg text-ink font-sans antialiased">
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      aria-hidden="true"
+    >
+      <i
+        class="animate-drift bg-brand absolute top-0 -left-[6vmax] h-[46vmax] w-[46vmax] rounded-full opacity-45 blur-[90px]"
+      ></i
+      ><i
+        class="animate-drift absolute top-[52vh] -right-[14vmax] h-[46vmax] w-[46vmax] rounded-full bg-[#818cf8] opacity-25 blur-[90px] [animation-delay:-9s]"
+      ></i>
+    </div>
+
+    <header
+      class="border-line sticky top-[env(safe-area-inset-top,0px)] z-50 border-b bg-[color-mix(in_srgb,var(--bg)_72%,transparent)] shadow-[inset_0_-1px_0_var(--gb)] backdrop-blur-xl backdrop-saturate-[1.8]"
+    >
+      <div
+        class="mx-auto flex h-[52px] max-w-[1080px] items-center justify-between px-6"
+      >
+        <a href="#" aria-label="Home" class="text-[22px] font-light">jh</a>
+        <nav
+          id="links"
+          class="border-line bg-bg absolute inset-x-0 top-[52px] hidden border-b px-6 pt-2 pb-4 text-[16px] md:static md:flex md:gap-7 md:border-0 md:bg-transparent md:p-0 md:text-[13px]"
+        >
+          <a
+            href="#"
+            class="text-ink md:text-muted md:hover:text-ink block py-3.5 md:py-0"
+            >About me</a
+          ><a
+            href="#"
+            class="text-ink md:text-muted md:hover:text-ink block py-3.5 md:py-0"
+            >Portfolio</a
+          ><a
+            href="#"
+            class="text-ink md:text-muted md:hover:text-ink block py-3.5 md:py-0"
+            >How I work</a
+          >
+        </nav>
+        <div class="text-muted flex items-center gap-2.5 text-[13px]">
+          <button
+            id="menu"
+            aria-label="Menu"
+            aria-expanded="false"
+            class="hover:bg-line grid h-8 w-8 place-items-center rounded-full md:hidden"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M4 8h16M4 16h16" />
+            </svg>
+          </button>
+          <button
+            id="theme"
+            aria-label="Toggle theme"
+            class="hover:bg-line grid h-8 w-8 place-items-center rounded-full"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" />
+            </svg>
+          </button>
+          <span class="inline-flex gap-0.5 text-xs font-semibold"
+            ><a href="#" class="bg-ink text-bg rounded-full px-[9px] py-1.5"
+              >EN</a
+            ><a href="#" class="text-muted rounded-full px-[9px] py-1.5"
+              >NL</a
+            ></span
+          >
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section
+        class="relative overflow-hidden pt-[104px] pb-16 before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] before:[mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,#000_15%,transparent_75%)] before:bg-[length:48px_48px] before:opacity-60 before:[-webkit-mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,#000_15%,transparent_75%)]"
+      >
+        <div
+          class="relative mx-auto grid max-w-[1080px] items-center gap-12 px-6 md:grid-cols-[1.25fr_1fr] md:gap-16"
+        >
+          <div>
+            <p
+              class="text-acc mb-5 inline-flex items-center gap-2.5 rounded-full bg-[color-mix(in_srgb,var(--brand)_10%,transparent)] px-3.5 py-[7px] text-[13px] font-medium shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--brand)_40%,transparent)]"
+            >
+              <span
+                class="bg-brand after:animate-ping2 after:bg-brand relative h-2 w-2 rounded-full after:absolute after:inset-0 after:rounded-full"
+              ></span
+              >Open to work · Remote or Managua
+            </p>
+            <h1
+              class="text-[clamp(38px,6vw,68px)] leading-[1.05] font-bold tracking-[-.035em]"
+            >
+              Hello, I’m <em class="text-brand not-italic">Jesús Hernández</em>
+            </h1>
+            <p class="mt-3.5 text-[22px] font-semibold">
+              Senior Software Engineer
+            </p>
+            <p
+              class="text-muted mt-6 max-w-[46ch] text-[clamp(17px,2vw,20px)] leading-normal"
+            >
+              6+ years building scalable enterprise systems, modernizing legacy
+              platforms, and leading engineering teams across e-commerce,
+              telecommunications and enterprise environments, with experience at
+              Walmart and Claro.
+            </p>
+            <div
+              class="mt-7 max-w-[520px] rounded-[20px] bg-gradient-to-br from-[var(--gl1)] to-[var(--gl2)] px-[22px] py-[18px] shadow-[inset_0_1px_0_var(--gh),inset_0_0_0_1px_var(--gb),var(--gs)] backdrop-blur-[22px] backdrop-saturate-[1.7]"
+            >
+              <p class="text-muted mb-3 text-xs">At a glance</p>
+              <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div>
+                  <small class="text-muted block text-[11px]"
+                    >Availability</small
+                  ><b class="mt-0.5 block text-xl tracking-[-.02em]"
+                    >Immediate</b
+                  >
+                </div>
+                <div>
+                  <small class="text-muted block text-[11px]">Experience</small
+                  ><b class="mt-0.5 block text-xl tracking-[-.02em]">7+ yrs</b>
+                </div>
+                <div>
+                  <small class="text-muted block text-[11px]">Projects</small
+                  ><b class="mt-0.5 block text-xl tracking-[-.02em]">25+</b>
+                </div>
+                <div>
+                  <small class="text-muted block text-[11px]"
+                    >Engineers led</small
+                  ><b class="mt-0.5 block text-xl tracking-[-.02em]">6</b>
+                </div>
+              </div>
+            </div>
+            <div class="mt-9 flex flex-wrap gap-3">
+              <a
+                class="bg-brand inline-block rounded-full px-6 py-3 text-[15px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,.4),0_8px_24px_color-mix(in_srgb,var(--brand)_45%,transparent)] transition hover:brightness-110"
+                href="#work"
+                >See projects</a
+              ><a
+                class="text-ink inline-block rounded-full bg-gradient-to-br from-[var(--gl1)] to-[var(--gl2)] px-6 py-3 text-[15px] font-medium shadow-[inset_0_1px_0_var(--gh),inset_0_0_0_1px_var(--gb)] backdrop-blur-xl backdrop-saturate-[1.7] transition hover:brightness-110"
+                href="#"
+                >Download CV</a
+              ><a
+                class="text-ink inline-block rounded-full bg-gradient-to-br from-[var(--gl1)] to-[var(--gl2)] px-6 py-3 text-[15px] font-medium shadow-[inset_0_1px_0_var(--gh),inset_0_0_0_1px_var(--gb)] backdrop-blur-xl backdrop-saturate-[1.7] transition hover:brightness-110"
+                href="#contact"
+                >Get in touch</a
+              >
+            </div>
+          </div>
+          <div
+            class="relative mx-auto aspect-square w-[min(380px,82%)] before:absolute before:-inset-[14%] before:rounded-full before:bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_38%,transparent),transparent_68%)] before:blur-[24px]"
+          >
+            <div
+              class="absolute inset-0 rounded-full bg-[conic-gradient(from_210deg,var(--brand),color-mix(in_srgb,var(--brand2)_35%,transparent),var(--brand))] p-[5px]"
+            >
+              <!-- Replace the placeholder with the real portrait: <img class="h-full w-full rounded-full object-cover object-[50%_18%]" src="portrait.webp" alt="Jesús Hernández" width="760" height="760" fetchpriority="high" decoding="async"> -->
+              <div
+                class="text-acc grid h-full w-full place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,color-mix(in_srgb,var(--brand)_35%,var(--bg)),var(--bg)_70%)] text-[96px] font-light"
+                aria-label="Portrait placeholder"
+              >
+                jh
+              </div>
+            </div>
+          </div>
+          <a
+            class="text-muted col-span-full mt-6 flex flex-col items-center gap-2 justify-self-center text-xs tracking-[.1em]"
+            href="#work"
+            >SCROLL DOWN<i
+              class="from-acc h-9 w-px bg-gradient-to-b to-transparent"
+            ></i
+          ></a>
+        </div>
+      </section>
+
+      <div
+        class="group overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)] pt-14 pb-2 [-webkit-mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
+        aria-hidden="true"
+      >
+        <div
+          id="m1"
+          class="animate-mqf mb-3.5 flex w-max gap-3.5 group-hover:[animation-play-state:paused]"
+        ></div>
+        <div
+          id="m2"
+          class="animate-mqr mb-3.5 flex w-max gap-3.5 group-hover:[animation-play-state:paused]"
+        ></div>
+      </div>
+
+      <section id="work" class="border-line border-t py-[84px] md:py-[120px]">
+        <div class="mx-auto max-w-[1080px] px-6">
+          <div class="text-center">
+            <p class="text-acc mb-3 text-sm font-medium">Portfolio</p>
+            <h2
+              class="mx-auto text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              Selected engineering
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >work.</span
+              >
+            </h2>
+            <p class="text-muted mx-auto mt-[18px] max-w-[48ch] text-lg">
+              A selection of systems and engineering initiatives where I solved
+              technical problems, improved delivery, and created measurable
+              business impact.
+            </p>
+          </div>
+          <div
+            id="cg"
+            class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3"
+          ></div>
+          <div
+            class="text-muted mt-14 flex flex-wrap justify-center gap-2 text-sm"
+          >
+            <span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >React · 10</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >TypeScript · 9</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >Android · 7</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >MySQL · 7</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >Tailwind CSS · 6</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >Java · 5</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >Redux · 5</span
+            ><span
+              class="rounded-full px-[18px] py-[9px] shadow-[inset_0_0_0_1px_var(--line)]"
+              >JavaScript · 4</span
+            >
+          </div>
+          <p class="mt-10 text-center">
+            <a
+              class="bg-brand inline-block rounded-full px-6 py-3 text-[15px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,.4),0_8px_24px_color-mix(in_srgb,var(--brand)_45%,transparent)] transition hover:brightness-110"
+              href="#"
+              >View all projects (25)</a
+            >
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="experience"
+        class="border-line border-t py-[84px] md:py-[120px]"
+      >
+        <div class="mx-auto max-w-[1080px] px-6">
+          <div class="mb-[72px] text-center">
+            <p class="text-acc mb-3 text-sm font-medium">
+              Companies, roles, and measurable impact
+            </p>
+            <h2
+              class="mx-auto text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              The
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >climb.</span
+              >
+            </h2>
+            <p class="text-muted mx-auto mt-[18px] max-w-[48ch] text-lg">
+              From frontend developer to senior engineer and team lead, 7+ years
+              and counting.
+            </p>
+          </div>
+          <div
+            class="bg-card rounded-[32px] px-[18px] py-6 md:px-10 md:pt-8 md:pb-9"
+          >
+            <div class="mb-2 flex items-start justify-between">
+              <span class="text-muted pt-2 font-mono text-xs tracking-[.12em]"
+                >NOV 2019 → TODAY</span
+              >
+              <div class="text-right">
+                <b
+                  class="text-acc block text-[clamp(40px,5vw,64px)] leading-none font-bold tracking-[-.04em]"
+                  >7+</b
+                ><span class="text-muted text-[11px] tracking-[.14em]"
+                  >YEARS CLIMBING</span
+                >
+              </div>
+            </div>
+            <div
+              class="grid items-start gap-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(280px,1fr)]"
+            >
+              <div>
+                <div
+                  id="cqs"
+                  class="[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+                ></div>
+                <div
+                  id="cqt"
+                  class="mt-[18px] grid grid-cols-3 gap-2 lg:grid-cols-6"
+                ></div>
+              </div>
+              <div
+                id="dp"
+                class="rounded-[20px] bg-[color-mix(in_srgb,var(--ink)_5%,var(--bg))] px-6 pt-6 pb-[18px]"
+              ></div>
+            </div>
+          </div>
+          <p class="mt-7 text-center text-sm">
+            <a href="#" class="text-acc">View full CV for complete history ↗</a>
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="working"
+        class="border-line border-t py-[84px] md:py-[120px]"
+      >
+        <div class="mx-auto max-w-[1080px] px-6">
+          <div class="mb-[72px] text-center">
+            <h2
+              class="mx-auto text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              Working
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >with me.</span
+              >
+            </h2>
+            <p class="text-muted mx-auto mt-[18px] max-w-[48ch] text-lg">
+              What my colleagues say, and the proof behind it.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <article
+              class="bg-card flex flex-col rounded-4xl p-6 sm:p-10 md:col-span-2"
+            >
+              <p
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Ownership
+              </p>
+              <h3
+                class="mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl"
+              >
+                End to end, without hand-holding.
+              </h3>
+              <figure class="mt-5">
+                <blockquote class="text-muted text-[17px] leading-relaxed">
+                  “What defines him as a senior engineer is his level of
+                  ownership: he takes on end-to-end design, makes decisions with
+                  great technical judgment, and operates with complete autonomy.
+                  He is the engineer you trust with the hardest problems,
+                  knowing they will be solved reliably.”
+                </blockquote>
+                <figcaption class="mt-4 text-sm">
+                  <span class="text-ink font-medium">Mauricio Arias</span
+                  ><span class="text-muted">
+                    · Software Engineer, Capstone Logistics (Contollo)</span
+                  >
+                </figcaption>
+              </figure>
+              <div
+                class="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8"
+              >
+                <span
+                  class="text-acc text-4xl font-bold tracking-tight whitespace-nowrap sm:text-5xl"
+                  >~40%</span
+                ><span class="text-muted min-w-0 text-sm"
+                  >faster recovery on critical production incidents (MTTR)</span
+                >
+              </div>
+            </article>
+            <article class="bg-card flex flex-col rounded-4xl p-6 sm:p-10">
+              <p
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Delivery
+              </p>
+              <h3
+                class="mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl"
+              >
+                Predictable, even when it’s a lot.
+              </h3>
+              <p class="text-muted mt-5 text-[17px] leading-relaxed">
+                Coordinated delivery across several enterprise projects at once,
+                aligning engineering, design and product.
+              </p>
+              <div
+                class="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8"
+              >
+                <span
+                  class="text-acc text-4xl font-bold tracking-tight whitespace-nowrap sm:text-5xl"
+                  >5+</span
+                ><span class="text-muted min-w-0 text-sm"
+                  >concurrent enterprise projects</span
+                >
+              </div>
+            </article>
+            <article class="bg-card flex flex-col rounded-4xl p-6 sm:p-10">
+              <p
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Growing others
+              </p>
+              <h3
+                class="mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl"
+              >
+                I make the people around me better.
+              </h3>
+              <p
+                class="text-muted mt-5 text-[15px] leading-relaxed italic opacity-70"
+              >
+                “Quote from someone you mentored goes here.”
+                <span class="not-italic">(placeholder)</span>
+              </p>
+              <div
+                class="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8"
+              >
+                <span
+                  class="text-acc text-4xl font-bold tracking-tight whitespace-nowrap sm:text-5xl"
+                  >4+</span
+                ><span class="text-muted min-w-0 text-sm"
+                  >developers mentored, team velocity up ~40%</span
+                >
+              </div>
+            </article>
+            <article
+              class="bg-card flex flex-col rounded-4xl p-6 sm:p-10 md:col-span-2"
+            >
+              <p
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Judgment
+              </p>
+              <h3
+                class="mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl"
+              >
+                Good calls that don’t cost quality.
+              </h3>
+              <figure class="mt-5">
+                <blockquote class="text-muted text-[17px] leading-relaxed">
+                  “He demonstrated strong full-stack capabilities, consistently
+                  met delivery deadlines, and approached every solution with a
+                  clear focus on scalability. He stood out for his technical
+                  judgment, autonomy, and ability to solve complex problems
+                  without compromising quality.”
+                </blockquote>
+                <figcaption class="mt-4 text-sm">
+                  <span class="text-ink font-medium">Technical coordinator</span
+                  ><span class="text-muted"> · Contollo</span>
+                </figcaption>
+              </figure>
+              <div
+                class="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8"
+              >
+                <span
+                  class="text-acc text-4xl font-bold tracking-tight whitespace-nowrap sm:text-5xl"
+                  >7 → 4</span
+                ><span class="text-muted min-w-0 text-sm"
+                  >days per release regression cycle, with E2E tests in
+                  place</span
+                >
+              </div>
+            </article>
+          </div>
+          <dl
+            class="divide-line border-line mt-10 grid grid-cols-2 divide-y border-y sm:mt-12 sm:grid-cols-4 sm:divide-x sm:divide-y-0"
+          >
+            <div class="py-5 sm:px-6 sm:first:pl-0">
+              <dt
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Languages
+              </dt>
+              <dd class="mt-1.5 text-[15px] font-medium">
+                Spanish, native · English, professional
+              </dd>
+            </div>
+            <div class="py-5 sm:px-6 sm:first:pl-0">
+              <dt
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Time zone
+              </dt>
+              <dd class="mt-1.5 text-[15px] font-medium">
+                UTC−6 · overlap with US and Costa Rica teams
+              </dd>
+            </div>
+            <div class="py-5 sm:px-6 sm:first:pl-0">
+              <dt
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Working style
+              </dt>
+              <dd class="mt-1.5 text-[15px] font-medium">
+                Remote with international teams
+              </dd>
+            </div>
+            <div class="py-5 sm:px-6 sm:first:pl-0">
+              <dt
+                class="text-muted font-mono text-[11px] tracking-[.14em] uppercase"
+              >
+                Availability
+              </dt>
+              <dd class="mt-1.5 text-[15px] font-medium">Immediate</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section
+        id="services"
+        class="border-line border-t py-[84px] md:py-[120px]"
+      >
+        <div
+          class="mx-auto mb-10 flex max-w-[1080px] flex-wrap items-end justify-between gap-6 px-6"
+        >
+          <div>
+            <h2
+              class="text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              Engineering
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >expertise.</span
+              >
+            </h2>
+            <p class="text-muted mt-3 text-lg">
+              Areas where I design, build, and lead production software.
+            </p>
+          </div>
+          <a
+            class="text-acc text-[15px] font-medium hover:underline"
+            href="#stack"
+            >See the stack ›</a
+          >
+        </div>
+        <div
+          id="xr"
+          tabindex="0"
+          aria-label="Engineering expertise cards"
+          class="relative flex cursor-grab snap-x snap-mandatory [scroll-padding-left:max(24px,calc((100vw-1080px)/2+24px))] [scrollbar-width:none] gap-5 overflow-x-auto px-[max(24px,calc((100vw-1080px)/2+24px))] pt-3 pb-7 outline-none [perspective:1400px] [&.drag]:cursor-grabbing [&.drag_*]:select-none [&::-webkit-scrollbar]:hidden"
+        ></div>
+        <div
+          class="mx-auto mt-1.5 flex max-w-[1080px] items-center gap-[18px] px-6"
+        >
+          <span id="xc" class="text-muted font-mono text-xs">01 / 07</span>
+          <div
+            id="xt"
+            aria-hidden="true"
+            class="bg-line relative h-[3px] flex-1 cursor-pointer rounded-full"
+          >
+            <i
+              id="xb"
+              class="bg-ink absolute inset-y-0 rounded-full transition-[left,width] duration-150"
+            ></i>
+          </div>
+          <button
+            id="xp"
+            aria-label="Previous card"
+            class="hover:text-acc px-1 text-[28px] leading-none disabled:cursor-default disabled:opacity-30"
+          >
+            ‹</button
+          ><button
+            id="xnx"
+            aria-label="Next card"
+            class="hover:text-acc px-1 text-[28px] leading-none disabled:cursor-default disabled:opacity-30"
+          >
+            ›
+          </button>
+        </div>
+      </section>
+      <dialog
+        id="xd"
+        aria-label="Expertise detail"
+        class="bg-bg text-ink m-auto max-h-[calc(100vh-48px)] w-[min(880px,calc(100vw-32px))] overflow-auto rounded-[28px] border-0 p-0 shadow-[0_40px_120px_rgba(0,0,0,.5)] backdrop:bg-[rgba(3,6,14,.6)] backdrop:backdrop-blur-xl"
+      >
+        <div
+          class="text-muted flex items-center justify-between px-5 pt-4 text-[13px]"
+        >
+          <span id="xdc" class="font-mono"></span
+          ><button
+            id="xdx"
+            aria-label="Close"
+            class="hover:bg-line hover:text-ink grid h-9 w-9 place-items-center rounded-full text-lg"
+          >
+            ✕
+          </button>
+        </div>
+        <div
+          id="xdm"
+          class="grid items-center gap-5 px-5 pt-2 pb-7 md:grid-cols-[1fr_1.2fr] md:gap-9 md:px-8 md:pb-9"
+        ></div>
+      </dialog>
+
+      <section id="stack" class="border-line border-t py-[84px] md:py-[120px]">
+        <div class="mx-auto max-w-[1080px] px-6">
+          <div class="mb-[72px] text-center">
+            <p class="text-acc mb-3 text-sm font-medium">Skills</p>
+            <h2
+              class="mx-auto text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              Technical
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >stack.</span
+              >
+            </h2>
+            <p class="text-muted mx-auto mt-[18px] max-w-[48ch] text-lg">
+              Technologies I’ve shipped in production across corporate-scale
+              systems, financial platforms, and high-compliance environments.
+            </p>
+          </div>
+          <div
+            class="border-line mx-auto max-w-[860px] overflow-hidden rounded-[18px] border bg-[var(--panel)] shadow-[0_30px_80px_rgba(0,0,0,.35)]"
+          >
+            <div
+              class="border-line text-muted flex items-center gap-1.5 border-b px-4 py-3 text-xs"
+            >
+              <i class="h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></i
+              ><i class="h-2.5 w-2.5 rounded-full bg-[#febc2e]"></i
+              ><i class="h-2.5 w-2.5 rounded-full bg-[#28c840]"></i
+              ><span class="ml-auto font-mono">expertise.json</span>
+            </div>
+            <div class="px-6 pt-7 pb-10">
+              <div
+                id="tabs"
+                class="flex flex-wrap justify-center gap-x-6 gap-y-1.5"
+              ></div>
+              <div id="tl"></div>
+            </div>
+          </div>
+          <p class="text-muted mt-9 text-center text-sm">
+            <span
+              class="text-ink inline-block rounded-full px-4 py-2 text-[13px] font-semibold shadow-[inset_0_0_0_1px_var(--gb)]"
+              >Updated technologies 2024–2026</span
+            ><br /><a href="#" class="text-acc mt-[18px] inline-block"
+              >See certificates →</a
+            >
+          </p>
+        </div>
+      </section>
+
+      <section class="border-line border-t py-[84px] md:py-[120px]">
+        <div class="mx-auto max-w-[1080px] px-6">
+          <div class="mb-[72px] text-center">
+            <h2
+              class="mx-auto text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              Questions?
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >Answers.</span
+              >
+            </h2>
+          </div>
+          <div class="border-line mx-auto max-w-[760px] border-t">
+            <details class="group border-line border-b">
+              <summary
+                class="after:text-muted flex cursor-pointer list-none items-center gap-6 py-6 text-[19px] font-medium tracking-[-.01em] after:ml-auto after:text-[26px] after:font-light after:transition-transform after:content-['+'] group-open:after:rotate-45 [&::-webkit-details-marker]:hidden"
+              >
+                Are you available for new roles?
+              </summary>
+              <p class="text-muted pb-6 text-[17px]">
+                Yes. I’m available immediately, and most of my recent work has
+                been remote.
+              </p>
+            </details>
+            <details class="group border-line border-b">
+              <summary
+                class="after:text-muted flex cursor-pointer list-none items-center gap-6 py-6 text-[19px] font-medium tracking-[-.01em] after:ml-auto after:text-[26px] after:font-light after:transition-transform after:content-['+'] group-open:after:rotate-45 [&::-webkit-details-marker]:hidden"
+              >
+                Which time zone do you work in?
+              </summary>
+              <p class="text-muted pb-6 text-[17px]">
+                I’m based in Managua, Nicaragua (UTC−6) and have worked with
+                teams in the United States and Costa Rica.
+              </p>
+            </details>
+            <details class="group border-line border-b">
+              <summary
+                class="after:text-muted flex cursor-pointer list-none items-center gap-6 py-6 text-[19px] font-medium tracking-[-.01em] after:ml-auto after:text-[26px] after:font-light after:transition-transform after:content-['+'] group-open:after:rotate-45 [&::-webkit-details-marker]:hidden"
+              >
+                What do you work with day to day?
+              </summary>
+              <p class="text-muted pb-6 text-[17px]">
+                React, Next.js and TypeScript on the front end; Node.js, Nest.js
+                and C#/.NET on the back end; SQL and NoSQL databases; CI/CD and
+                testing with Docker, Playwright and Jest.
+              </p>
+            </details>
+            <details class="group border-line border-b">
+              <summary
+                class="after:text-muted flex cursor-pointer list-none items-center gap-6 py-6 text-[19px] font-medium tracking-[-.01em] after:ml-auto after:text-[26px] after:font-light after:transition-transform after:content-['+'] group-open:after:rotate-45 [&::-webkit-details-marker]:hidden"
+              >
+                Can I get your CV?
+              </summary>
+              <p class="text-muted pb-6 text-[17px]">
+                Of course. You can read it online or request a PDF by email on
+                the CV page.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="contact"
+        class="border-line border-t py-[84px] md:py-[120px]"
+      >
+        <div
+          class="mx-auto grid max-w-[1080px] items-start gap-16 px-6 md:grid-cols-2 md:gap-20"
+        >
+          <div>
+            <p class="text-acc mb-3 text-sm font-medium">Contact</p>
+            <h2
+              class="text-[clamp(30px,4.6vw,52px)] leading-[1.08] font-bold tracking-[-.03em]"
+            >
+              Let’s
+              <span
+                class="from-acc bg-gradient-to-r to-indigo-400 bg-clip-text text-transparent"
+                >talk.</span
+              >
+            </h2>
+            <p class="text-muted mt-4 text-lg">
+              I’m looking for a senior full-stack or tech-lead role, remote or
+              from Managua, and I can start right away.
+            </p>
+            <p
+              class="mt-6 flex flex-wrap items-center gap-3 text-[clamp(20px,3vw,28px)] font-semibold tracking-[-.02em] break-all"
+            >
+              <span id="em">jesus.hernandez@jesushg.com</span
+              ><button
+                id="cp"
+                type="button"
+                class="text-muted hover:text-ink rounded-full px-3.5 py-1.5 text-[13px] font-medium shadow-[inset_0_0_0_1px_var(--line)]"
+              >
+                Copy
+              </button>
+            </p>
+            <ul class="border-line mt-10 border-t text-lg">
+              <li class="border-line flex justify-between gap-4 border-b py-5">
+                Phone<span
+                  class="text-muted self-center text-xs tracking-[.1em]"
+                  >CALL</span
+                >
+              </li>
+              <li class="border-line flex justify-between gap-4 border-b py-5">
+                Email<span
+                  class="text-muted self-center text-xs tracking-[.1em]"
+                  >WRITE</span
+                >
+              </li>
+              <li class="border-line flex justify-between gap-4 border-b py-5">
+                LinkedIn<span
+                  class="text-muted self-center text-xs tracking-[.1em]"
+                  >CONNECT</span
+                >
+              </li>
+              <li class="border-line flex justify-between gap-4 border-b py-5">
+                Managua, Nicaragua<span
+                  id="lt"
+                  class="text-muted self-center text-xs tracking-[.1em]"
+                ></span>
+              </li>
+            </ul>
+            <div
+              role="img"
+              aria-label="Map showing Managua, Nicaragua"
+              class="relative mt-7 aspect-[660/400] overflow-hidden rounded-3xl bg-[color-mix(in_srgb,var(--ink)_4%,var(--bg))] shadow-[inset_0_0_0_1px_var(--gb)]"
+            >
+              <svg
+                id="mapsvg"
+                class="mapt h-full w-full"
+                viewBox="0 0 660 400"
+                preserveAspectRatio="xMidYMid slice"
+              ></svg
+              ><span
+                class="absolute top-3 right-3 rounded-full bg-gradient-to-br from-[var(--gl1)] to-[var(--gl2)] px-3.5 py-[7px] text-[13px] font-semibold shadow-[inset_0_1px_0_var(--gh),inset_0_0_0_1px_var(--gb),var(--gs)] backdrop-blur-[22px] backdrop-saturate-[1.7]"
+                >📍 Managua, Nicaragua</span
+              ><span
+                class="absolute bottom-3 left-3 rounded-full bg-gradient-to-br from-[var(--gl1)] to-[var(--gl2)] px-3.5 py-[7px] font-mono text-[13px] font-medium shadow-[inset_0_1px_0_var(--gh),inset_0_0_0_1px_var(--gb),var(--gs)] backdrop-blur-[22px] backdrop-saturate-[1.7]"
+                ><i
+                  class="mr-2 inline-block h-2 w-2 rounded-full bg-[#4ade80]"
+                ></i
+                >Local time <b id="lt2"></b
+              ></span>
+            </div>
+            <p class="mt-7 flex flex-wrap gap-2.5">
+              <a
+                class="bg-brand inline-block rounded-full px-6 py-3 text-[15px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,.4),0_8px_24px_color-mix(in_srgb,var(--brand)_45%,transparent)] transition hover:brightness-110"
+                href="#"
+                >Schedule a video call</a
+              ><a
+                class="text-ink inline-block rounded-full bg-gradient-to-br from-[var(--gl1)] to-[var(--gl2)] px-6 py-3 text-[15px] font-medium shadow-[inset_0_1px_0_var(--gh),inset_0_0_0_1px_var(--gb)] backdrop-blur-xl backdrop-saturate-[1.7] transition hover:brightness-110"
+                href="#"
+                >Download CV</a
+              >
+            </p>
+          </div>
+          <div>
+            <h3 class="text-2xl font-semibold tracking-[-.02em]">
+              Send a message
+            </h3>
+            <p class="text-muted mt-1.5 mb-6 text-[15px]">
+              Tell me about your project or inquiry and I’ll reply as soon as
+              possible.
+            </p>
+            <form id="fm" class="grid gap-3">
+              <input
+                placeholder="Name"
+                aria-label="Name"
+                class="text-ink placeholder:text-muted focus-visible:ring-brand box-border w-full rounded-2xl border-0 bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] px-[18px] py-3.5 text-[15px] outline-none focus-visible:ring-2"
+              /><input
+                type="email"
+                placeholder="Email"
+                aria-label="Email"
+                class="text-ink placeholder:text-muted focus-visible:ring-brand box-border w-full rounded-2xl border-0 bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] px-[18px] py-3.5 text-[15px] outline-none focus-visible:ring-2"
+              /><textarea
+                placeholder="Tell me about your project…"
+                aria-label="Message"
+                class="text-ink placeholder:text-muted focus-visible:ring-brand box-border min-h-[130px] w-full resize-none rounded-2xl border-0 bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] px-[18px] py-3.5 text-[15px] outline-none focus-visible:ring-2"
+              ></textarea
+              ><button
+                id="sb"
+                type="submit"
+                class="bg-brand inline-block cursor-pointer rounded-full px-6 py-3 text-[15px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,.4),0_8px_24px_color-mix(in_srgb,var(--brand)_45%,transparent)] transition hover:brightness-110"
+              >
+                Send message
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-[var(--bar)] text-white">
+      <div
+        class="mx-auto flex max-w-[1080px] flex-wrap justify-between gap-x-10 gap-y-10 px-6 pt-14 pb-12"
+      >
+        <div>
+          <p class="text-[30px] font-light">jh</p>
+          <small class="text-[13px] text-white/85"
+            >Made with ♥ by Jesús Hernández</small
+          >
+        </div>
+        <div>
+          <h4 class="mb-3 text-[13px] font-semibold">Portfolio</h4>
+          <a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Projects</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Certificates</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Curriculum Vitae</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Timeline</a
+          >
+        </div>
+        <div>
+          <h4 class="mb-3 text-[13px] font-semibold">How I work</h4>
+          <a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >How I use AI</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >QA collaboration</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Uses</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Now</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Stats</a
+          ><a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >Colophon</a
+          >
+        </div>
+        <div>
+          <h4 class="mb-3 text-[13px] font-semibold">Miscellaneous</h4>
+          <a
+            href="#"
+            class="block py-1 text-[13px] text-white/80 hover:text-white"
+            >CV Generator</a
+          >
+        </div>
+        <div class="min-w-[230px] rounded-2xl bg-white/10 px-4 py-3.5">
+          <small class="block text-[11px] tracking-[.08em] text-white/70"
+            >NOW PLAYING<span
+              class="ml-2 inline-flex h-3 items-end gap-0.5 align-middle"
+              ><u class="animate-eqk h-full w-0.5 origin-bottom bg-white"></u
+              ><u
+                class="animate-eqk h-full w-0.5 origin-bottom bg-white [animation-delay:.25s]"
+              ></u
+              ><u
+                class="animate-eqk h-full w-0.5 origin-bottom bg-white [animation-delay:.5s]"
+              ></u></span></small
+          ><b class="mt-1.5 block text-[15px]">What Is Love – Reloaded</b
+          ><span class="text-[13px] text-white/80"
+            >Haddaway feat. Guido Gronwald</span
+          >
+        </div>
+      </div>
+      <div
+        class="border-t border-white/10 px-6 py-[18px] text-center text-xs text-white/75"
+      >
+        All rights reserved © 2026
+      </div>
+    </footer>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const BTN =
+        "inline-block rounded-full bg-brand px-6 py-3 text-[15px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,.4),0_8px_24px_color-mix(in_srgb,var(--brand)_45%,transparent)] transition hover:brightness-110";
+      const SV = (b) =>
+        `<svg viewBox="0 0 372 250" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${b}</svg>`;
+      const A = (at, v, kt, d = "6s") =>
+        `<animate attributeName="${at}" values="${v}" keyTimes="${kt}" dur="${d}" repeatCount="indefinite"/>`;
+      const wn = (a, b, d) => {
+        const e = 0.004;
+        let v, k;
+        if (a <= 0) {
+          v = "1;1;0;0";
+          k = `0;${(b - e).toFixed(3)};${b};1`;
+        } else if (b >= 1) {
+          v = "0;0;1;1";
+          k = `0;${(a - e).toFixed(3)};${a};1`;
+        } else {
+          v = "0;0;1;1;0;0";
+          k = `0;${(a - e).toFixed(3)};${a};${(b - e).toFixed(3)};${b};1`;
+        }
+        return `<animate attributeName="opacity" values="${v}" keyTimes="${k}" dur="${d}" repeatCount="indefinite"/>`;
+      };
+      const mp = (path, a, b, cls, d) =>
+        `<circle r="4" class="${cls}" opacity="0"><animateMotion dur="${d}" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;${a};${b};1" path="${path}"/>${wn(a, b, d)}</circle>`;
+      const gw = (a, b, d, inner) =>
+        `<g opacity="0">${wn(a, b, d)}${inner}</g>`;
+      const tx = (x, y, t, st, cls, an) =>
+        `<text x="${x}" y="${y}" class="${cls || "zq"}" text-anchor="${an || "start"}" style="${st || ""}">${t}</text>`;
+      const RD = "#f87171",
+        YL = "#fbbf24",
+        GR = "#4ade80";
+      const ar = (() => {
+        const sat = (r, n, dur, dir, lab, rr) => {
+          let o = "";
+          for (let i = 0; i < n; i++) {
+            const a = (i * 360) / n;
+            o += `<g transform="rotate(${a}) translate(${r} 0)"><circle r="${rr}" class="zb"/><g transform="rotate(${-a})"><g><animateTransform attributeName="transform" type="rotate" from="0" to="${-360 * dir}" dur="${dur}s" repeatCount="indefinite"/><text class="zq" text-anchor="middle" y="3.5" style="fill:var(--bg);font-size:9px">${lab[i]}</text></g></g></g>`;
+          }
+          return `<g><animateTransform attributeName="transform" type="rotate" from="0" to="${360 * dir}" dur="${dur}s" repeatCount="indefinite"/>${o}</g>`;
+        };
+        return SV(
+          `<g transform="translate(186 118)"><circle r="52" class="zs" stroke-dasharray="2 5"/><circle r="92" class="zs" stroke-dasharray="2 6"/>${sat(92, 4, 30, 1, ["DDD", "CQRS", "API", "DB"], 17)}${sat(52, 2, 20, -1, ["", ""], 8)}<rect x="-28" y="-28" width="56" height="56" rx="16" class="za"/><g fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"><path d="M0 -12 14 -5 0 2 -14 -5z"/><path d="M-14 3 0 10 14 3"/></g></g>`,
+        );
+      })();
+      const be2 = (() => {
+        const d = "9s",
+          ys = [66, 122, 178],
+          nm = ["auth", "orders", "stock"];
+        let p = `<rect x="8" y="94" width="58" height="56" rx="12" class="zc"/>${tx(37, 118, "POST", "", "zq", "middle")}${tx(37, 135, "/api", "", "zq zw", "middle")}`;
+        ys.forEach((y, i) => {
+          p += `<path class="zs" stroke-dasharray="3 4" d="M66 122C80 122 80 ${y} 96 ${y}"/><rect x="96" y="${y - 19}" width="80" height="38" rx="10" class="zc"/><circle cx="110" cy="${y}" r="4" class="zg"><animate attributeName="opacity" values="1;.25;1" dur="${1.6 + i * 0.4}s" repeatCount="indefinite"/></circle>${tx(122, y + 4, nm[i], "", "zq zw")}<path class="zs" stroke-dasharray="3 4" d="M176 ${y}H200"/>`;
+          p +=
+            mp(
+              `M66 122C80 122 80 ${y} 96 ${y}`,
+              0.02 + i * 0.03,
+              0.12 + i * 0.03,
+              "zb",
+              d,
+            ) + mp(`M176 ${y}H200`, 0.18 + i * 0.02, 0.26 + i * 0.02, "zb", d);
+        });
+        p += `<rect x="200" y="40" width="40" height="164" rx="20" class="zc"/>${tx(220, 224, "pub/sub", "", "zq", "middle")}`;
+        [0, 1, 2].forEach(
+          (i) =>
+            (p += `<rect x="210" y="${62 + i * 42}" width="20" height="26" rx="5" class="zb"><animate attributeName="fill-opacity" values="1;.45;1" dur="${2 + i * 0.5}s" repeatCount="indefinite"/></rect>`),
+        );
+        p += `<path class="zs" stroke-dasharray="3 4" d="M240 122H290"/><path d="M292 112v52a28 9 0 0 0 56 0v-52z" class="za"/><ellipse cx="320" cy="112" rx="28" ry="9" class="zb"/>${tx(320, 146, "db", "fill:#fff", "zq", "middle")}`;
+        p +=
+          mp("M240 122H290", 0.34, 0.42, "zr", d) +
+          mp("M240 122H290", 0.58, 0.66, "zg", d);
+        p += gw(
+          0.42,
+          0.56,
+          d,
+          `${tx(320, 98, "✕", `fill:${RD};font-size:14px`, "zq", "middle")}<rect x="238" y="134" width="52" height="20" rx="10" fill="${YL}"/>${tx(264, 148, "retry ×1", "fill:#422006", "zq", "middle")}`,
+        );
+        p += gw(
+          0.66,
+          0.99,
+          d,
+          `<rect x="282" y="186" width="76" height="22" rx="11" class="zg" fill-opacity=".2"/>${tx(320, 201, "200 · 42ms", `fill:${GR}`, "zq", "middle")}${tx(220, 242, "no message lost", "fill:#4ade80", "zq", "middle")}`,
+        );
+        return SV(p);
+      })();
+      const fe3 = (() => {
+        const d = "9s";
+        let p = `<rect x="28" y="16" width="316" height="218" rx="16" class="zc"/><circle cx="46" cy="32" r="4" class="zb"/><circle cx="60" cy="32" r="4" class="zc"/><circle cx="74" cy="32" r="4" class="zc"/>`;
+        p += gw(
+          0,
+          0.46,
+          d,
+          `<rect x="96" y="29" height="3" rx="1.5" fill="${RD}" width="0"><animate attributeName="width" values="0;200;200" keyTimes="0;.44;1" dur="${d}" repeatCount="indefinite"/></rect><rect x="48" y="60" height="10" rx="5" class="zc" width="0">${A("width", "0;130;130", "0;.4;1", d)}</rect><rect x="48" y="80" height="6" rx="3" class="zc" width="0">${A("width", "0;0;150;150", "0;.1;.42;1", d)}</rect><rect x="48" y="92" height="6" rx="3" class="zc" width="0">${A("width", "0;0;110;110", "0;.2;.44;1", d)}</rect><circle cx="132" cy="156" r="14" fill="none" stroke="${RD}" stroke-width="4" stroke-dasharray="30 60"><animateTransform attributeName="transform" type="rotate" from="0 132 156" to="360 132 156" dur="1s" repeatCount="indefinite"/></circle><rect x="48" y="198" width="100" height="24" rx="12" class="zc"/>${tx(98, 214, "Get started", "", "zq", "middle")}`,
+        );
+        p += gw(
+          0.5,
+          1,
+          d,
+          `<rect x="48" y="60" height="10" rx="5" class="za" width="0">${A("width", "0;0;130;130", "0;.5;.55;1", d)}</rect><rect x="48" y="80" height="6" rx="3" class="zc" width="0">${A("width", "0;0;150;150", "0;.52;.57;1", d)}</rect><rect x="48" y="92" height="6" rx="3" class="zc" width="0">${A("width", "0;0;110;110", "0;.54;.59;1", d)}</rect>${[0, 1, 2].map((i) => `<g opacity="0">${A("opacity", "0;0;1;1", `0;${0.55 + i * 0.04};${0.59 + i * 0.04};1`, d)}<rect x="${48 + i * 84}" y="124" width="76" height="60" rx="10" class="zc"/><circle cx="${66 + i * 84}" cy="142" r="7" class="${["za", "zb", "zg"][i]}"/><rect x="${58 + i * 84}" y="158" width="56" height="5" rx="2.5" class="zc"/><rect x="${58 + i * 84}" y="168" width="38" height="5" rx="2.5" class="zc"/></g>`).join("")}<rect x="48" y="198" width="100" height="24" rx="12" class="za"/>${tx(98, 214, "Get started", "fill:#fff", "zq", "middle")}<circle cx="98" cy="210" r="0" fill="none" stroke="var(--brand2)" stroke-width="2"><animate attributeName="r" values="0;0;26;26" keyTimes="0;.84;.93;1" dur="${d}" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;.84;.85;.93;1" dur="${d}" repeatCount="indefinite"/></circle><rect x="200" y="198" width="56" height="22" rx="11" class="zc"/>${tx(228, 213, "a11y AA", "", "zq zw", "middle")}<rect x="262" y="198" width="70" height="22" rx="11" class="zc"/>${tx(297, 213, "scalable", "", "zq zw", "middle")}`,
+        );
+        p += `<circle cx="300" cy="62" r="22" fill="none" stroke="var(--ink)" stroke-opacity=".14" stroke-width="6"/>`;
+        p += gw(
+          0,
+          0.48,
+          d,
+          `<circle cx="300" cy="62" r="22" fill="none" stroke="${RD}" stroke-width="6" stroke-linecap="round" stroke-dasharray="52 138" transform="rotate(-90 300 62)"/>${tx(300, 67, "38", `fill:${RD};font-size:14px`, "zq", "middle")}${tx(300, 100, "LCP 4.2s", `fill:${RD}`, "zq", "middle")}${tx(300, 114, "CLS 0.31", `fill:${RD}`, "zq", "middle")}`,
+        );
+        p += gw(
+          0.5,
+          1,
+          d,
+          `<circle cx="300" cy="62" r="22" fill="none" stroke="${GR}" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 138" transform="rotate(-90 300 62)"><animate attributeName="stroke-dasharray" values="0 138;0 138;138 138;138 138" keyTimes="0;.5;.64;1" dur="${d}" repeatCount="indefinite"/></circle>${tx(300, 67, "100", `fill:${GR};font-size:14px`, "zq", "middle")}${tx(300, 100, "LCP 0.8s", `fill:${GR}`, "zq", "middle")}${tx(300, 114, "CLS 0.02", `fill:${GR}`, "zq", "middle")}`,
+        );
+        p += `<g opacity="0">${wn(0.68, 0.92, d)}<path d="M0 0v16l4.5-4 3.5 8 3-1.5-3.5-7.5H13z" class="zk"/><animateMotion dur="${d}" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.68;.84;1" path="M210 150 L100 208"/></g>`;
+        return SV(p);
+      })();
+      const dv2 = (() => {
+        const d = "8s",
+          xs = [36, 136, 236, 336],
+          nm = ["build", "test", "scan", "deploy"];
+        let p = `<line x1="36" y1="58" x2="336" y2="58" class="zs" stroke-width="3"/><line x1="36" y1="58" x2="336" y2="58" stroke="var(--brand)" stroke-width="3" stroke-linecap="round" stroke-dasharray="300" stroke-dashoffset="300">${A("stroke-dashoffset", "300;0;0;300", "0;.55;.9;1", d)}</line>`;
+        xs.forEach((x, i) => {
+          const t = 0.05 + i * 0.16;
+          p += `<circle cx="${x}" cy="58" r="20" style="fill:color-mix(in srgb,var(--ink) 10%,var(--bg))" class="zs"/><path d="M${x - 8} 58l6 6 11-12" fill="none" stroke="${GR}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0">${A("opacity", "0;0;1;1;0", `0;${t};${t + 0.04};.9;1`, d)}</path>${tx(x, 98, nm[i], "", "zq", "middle")}`;
+        });
+        [
+          ["build 42s", 18, 100, 0.12],
+          ["128 tests passed", 126, 130, 0.3],
+          ["0 downtime", 264, 90, 0.5],
+        ].forEach((c) => {
+          p += gw(
+            c[3],
+            0.95,
+            d,
+            `<rect x="${c[1]}" y="118" width="${c[2]}" height="26" rx="13" class="zc"/><circle cx="${c[1] + 12}" cy="131" r="3.5" class="zg"/>${tx(c[1] + c[2] / 2 + 5, 135, c[0], "", "zq zw", "middle")}`,
+          );
+        });
+        p += tx(18, 172, "uptime 99.9%");
+        let sd = 3;
+        const rn = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+        for (let i = 0; i < 34; i++) {
+          const h = 18 + Math.round(rn() * 26);
+          p += `<rect x="${18 + i * 10}" y="${232 - h}" width="6" height="${h}" rx="3" class="zg" opacity="${i > 28 ? 1 : 0.5}">${i > 28 ? A("opacity", "1;.3;1", "0;.5;1", "1.6s") : ""}</rect>`;
+        }
+        return SV(p);
+      })();
+      const sec3 = (() => {
+        const d = "12s";
+        let p = `<rect x="150" y="12" width="214" height="128" rx="14" class="zc"/><circle cx="164" cy="26" r="3.5" class="zb"/><circle cx="175" cy="26" r="3.5" class="zc"/><circle cx="186" cy="26" r="3.5" class="zc"/>${tx(200, 29, "admin", "", "zq")}<rect x="160" y="42" width="26" height="86" rx="6" class="zc"/>`;
+        p +=
+          gw(
+            0,
+            0.32,
+            d,
+            `<rect x="262" y="18" width="92" height="18" rx="9" fill="${YL}" fill-opacity=".25"/>${tx(308, 30.5, "update pending", `fill:${YL};font-size:9px`, "zq", "middle")}`,
+          ) +
+          gw(
+            0.32,
+            1,
+            d,
+            `<rect x="278" y="18" width="76" height="18" rx="9" class="zg" fill-opacity=".2"/>${tx(316, 30.5, "● secure", `fill:${GR};font-size:9px`, "zq", "middle")}`,
+          );
+        [196, 252, 308].forEach(
+          (x) =>
+            (p += `<rect x="${x}" y="44" width="48" height="26" rx="7" class="zc"/><rect x="${x + 8}" y="52" width="22" height="5" rx="2.5" class="zb"/><rect x="${x + 8}" y="61" width="32" height="4" rx="2" class="zc"/>`),
+        );
+        for (let i = 0; i < 10; i++) {
+          const h1 = 14 + ((i * 7) % 18),
+            h2 = h1 + 10;
+          p += `<rect x="${196 + i * 16}" y="${128 - h1}" width="10" height="${h1}" rx="3" class="zg" fill-opacity=".7"><animate attributeName="height" values="${h1};${h2};${h1}" dur="${2 + i * 0.2}s" repeatCount="indefinite"/><animate attributeName="y" values="${128 - h1};${128 - h2};${128 - h1}" dur="${2 + i * 0.2}s" repeatCount="indefinite"/></rect>`;
+        }
+        p += gw(
+          0.52,
+          0.99,
+          d,
+          `<rect x="6" y="14" width="104" height="92" rx="12" class="zc"/><circle cx="19" cy="28" r="3.5" fill="${RD}"/><circle cx="30" cy="28" r="3.5" class="zc"/><circle cx="41" cy="28" r="3.5" class="zc"/>${tx(102, 31, "attacker", `fill:${RD};font-size:9px`, "zq", "end")}${tx(16, 56, "$ php2shell", "", "zq zw")}${tx(16, 70, "--target admin", "", "zq")}${tx(16, 88, "payload sent…", `fill:${RD}`, "zq")}`,
+        );
+        for (let i = 0; i < 4; i++) {
+          const t = 0.58 + i * 0.1;
+          p +=
+            mp("M112 64 L142 64 L118 64", t, t + 0.07, "zr", d) +
+            `<text x="146" y="69" class="zq" opacity="0" style="fill:${RD};font-size:14px">✕${wn(t + 0.03, t + 0.07, d)}</text>`;
+        }
+        p += `<rect x="6" y="152" width="358" height="92" rx="14" class="zc"/><path d="M22 168l6 -10 6 10z" class="zk"/>${tx(40, 168, "production deployment", "", "zq zw")}`;
+        p += gw(
+          0.02,
+          0.32,
+          d,
+          `<rect x="18" y="178" width="236" height="24" rx="12" fill="${YL}" fill-opacity=".2"/>${tx(136, 194, "! vulnerable dependency · critical RCE", `fill:${YL}`, "zq", "middle")}<rect x="18" y="176" width="3" height="28" class="zb"><animate attributeName="x" values="18;250;18" dur="2.6s" repeatCount="indefinite"/></rect>`,
+        );
+        p += gw(
+          0.32,
+          0.52,
+          d,
+          `<rect x="18" y="178" width="236" height="24" rx="12" class="zg" fill-opacity=".2"/>${tx(136, 194, "✓ updated & redeployed", `fill:${GR}`, "zq", "middle")}`,
+        );
+        p += gw(
+          0.52,
+          0.99,
+          d,
+          `<rect x="18" y="178" width="236" height="24" rx="12" class="zg" fill-opacity=".2"/>${tx(136, 194, "✓ attack blocked · 0 incidents", `fill:${GR}`, "zq", "middle")}`,
+        );
+        [
+          ["SonarQube", 18, 76],
+          ["Snyk Code", 100, 74],
+          ["dependency scan", 180, 110],
+        ].forEach((c) => {
+          p += `<rect x="${c[1]}" y="212" width="${c[2]}" height="22" rx="11" class="zc"/><circle cx="${c[1] + 10}" cy="223" r="3" class="zg"/>${tx(c[1] + c[2] / 2 + 6, 226.5, c[0], "font-size:9px", "zq zw", "middle")}`;
+        });
+        return SV(p);
+      })();
+      const mo3 = (() => {
+        const d = "9s";
+        let p = `<g transform="rotate(-8 62 140)"><rect x="14" y="46" width="96" height="184" rx="18" class="zc"/>${tx(62, 72, "Orders", "", "zq zw", "middle")}${[
+          0, 1, 2, 3, 4,
+        ]
+          .map((i) => {
+            const h1 = 18 + i * 13,
+              h2 = 46 - i * 5;
+            return `<rect x="${30 + i * 15}" y="${150 - h1}" width="10" height="${h1}" rx="3" class="zb"><animate attributeName="height" values="${h1};${h2};${h1}" dur="3s" begin="${-i * 0.3}s" repeatCount="indefinite"/><animate attributeName="y" values="${150 - h1};${150 - h2};${150 - h1}" dur="3s" begin="${-i * 0.3}s" repeatCount="indefinite"/></rect>`;
+          })
+          .join("")}</g>`;
+        p += `<g transform="rotate(8 310 140)"><rect x="262" y="46" width="96" height="184" rx="18" class="zc"/>${tx(276, 72, "Shop", "", "zq zw")}<path d="M322 62h4l2.5 10h10l2.5-8h-14" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="331" cy="77" r="1.8" class="zk"/><circle cx="339" cy="77" r="1.8" class="zk"/>`;
+        const cl = ["za", "zb", "zg", "za"];
+        for (let k = 0; k < 4; k++) {
+          const x = 274 + (k % 2) * 40,
+            y = 88 + Math.floor(k / 2) * 52;
+          p += `<rect x="${x}" y="${y}" width="34" height="46" rx="8" class="zc"/><rect x="${x + 4}" y="${y + 4}" width="26" height="24" rx="5" class="${cl[k]}"/>${tx(x + 17, y + 40, "$" + [12, 8, 15, 6][k], "font-size:9px", "zq zw", "middle")}`;
+        }
+        p +=
+          gw(
+            0.14,
+            0.26,
+            d,
+            `<rect x="274" y="88" width="34" height="46" rx="8" fill="none" stroke="var(--brand2)" stroke-width="2"/>`,
+          ) +
+          gw(
+            0.34,
+            0.46,
+            d,
+            `<rect x="274" y="140" width="34" height="46" rx="8" fill="none" stroke="var(--brand2)" stroke-width="2"/>`,
+          );
+        p += `<circle cx="344" cy="60" r="8" fill="${RD}" opacity="0">${wn(0.18, 1, d)}</circle>${gw(0.18, 0.38, d, tx(344, 63.5, "1", "fill:#fff", "zq", "middle"))}${gw(0.38, 1, d, tx(344, 63.5, "2", "fill:#fff", "zq", "middle"))}`;
+        p +=
+          gw(
+            0.5,
+            0.76,
+            d,
+            `<rect x="274" y="198" width="72" height="22" rx="11" class="za"/>${tx(310, 213, "Checkout", "fill:#fff", "zq", "middle")}`,
+          ) +
+          gw(
+            0.76,
+            0.97,
+            d,
+            `<rect x="274" y="198" width="72" height="22" rx="11" class="zg"/>${tx(310, 213, "Placed ✓", "fill:#052e16", "zq", "middle")}`,
+          );
+        p += `</g>`;
+        let q = "",
+          sd = 7;
+        const rn = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+        for (let r = 0; r < 7; r++)
+          for (let c = 0; c < 7; c++) {
+            const f = (r < 3 && c < 3) || (r < 3 && c > 3) || (r > 3 && c < 3);
+            if (f || rn() > 0.5)
+              q += `<rect x="${151 + c * 10}" y="${80 + r * 10}" width="8" height="8" rx="1.5" class="zk"/>`;
+          }
+        p += `<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -7;0 0" dur="4s" repeatCount="indefinite"/><rect x="132" y="22" width="108" height="214" rx="20" style="fill:var(--bg)" class="zs" stroke-width="2"/><rect x="170" y="32" width="32" height="6" rx="3" class="zc"/>${q}<rect x="146" y="80" width="80" height="3" rx="1.5" class="za">${A("y", "80;146;80", "0;.5;1", "2.5s")}</rect>${gw(0.45, 0.92, d, `<rect x="148" y="172" width="76" height="26" rx="13" class="zg"/>${tx(186, 189, "Paid ✓", "fill:#052e16", "zq", "middle")}`)}</g>`;
+        return SV(p);
+      })();
+      const ai2 = (() => {
+        const d = "10s";
+        let p = "";
+        const bw = 52,
+          bh = 36,
+          gx = 62,
+          gy = 46,
+          ox = 22,
+          oy = 58,
+          rot = [-4, 3, -2, 5, 2, -5, 4, -3, 3, -4, 2, -2],
+          off = [
+            [0, 3],
+            [-2, 0],
+            [3, -2],
+            [0, 2],
+            [2, -3],
+            [-3, 1],
+            [0, -2],
+            [3, 2],
+            [-2, 3],
+            [2, 0],
+            [0, -3],
+            [-3, -1],
+          ];
+        for (let r = 0; r < 3; r++)
+          for (let c = 0; c < 4; c++) {
+            const i = r * 4 + c,
+              x = ox + c * gx,
+              y = oy + r * gy,
+              cx = x + bw / 2,
+              cy = y + bh / 2,
+              t0 = 0.03 + i * 0.02,
+              th = 0.4 + c * 0.06,
+              bad = i === 2 || i === 6;
+            p += gw(
+              t0,
+              th,
+              d,
+              `<g transform="translate(${off[i][0]} ${off[i][1]}) rotate(${rot[i]} ${cx} ${cy})"><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="8" fill="none" stroke="${bad ? RD : "var(--ink)"}" stroke-opacity="${bad ? 1 : 0.4}" stroke-width="1.5" stroke-dasharray="4 3"/><rect x="${x + 8}" y="${y + 10}" width="${bad ? 30 : 22}" height="5" rx="2.5" class="${bad ? "zr" : "zc"}"/><rect x="${x + 8}" y="${y + 21}" width="30" height="5" rx="2.5" class="zc"/></g>`,
+            );
+            p += gw(
+              th,
+              0.99,
+              d,
+              `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="8" class="zc"/><rect x="${x + 8}" y="${y + 10}" width="22" height="5" rx="2.5" class="zb"/><rect x="${x + 8}" y="${y + 21}" width="30" height="5" rx="2.5" class="zc"/><circle cx="${x + bw - 10}" cy="${y + 11}" r="5" class="zg"/>`,
+            );
+          }
+        p += gw(
+          0.36,
+          0.74,
+          d,
+          `<rect width="26" y="50" height="150" rx="6" class="zb" fill-opacity=".12"><animate attributeName="x" values="14;14;236;236" keyTimes="0;.38;.7;1" dur="${d}" repeatCount="indefinite"/></rect><rect width="3" y="50" height="150" rx="1.5" class="zb"><animate attributeName="x" values="37;37;259;259" keyTimes="0;.38;.7;1" dur="${d}" repeatCount="indefinite"/></rect>`,
+        );
+        [
+          ["security", 0.46],
+          ["tests", 0.54],
+          ["types", 0.62],
+          ["reviews", 0.7],
+        ].forEach((c, i) => {
+          p += gw(
+            c[1],
+            0.99,
+            d,
+            `<rect x="282" y="${58 + i * 30}" width="80" height="22" rx="11" class="zc"/><circle cx="294" cy="${69 + i * 30}" r="3.5" class="zg"/>${tx(332, 73 + i * 30, c[0], "", "zq zw", "middle")}`,
+          );
+        });
+        p += gw(
+          0.76,
+          0.99,
+          d,
+          `<path d="M322 178 346 187V206C346 220 336 230 322 236 308 230 298 220 298 206V187Z" class="za" fill-opacity=".2" stroke="var(--brand)" stroke-width="3" stroke-linejoin="round"/><path d="m312 207 8 8 14-16" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+        );
+        p +=
+          gw(
+            0.02,
+            0.38,
+            d,
+            `<rect x="22" y="14" width="112" height="24" rx="12" class="za"/>${tx(78, 30, "✦ AI drafts fast", "fill:#fff", "zq", "middle")}`,
+          ) +
+          gw(
+            0.38,
+            0.99,
+            d,
+            `<rect x="22" y="14" width="136" height="24" rx="12" class="zg" fill-opacity=".2"/>${tx(90, 30, "✓ I make it solid", `fill:${GR}`, "zq", "middle")}`,
+          );
+        p += tx(
+          186,
+          246,
+          "AI gives the speed · I add the safety",
+          "",
+          "zq",
+          "middle",
+        );
+        return SV(p);
+      })();
+      const IL = [be2, ar, fe3, dv2, sec3, mo3, ai2];
+
+      const TS = {
+        Frontend: [
+          "React",
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS",
+          "Redux",
+          "Angular",
+        ],
+        Backend: [
+          "Node.js",
+          "Nest.js",
+          "C# / .NET",
+          "GraphQL",
+          "REST",
+          "Prisma",
+        ],
+        Architecture: [
+          "Clean Architecture",
+          "DDD",
+          "SOLID",
+          "Microservices",
+          "Event-driven",
+        ],
+        "AI & Machine Learning": [
+          "OpenAI GPT-4o",
+          "Claude",
+          "Gemini",
+          "GitHub Copilot",
+          "Cursor",
+          "v0",
+        ],
+        Data: ["MySQL", "MongoDB", "Firebase"],
+        "Quality & Delivery": [
+          "Jest",
+          "Playwright",
+          "Docker",
+          "CI/CD",
+          "Azure",
+          "OWASP",
+        ],
+      };
+      const D = {
+        Frontend:
+          "Component-driven interfaces and design systems for web and mobile.",
+        Backend:
+          "APIs, services and integrations that stay reliable under load.",
+        Architecture: "Patterns for systems that scale and stay maintainable.",
+        "AI & Machine Learning":
+          "Large language models, orchestration frameworks, autonomous agents, and modern AI engineering tools.",
+        Data: "Relational and document stores, modeled for real workloads.",
+        "Quality & Delivery":
+          "Testing, CI/CD and cloud tooling that keep releases boring.",
+      };
+      const PJ = [
+        [
+          "OFILEGAL: Law & Notary Portal",
+          "Client work · Solo",
+          "Institutional web platform and legal CMS for a corporate law firm in Nicaragua, built with Next.js, React and Tailwind CSS.",
+          "#1e3a8a,#0b1220",
+          "OF",
+        ],
+        [
+          "Walmart Central America: Multi-Format Mobile Platform",
+          "Client work · Team of 18 · 2025–2026",
+          "Large-scale mobile retail and e-commerce platform for the Walmart Central America ecosystem.",
+          "#0ea5e9,#1d4ed8",
+          "WM",
+        ],
+        [
+          "Store API: E-Commerce GraphQL",
+          "Client work",
+          "Modular e-commerce backend API designed with Clean Architecture in Node.js and TypeScript.",
+          "#7c3aed,#111827",
+          "API",
+        ],
+        [
+          "Musa Ecommerce",
+          "Client work",
+          "B2C e-commerce platform for fresh agricultural products, built in Next.js with hybrid rendering.",
+          "#16a34a,#92400e",
+          "ME",
+        ],
+        [
+          "PSPro AI",
+          "Client work · Team of 8 · 2024–2025",
+          "Enterprise multi-tenant SaaS platform with dynamic reports and flexible Firebase data modeling.",
+          "#059669,#0f766e",
+          "PS",
+        ],
+        [
+          "Musa Admin",
+          "Client work",
+          "Enterprise admin portal for agricultural marketplaces with multi-vendor catalog and order tracking.",
+          "#2563eb,#0b1220",
+          "MA",
+        ],
+      ];
+      $("theme").onclick = () => {
+        const r = document.documentElement;
+        const d = r.dataset.theme
+          ? r.dataset.theme === "dark"
+          : !matchMedia("(prefers-color-scheme:light)").matches;
+        r.dataset.theme = d ? "light" : "dark";
+      };
+      {
+        const m = $("menu"),
+          l = $("links");
+        m.onclick = () =>
+          m.setAttribute("aria-expanded", !l.classList.toggle("hidden"));
+        l.querySelectorAll("a").forEach((a) =>
+          a.addEventListener("click", () => {
+            l.classList.add("hidden");
+          }),
+        );
+      }
+      /* marquee */
+      {
+        const R1 = [
+            "TypeScript",
+            "React",
+            "Next.js",
+            "Node.js",
+            "Nest.js",
+            "C# / .NET",
+            "GraphQL",
+            "Tailwind CSS",
+            "Prisma",
+            "MongoDB",
+            "MySQL",
+            "SQL Server",
+          ],
+          R2 = [
+            "Docker",
+            "Azure",
+            "AWS",
+            "GCP",
+            "Playwright",
+            "Jest",
+            "Redux",
+            "React Native",
+            "Flutter",
+            "VTEX",
+            "tRPC",
+            "Firebase",
+          ];
+        const fill = (id, a) =>
+          ($(id).innerHTML = [...a, ...a]
+            .map(
+              (t) =>
+                `<span class="whitespace-nowrap rounded-full bg-[color-mix(in_srgb,var(--ink)_6%,transparent)] px-[22px] py-3 text-[15px] font-semibold shadow-[inset_0_0_0_1px_var(--line)]">${t}</span>`,
+            )
+            .join(""));
+        fill("m1", R1);
+        fill("m2", R2);
+      }
+      /* projects */
+      PJ.unshift(PJ.splice(1, 1)[0]);
+      $("cg").innerHTML = PJ.map(
+        (p, i) =>
+          `<a href="#" class="group block ${i === 0 ? "sm:col-span-2 lg:col-span-3 grid items-center gap-5 rounded-[32px] bg-gradient-to-br from-[color-mix(in_srgb,var(--brand)_22%,transparent)] to-[color-mix(in_srgb,var(--ink)_4%,transparent)] p-[18px] md:grid-cols-[1.3fr_1fr] md:gap-10 md:p-7" : ""}"><div style="--g:linear-gradient(135deg,${p[3]})" class="relative grid aspect-video place-items-center overflow-hidden rounded-[18px] bg-[image:var(--g)] before:h-[60%] before:w-[64%] before:rounded-[10px] before:bg-white/15 before:shadow-[inset_0_0_0_1px_rgba(255,255,255,.2)] before:transition-transform group-hover:before:scale-105"><span class="absolute text-[clamp(20px,2.4vw,30px)] font-bold tracking-[.04em] text-white">${p[4]}</span></div><div><p class="${i === 0 ? "" : "mt-4 "}text-[13px] text-muted">${p[1]}</p><h3 class="mt-1 ${i === 0 ? "text-[clamp(24px,3vw,34px)] tracking-[-.025em]" : "text-[19px] tracking-[-.015em]"} font-semibold leading-[1.3]">${p[0]}</h3><p class="mt-2 ${i === 0 ? "line-clamp-4 text-[17px]" : "line-clamp-2 text-[15px]"} text-muted">${p[2]}</p></div></a>`,
+      ).join("");
+      /* working */
+      /* stack */
+      {
+        const ic = (t, big) => {
+          let h = 0;
+          for (const c of t) h = (h * 31 + c.charCodeAt(0)) % 360;
+          return `<b class="grid ${big ? "mb-2.5 h-10 w-10 rounded-xl text-[15px]" : "h-7 w-7 rounded-[9px] text-xs"} place-items-center" style="color:hsl(${h} 80% 72%);background:hsl(${h} 50% 24%/.75)">${t[0]}</b>`;
+        };
+        let tk = "Frontend";
+        function tab() {
+          $("tabs").innerHTML = Object.keys(TS)
+            .map(
+              (k) =>
+                `<button class="cursor-pointer px-0.5 py-1 text-[clamp(15px,1.8vw,19px)] font-bold tracking-[-.02em] text-[color-mix(in_srgb,var(--ink)_32%,transparent)] transition-colors hover:text-ink [&.on]:bg-gradient-to-r [&.on]:from-acc [&.on]:to-indigo-400 [&.on]:bg-clip-text [&.on]:text-transparent${k === tk ? " on" : ""}">${k}<sup class="ml-1 text-[.5em] opacity-60 [.on_&]:[-webkit-text-fill-color:var(--muted)]">${TS[k].length}</sup></button>`,
+            )
+            .join("");
+          $("tabs")
+            .querySelectorAll("button")
+            .forEach(
+              (b) =>
+                (b.onclick = () => {
+                  tk = b.firstChild.textContent;
+                  tab();
+                }),
+            );
+          const a = TS[tk];
+          $("tl").innerHTML =
+            `<p class="mb-6 mt-[22px] text-[15px] text-muted">${D[tk]}</p><div class="grid gap-3.5 sm:grid-cols-3">${a
+              .slice(0, 3)
+              .map(
+                (t) =>
+                  `<div class="flex flex-col gap-1.5 rounded-[22px] bg-[color-mix(in_srgb,var(--ink)_5%,transparent)] p-5">${ic(t, 1)}<b class="text-[15px]">${t}</b><small class="text-[13px] text-acc">Featured</small></div>`,
+              )
+              .join("")}</div><div class="mt-[18px] flex flex-wrap gap-2.5">${a
+              .slice(3)
+              .map(
+                (t) =>
+                  `<span class="inline-flex items-center gap-2.5 rounded-[14px] bg-[color-mix(in_srgb,var(--ink)_5%,transparent)] py-1.5 pl-1.5 pr-4 text-sm font-semibold">${ic(t)}${t}</span>`,
+              )
+              .join("")}</div>`;
+        }
+        tab();
+      }
+      /* expertise carousel */
+      const X = [
+        [
+          "Backend & APIs",
+          "Backend & Distributed Systems",
+          "Building robust microservices, REST & tRPC APIs with Node.js, C# / .NET, and scalable SQL/NoSQL databases.",
+          [
+            "Designed GraphQL/Nest.js APIs that raised sync reliability ~90% (Musa).",
+            "Architected a service orchestration platform with Next.js, tRPC, Prisma and SQL Server (Claro).",
+            "Built a modular e-commerce API with Clean Architecture in Node.js and TypeScript.",
+          ],
+          [
+            "Node.js",
+            "Nest.js",
+            "C# / .NET",
+            "tRPC",
+            "GraphQL",
+            "SQL Server",
+            "MySQL",
+            "MongoDB",
+          ],
+        ],
+        [
+          "Architecture",
+          "System Architecture",
+          "Designing distributed systems using microservices, DDD, Clean Architecture, REST/GraphQL, and event-driven patterns where appropriate.",
+          [
+            "Refactored toward CQRS and event-driven patterns, improving scalability and reducing coupling (Musa).",
+            "Led architecture spikes and design decisions that reduced rework by ~25% (Walmart).",
+            "Established Architecture Decision Records (ADRs) and coding standards.",
+          ],
+          [
+            "Microservices",
+            "DDD",
+            "Clean Architecture",
+            "CQRS",
+            "Event-driven",
+          ],
+        ],
+        [
+          "Frontend & UI/UX",
+          "Frontend Engineering",
+          "High-performance, accessible frontend systems built with React, Next.js, and TypeScript.",
+          [
+            "Migrated jQuery to React + TypeScript, improving performance ~35% (Musa).",
+            "Defined a component library and standards adopted organization-wide (Contollo).",
+            "Shipped critical React, Flutter and VTEX features across checkout, search and billing (Walmart).",
+          ],
+          [
+            "React",
+            "Next.js",
+            "TypeScript",
+            "Tailwind CSS",
+            "Redux",
+            "Angular",
+          ],
+        ],
+        [
+          "DevOps & Cloud",
+          "Reliability & DevOps",
+          "Linux server administration, Docker containerization, CI/CD pipeline automation, and cloud deployments.",
+          [
+            "Cut release regression cycles from 7 to 4 days with Playwright E2E tests (Walmart).",
+            "Established CI/CD pipelines and code review standards (Contollo).",
+            "Improved MTTR by ~40% through root-cause analysis and recurrence prevention.",
+          ],
+          ["Docker", "CI/CD", "Azure", "AWS", "GCP", "Playwright"],
+        ],
+        [
+          "Security",
+          "Secure Software Engineering",
+          "Secure coding, dependency scanning, OWASP practices, and DevSecOps.",
+          [
+            "Implemented role-based access control (RBAC) with technical audit views (Claro).",
+            "Integrated secure APIs/services with QuickBooks and DevExpress Report Manager (Contollo).",
+            "Trained in Digital Security and Data Protection (Numu & BID, 2022).",
+            "Static analysis (SonarQube, Snyk Code), dependency scanning and lockout after repeated failed logins.",
+          ],
+          [
+            "OWASP",
+            "RBAC",
+            "JWT",
+            "SonarQube",
+            "Snyk Code",
+            "Dependency scanning",
+            "Account lockout",
+          ],
+        ],
+        [
+          "Mobile",
+          "Mobile",
+          "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
+          [
+            "Built React Native apps for a crypto ecosystem: Telo Wallet and Telo Business (Telo Group).",
+            "Integrated Socket.IO payment events and QR checkout flows.",
+            "Delivered Flutter features for checkout, search and billing in Walmart’s e-commerce ecosystem.",
+          ],
+          ["React Native", "Flutter", "Socket.IO", "Mapbox GL"],
+        ],
+      ];
+      X.push([
+        "AI & Tooling",
+        "AI makes it fast. I make it solid.",
+        "I use AI tools to move faster on research, code and docs, and spend the time I save on security, robustness and good practices.",
+        [
+          "Claude or ChatGPT for a quick first pass on research, verified against official docs.",
+          "GitHub Copilot and Claude for boilerplate and refactors; architecture decisions stay mine.",
+          "AI in PR checks to flag vulnerabilities, code smells and likely bugs before manual QA.",
+        ],
+        ["Claude", "ChatGPT", "GitHub Copilot", "Cursor", "Perplexity", "v0"],
+      ]);
+      {
+        const R = $("xr"),
+          n = X.length,
+          gap = 20,
+          XC =
+            "relative flex min-h-[480px] w-[min(372px,82vw)] shrink-0 cursor-pointer snap-start flex-col overflow-hidden rounded-[28px] bg-card px-7 pt-7 will-change-transform [transform:scale(var(--s,1))_rotateY(var(--r,0deg))] [filter:brightness(var(--b,1))] focus-visible:rounded-[28px] motion-reduce:![transform:none]";
+        R.innerHTML = X.map(
+          (x, i) =>
+            `<article class="${XC}" data-xc="${i}" tabindex="0" role="button"><div class="text-[13px] font-semibold text-acc">${x[0]}</div><h3 class="mt-2.5 text-[25px] font-bold leading-[1.15] tracking-[-.025em]">${x[1]}</h3><p class="mt-3 text-[15px] leading-[1.45] text-muted">${x[2]}</p><button class="mt-4 cursor-pointer self-start text-[15px] font-medium text-acc hover:underline" aria-label="More about ${x[1]}">In practice ›</button><div class="-mx-7 mt-auto grid h-[250px] place-items-center overflow-hidden [&>svg]:h-full [&>svg]:w-full">${IL[i]}</div></article>`,
+        ).join("");
+        const cards = [...R.children],
+          pad = () => parseFloat(getComputedStyle(R).paddingLeft),
+          W = () => cards[0].offsetWidth + gap,
+          pp = (a, b, v) => Math.max(a, Math.min(b, v));
+        function upd() {
+          const sl = R.scrollLeft,
+            w = W(),
+            p0 = pad(),
+            mx = R.scrollWidth - R.clientWidth;
+          cards.forEach((c) => {
+            const p = (c.offsetLeft - p0 - sl) / w,
+              l = pp(0, 1, -p);
+            c.style.setProperty("--s", (1 - l * 0.07).toFixed(3));
+            c.style.setProperty("--r", (l * 9).toFixed(1) + "deg");
+            c.style.setProperty(
+              "--b",
+              (1 - pp(0, 1, l - 0.15) * 0.14).toFixed(2),
+            );
+          });
+          const i = pp(0, n - 1, Math.round(sl / w));
+          $("xc").textContent =
+            String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0");
+          $("xp").disabled = sl <= 2;
+          $("xnx").disabled = sl >= mx - 2;
+          const tw = R.scrollWidth || 1;
+          $("xb").style.width = (R.clientWidth / tw) * 100 + "%";
+          $("xb").style.left = (sl / tw) * 100 + "%";
+        }
+        R.addEventListener("scroll", () => requestAnimationFrame(upd), {
+          passive: true,
+        });
+        addEventListener("resize", upd);
+        $("xp").onclick = () => R.scrollBy({ left: -W(), behavior: "smooth" });
+        $("xnx").onclick = () => R.scrollBy({ left: W(), behavior: "smooth" });
+        $("xt").onclick = (e) => {
+          const b = $("xt").getBoundingClientRect();
+          R.scrollTo({
+            left:
+              ((e.clientX - b.left) / b.width) * R.scrollWidth -
+              R.clientWidth / 2,
+            behavior: "smooth",
+          });
+        };
+        R.onkeydown = (e) => {
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            $("xnx").click();
+          }
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            $("xp").click();
+          }
+        };
+        let dn = 0,
+          sx = 0,
+          sl0 = 0,
+          lx = 0,
+          lt = 0,
+          vx = 0,
+          mv = 0,
+          raf = 0;
+        R.addEventListener("pointerdown", (e) => {
+          if (e.pointerType !== "mouse" || e.button) return;
+          dn = 1;
+          mv = 0;
+          sx = lx = e.clientX;
+          sl0 = R.scrollLeft;
+          vx = 0;
+          lt = performance.now();
+          cancelAnimationFrame(raf);
+          R.style.scrollSnapType = "none";
+          R.classList.add("drag");
+        });
+        addEventListener("pointermove", (e) => {
+          if (!dn) return;
+          const dx = e.clientX - sx;
+          if (Math.abs(dx) > 4) mv = 1;
+          R.scrollLeft = sl0 - dx;
+          const t = performance.now();
+          vx = (lx - e.clientX) / Math.max(t - lt, 1);
+          lx = e.clientX;
+          lt = t;
+        });
+        addEventListener("pointerup", () => {
+          if (!dn) return;
+          dn = 0;
+          R.classList.remove("drag");
+          let v = pp(-60, 60, vx * 18);
+          const st = () => {
+            R.scrollLeft += v;
+            v *= 0.93;
+            if (Math.abs(v) > 0.4) raf = requestAnimationFrame(st);
+            else R.style.scrollSnapType = "x mandatory";
+          };
+          st();
+        });
+        R.addEventListener(
+          "click",
+          (e) => {
+            if (mv) {
+              e.stopPropagation();
+              e.preventDefault();
+              mv = 0;
+              return;
+            }
+            const c = e.target.closest("[data-xc]");
+            if (c) openX(+c.dataset.xc);
+          },
+          true,
+        );
+        const D2 = $("xd");
+        function openX(i) {
+          const x = X[i];
+          $("xdc").textContent =
+            String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0");
+          $("xdm").innerHTML =
+            `<div class="grid h-[260px] place-items-center overflow-hidden rounded-[20px] bg-card [&>svg]:h-full [&>svg]:w-full">${IL[i]}</div><div><div class="text-[13px] font-semibold text-acc">${x[0]}</div><h3 class="mt-1.5 text-[28px] font-semibold leading-[1.15] tracking-[-.025em]">${x[1]}</h3><p class="mt-3 text-[15px] text-muted">${x[2]}</p><p class="mt-5 text-xs font-semibold tracking-[.1em] text-muted">IN PRACTICE</p><ul class="mt-3 list-disc pl-[18px] text-[14.5px] marker:text-acc [&>li]:my-2">${x[3].map((t) => `<li>${t}</li>`).join("")}</ul><div class="mt-[18px] flex flex-wrap gap-2">${x[4].map((t) => `<span class="rounded-full px-3 py-1.5 text-xs text-muted shadow-[inset_0_0_0_1px_var(--line)]">${t}</span>`).join("")}</div></div>`;
+          if (!D2.open) {
+            D2.showModal();
+            document.body.classList.add("overflow-hidden");
+          }
+        }
+        D2.addEventListener("close", () =>
+          document.body.classList.remove("overflow-hidden"),
+        );
+        $("xdx").onclick = () => D2.close();
+        D2.onclick = (e) => {
+          if (e.target === D2) D2.close();
+        };
+        upd();
+      }
+      /* climb */
+      {
+        const P = {
+            A: [65, 290],
+            B: [254, 232],
+            C: [338, 188],
+            D: [429, 146],
+            E: [484, 104],
+            N: [600, 50],
+          },
+          K = ["A", "B", "C", "D", "E", "N"],
+          ORD = ["A", "B", "C", "D", "E"];
+        const Q = [
+          {
+            n: "Frontend & IT",
+            d: "NOV 2019 – DEC 2021",
+            du: "2 years",
+            co: "Asociación de Iglesias Reformadas",
+            r: "Frontend Developer and IT Technician",
+            ds: "Nonprofit organization: institutional website, IT support, and foundational computer education.",
+            b: [
+              "Built, deployed, and maintained the institutional website with React/Next.js, modernizing CSS (BEM/SASS) with a UX focus.",
+              "Provided IT support (hardware/software), resolving issues and minimizing downtime.",
+            ],
+            c: ["React", "Next.js", "CSS / SASS", "IT support"],
+          },
+          {
+            n: "Full stack",
+            d: "JUN 2022 – JUL 2023",
+            du: "1 year",
+            co: "Musa",
+            r: "Full Stack Developer",
+            ds: "Multi-user e-commerce platform: web and mobile with external vendor integrations and legacy frontend modernization.",
+            b: [
+              "Led frontend modernization: migrated jQuery to React + TypeScript, improving performance ~35% and reducing technical debt.",
+              "Refactored toward CQRS and event-driven patterns, improving scalability and reducing coupling.",
+              "Designed GraphQL/Nest.js APIs that increased sync reliability ~90%.",
+            ],
+            c: ["React", "TypeScript", "GraphQL", "Nest.js", "CQRS"],
+          },
+          {
+            n: "Senior engineer",
+            d: "AUG 2023 – NOV 2024",
+            du: "1 year 4 months",
+            co: "Contollo",
+            r: "Senior Software Engineer",
+            ds: "Software consultancy delivering solutions for international clients under tight timelines.",
+            b: [
+              "Built backend apps (C# / Nest.js) and frontend (Angular / React/Next.js) with robust, dynamic solutions.",
+              "Created and maintained secure APIs/services improving connectivity with QuickBooks and DevExpress Report Manager.",
+              "Collaborated with international teams to deliver tailored solutions for foreign clients.",
+            ],
+            c: ["C#", "Nest.js", "Angular", "React", "QuickBooks"],
+          },
+          {
+            n: "Team lead",
+            d: "NOV 2024 – MAR 2025",
+            du: "5 months",
+            co: "Contollo",
+            r: "Development Team Lead",
+            ds: "Led a development team delivering solutions for international clients.",
+            b: [
+              "Directed engineering, design, and product teams to align delivery across 5+ concurrent enterprise projects.",
+              "Established CI/CD pipelines and code review standards, and mentored 4+ developers, increasing delivery velocity ~40%.",
+              "Defined a component library and development standards adopted organization-wide.",
+            ],
+            c: ["CI/CD", "Code review", "Mentoring", "Component library"],
+            al: {
+              h: "ALONGSIDE · PART-TIME · SEP 2024 – AUG 2025",
+              t: "Claro Nicaragua — Full Stack Engineer",
+              b: [
+                "Architected a telecom service orchestration platform with Next.js, tRPC, Prisma and SQL Server.",
+                "Increased request traceability by ~80%, saving 120+ operational hours monthly.",
+              ],
+            },
+          },
+          {
+            n: "Walmart",
+            d: "AUG 2025 – AUG 2026",
+            du: "1 year",
+            co: "Walmart (via Imagomaker)",
+            r: "Senior Software Engineer",
+            ds: "Large-scale e-commerce platform with millions of digital interactions.",
+            b: [
+              "Engineered critical React, Flutter, and VTEX features across checkout, search, and billing.",
+              "Led architecture updates and system design decisions that reduced rework by ~25%.",
+              "Cut release regression cycles from 7 to 4 days with Playwright E2E tests (+30% coverage) and unit tests (+15% coverage).",
+              "Owned critical production incidents, improving MTTR by ~40%.",
+            ],
+            c: ["React", "Flutter", "VTEX", "Playwright"],
+          },
+          { n: "Your team", d: "NEXT STAGE", next: 1 },
+        ];
+        const seg = ORD.map((k, i) =>
+            i
+              ? Math.hypot(
+                  P[k][0] - P[ORD[i - 1]][0],
+                  P[k][1] - P[ORD[i - 1]][1],
+                )
+              : 0,
+          ),
+          cum = [];
+        seg.reduce((a, v, i) => (cum[i] = a + v), 0);
+        const line = "M" + ORD.map((k) => P[k].join(" ")).join(" L"),
+          area = `${line} L600 50 L600 312 L65 312Z`;
+        let pts = "",
+          ax = "";
+        K.forEach(
+          (k, i) =>
+            (pts += `<g class="pt" data-i="${i}" style="cursor:pointer"><circle class="dot" cx="${P[k][0]}" cy="${P[k][1]}" r="7" ${k === "N" ? 'stroke-dasharray="3 3"' : ""}/><circle cx="${P[k][0]}" cy="${P[k][1]}" r="18" fill="transparent"/></g>`),
+        );
+        [2020, 2022, 2024, 2026].forEach((y) => {
+          const x = 40 + (y - 2019.5) * 72.7;
+          ax += `<line x1="${x}" y1="312" x2="${x}" y2="318" class="zs"/><text x="${x}" y="334" class="zq" text-anchor="middle" style="font-size:11px">${y}</text>`;
+        });
+        $("cqs").innerHTML =
+          `<svg viewBox="0 0 640 340" role="img" aria-label="Career progression from 2019 to the next stage"><defs><linearGradient id="cqg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--brand);stop-opacity:.5"/><stop offset="1" style="stop-color:var(--brand);stop-opacity:.02"/></linearGradient><clipPath id="cqc1"><rect id="cqr" x="0" y="0" width="0" height="340" style="transition:width .7s ease"/></clipPath></defs><path d="${area}" style="fill:var(--ink);fill-opacity:.05"/><path d="${area}" fill="url(#cqg1)" clip-path="url(#cqc1)"/><line x1="40" y1="312" x2="620" y2="312" class="zs"/>${ax}<path d="${line}" fill="none" class="zs" stroke-width="3" stroke-linejoin="round"/><path d="M484 104 L600 50" fill="none" class="zs" stroke-width="3" stroke-dasharray="6 6"/><path id="cqb" d="${line}" fill="none" stroke="var(--brand2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0 9999" style="transition:stroke-dasharray .7s ease"/><path id="cqn" d="M484 104 L600 50" fill="none" stroke="var(--brand2)" stroke-width="4" stroke-dasharray="6 6" style="opacity:0;transition:opacity .5s"/><path d="M600 50V18l24 9-24 9" fill="var(--brand2)"/><text x="590" y="30" text-anchor="end" style="font:700 12px 'JetBrains Mono',monospace;fill:var(--brand2);letter-spacing:.04em">NEXT STAGE: YOUR TEAM</text><line id="cqm" stroke-dasharray="2 3" class="zs"/>${pts}<g id="cql"></g></svg>`;
+
+        const TABC =
+          "box-border cursor-pointer border-t-2 border-line px-2 pb-2.5 pt-3 text-left text-muted transition-colors hover:text-ink [&.on]:border-acc [&.on]:text-ink";
+        $("cqt").innerHTML = Q.map(
+          (q, i) =>
+            `<button data-i="${i}" class="${TABC}"><b class="block text-[13px] font-semibold leading-tight">${q.n}</b><i class="mt-1 block font-mono text-[9px] not-italic tracking-[.04em]">${q.d}</i></button>`,
+        ).join("");
+        let cc = -1;
+        function pq(i) {
+          if (i === cc) return;
+          cc = i;
+          const q = Q[i],
+            k = K[i],
+            [x, y] = P[k];
+          [...$("cqt").children].forEach((b, j) =>
+            b.classList.toggle("on", j === i),
+          );
+          document
+            .querySelectorAll("#cqs .pt")
+            .forEach((g, j) => g.classList.toggle("on", j === i));
+          const kk = k === "N" ? "E" : k;
+          $("cqb").style.strokeDasharray = `${cum[ORD.indexOf(kk)]} 9999`;
+          $("cqn").style.opacity = k === "N" ? 1 : 0;
+          $("cqr").style.width = (k === "N" ? 640 : x) + "px";
+          const m = $("cqm");
+          m.setAttribute("x1", x);
+          m.setAttribute("x2", x);
+          m.setAttribute("y1", y + 9);
+          m.setAttribute("y2", 312);
+          const a = k === "A" ? "start" : "end",
+            lx = k === "A" ? x - 8 : x + 8;
+          $("cql").innerHTML =
+            k === "N"
+              ? ""
+              : `<g style="animation:xin .4s ease both"><text x="${lx}" y="${y - 36}" text-anchor="${a}" style="font:700 18px Inter,sans-serif;fill:var(--ink);letter-spacing:.02em">${q.n.toUpperCase()}</text><text x="${lx}" y="${y - 19}" text-anchor="${a}" class="zq" style="font-size:11px">${q.d}</text></g>`;
+          const EB = "font-mono text-[11px] tracking-[.1em] text-muted",
+            H3 =
+              "mt-2 text-[26px] font-semibold leading-[1.15] tracking-[-.025em]",
+            UL =
+              "mt-3.5 list-disc pl-[18px] text-sm marker:text-acc [&>li]:my-[7px]";
+          $("dp").innerHTML = q.next
+            ? `<div class="animate-xin"><p class="${EB}">NEXT STAGE</p><h3 class="${H3}">Next stage: your team</h3><p class="mt-3.5 text-[15px] text-muted">Senior full-stack or tech-lead roles, remote or from Managua. I can start right away.</p><p class="mt-[18px]"><a class="${BTN}" href="#contact">Let’s talk</a></p></div>`
+            : `<div class="animate-xin"><p class="${EB}">${q.d} · ${q.co.toUpperCase()}</p><h3 class="${H3}">${q.r}</h3><p class="mt-1 font-semibold text-acc">${q.du}</p><p class="mt-3.5 text-[15px] text-muted">${q.ds}</p><ul class="${UL}">${q.b.map((t) => `<li>${t}</li>`).join("")}</ul>${q.al ? `<p class="${EB} mt-5">${q.al.h}</p><h4 class="mt-2 text-[15px] font-semibold">${q.al.t}</h4><ul class="${UL}">${q.al.b.map((t) => `<li>${t}</li>`).join("")}</ul>` : ""}<div class="mt-4 flex flex-wrap gap-2">${q.c.map((t) => `<span class="rounded-full px-3 py-1.5 text-xs text-muted shadow-[inset_0_0_0_1px_var(--line)]">${t}</span>`).join("")}</div></div>`;
+        }
+        $("cqt").onclick = (e) => {
+          const b = e.target.closest("button");
+          if (b) pq(+b.dataset.i);
+        };
+        $("cqs").onclick = (e) => {
+          const g = e.target.closest(".pt");
+          if (g) pq(+g.dataset.i);
+        };
+        pq(4);
+      }
+      /* contact */
+      {
+        const P = (a) =>
+          a
+            .map(
+              ([o, l], i) =>
+                (i ? "L" : "M") + (o + 118) * 10 + " " + (36 - l) * 10,
+            )
+            .join("") + "Z";
+        const NA = [
+          [-125, 40],
+          [-124, 46],
+          [-123, 49],
+          [-128, 52],
+          [-134, 58],
+          [-141, 60],
+          [-150, 60],
+          [-158, 57],
+          [-165, 54],
+          [-162, 59],
+          [-166, 62],
+          [-168, 66],
+          [-162, 70],
+          [-141, 70],
+          [-125, 70],
+          [-110, 73],
+          [-95, 72],
+          [-82, 68],
+          [-85, 63],
+          [-93, 59],
+          [-82, 55],
+          [-78, 62],
+          [-70, 60],
+          [-62, 57],
+          [-56, 52],
+          [-66, 45],
+          [-70, 42],
+          [-76, 38],
+          [-81, 31],
+          [-80, 25],
+          [-83, 29],
+          [-90, 29],
+          [-97, 27],
+          [-97, 21],
+          [-95, 18],
+          [-91, 19],
+          [-87, 21],
+          [-88, 16],
+          [-84, 15.5],
+          [-83, 11],
+          [-80, 8.5],
+          [-77.5, 8.5],
+          [-79, 7.3],
+          [-82, 8],
+          [-85.5, 10],
+          [-87.5, 13],
+          [-92, 14.5],
+          [-96, 15.8],
+          [-101, 17.5],
+          [-105.5, 20],
+          [-106, 23],
+          [-109, 25.5],
+          [-112.5, 29.5],
+          [-114.7, 31.7],
+          [-117, 32.5],
+          [-120.5, 34.5],
+        ];
+        const SA = [
+          [-77.5, 8.5],
+          [-72, 12],
+          [-64, 10.5],
+          [-60, 8.5],
+          [-52, 5],
+          [-50, 0],
+          [-44, -2.5],
+          [-35, -5.5],
+          [-35, -9],
+          [-39, -14],
+          [-39, -18],
+          [-41, -22],
+          [-48, -25.5],
+          [-49, -29],
+          [-53, -34],
+          [-57, -35],
+          [-57, -38.5],
+          [-62, -39],
+          [-65, -42],
+          [-64, -47],
+          [-68, -50],
+          [-69, -52.5],
+          [-68.5, -54.5],
+          [-72, -53],
+          [-75, -48],
+          [-73.5, -42],
+          [-73.5, -37],
+          [-71.5, -30],
+          [-70.5, -23],
+          [-70.5, -18],
+          [-76, -14],
+          [-81, -5],
+          [-80, -1],
+          [-78.5, 2],
+          [-77.5, 6],
+        ];
+        const CU = [
+            [-84.9, 21.9],
+            [-82, 23.1],
+            [-79, 22.5],
+            [-74.2, 20.2],
+            [-77.5, 19.9],
+            [-81, 22.2],
+          ],
+          HI = [
+            [-74.4, 18.5],
+            [-72, 19.9],
+            [-69, 19.2],
+            [-68.4, 18.4],
+            [-71, 17.8],
+            [-74, 18.2],
+          ];
+        let g = "";
+        for (let o = -120; o <= -50; o += 10)
+          g += `<path d="M${(o + 118) * 10} 0V400"/>`;
+        for (let l = 30; l >= -10; l -= 10)
+          g += `<path d="M0 ${(36 - l) * 10}H660"/>`;
+        $("mapsvg").innerHTML =
+          `<g class="gr">${g}</g><g class="ld">${[NA, SA, CU, HI].map((a) => `<path d="${P(a)}"/>`).join("")}</g><g transform="translate(317.5 238.7)"><circle class="pr" r="6"/><circle class="pd" r="5"/><text x="12" y="4">Managua</text></g>`;
+      }
+      {
+        const f = new Intl.DateTimeFormat("en-US", {
+          timeZone: "America/Managua",
+          hour: "numeric",
+          minute: "2-digit",
+        });
+        const lt = () => {
+          const v = f.format(new Date());
+          $("lt").textContent = v;
+          $("lt2").textContent = v;
+        };
+        lt();
+        setInterval(lt, 30000);
+      }
+      $("fm").onsubmit = (e) => {
+        e.preventDefault();
+        $("sb").textContent = "Thanks — message sent (demo)";
+      };
+      $("cp").onclick = () => {
+        navigator.clipboard &&
+          navigator.clipboard.writeText($("em").textContent).catch(() => {});
+        $("cp").textContent = "Copied";
+        setTimeout(() => ($("cp").textContent = "Copy"), 1500);
+      };
+    </script>
+  </body>
+</html>

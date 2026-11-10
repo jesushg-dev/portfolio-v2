@@ -1,4 +1,4 @@
-import type { FC, CSSProperties, ComponentType } from "react";
+import type { FC, ComponentType } from "react";
 import { Calendar, Globe, Mail, MapPin, Phone } from "lucide-react";
 import {
   GithubIcon,
@@ -28,7 +28,6 @@ interface ContactItemProps {
   href: string;
   label: string;
   icon: ContactIconKey;
-  accent?: string;
   ariaLabel?: string;
 }
 
@@ -36,24 +35,16 @@ const ContactItem: FC<ContactItemProps> = ({
   href,
   label,
   icon,
-  accent,
   ariaLabel,
 }) => {
   const Icon = CONTACT_ICONS[icon];
   const isInternal = href.startsWith("/");
 
-  const effectiveAccent =
-    accent && accent.length > 0 ? accent : "var(--primary)";
-
-  const style = {
-    "--contact-accent": effectiveAccent,
-  } as CSSProperties;
-
   const isEmail = href.startsWith("mailto:");
 
   const className = cn(
-    "group inline-flex min-h-11 items-center gap-2 rounded-full border border-border/80 bg-card px-4 py-2.5 text-sm font-semibold text-foreground shadow-2xs transition-all duration-200",
-    "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md hover:-translate-y-0.5 active:scale-95",
+    "group inline-flex min-h-11 items-center gap-2 rounded-full border border-border/50 bg-card/35 px-4 py-2.5 text-sm font-medium text-foreground backdrop-blur-lg transition-colors duration-200",
+    "hover:border-primary/25 hover:bg-primary/5 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]",
   );
 
   const linkNode = isInternal ? (
@@ -61,9 +52,8 @@ const ContactItem: FC<ContactItemProps> = ({
       href={href as "/schedule"}
       aria-label={ariaLabel ?? label}
       className={className}
-      style={style}
     >
-      <Icon className="text-primary size-4 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
+      <Icon className="text-primary size-4 shrink-0" />
       <span className="truncate">{label}</span>
     </Link>
   ) : (
@@ -73,9 +63,8 @@ const ContactItem: FC<ContactItemProps> = ({
       rel="noopener noreferrer"
       aria-label={ariaLabel ?? label}
       className={className}
-      style={style}
     >
-      <Icon className="text-primary size-4 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
+      <Icon className="text-primary size-4 shrink-0" />
       <span className="truncate">{label}</span>
     </a>
   );

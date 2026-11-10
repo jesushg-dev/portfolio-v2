@@ -9,7 +9,6 @@ export const headerLabelTextStyles =
 
 interface ControlOptions {
   active?: boolean;
-  iconOnly?: boolean;
 }
 
 /** Icon controls (theme, mobile menu): bordered, matches locale pill. */
@@ -76,15 +75,4 @@ export function headerNavTriggerStyles(isActive = false) {
       ? "bg-primary/15 text-primary font-semibold shadow-2xs"
       : "bg-transparent hover:bg-accent/50 hover:text-foreground active:scale-[0.98]",
   );
-}
-
-/** @deprecated Use headerIconControlStyles or headerPillControlStyles. */
-export function toolbarControlStyles(
-  inverted: boolean,
-  options?: ControlOptions,
-) {
-  const { iconOnly = false, active = false } = options ?? {};
-  return iconOnly
-    ? headerIconControlStyles(inverted, { active })
-    : headerPillControlStyles(inverted, { active });
 }

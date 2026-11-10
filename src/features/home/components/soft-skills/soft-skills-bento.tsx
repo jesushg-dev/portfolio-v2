@@ -2,6 +2,7 @@ import { createElement, type FC } from "react";
 import { useTranslations } from "next-intl";
 
 import { resolveSoftSkillIcon } from "@/features/soft-skills/lib/soft-skill-icons";
+import { HeadingAccent } from "@/components/shared/showcase";
 import { cn } from "@/lib/utils";
 
 export interface SoftSkillBentoItem {
@@ -45,7 +46,7 @@ const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items, metrics }) => {
             {t("subtitle")}
           </p>
           <h2 className="text-foreground mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-            {t("title")}
+            {t("titleLead")} <HeadingAccent>{t("titleGradient")}</HeadingAccent>
           </h2>
           <p className="text-muted-foreground mt-4 max-w-md text-base leading-relaxed sm:text-lg">
             {t("description")}

@@ -1,3 +1,7 @@
+import {
+  parseServiceVisualNodes,
+  serviceVisualTypeSchema,
+} from "@/features/services/lib/service-visual";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import type {
   ProcessPageTemplate,
@@ -112,11 +116,15 @@ export interface ServiceExportRow {
   isActive: boolean;
   order: number;
   image: string;
+  visualType?: string;
+  ServiceSkill?: { Skill: { title: string } }[];
   ServiceTranslation: (TranslationRow & {
     title: string;
     description: string;
     badge: string | null;
     statsLabel: string | null;
+    practicePoints?: string | null;
+    visualNodes?: unknown;
   })[];
 }
 
@@ -453,6 +461,12 @@ export function serializeServices(
       featured: service.featured,
       order: service.order,
       image: service.image,
+      visualType: serviceVisualTypeSchema
+        .catch("network")
+        .parse(service.visualType),
+      ...(service.ServiceSkill?.length
+        ? { skillTitles: service.ServiceSkill.map((link) => link.Skill.title) }
+        : {}),
       translations: translationArray(
         service.ServiceTranslation,
         languages,
@@ -462,6 +476,10 @@ export function serializeServices(
           description: row.description,
           badge: emptyToBlank(row.badge),
           statsLabel: emptyToBlank(row.statsLabel),
+          ...(row.practicePoints ? { practicePoints: row.practicePoints } : {}),
+          ...(parseServiceVisualNodes(row.visualNodes).length
+            ? { visualNodes: parseServiceVisualNodes(row.visualNodes) }
+            : {}),
         }),
       ),
     };

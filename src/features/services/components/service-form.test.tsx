@@ -81,6 +81,7 @@ const mockLanguages = [
 const mockInitialData: ServiceEditorDTO = {
   id: "srv-1",
   icon: "code",
+  visualType: "frontend",
   type: "FRONTEND",
   image: "https://example.com/banner.jpg",
   statsValue: "99.9%",
@@ -94,6 +95,8 @@ const mockInitialData: ServiceEditorDTO = {
       description: "Building responsive, modern, scalable user interfaces.",
       badge: "Popular",
       statsLabel: "Uptime",
+      practicePoints: "Original evidence",
+      visualNodes: [{ label: "Component system" }],
     },
     "lang-es": {
       title: "Ingeniería Frontend",
@@ -143,6 +146,46 @@ describe("ServiceForm", () => {
         "Building responsive, modern, scalable user interfaces.",
       ),
     ).toBeInTheDocument();
+  });
+
+  it("edits translated diagram labels and evidence without flattening them into HTML", async () => {
+    renderWithIntl(
+      <ServiceForm initialData={mockInitialData} languages={mockLanguages} />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: /content/i }));
+    fireEvent.change(screen.getByLabelText("Diagram labels"), {
+      target: { value: "UI system\nReact\n" },
+    });
+    fireEvent.change(screen.getByLabelText("In practice"), {
+      target: { value: "Updated evidence" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /save/i }));
+    await waitFor(() => {
+      expect(mockUpdateMutateAsync).toHaveBeenCalledTimes(1);
+    });
+    const [[updatePayload]] = mockUpdateMutateAsync.mock.calls as [
+      [
+        {
+          visualType?: string;
+          translations?: Record<
+            string,
+            {
+              practicePoints?: string;
+              visualNodes?: { label?: string }[];
+            }
+          >;
+        },
+      ],
+    ];
+    expect(updatePayload).toMatchObject({
+      visualType: "frontend",
+      translations: {
+        "lang-en": {
+          practicePoints: "Updated evidence",
+          visualNodes: [{ label: "UI system" }, { label: "React" }],
+        },
+      },
+    });
   });
 
   it("navigates to Skills tab and displays SkillPicker", () => {

@@ -11,16 +11,11 @@ for (const pathname of ["/", "/es", "/nl"]) {
     expect(await response?.text()).not.toContain("adminCredentials");
 
     await expect(page.locator("main h1")).toBeVisible();
-    await expect(page.locator("#about p").first()).not.toBeEmpty();
     await expect(page.locator("#services h2")).not.toBeEmpty();
-    await expect(page.locator("#experience h2")).not.toBeEmpty();
+    await expect(page.locator("#experience-heading")).not.toBeEmpty();
 
     const cards = page.locator("#portfolio article");
     expect(await cards.count()).toBeGreaterThan(0);
-    await expect(page.locator("#portfolio-tab-panel-0 > ul")).toHaveCSS(
-      "opacity",
-      "1",
-    );
     for (const card of await cards.all()) {
       await card.scrollIntoViewIfNeeded();
       await expect(card.locator("h3")).toBeVisible();
@@ -71,25 +66,6 @@ test.describe("hydrated portfolio", () => {
       await expect(spotifyLink).toBeInViewport({ timeout: 500 });
     }).toPass({ timeout: 15000 });
     await playbackRequest;
-    expect(errors).toEqual([]);
-  });
-
-  test("keeps project filters interactive", async ({ page }) => {
-    const errors: string[] = [];
-    page.on("pageerror", (error) => errors.push(error.message));
-    page.on("console", (message) => {
-      if (/MISSING_MESSAGE|IntlError/.test(message.text())) {
-        errors.push(message.text());
-      }
-    });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-
-    const frontend = page
-      .locator("#portfolio")
-      .getByRole("tab", { name: /^Frontend/ });
-    await frontend.click();
-    await expect(frontend).toHaveAttribute("aria-selected", "true");
-    await expect(page.locator("#portfolio-tab-panel-1")).toBeVisible();
     expect(errors).toEqual([]);
   });
 
@@ -172,47 +148,6 @@ test.describe("hydrated portfolio", () => {
       sizes,
       media: "(min-width: 64rem)",
     });
-  });
-
-  test("uses compositor properties for service micro-animations", async ({
-    page,
-  }) => {
-    await page.goto("/", { waitUntil: "load" });
-    await page.locator("#services").scrollIntoViewIfNeeded();
-
-    const properties = await page.evaluate(() => {
-      const names = new Set([
-        "bento-ring",
-        "bento-blink",
-        "bento-travel",
-        "bento-sweep",
-      ]);
-      return document.getAnimations().flatMap((animation) => {
-        if (
-          !(animation instanceof CSSAnimation) ||
-          !names.has(animation.animationName)
-        )
-          return [];
-        if (!(animation.effect instanceof KeyframeEffect)) return [];
-        return animation.effect
-          .getKeyframes()
-          .flatMap((frame) =>
-            Object.keys(frame).filter(
-              (key) =>
-                !["offset", "computedOffset", "easing", "composite"].includes(
-                  key,
-                ),
-            ),
-          );
-      });
-    });
-
-    expect(properties.length).toBeGreaterThan(0);
-    expect(
-      properties.every((property) =>
-        ["transform", "opacity"].includes(property),
-      ),
-    ).toBe(true);
   });
 
   test("limits the hero photo preload to desktop home visits", async ({

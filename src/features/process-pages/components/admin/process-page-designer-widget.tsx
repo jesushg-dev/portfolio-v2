@@ -826,9 +826,11 @@ function RolesEditor({
           addLabel={t("addChip")}
           onChange={(myRoles) => form.setValue(`${prefix}.myRoles`, myRoles)}
         />
-        <p className="text-muted-foreground mt-6 mb-3 text-sm">
-          {t("ecosystemRoles")}
-        </p>
+        <CanvasText
+          name={`${prefix}.ecosystemRolesLabel`}
+          placeholder={t("ecosystemRoles")}
+          className="text-muted-foreground mt-6 mb-3 text-sm font-semibold tracking-widest uppercase"
+        />
         <CanvasStringChips
           items={section.ecosystemRoles}
           placeholder={t("ecosystemRoles")}

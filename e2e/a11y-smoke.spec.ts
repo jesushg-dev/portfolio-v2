@@ -66,23 +66,3 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
     });
   }
 });
-
-test.describe("legacy process page redirects", () => {
-  const redirects = [
-    { from: "/how-i-use-ai", to: "/process/how-i-use-ai" },
-    { from: "/qa-collaboration", to: "/process/qa-collaboration" },
-    { from: "/es/como-uso-ia", to: "/es/proceso/how-i-use-ai" },
-    { from: "/es/colaboracion-qa", to: "/es/proceso/qa-collaboration" },
-    { from: "/nl/hoe-ik-ai-gebruik", to: "/nl/proces/how-i-use-ai" },
-    { from: "/nl/qa-samenwerking", to: "/nl/proces/qa-collaboration" },
-  ] as const;
-
-  for (const { from, to } of redirects) {
-    test(`301 ${from} → ${to}`, async ({ request }) => {
-      const response = await request.get(from, { maxRedirects: 0 });
-      expect(response.status()).toBe(301);
-      const location = response.headers().location ?? "";
-      expect(new URL(location, "http://127.0.0.1:3000").pathname).toBe(to);
-    });
-  }
-});

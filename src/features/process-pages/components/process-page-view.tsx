@@ -150,6 +150,7 @@ export function ProcessPageSection({
           description={section.description}
           myRolesLabel={section.myRolesLabel}
           myRoles={section.myRoles}
+          ecosystemRolesLabel={section.ecosystemRolesLabel}
           ecosystemRoles={section.ecosystemRoles}
           testingLabel={section.testingLabel}
           testingTags={section.testingTags}

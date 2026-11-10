@@ -1,5 +1,7 @@
 import type { Locale } from "@/i18n/config";
+import { getTranslations } from "next-intl/server";
 import SkillsTerminal from "@/features/home/components/skills/skills-terminal";
+import { ShowcaseSection, ShowcaseHeading } from "@/components/shared/showcase";
 import { api } from "@/trpc/server";
 
 interface SkillsProps {
@@ -7,6 +9,7 @@ interface SkillsProps {
 }
 
 export default async function Skills({ locale }: SkillsProps) {
+  const t = await getTranslations({ locale, namespace: "main.skills" });
   const skillsData = await api.portfolio.getSkills({ locale });
   const compactSkills = skillsData.map((s) => ({
     id: s.id,
@@ -18,10 +21,17 @@ export default async function Skills({ locale }: SkillsProps) {
   }));
 
   return (
-    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
-      <section className="relative mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
-        <SkillsTerminal initialSkills={compactSkills} />
-      </section>
-    </div>
+    <ShowcaseSection ariaLabelledBy="skills-heading">
+      <ShowcaseHeading
+        sectionId="skills"
+        eyebrow={t("subtitle")}
+        title={t("titleLead")}
+        titleGradient={t("titleGradient")}
+        description={t("description")}
+      />
+      <div className="w-full">
+        <SkillsTerminal initialSkills={compactSkills} showHeader={false} />
+      </div>
+    </ShowcaseSection>
   );
 }

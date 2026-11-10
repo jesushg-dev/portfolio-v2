@@ -10,12 +10,20 @@ jest.mock("@/i18n/routing", () => ({
     ...props
   }: {
     children: React.ReactNode;
-    href: string | { pathname: string };
-  }) => (
-    <a href={typeof href === "string" ? href : href.pathname} {...props}>
-      {children}
-    </a>
-  ),
+    href: string | { pathname: string; params?: Record<string, string> };
+  }) => {
+    let target = typeof href === "string" ? href : href.pathname;
+    if (typeof href === "object" && href.params) {
+      for (const [key, val] of Object.entries(href.params)) {
+        target = target.replace(`[${key}]`, val);
+      }
+    }
+    return (
+      <a href={target} {...props}>
+        {children}
+      </a>
+    );
+  },
 }));
 
 describe("ProjectsCatalogView", () => {
@@ -149,5 +157,29 @@ describe("ProjectsCatalogView", () => {
 
     expect(screen.getByText("Musa Ecommerce")).toBeInTheDocument();
     expect(screen.getByText("Tienda API")).toBeInTheDocument();
+  });
+
+  it("opens modal dialog on project click and supports navigation and closing", () => {
+    renderWithIntl(<ProjectsCatalogView initialProjects={mockProjects} />);
+
+    // Musa Ecommerce has a case study, so it renders as a direct link
+    const musaLink = screen.getByRole("link", { name: /musa ecommerce/i });
+    expect(musaLink).toHaveAttribute("href", "/projects/musa-ecommerce");
+
+    // Tienda API has no case study, so it opens the preview modal dialog
+    const projectCard = screen.getByRole("button", { name: /tienda api/i });
+    fireEvent.click(projectCard);
+
+    // Dialog should now be visible with project details
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveAttribute("aria-label", "Tienda API");
+
+    // Close button
+    const closeBtn = screen.getByRole("button", {
+      name: /close|sluiten|cerrar/i,
+    });
+    fireEvent.click(closeBtn);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

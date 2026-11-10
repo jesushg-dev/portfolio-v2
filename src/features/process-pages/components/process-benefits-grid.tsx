@@ -20,9 +20,9 @@ export function ProcessBenefitsGrid({
     <section
       id={id}
       aria-labelledby={processSectionHeadingId(id)}
-      className="bg-muted/50 px-6 py-20"
+      className="border-border/80 border-t py-20 md:py-28"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto w-full px-4 sm:px-6 lg:container lg:px-20">
         <ProcessReveal>
           <ProcessSectionHeader
             sectionId={id}
@@ -31,27 +31,21 @@ export function ProcessBenefitsGrid({
           />
         </ProcessReveal>
 
-        <ul className="grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <ProcessRevealItem
-                key={item.title}
-                index={index}
-                className="bg-card ring-border/60 rounded-2xl p-6 shadow-sm ring-1"
-              >
-                <div className="bg-primary/10 text-primary mb-4 flex size-11 items-center justify-center rounded-xl">
-                  <Icon aria-hidden className="size-5" />
-                </div>
-                <h3 className="text-foreground mb-2 text-lg font-bold">
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {item.description}
-                </p>
-              </ProcessRevealItem>
-            );
-          })}
+        <ul className="grid list-none grid-cols-1 gap-x-12 gap-y-14 md:grid-cols-3">
+          {items.map((item, index) => (
+            <ProcessRevealItem
+              key={item.title}
+              index={index}
+              className="border-border/80 border-t pt-5"
+            >
+              <h3 className="text-foreground text-lg font-semibold tracking-tight sm:text-xl">
+                {item.title}
+              </h3>
+              <p className="text-muted-foreground mt-2.5 text-sm leading-relaxed sm:text-base">
+                {item.description}
+              </p>
+            </ProcessRevealItem>
+          ))}
         </ul>
       </div>
     </section>

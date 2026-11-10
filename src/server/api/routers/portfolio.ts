@@ -1,4 +1,9 @@
+import {
+  resolveServiceVisualNodes,
+  serviceVisualTypeSchema,
+} from "@/features/services/lib/service-visual";
 import { z } from "zod";
+import { parseFaqItems } from "@/features/home/lib/faq-content";
 
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import {
@@ -328,6 +333,22 @@ export const portfolioRouter = createTRPCRouter({
       return projects.map(formatProjectListItem);
     }),
 
+  getFaqItems: publicProcedure
+    .input(z.object({ locale: LanguageCode }))
+    .query(async ({ ctx, input }) => {
+      if (!ctx.tenant?.userId) return [];
+      const header = await ctx.db.portfolioHeader.findUnique({
+        where: { userId: ctx.tenant.userId },
+        select: {
+          translations: {
+            where: { language: { code: input.locale } },
+            select: { faqItems: true },
+          },
+        },
+      });
+      return parseFaqItems(header?.translations[0]?.faqItems);
+    }),
+
   getSkills: publicProcedure
     .input(
       z.object({
@@ -642,6 +663,8 @@ export const portfolioRouter = createTRPCRouter({
       );
 
       const availabilityBadgeText = t("availabilityBadge");
+      const careerNextTitle = t("careerNextTitle").trim();
+      const careerNextDescription = t("careerNextDescription").trim();
 
       return {
         fullName: profile?.displayName?.trim() ?? header.fullName,
@@ -652,6 +675,13 @@ export const portfolioRouter = createTRPCRouter({
         heroSummary: t("heroSummary"),
         imageAlt: t("clientImageAlt"),
         availabilityBadge: availabilityBadgeText?.trim() || null,
+        careerNextStage:
+          header.availableForWork && careerNextTitle && careerNextDescription
+            ? {
+                title: careerNextTitle,
+                description: careerNextDescription,
+              }
+            : null,
       };
     }),
 
@@ -709,6 +739,7 @@ export const portfolioRouter = createTRPCRouter({
         where: { userId: tenantUserId, isActive: true },
         include: {
           ServiceTranslation: true,
+          ServiceSkill: { include: { Skill: true } },
         },
         orderBy: [{ order: "asc" }, { createdAt: "asc" }],
       });
@@ -721,6 +752,14 @@ export const portfolioRouter = createTRPCRouter({
           image: service.image,
           type: service.type,
           icon: service.icon ?? undefined,
+          visualType: serviceVisualTypeSchema
+            .catch("network")
+            .parse(service.visualType),
+          visualNodes: resolveServiceVisualNodes(
+            service.ServiceTranslation,
+            languages,
+            locale,
+          ),
           statsValue: service.statsValue ?? undefined,
           featured: service.featured,
           order: service.order,
@@ -728,6 +767,13 @@ export const portfolioRouter = createTRPCRouter({
           description: t("description"),
           badge: t("badge"),
           statsLabel: t("statsLabel"),
+          practicePoints: t("practicePoints")
+            .split(/\r?\n/)
+            .map((point) => point.trim())
+            .filter(Boolean),
+          technologies: (service.ServiceSkill ?? [])
+            .filter((entry) => entry.Skill.userId === tenantUserId)
+            .map((entry) => ({ id: entry.Skill.id, title: entry.Skill.title })),
         };
       });
     }),
@@ -852,7 +898,7 @@ export const portfolioRouter = createTRPCRouter({
       const locale = input.locale;
       const field = createLocalizedFieldResolver(languages, locale);
 
-      let experiences = await ctx.db.cvExperience.findMany({
+      const experiences = await ctx.db.cvExperience.findMany({
         where: { userId: tenantUserId, featuredOnHome: true },
         include: {
           translations: true,
@@ -860,53 +906,19 @@ export const portfolioRouter = createTRPCRouter({
             include: { skill: { select: { title: true } } },
           },
           responsibilities: {
+            where: { atsOnly: false },
             include: { translations: true },
             orderBy: { order: "asc" },
           },
         },
         orderBy: [{ order: "asc" }, { startDate: "desc" }],
+        take: input.limit,
       });
-
-      if (experiences.length === 0) {
-        experiences = await ctx.db.cvExperience.findMany({
-          where: { userId: tenantUserId },
-          include: {
-            translations: true,
-            CvExperienceSkill: {
-              include: { skill: { select: { title: true } } },
-            },
-            responsibilities: {
-              include: { translations: true },
-              orderBy: { order: "asc" },
-            },
-          },
-          orderBy: [{ order: "asc" }, { startDate: "desc" }],
-          take: input.limit,
-        });
-      }
 
       return experiences.map((experience) => {
         const expT = field.for(experience.translations);
         const relatedSkillTitles =
           experience.CvExperienceSkill?.map((s) => s.skill.title) ?? [];
-
-        const parsedMetrics = (() => {
-          if (!experience.skills) return [];
-          try {
-            const parsed = JSON.parse(experience.skills) as unknown;
-            if (Array.isArray(parsed)) return parsed as string[];
-            if (typeof parsed === "object" && parsed !== null) {
-              const obj = parsed as Record<string, string[]>;
-              return obj[locale] ?? obj.es ?? obj.en ?? [];
-            }
-          } catch {
-            return experience.skills
-              .split(",")
-              .map((s) => s.trim())
-              .filter(Boolean);
-          }
-          return [];
-        })();
 
         return {
           id: experience.id,
@@ -924,7 +936,6 @@ export const portfolioRouter = createTRPCRouter({
           ),
           role: expT("role"),
           location: expT("location"),
-          metrics: parsedMetrics,
           skills: relatedSkillTitles,
           responsibilities: experience.responsibilities.map((responsibility) =>
             field(responsibility.translations, "text"),

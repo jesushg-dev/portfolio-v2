@@ -20,24 +20,27 @@ function cityLabel(place: string): string {
   return city && city.length > 0 ? city : place;
 }
 
-function ContactGlobeContent({ location }: { location: OwnerMapLocation }) {
+interface ContactGlobeProps {
+  location: OwnerMapLocation;
+  timezone?: string | null;
+}
+
+function ContactGlobeContent({ location, timezone }: ContactGlobeProps) {
   const t = useTranslations("main.contact.globe");
   const locale = useLocale();
   const { location: visitor, status } = useVisitorLocation();
   const [timeStr, setTimeStr] = useState<string>("");
 
   useEffect(() => {
+    if (!timezone) return;
     const updateTime = () => {
       try {
         const now = new Date();
-        const formatted = new Intl.DateTimeFormat(
-          locale === "es" ? "es-NI" : "en-US",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-            timeZone: "America/Managua",
-          },
-        ).format(now);
+        const formatted = new Intl.DateTimeFormat(locale, {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: timezone,
+        }).format(now);
         setTimeStr(formatted);
       } catch {
         // Fallback gracefully
@@ -46,7 +49,7 @@ function ContactGlobeContent({ location }: { location: OwnerMapLocation }) {
     updateTime();
     const interval = setInterval(updateTime, 30000);
     return () => clearInterval(interval);
-  }, [locale]);
+  }, [locale, timezone]);
 
   const hasVisitor = status === "success" && visitor != null;
   const origin = hasVisitor
@@ -62,17 +65,17 @@ function ContactGlobeContent({ location }: { location: OwnerMapLocation }) {
 
   return (
     <div className="flex h-full w-full flex-col gap-3.5">
-      <div className="border-border/80 bg-muted/20 relative min-h-64 flex-1 overflow-hidden rounded-2xl border shadow-xs">
+      <div className="border-border/40 bg-card/20 relative min-h-64 flex-1 overflow-hidden rounded-[2rem] border backdrop-blur-lg">
         {/* Floating location tag */}
-        <div className="border-border/60 bg-card/90 text-card-foreground pointer-events-none absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold shadow-xs backdrop-blur-md">
+        <div className="border-border/50 bg-background/55 text-foreground pointer-events-none absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium backdrop-blur-xl">
           <MapPin className="text-primary size-3.5" />
           <span>{location.label}</span>
         </div>
 
         {/* Floating live local time badge */}
-        {timeStr ? (
-          <div className="border-border/60 bg-card/90 text-card-foreground pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold shadow-xs backdrop-blur-md">
-            <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
+        {timezone && timeStr ? (
+          <div className="border-border/50 bg-background/55 text-foreground pointer-events-none absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium backdrop-blur-xl">
+            <span className="bg-primary/70 size-1.5 rounded-full" />
             <span>
               {t("localTime")}{" "}
               <b className="font-mono tabular-nums">{timeStr}</b>
@@ -106,10 +109,14 @@ function ContactGlobeContent({ location }: { location: OwnerMapLocation }) {
   );
 }
 
-export function ContactGlobe({ location }: { location: OwnerMapLocation }) {
+export function ContactGlobe({ location, timezone }: ContactGlobeProps) {
   return (
     <TRPCReactProvider>
-      <ContactGlobeContent location={location} />
+      <ContactGlobeContent
+        key={`${location.lat}:${location.lon}:${timezone ?? ""}`}
+        location={location}
+        timezone={timezone}
+      />
     </TRPCReactProvider>
   );
 }

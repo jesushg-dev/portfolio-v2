@@ -14,6 +14,7 @@ import {
   nowHeadingClassName,
   nowSectionClassName,
 } from "./now-layout";
+import { Link } from "@/i18n/routing";
 
 function ActivityCover({
   src,
@@ -27,14 +28,14 @@ function ActivityCover({
   return (
     <NowHover
       cover
-      className="bg-muted relative aspect-[2/3] w-14 shrink-0 overflow-hidden rounded-lg shadow-lg"
+      className="bg-muted relative aspect-[2/3] w-16 shrink-0 overflow-hidden rounded-xl shadow-md"
     >
       {src ? (
         <MediaImage
           src={src}
           alt={title}
           fill
-          sizes="3.5rem"
+          sizes="4rem"
           className="object-cover"
         />
       ) : (
@@ -58,15 +59,20 @@ export async function NowActivity({
   locale: Locale;
 }) {
   const t = await getTranslations({ locale, namespace: "main.now.activity" });
+
   return (
     <>
+      {/* Away From The Keyboard */}
       <section className={nowSectionClassName}>
         <div className={nowContainerClassName}>
           <ProcessReveal>
             <h2 className={nowHeadingClassName}>{t("awayHeading")}</h2>
           </ProcessReveal>
-          <div className="border-border mt-14 grid border-t md:grid-cols-3">
-            <div className="border-border min-w-0 border-b py-8 md:border-r md:border-b-0 md:pr-8">
+
+          {/* 3 Border-Divided Columns from Redesign Prototype */}
+          <div className="border-border/80 divide-border/80 mt-14 grid grid-cols-1 divide-y border-t md:grid-cols-3 md:divide-x md:divide-y-0">
+            {/* Listening / Spotify */}
+            <div className="flex min-w-0 items-center justify-between gap-4 py-8 first:pl-0 last:pr-0 md:px-8">
               <NowLastPlayed
                 headingPlaying={t("nowPlaying")}
                 headingLast={t("lastPlayed")}
@@ -74,31 +80,29 @@ export async function NowActivity({
                 idleSubtitle={t("spotifyIdleSubtitle")}
               />
             </div>
-            <div className="border-border flex min-w-0 items-center justify-between gap-5 border-b py-8 md:border-r md:border-b-0 md:px-8">
-              <div className="min-w-0">
-                <h3 className="text-muted-foreground text-sm">
+
+            {/* Reading */}
+            <div className="flex min-w-0 items-center justify-between gap-4 py-8 first:pl-0 last:pr-0 md:px-8">
+              <div className="min-w-0 flex-1">
+                <span className="text-muted-foreground block text-xs font-semibold tracking-wider uppercase">
                   {t("reading")}
-                </h3>
-                <p className="text-foreground mt-2 text-xl leading-tight font-semibold tracking-tight">
+                </span>
+                <p className="text-foreground mt-2 truncate text-xl font-semibold tracking-tight">
                   {data.readingTitle ?? t("noReading")}
                 </p>
                 {data.readingAuthors ? (
-                  <p className="text-muted-foreground mt-1 text-sm">
+                  <p className="text-muted-foreground mt-1 truncate text-sm">
                     {data.readingAuthors}
+                    {data.readingTitle ? ` · ${data.readingProgress}%` : ""}
                   </p>
                 ) : null}
                 {data.readingTitle ? (
-                  <>
-                    <p className="text-muted-foreground mt-1 text-sm tabular-nums">
-                      {data.readingProgress}%
-                    </p>
-                    <div className="bg-border mt-4 h-0.5 max-w-48 overflow-hidden rounded-full">
-                      <div
-                        className="bg-primary h-full"
-                        style={{ width: String(data.readingProgress) + "%" }}
-                      />
-                    </div>
-                  </>
+                  <div className="bg-border/60 mt-3 h-1 w-full max-w-36 overflow-hidden rounded-full">
+                    <div
+                      className="bg-primary h-full rounded-full transition-all"
+                      style={{ width: `${data.readingProgress}%` }}
+                    />
+                  </div>
                 ) : null}
               </div>
               <ActivityCover
@@ -107,23 +111,29 @@ export async function NowActivity({
                 kind="book"
               />
             </div>
-            <div className="flex min-w-0 items-center justify-between gap-5 py-8 md:pl-8">
-              <div className="min-w-0">
-                <h3 className="text-muted-foreground text-sm">
+
+            {/* Watched */}
+            <div className="flex min-w-0 items-center justify-between gap-4 py-8 first:pl-0 last:pr-0 md:px-8">
+              <div className="min-w-0 flex-1">
+                <span className="text-muted-foreground block text-xs font-semibold tracking-wider uppercase">
                   {t("lastWatched")}
-                </h3>
-                <p className="text-foreground mt-2 text-xl leading-tight font-semibold tracking-tight">
+                </span>
+                <p className="text-foreground mt-2 truncate text-xl font-semibold tracking-tight">
                   {data.watchedTitle ?? t("noWatching")}
                 </p>
                 {data.watchedRating > 0 ? (
-                  <p className="text-primary mt-2 text-sm tracking-widest">
+                  <p className="text-primary mt-1 text-sm tracking-widest">
                     <span aria-hidden>
                       {"★".repeat(Math.min(5, data.watchedRating))}
                       {"☆".repeat(Math.max(0, 5 - data.watchedRating))}
                     </span>
                     <span className="sr-only">{data.watchedRating}/5</span>
                   </p>
-                ) : null}
+                ) : (
+                  <p className="text-muted-foreground text-sm">
+                    {t("noWatching")}
+                  </p>
+                )}
               </div>
               <ActivityCover
                 src={data.watchedCoverUrl}
@@ -132,9 +142,10 @@ export async function NowActivity({
               />
             </div>
           </div>
+
           {data.photoUrls.length ? (
             <div className="mt-14">
-              <h3 className="text-muted-foreground mb-5 text-sm">
+              <h3 className="text-muted-foreground mb-5 text-sm font-semibold tracking-wider uppercase">
                 {t("latestPhotos")}
               </h3>
               <NowPhotoStrip
@@ -145,17 +156,52 @@ export async function NowActivity({
           ) : null}
         </div>
       </section>
+
+      {/* Shipping, in public */}
       <section className={nowSectionClassName}>
         <div className={nowContainerClassName}>
           <ProcessReveal>
-            <h2 className={nowHeadingClassName}>{t("shippingHeading")}</h2>
+            <div className="flex flex-col gap-2">
+              <h2 className={nowHeadingClassName}>{t("shippingHeading")}</h2>
+              <p className="text-muted-foreground text-base">
+                {t("shippingDescription")}
+              </p>
+            </div>
           </ProcessReveal>
-          <div className="mt-12 max-w-xl">
+          <div className="mt-8 max-w-xl">
             <NowGithubActivity activity={data.githubActivity} />
           </div>
-          <div className="mt-16 md:mt-20">
+          <div className="mt-12 md:mt-16">
             <NowContribGraph calendar={data.githubContributions} />
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section from Prototype */}
+      <section className="border-border/80 border-t bg-[radial-gradient(ellipse_60%_70%_at_50%_100%,color-mix(in_srgb,var(--primary)_22%,transparent),transparent_70%)] py-28 text-center">
+        <div className={nowContainerClassName}>
+          <ProcessReveal>
+            <h2 className="text-foreground mx-auto max-w-xl text-3xl leading-tight font-bold tracking-tight sm:text-4xl md:text-5xl">
+              {t("collaborateTitle")}
+            </h2>
+            <p className="text-muted-foreground mx-auto mt-4 mb-8 max-w-md text-base leading-relaxed sm:text-lg">
+              {t("collaborateSubtitle")}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/schedule"
+                className="bg-primary text-primary-foreground inline-flex min-h-11 items-center justify-center rounded-full px-8 py-3 text-sm font-medium transition-all hover:brightness-110"
+              >
+                {t("scheduleCall")}
+              </Link>
+              <a
+                href="mailto:jesus.hernandez@jesushg.com"
+                className="border-border text-foreground hover:bg-muted/40 inline-flex min-h-11 items-center justify-center rounded-full border bg-transparent px-8 py-3 text-sm font-medium transition-all"
+              >
+                {t("sendEmail")}
+              </a>
+            </div>
+          </ProcessReveal>
         </div>
       </section>
     </>

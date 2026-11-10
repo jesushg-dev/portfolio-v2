@@ -56,24 +56,34 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
       className="flex min-h-0 flex-1 flex-col gap-6"
     >
       <TabsList
+        variant="line"
         aria-label={t("tabsLabel")}
-        className="max-w-full overflow-x-auto overflow-y-hidden"
+        className="border-border/70 w-full justify-start overflow-x-auto overflow-y-hidden border-b"
       >
-        <TabsTrigger value="EVERYDAY" className="gap-1.5">
+        <TabsTrigger value="EVERYDAY" className="gap-2">
           <Layers className="size-4" />
-          {t("tabs.everyday")}
+          <span>{t("tabs.everyday")}</span>
+          <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums">
+            {lists.EVERYDAY.totalCount}
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="SOFTWARE" className="gap-1.5">
+        <TabsTrigger value="SOFTWARE" className="gap-2">
           <Monitor className="size-4" />
-          {t("tabs.software")}
+          <span>{t("tabs.software")}</span>
+          <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums">
+            {lists.SOFTWARE.totalCount}
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="BROWSER" className="gap-1.5">
+        <TabsTrigger value="BROWSER" className="gap-2">
           <Globe className="size-4" />
-          {t("tabs.browser")}
+          <span>{t("tabs.browser")}</span>
+          <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums">
+            {lists.BROWSER.totalCount}
+          </span>
         </TabsTrigger>
         <TabsTrigger value="SETTINGS" className="gap-1.5">
           <Settings className="size-4" />
-          {t("tabs.settings")}
+          <span>{t("tabs.settings")}</span>
         </TabsTrigger>
       </TabsList>
 

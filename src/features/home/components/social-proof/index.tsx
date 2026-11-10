@@ -1,13 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FC } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowRightIcon, ChevronDown, ChevronUp, Quote } from "lucide-react";
-
-import { Link } from "@/i18n/routing";
-import { MediaImage } from "@/components/shared/media-image";
-import { usePublicCvVisible } from "@/components/app-layout/public-cv-visible";
-import { cn } from "@/lib/utils";
+import { ShowcaseHeading, ShowcaseSection } from "@/components/shared/showcase";
+import type {
+  SoftSkillBentoItem,
+  SoftSkillMetric,
+} from "@/features/home/components/soft-skills/soft-skills-bento";
 
 export interface TestimonialItem {
   id: string;
@@ -18,410 +16,163 @@ export interface TestimonialItem {
   linkedInUrl?: string | null;
 }
 
-interface SocialProofStats {
-  yearsExperience: number;
-  projectsCount: number;
-  certificationsCount: number;
-  engineersMentored: number;
-}
-
 interface SocialProofProps {
-  stats: SocialProofStats;
   testimonials: TestimonialItem[];
+  proofItems?: SoftSkillBentoItem[];
+  metrics?: SoftSkillMetric[];
 }
 
-function AuthorName({
-  author,
-  linkedInUrl,
-}: {
-  author: string;
-  linkedInUrl?: string | null;
-}) {
-  if (!linkedInUrl) {
-    return (
-      <b className="text-foreground block text-base font-bold">{author}</b>
-    );
-  }
-
+function ProofMetric({ metric }: { metric?: SoftSkillMetric }) {
+  if (!metric) return null;
   return (
-    <a
-      href={linkedInUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-foreground hover:text-primary inline-flex min-h-11 items-center text-base font-bold underline-offset-2 transition-colors hover:underline"
-    >
-      {author}
-    </a>
-  );
-}
-
-function SocialProofContent({
-  stats: statsData,
-  items,
-}: {
-  stats: SocialProofStats;
-  items: TestimonialItem[];
-}) {
-  const t = useTranslations("main.socialProof");
-  const cvPublic = usePublicCvVisible();
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const hasItems = items.length > 0;
-  const activeTestimonial = hasItems
-    ? items[currentIndex % items.length]
-    : null;
-
-  const handleNext = useCallback(() => {
-    if (items.length <= 1) return;
-    setIsExpanded(false);
-    setCurrentIndex((prev) => (prev + 1) % items.length);
-  }, [items.length]);
-
-  const handlePrev = useCallback(() => {
-    if (items.length <= 1) return;
-    setIsExpanded(false);
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  }, [items.length]);
-
-  // Autoplay rotation every 8 seconds if multiple testimonials and not expanded or hovered
-  useEffect(() => {
-    if (items.length <= 1 || isExpanded || isPaused) return;
-    const interval = setInterval(handleNext, 8000);
-    return () => clearInterval(interval);
-  }, [handleNext, isExpanded, isPaused, items.length]);
-
-  const initials = activeTestimonial?.author
-    ? activeTestimonial.author
-        .split(" ")
-        .slice(0, 2)
-        .map((w) => w[0])
-        .join("")
-        .toUpperCase()
-    : "TL";
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
-    e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
-  };
-
-  const handlePointerLeave = (e: React.PointerEvent<HTMLElement>) => {
-    e.currentTarget.style.removeProperty("--x");
-    e.currentTarget.style.removeProperty("--y");
-    setIsPaused(false);
-  };
-
-  return (
-    <div className="bg-card relative w-full overflow-hidden">
-      <section
-        id="testimonials"
-        aria-label={t("title", { count: items.length })}
-        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
-      >
-        {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-primary text-sm font-semibold tracking-wide sm:text-base">
-            {t("eyebrow")}
-          </p>
-          <h2 className="text-foreground mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
-            {t("title", { count: items.length })}
-          </h2>
-          <p className="text-muted-foreground mt-2.5 text-sm leading-relaxed sm:mt-3 sm:text-base">
-            {t("subtitle")}
-          </p>
-        </div>
-
-        {/* 12-Column Bento Layout */}
-        <div className="mt-8 grid items-stretch gap-4 sm:mt-10 sm:gap-5 md:mt-12 md:grid-cols-12">
-          {/* Left Column: Testimonial Figure Card */}
-          <div className="flex flex-col md:col-span-7">
-            {activeTestimonial ? (
-              <figure
-                onPointerMove={handlePointerMove}
-                onPointerLeave={handlePointerLeave}
-                onPointerEnter={() => setIsPaused(true)}
-                className="b-card-glow group border-border/80 bg-card hover:border-primary/30 relative flex min-h-[29rem] flex-1 flex-col justify-between overflow-hidden rounded-[1.75rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-lg sm:min-h-0 sm:p-7 md:p-8"
-              >
-                {/* Large Background Watermark Quote Mark */}
-                <svg
-                  className="text-primary/5 pointer-events-none absolute -top-3 -right-3 size-28 select-none sm:size-36"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M7.2 6C4.9 6 3 7.9 3 10.2V18h7v-7.2H6.4c0-1.4 1-2.4 2.3-2.5L7.2 6zm9 0C13.9 6 12 7.9 12 10.2V18h7v-7.2h-3.6c0-1.4 1-2.4 2.3-2.5L16.2 6z" />
-                </svg>
-
-                {/* Top Section: Icon Tile + Blockquote with Read More Toggle */}
-                <div>
-                  {/* Branded Icon Tile */}
-                  <span className="border-primary/15 bg-primary/8 text-primary relative z-10 flex size-10 shrink-0 items-center justify-center rounded-xl border shadow-xs">
-                    <Quote className="size-4.5" aria-hidden="true" />
-                  </span>
-
-                  {/* Blockquote with Key Transition */}
-                  <div
-                    key={activeTestimonial.id}
-                    className="animate-in fade-in duration-200"
-                  >
-                    <blockquote
-                      className={cn(
-                        "text-foreground relative mt-4 text-base leading-relaxed font-medium transition-all duration-300 sm:mt-5 sm:text-lg sm:leading-8",
-                        !isExpanded && "line-clamp-4 sm:line-clamp-none",
-                      )}
-                    >
-                      & ldquo;{activeTestimonial.quote}&rdquo;
-                    </blockquote>
-
-                    {/* Read More / Read Less Toggle for Mobile */}
-                    {activeTestimonial.quote.length > 140 ? (
-                      <button
-                        type="button"
-                        onClick={() => setIsExpanded((prev) => !prev)}
-                        aria-expanded={isExpanded}
-                        className="text-primary hover:text-primary/80 mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 py-2 text-sm font-semibold transition-colors sm:hidden"
-                      >
-                        <span>
-                          {isExpanded ? t("readLess") : t("readMore")}
-                        </span>
-                        {isExpanded ? (
-                          <ChevronUp className="size-4" aria-hidden="true" />
-                        ) : (
-                          <ChevronDown className="size-4" aria-hidden="true" />
-                        )}
-                      </button>
-                    ) : null}
-                  </div>
-                </div>
-
-                {/* Bottom Section: Author Info, Controls & Hire CTA */}
-                <div>
-                  {/* Figcaption with Author Info & Slider Controls */}
-                  <figcaption className="border-border/60 relative mt-6 flex flex-col gap-3.5 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
-                    {/* Author & Avatar (Full role, wraps naturally without clipping) */}
-                    <div className="flex min-w-0 items-center gap-3">
-                      {/* Avatar */}
-                      {activeTestimonial.avatarUrl ? (
-                        <div className="border-border/60 relative size-10 shrink-0 overflow-hidden rounded-full border shadow-xs sm:size-11">
-                          <MediaImage
-                            src={activeTestimonial.avatarUrl}
-                            alt={activeTestimonial.author}
-                            fill
-                            className="object-cover"
-                            sizes="2.75rem"
-                          />
-                        </div>
-                      ) : (
-                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold sm:size-11">
-                          {initials}
-                        </span>
-                      )}
-
-                      {/* Name and Role */}
-                      <div className="min-w-0">
-                        <AuthorName
-                          author={activeTestimonial.author}
-                          linkedInUrl={activeTestimonial.linkedInUrl}
-                        />
-                        {activeTestimonial.role ? (
-                          <span className="text-muted-foreground block text-sm leading-normal">
-                            {activeTestimonial.role}
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    {/* Slider Controls */}
-                    {items.length > 1 ? (
-                      <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
-                        <div
-                          className="flex items-center gap-1"
-                          aria-label="Pagination"
-                        >
-                          {items.map((_, idx) => (
-                            <button
-                              key={idx}
-                              type="button"
-                              aria-label={`Go to slide ${idx + 1}`}
-                              onClick={() => {
-                                setIsExpanded(false);
-                                setCurrentIndex(idx);
-                              }}
-                              className="focus-visible:ring-ring flex size-11 cursor-pointer items-center justify-center rounded-full p-2 transition-transform focus-visible:ring-2 focus-visible:outline-none"
-                            >
-                              <span
-                                className={cn(
-                                  "h-1.5 rounded-full transition-all duration-300",
-                                  idx === currentIndex % items.length
-                                    ? "bg-primary w-6"
-                                    : "bg-muted-foreground/40 hover:bg-muted-foreground/60 w-1.5",
-                                )}
-                              />
-                            </button>
-                          ))}
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            aria-label="Previous testimonial"
-                            onClick={handlePrev}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
-                          >
-                            ‹
-                          </button>
-                          <button
-                            type="button"
-                            aria-label="Next testimonial"
-                            onClick={handleNext}
-                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-11 cursor-pointer items-center justify-center rounded-full border text-base shadow-2xs transition-colors"
-                          >
-                            ›
-                          </button>
-                        </div>
-                      </div>
-                    ) : null}
-                  </figcaption>
-
-                  {/* Hire Me CTA Button */}
-                  <a
-                    href="#contact"
-                    id="hire-me-cta"
-                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-sm font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6"
-                  >
-                    {t("cta")}
-                    <span className="bg-primary-foreground text-primary flex size-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
-                      <ArrowRightIcon className="size-3.5" />
-                    </span>
-                  </a>
-                </div>
-              </figure>
-            ) : null}
-          </div>
-
-          {/* Right Column: 3 Bento Stat Cards */}
-          <div className="flex flex-col justify-between gap-3.5 sm:gap-4 md:col-span-5">
-            {/* Stat Card 1: Mentored */}
-            <div
-              onPointerMove={handlePointerMove}
-              onPointerLeave={handlePointerLeave}
-              className="b-card-glow group border-border/80 bg-card hover:border-primary/40 relative flex items-center justify-between gap-4 rounded-2xl border p-4 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
-            >
-              <div>
-                <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-                  {statsData.engineersMentored}
-                </p>
-                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
-                  {t("stats.engineersMentored.label")}
-                </p>
-              </div>
-
-              {/* 4x2 Popping Squares Grid Visual */}
-              <div
-                className="grid grid-cols-4 gap-1 sm:gap-1.25"
-                aria-hidden="true"
-              >
-                {[0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1].map((delay, i) => (
-                  <span
-                    key={i}
-                    style={{ animationDelay: `${delay}s` }}
-                    className="bento-pop size-3 rounded-[0.25rem] sm:size-3.5"
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Stat Card 2: Projects */}
-            <a
-              href="#portfolio"
-              onPointerMove={handlePointerMove}
-              onPointerLeave={handlePointerLeave}
-              className="b-card-glow group border-border/80 bg-card hover:border-primary/40 relative flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
-            >
-              <div>
-                <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-                  {statsData?.projectsCount ?? 19}+
-                </p>
-                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
-                  {t("stats.projects.label")}
-                </p>
-              </div>
-
-              {/* Rising Bars Chart Visual */}
-              <div
-                className="flex h-11 items-end gap-1 sm:h-12 sm:gap-1.25"
-                aria-hidden="true"
-              >
-                {[
-                  { height: "30%", delay: "0s", color: "bg-primary/20" },
-                  { height: "45%", delay: "0.1s", color: "bg-primary/30" },
-                  { height: "55%", delay: "0.2s", color: "bg-primary/45" },
-                  { height: "72%", delay: "0.3s", color: "bg-primary/60" },
-                  { height: "85%", delay: "0.4s", color: "bg-primary/80" },
-                  { height: "100%", delay: "0.5s", color: "bg-primary" },
-                ].map((bar, i) => (
-                  <span
-                    key={i}
-                    style={{ height: bar.height, animationDelay: bar.delay }}
-                    className={cn(
-                      "bento-bar w-2 rounded-t-sm sm:w-2.5",
-                      bar.color,
-                    )}
-                  />
-                ))}
-              </div>
-            </a>
-
-            {/* Stat Card 3: Years of Experience */}
-            <Link
-              href={
-                cvPublic
-                  ? { pathname: "/curriculum-vitae" }
-                  : { pathname: "/", hash: "#experience" }
-              }
-              onPointerMove={handlePointerMove}
-              onPointerLeave={handlePointerLeave}
-              className="b-card-glow group border-border/80 bg-card hover:border-primary/40 relative flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
-            >
-              <div>
-                <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-                  {statsData?.yearsExperience ?? 6}+
-                </p>
-                <p className="text-muted-foreground mt-0.5 text-sm font-medium">
-                  {t("stats.experience.label")}
-                </p>
-              </div>
-
-              {/* Milestone Progress Track + Glowing Current Node Visual */}
-              <div
-                className="relative flex w-20 items-center justify-between sm:w-24"
-                aria-hidden="true"
-              >
-                <span className="bg-border/60 absolute inset-x-1 top-1/2 h-0.5 -translate-y-1/2" />
-                <span className="bg-primary/25 relative size-2 rounded-full" />
-                <span className="bg-primary/40 relative size-2 rounded-full" />
-                <span className="bg-primary/60 relative size-2 rounded-full" />
-                <span className="bg-primary/80 relative size-2 rounded-full" />
-                <span className="a-ring bg-primary ring-card relative size-3 rounded-full shadow-xs ring-2" />
-              </div>
-            </Link>
-
-            {/* Note below cards */}
-            <p className="text-muted-foreground px-2 text-center text-sm">
-              {t("statsNote")}
-            </p>
-          </div>
-        </div>
-      </section>
+    <div className="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8">
+      <strong className="text-primary text-4xl font-bold tracking-tight whitespace-nowrap sm:text-5xl">
+        {metric.value}
+      </strong>
+      {metric.label ? (
+        <span className="text-muted-foreground min-w-0 text-sm leading-relaxed">
+          {metric.label}
+        </span>
+      ) : null}
     </div>
   );
 }
 
-const SocialProof: FC<SocialProofProps> = ({ stats, testimonials }) => (
-  <SocialProofContent stats={stats} items={testimonials} />
-);
+function Attribution({ item }: { item: TestimonialItem }) {
+  let href: string | null = null;
+  try {
+    const url = new URL(item.linkedInUrl ?? "");
+    if (["http:", "https:"].includes(url.protocol)) href = url.href;
+  } catch {}
 
-export default SocialProof;
+  return (
+    <figcaption className="text-muted-foreground mt-4 text-sm leading-relaxed">
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-foreground hover:text-primary inline-flex min-h-11 items-center font-semibold hover:underline"
+        >
+          {item.author}
+        </a>
+      ) : (
+        <span className="text-foreground font-semibold">{item.author}</span>
+      )}
+      {item.role ? <span> · {item.role}</span> : null}
+    </figcaption>
+  );
+}
+
+function Quote({ item }: { item: TestimonialItem }) {
+  return (
+    <figure className="mt-5">
+      <blockquote className="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        “{item.quote}”
+      </blockquote>
+      <Attribution item={item} />
+    </figure>
+  );
+}
+
+function WorkingCard({
+  eyebrow,
+  title,
+  quote,
+  description,
+  metric,
+  wide = false,
+  placeholder = false,
+}: {
+  eyebrow: string;
+  title: string;
+  quote?: TestimonialItem;
+  description?: string;
+  metric?: SoftSkillMetric;
+  wide?: boolean;
+  placeholder?: boolean;
+}) {
+  return (
+    <li className={wide ? "md:col-span-2 lg:col-span-2" : ""}>
+      <article className="bg-card flex h-full flex-col rounded-[2rem] p-6 sm:p-10">
+        <p className="text-muted-foreground font-mono text-sm tracking-widest uppercase">
+          {eyebrow}
+        </p>
+        <h3 className="text-foreground mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
+          {title}
+        </h3>
+        {quote && !placeholder ? (
+          <Quote item={quote} />
+        ) : description ? (
+          <p
+            className={
+              placeholder
+                ? "text-muted-foreground mt-5 text-base leading-relaxed italic opacity-80 sm:text-lg"
+                : "text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg"
+            }
+          >
+            {description}
+          </p>
+        ) : null}
+        <ProofMetric metric={metric} />
+      </article>
+    </li>
+  );
+}
+
+export default function SocialProof({
+  testimonials,
+  proofItems = [],
+  metrics = [],
+}: SocialProofProps) {
+  const t = useTranslations("main.socialProof");
+  const published = testimonials.filter(
+    (item) => item.author.trim().length > 0,
+  );
+  const placeholder = testimonials.find(
+    (item) => item.author.trim().length === 0,
+  );
+  if (published.length === 0 && proofItems.length === 0) return null;
+
+  return (
+    <ShowcaseSection id="testimonials" ariaLabelledBy="testimonials-heading">
+      <ShowcaseHeading
+        sectionId="testimonials"
+        title={t("titleLead")}
+        titleGradient={t("titleGradient")}
+        description={t("subtitle")}
+      />
+      <ul className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <WorkingCard
+          wide
+          eyebrow={t("cards.ownership.eyebrow")}
+          title={t("cards.ownership.title")}
+          quote={published[0]}
+          description={proofItems[0]?.description}
+          metric={metrics[0]}
+        />
+        <WorkingCard
+          eyebrow={t("cards.delivery.eyebrow")}
+          title={t("cards.delivery.title")}
+          description={proofItems[0]?.description}
+          metric={metrics[1]}
+        />
+        <WorkingCard
+          eyebrow={t("cards.growing.eyebrow")}
+          title={t("cards.growing.title")}
+          description={placeholder?.quote ?? proofItems[1]?.description}
+          placeholder={Boolean(placeholder)}
+          metric={metrics[2]}
+        />
+        <WorkingCard
+          wide
+          eyebrow={t("cards.judgment.eyebrow")}
+          title={t("cards.judgment.title")}
+          quote={published[1]}
+          description={proofItems[2]?.description}
+          metric={metrics[3]}
+        />
+      </ul>
+    </ShowcaseSection>
+  );
+}

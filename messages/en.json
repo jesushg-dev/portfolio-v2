@@ -250,12 +250,12 @@
     "uploadthing": {
       "title": "UploadThing Storage Credentials",
       "description": "Configure custom UploadThing credentials for file uploads.",
-      "tokenLabel": "Secret Token",
-      "tokenPlaceholder": "UploadThing Secret Token",
-      "appIdLabel": "App ID (Optional)",
-      "appIdPlaceholder": "UploadThing App ID",
-      "secretLabel": "Secret Key (Optional)",
-      "secretPlaceholder": "UploadThing Secret Key",
+      "tokenLabel": "UploadThing Token",
+      "tokenPlaceholder": "Paste your UPLOADTHING_TOKEN (starts with eyJ...)",
+      "testButton": "Test Connection",
+      "testSuccess": "UploadThing connection verified successfully!",
+      "testFailed": "Failed to authenticate with UploadThing. Please verify your token.",
+      "missingTokenToTest": "Please enter a token to test the connection.",
       "saveButton": "Save Storage Credentials",
       "saveSuccess": "UploadThing credentials saved successfully!",
       "requiredTitle": "File storage not connected",
@@ -295,9 +295,9 @@
     }
   },
   "certification": {
-    "title": "Certificates",
-    "subtitle": "Mastery in Diverse Skills",
-    "description": "Empowering projects and ready to take on new challenges!",
+    "title": "All certificates",
+    "subtitle": "Master of multiple skills",
+    "description": "Official certificates and completed programs validating my expertise in frontend, backend, security, and software development.",
     "pagination": {
       "loading": "Loading...",
       "loadMore": "Load More"
@@ -341,15 +341,16 @@
     },
     "catalog": {
       "backToPortfolio": "Back to portfolio",
-      "pageTitle": "All Certifications",
-      "pageSubtitle": "Official credentials and completed programs validating hands-on expertise across frontend, backend, cybersecurity, and engineering practices.",
+      "pageTitle": "All certificates",
+      "pageSubtitle": "Official certificates and completed programs validating my expertise in frontend, backend, security, and software development.",
       "searchPlaceholder": "Search by title, technology, or issuer…",
       "searchLabel": "Search certificates or technologies",
       "sortLabel": "Sort by",
       "sorts": {
         "newest": "Newest first",
         "name": "Name (A–Z)",
-        "issuer": "Issuer (A–Z)"
+        "issuer": "Issuer (A–Z)",
+        "oldest": "Oldest first"
       },
       "issuerLabel": "Issuer / Institution",
       "techLabel": "Technology",
@@ -364,7 +365,12 @@
       "preview": "Preview",
       "verify": "Verify credential",
       "credentialId": "Credential ID",
-      "closeModal": "Close"
+      "closeModal": "Close",
+      "moreFilters": "More filters",
+      "previous": "Previous",
+      "next": "Next",
+      "copyId": "Copy ID",
+      "idCopied": "ID copied!"
     }
   },
   "curriculum": {
@@ -827,6 +833,12 @@
       "availableForOpportunities": "Available for new opportunities",
       "scheduleCall": "Schedule a call",
       "scheduleCallAria": "Schedule a call — go to contact section",
+      "atAGlance": "At a glance",
+      "availability": "Availability",
+      "immediate": "Immediate",
+      "seeProjects": "See projects",
+      "getInTouch": "Get in touch",
+      "openToWork": "Open to work · Remote or Managua",
       "empty": {
         "title": "Hero not configured",
         "description": "Add your profile photo, subtitle, and intro from the admin Profile section."
@@ -834,17 +846,29 @@
     },
     "services": {
       "title": "Engineering Expertise",
-      "subtitle": "Services",
+      "subtitle": "Expertise",
       "description": "Areas where I design, build, and lead production software.",
       "seeMore": "See more",
       "seeLess": "See less",
+      "seeStack": "See the stack ›",
+      "inPractice": "In practice ›",
       "items": {
         "contact": {
           "title": "Let's build together",
           "subtitle": "Have a project in mind?",
           "cta": "Contact Me"
         }
-      }
+      },
+      "carouselInstructions": "Service cards. Use the arrow keys to move.",
+      "viewDetails": "View details for {title}",
+      "previousCard": "Previous card",
+      "nextCard": "Next card",
+      "close": "Close",
+      "technologies": "Technologies",
+      "pauseMotion": "Pause diagrams",
+      "resumeMotion": "Resume diagrams",
+      "titleLead": "Engineering",
+      "titleGradient": "expertise."
     },
     "timeline": {
       "title": "My Journey",
@@ -874,28 +898,19 @@
       "techAria": "Technologies"
     },
     "about": {
-      "subtitle": "How I engineer",
-      "title": "Engineering Approach",
+      "subtitle": "About me",
+      "title": "A little about me",
       "terminalEmpty": {
         "title": "Terminal not configured",
         "description": "Add an animated terminal sequence from the admin profile console tab."
       },
-      "timeline": {
-        "title": "My timeline",
-        "subtitle": "Continuous learning...",
-        "viewAll": "View full timeline",
-        "empty": "No timeline entries yet.",
-        "categories": {
-          "WORK": "Work",
-          "STUDY": "Study",
-          "COURSE": "Course"
-        }
-      }
+      "titleLead": "A little about",
+      "titleGradient": "me."
     },
     "skills": {
       "title": "Technical Stack",
       "subtitle": "Skills",
-      "description": "Technologies I've shipped in production across corporate-scale systems, financial platforms, and high-compliance environments.",
+      "description": "Technologies and tools in this portfolio.",
       "aux": "Every technology listed here has been used in real-world projects, not just tutorials. Most at scale, in production, under pressure.",
       "page": {
         "breadcrumbHome": "Home",
@@ -960,14 +975,14 @@
         "eyebrow": "// skills",
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Search technologies",
+        "categoryLabel": "Explore by specialty",
         "noResults": "No match in the current stack.",
         "noMatch": "grep: no match for \"{query}\"",
         "featured": "Featured",
         "coreLegend": "brighter = featured stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
         "searchFor": " for \"{query}\"",
-        "trend": "Trend",
-        "updatedTechPill": "Updated technologies 2024-2026"
+        "trend": "Trend"
       },
       "tabs": {
         "ai": {
@@ -994,13 +1009,17 @@
           "title": "Quality & Delivery",
           "description": "CI/CD pipelines, Docker containerization, automated testing, and security scanning for reliable delivery."
         }
-      }
+      },
+      "titleLead": "Technical",
+      "titleGradient": "stack."
     },
     "soft-skills": {
       "subtitle": "Leadership",
       "title": "Leadership & Impact",
       "description": "Technical skills matter. So does how you lead, collaborate, and make things happen with real teams on real projects.",
-      "aux": "These aren't adjectives claimed on a resume: they represent how I operate across every role."
+      "aux": "These aren't adjectives claimed on a resume: they represent how I operate across every role.",
+      "titleLead": "Leadership &",
+      "titleGradient": "impact."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -1158,8 +1177,8 @@
       },
       "catalog": {
         "backToPortfolio": "Back to portfolio",
-        "pageTitle": "All engineering projects",
-        "pageSubtitle": "Explore by type, category, or technology. Case studies detail decisions, architecture, and outcomes.",
+        "pageTitle": "All projects",
+        "pageSubtitle": "Explore by type, category, or technology. Case studies show decisions, architecture, and outcomes.",
         "searchPlaceholder": "Search projects or technologies…",
         "searchLabel": "Search projects or technologies",
         "sortLabel": "Sort",
@@ -1177,15 +1196,25 @@
         "more": "View more ({count} remaining)",
         "emptyTitle": "No results",
         "emptyDescription": "Try another search term or remove some filters.",
-        "emptyButton": "Clear filters"
-      }
+        "emptyButton": "Clear filters",
+        "moreFilters": "More filters",
+        "previous": "Previous",
+        "next": "Next",
+        "closeModal": "Close",
+        "roleAndPeriod": "ROLE & PERIOD",
+        "role": "ROLE",
+        "impact": "IMPACT",
+        "privateRepo": "Private repository",
+        "readCaseStudy": "Read case study"
+      },
+      "titleLead": "Selected engineering",
+      "titleGradient": "work."
     },
     "contact": {
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "Use the form or the channels below.",
-      "responseTime": "Reply within 24h",
+      "subtitle": "Hiring for a senior engineering role or planning a complex build? Tell me what you need.",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
       "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
@@ -1207,8 +1236,7 @@
         "distanceFromVisitor": "I'm from {place}, roughly <km>{distance}</km> away from your current location, according to your IP address."
       },
       "form": {
-        "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",
-        "alternativeContact": "Prefer a meeting? Schedule a <schedule>video call</schedule> or reach out on <linkedin>LinkedIn</linkedin>.",
+        "helper": "Share the role or project, its biggest challenge, and your timeline. I’ll reply with a clear next step.",
         "name": {
           "label": "Name",
           "placeholder": "John Doe",
@@ -1232,7 +1260,7 @@
         },
         "message": {
           "label": "Message",
-          "placeholder": "Tell me about your project...",
+          "placeholder": "What are you building or hiring for?",
           "success": "Message entered correctly",
           "errors": {
             "required": "Please enter your message",
@@ -1267,16 +1295,30 @@
         "website": "Visit website",
         "location": "View location on map",
         "calendly": "Schedule on Calendly"
-      }
+      },
+      "titleLead": "Let’s",
+      "titleGradient": "talk."
     },
     "experience": {
       "title": "Professional Experience",
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
-      "showingRecent": "Showing most recent roles.",
-      "promotion": "Promotion",
-      "previousRole": "Previous position",
-      "rolesCount": "{count} roles"
+      "description": "From frontend developer to senior engineer and team lead, with years of work and learning along the way.",
+      "chart": {
+        "eyebrow": "The journey so far",
+        "monthsShown": "months across the roles shown",
+        "ariaLabel": "Career milestones ordered by start date",
+        "caption": "Each step marks a recorded role, ordered by its start date.",
+        "selectRole": "Explore experience",
+        "title": "A career in motion",
+        "previous": "Previous",
+        "next": "Next",
+        "monthsExplanation": "Complete months from the dates of the roles shown. Overlapping jobs count once; gaps and unknown dates are excluded.",
+        "nextStage": "Next stage",
+        "letsTalk": "Let’s talk"
+      },
+      "titleLead": "The",
+      "titleGradient": "climb."
     },
     "impactStats": {
       "teamSize": {
@@ -1297,25 +1339,31 @@
       "subtitle": "What colleagues say"
     },
     "socialProof": {
-      "eyebrow": "Trusted by developers",
-      "title": "{count, plural, =0 {What senior developers say about me} =1 {What a senior developer says about me} other {What senior developers say about me}}",
-      "subtitle": "Colleagues who have seen my work up close.",
-      "cta": "Hire me",
-      "readMore": "Read more",
-      "readLess": "Read less",
-      "statsLabel": "By the numbers",
-      "statsNote": "Numbers accumulated across professional engagements.",
-      "stats": {
-        "projects": {
-          "label": "Projects"
+      "subtitle": "What my colleagues say, and the proof behind it.",
+      "titleLead": "Working",
+      "titleGradient": "with me.",
+      "cards": {
+        "ownership": {
+          "eyebrow": "Ownership",
+          "title": "End to end, without hand-holding."
         },
-        "experience": {
-          "label": "Years of experience"
+        "delivery": {
+          "eyebrow": "Delivery",
+          "title": "Predictable, even when it’s a lot."
         },
-        "engineersMentored": {
-          "label": "Engineers led"
+        "growing": {
+          "eyebrow": "Growing others",
+          "title": "I make the people around me better."
+        },
+        "judgment": {
+          "eyebrow": "Judgment",
+          "title": "Good calls that don’t cost quality."
         }
       }
+    },
+    "faq": {
+      "title": "Questions?",
+      "titleGradient": "Answers."
     },
     "qaCollaboration": {
       "metaTitle": "QA Collaboration",
@@ -1418,6 +1466,7 @@
           "0": "Full-Stack Developer",
           "1": "Software Architect"
         },
+        "ecosystemRolesLabel": "I collaborate with",
         "ecosystem": {
           "0": "QA Engineer",
           "1": "QA Automation Engineer",
@@ -1708,7 +1757,8 @@
         "eyebrow": "Now",
         "title": "What I’m doing",
         "titleHighlight": "right now.",
-        "description": "A snapshot of what I’m focused on, reading and shipping. Updated whenever I remember to."
+        "description": "A snapshot of what I’m focused on, reading and shipping. Updated whenever I remember to.",
+        "snapshot": "A snapshot, updated whenever I remember to."
       },
       "list": {
         "localTimeLabel": "Local time",
@@ -1769,11 +1819,11 @@
         "zoomOutBlocks": "Zoom out",
         "resetBlocks": "Reset view",
         "contributionViews": "Contribution views",
-        "blocks": "3D blocks",
-        "calendar": "Calendar",
+        "calendar": "Flat",
+        "blocks": "3D",
         "breakout": "Breakout",
-        "blocksDescription": "GitHub contributions as an isometric landscape of building blocks.",
-        "blocksHint": "Drag to rotate; enable Move or hold Shift to pan. Arrow keys rotate, +/− zoom, Home resets. Each block represents a day.",
+        "blocksDescription": "GitHub contributions as an interactive terrain.",
+        "blocksHint": "Drag to tilt and rotate into 3D. Press Flat to return to 2D view. Arrow keys navigate days.",
         "languageDistribution": "Languages in public repositories",
         "otherLanguages": "Other",
         "noLanguageData": "No language data is available.",
@@ -1804,6 +1854,11 @@
         },
         "awayHeading": "Away from the keyboard.",
         "shippingHeading": "Shipping, in public.",
+        "shippingDescription": "Commits, pull requests and code shipped across repositories.",
+        "collaborateTitle": "Want to collaborate?",
+        "collaborateSubtitle": "Open to full-time roles, contracts, and architecture consulting.",
+        "scheduleCall": "Schedule a call",
+        "sendEmail": "Send an email",
         "contributionCount": "Contributions",
         "gameInstructions": "Move the paddle with your mouse, by dragging, or with ←/→ (A/D). Space starts or pauses; Esc pauses. Clear the contribution bricks without dropping the ball.",
         "gameScore": "Score: {score}",
@@ -1818,7 +1873,11 @@
         "gameLost": "Game over. Restart to try again.",
         "gameReady": "Position your paddle, then press Play or Space to launch.",
         "gamePaused": "Paused.",
-        "gameReduced": "No autoplay or decorative motion. The ball moves only when you choose to play."
+        "gameReduced": "No autoplay or decorative motion. The ball moves only when you choose to play.",
+        "routineAround": "Around this time I’m usually",
+        "routineUsual": "Usual routine {start}–{end}",
+        "routineInWindow": "in the usual window",
+        "routineOutsideWindow": "outside the usual window"
       }
     },
     "colophon": {
@@ -1853,7 +1912,9 @@
       "colors": {
         "title": "Design & Colors",
         "body": "Colors run on Tailwind CSS custom properties, switched through a <code>data-theme</code> attribute — three palettes (Main, Orange, Christmas), each with a light and dark variant, six in total.",
-        "currentBadge": "current"
+        "currentBadge": "current",
+        "viewing": "Viewing:",
+        "clickToCopy": "Click any swatch to copy HEX"
       },
       "palettes": {
         "orangeLight": "Orange · Light",
@@ -1876,6 +1937,12 @@
           "co2": "{grams}g of CO₂/view",
           "brand": "Website Carbon",
           "cleaner": "Rated A+ on Website Carbon"
+        },
+        "metrics": {
+          "firstVisit": "CO₂, first visit",
+          "returnVisits": "CO₂, return visits",
+          "websiteCarbon": "Website Carbon",
+          "digitalBeacon": "Digital Beacon"
         }
       }
     },
@@ -1884,7 +1951,7 @@
       "metaDescription": "Anonymous visitor stats and portfolio highlights — no cookies, unique IDs, or IP addresses.",
       "eyebrow": "Public stats",
       "title": "How this site is used",
-      "description": "Cookieless, first-party audience measurement plus a snapshot of the portfolio. No unique visitors, no tracking across other sites.",
+      "description": "First-party audience measurement without cookies, plus a snapshot of the portfolio. No unique visitors, no tracking across other sites.",
       "highlightsTitle": "Highlights",
       "kpis": {
         "pageviews": "Pageviews (30 days)",
@@ -1902,10 +1969,29 @@
       "emptyTraffic": "No public visits recorded yet.",
       "servicesTitle": "Active services",
       "emptyServices": "No active services right now.",
-      "privacyNote": "Measurement is anonymous and explained in the <link>privacy policy</link>."
+      "privacyNote": "Measurement is anonymous and explained in the <link>privacy policy</link>.",
+      "referrersTitle": "Top Referrers",
+      "portfolioTitle": "The portfolio",
+      "countriesHint": "Last 30 days. Country level only. For {unknownPercent}% of views no country is known.",
+      "countriesHintSimple": "Last 30 days. Country level only.",
+      "pagesHint": "Last 30 days.",
+      "otherCountries": "Other countries ({count})"
     }
   },
   "admin": {
+    "careerAvailability": {
+      "title": "Career availability",
+      "description": "Show a next-stage invitation in the career chart only when you are accepting new roles. Add a title and description for each public language.",
+      "available": "Open to new roles",
+      "language": "Language",
+      "nextTitle": "Next-stage title",
+      "nextDescription": "Next-stage description",
+      "save": "Save availability",
+      "saving": "Saving…",
+      "saved": "Availability saved.",
+      "error": "Could not load or save availability.",
+      "loading": "Loading availability…"
+    },
     "shell": {
       "title": "Admin Panel",
       "signedInAs": "Signed in as",
@@ -2719,6 +2805,19 @@
         "atLeastOneLanguage": "At least one language is required"
       },
       "service": {
+        "visualType": "Illustration",
+        "visualTypeHint": "Choose a diagram for this service. A custom image takes precedence.",
+        "visualNodes": "Diagram labels",
+        "visualNodesHint": "One label per line, up to 16 labels of 48 characters, in the order used by the selected diagram.",
+        "visualTypes": {
+          "network": "API and service topology",
+          "architecture": "Architecture layers",
+          "frontend": "Interface and components",
+          "pipeline": "Delivery and reliability",
+          "security": "Security controls",
+          "mobile": "Mobile application",
+          "ai": "AI and quality review"
+        },
         "generalSection": "General Information",
         "skillsSection": "Skills",
         "titleWithLanguage": "Title ({language})",
@@ -2749,6 +2848,8 @@
         "createFailed": "Failed to create service",
         "imageRequired": "Image is required",
         "titleRequiredPrimary": "Title is required for the primary language",
+        "practicePoints": "In practice",
+        "practicePointsHint": "One example per line. Only include claims you can substantiate.",
         "atLeastOneLanguage": "At least one language is required",
         "isActive": "Active on the public site",
         "isActiveHint": "Inactive services stay in admin but are hidden from the homepage and public stats.",
@@ -3673,19 +3774,19 @@
     },
     "uses": {
       "title": "Uses",
-      "subtitle": "Manage everyday gear, software, browser extensions, and page media.",
+      "subtitle": "Daily hardware, software, browser extensions, and site media.",
       "tabsLabel": "Uses sections",
       "tabs": {
         "everyday": "Everyday",
         "software": "Software",
         "browser": "Browser",
-        "settings": "Settings"
+        "settings": "Media & Settings"
       },
       "addNew": "Add item",
       "createDescription": "Add a new item to your Uses inventory.",
       "editTitle": "Edit item",
       "editDescription": "Update this Uses inventory item.",
-      "count": "{count} items",
+      "count": "{count, plural, =1 {1 item} other {# items}} · displayed in this order on the public page",
       "searchTitle": "Search title",
       "deletedSuccess": "Item deleted.",
       "deleteFailed": "Could not delete item.",
@@ -4820,6 +4921,33 @@
       "tailorOutputLanguage": "Output language",
       "tailorOutputLanguageAuto": "Automatic (job description)",
       "tailorTemplatePages": "{count, plural, one {# page} other {# pages}}"
+    },
+    "contactPreferences": {
+      "title": "Contact preferences",
+      "description": "Set your own response-time note for each language. Leave it empty to hide it. Your local clock uses the timezone configured in Now.",
+      "responseTime": "Response-time note",
+      "save": "Save contact preferences",
+      "saving": "Saving…",
+      "saved": "Contact preferences saved.",
+      "error": "Could not save contact preferences.",
+      "loading": "Loading contact preferences…"
+    },
+    "homeFaq": {
+      "title": "Home FAQ",
+      "description": "Manage questions for this portfolio in each language. Save FAQ changes separately. Empty languages stay hidden on the public site.",
+      "question": "Question",
+      "answer": "Answer",
+      "add": "Add question",
+      "remove": "Remove question",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "save": "Save FAQ",
+      "saving": "Saving…",
+      "saved": "FAQ saved.",
+      "error": "Could not load or save the FAQ. Try again.",
+      "invalid": "Complete every question and answer before saving.",
+      "loading": "Loading FAQ…",
+      "empty": "No questions in this language. The section is hidden until you add content."
     }
   },
   "auth": {

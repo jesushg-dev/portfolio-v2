@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
-import { ArrowRightIcon, Rocket, TrendingUp } from "lucide-react";
+import { ArrowRightIcon, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import HeaderArticle from "@/components/shared/header-article";
 import { Link } from "@/i18n/routing";
 import { LinkPreview } from "@/components/ui/link-preview";
-import { cn } from "@/lib/utils";
 import type { SkillType } from "@/utils/interfaces/types";
 import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
 import {
@@ -23,11 +23,15 @@ export type CompactSkillType = Pick<
   "id" | "title" | "image" | "type" | "featured" | "trend"
 >;
 
-interface SkillsTerminalProps {
+export interface SkillsTerminalProps {
   initialSkills: (SkillType | CompactSkillType)[];
+  showHeader?: boolean;
 }
 
-const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
+const SkillsTerminal: FC<SkillsTerminalProps> = ({
+  initialSkills,
+  showHeader = false,
+}) => {
   const t = useTranslations("main.skills");
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -96,13 +100,24 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
 
   return (
     <div className="relative z-10 mx-auto w-full py-6">
-      <HeaderArticle
-        subtitle={t("terminal.eyebrow")}
-        title={t("title")}
-        description={t("description")}
-      />
+      {showHeader ? (
+        <HeaderArticle
+          subtitle={t("terminal.eyebrow")}
+          title={t("title")}
+          description={t("description")}
+        />
+      ) : null}
 
-      <div className="bg-card border-border/30 hover:border-primary/30 relative overflow-hidden rounded-3xl border shadow-xs transition-all duration-300">
+      <Tabs
+        value={activeCategory}
+        onValueChange={(value) => {
+          const category = SKILL_CATEGORIES.find((item) => item.id === value);
+          if (!category) return;
+          setSearch("");
+          setActiveCategory(category.id);
+        }}
+        className="bg-card border-border/50 relative gap-0 overflow-hidden rounded-2xl border shadow-lg"
+      >
         {/* Terminal Chrome Bar */}
         <div className="border-border/30 bg-muted/20 flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
           <div className="flex items-center gap-2">
@@ -141,60 +156,40 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
           </label>
         </div>
 
-        {/* Category Tabs */}
-        <div
-          role="tablist"
-          className={cn(
-            "border-border/30 bg-muted/10 flex flex-wrap border-b px-3",
-            isSearching && "pointer-events-none opacity-40",
-          )}
+        <TabsList
+          variant="file"
+          aria-label={t("terminal.categoryLabel")}
+          className="w-full [scrollbar-width:thin] overflow-x-auto"
         >
-          {SKILL_CATEGORIES.map((category) => {
-            const isActive = !isSearching && activeCategory === category.id;
-
-            return (
-              <button
-                key={category.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                data-cat={category.id}
-                onClick={() => {
-                  setSearch("");
-                  setActiveCategory(category.id);
-                }}
-                className={cn(
-                  "focus-visible:ring-primary/40 relative flex min-h-11 shrink-0 cursor-pointer items-center gap-2 px-3 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-150 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:px-4",
-                  isActive
-                    ? "text-foreground font-bold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-t-lg",
-                )}
-              >
-                {isActive ? (
-                  <span className="bg-primary absolute right-0 bottom-[-1px] left-0 h-0.5" />
-                ) : null}
-                <span
-                  className={cn(
-                    "size-1.5 shrink-0 rounded-full transition-colors",
-                    isActive ? "bg-primary" : "bg-muted-foreground/50",
-                  )}
-                />
-                <span>{t(`tabs.${category.id}.title`)}</span>
-                <span className="text-muted-foreground font-mono text-sm font-medium">
-                  {counts[category.id]}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+          {SKILL_CATEGORIES.map((category) => (
+            <TabsTrigger
+              key={category.id}
+              value={category.id}
+              className="min-h-11 flex-none px-4 text-sm"
+              onFocus={(event) =>
+                event.currentTarget.scrollIntoView?.({
+                  block: "nearest",
+                  inline: "nearest",
+                })
+              }
+            >
+              <span>{t(`tabs.${category.id}.title`)}</span>
+              <span className="text-muted-foreground font-mono text-sm">
+                {counts[category.id]}
+              </span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
         {/* Category blurb */}
         <div className="text-muted-foreground px-6 pt-5">
-          <p className="text-sm font-medium">{description}</p>
+          <p role="status" className="text-sm font-medium">
+            {description}
+          </p>
         </div>
 
         {/* Chips & Cards */}
-        <div className="p-6 pt-4">
+        <TabsContent value={activeCategory} className="p-6 pt-4">
           {visibleSkills.length === 0 ? (
             <p className="text-muted-foreground py-10 text-center font-mono text-sm">
               {t("terminal.noMatch", { query: search })}
@@ -299,17 +294,10 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   ))}
                 </ul>
               ) : null}
-
-              <div className="mt-6 flex justify-center">
-                <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium backdrop-blur-xs">
-                  <Rocket className="text-primary size-4" aria-hidden="true" />
-                  <span>{t("terminal.updatedTechPill")}</span>
-                </div>
-              </div>
             </div>
           )}
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
 
       <div className="mt-8 flex justify-center">
         <LinkPreview

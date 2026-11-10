@@ -48,14 +48,14 @@ export const PortfolioTopStack: FC<PortfolioTopStackProps> = ({
               query: { tech: techName },
             }}
             title={`${techName}: ${data.count} ${projectsWord}`}
-            className="border-border bg-card text-foreground hover:border-primary/50 hover:text-primary inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-2xs transition-colors"
+            className="btn-glass inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors"
           >
             <SkillIcon
               image={data.image}
               title={techName}
               tile
               size="sm"
-              className="size-5 rounded-md text-[10px]"
+              className="size-5 rounded-md text-[0.625rem]"
             />
             <span>{techName}</span>
             <span className="text-primary font-bold">{data.count}</span>

@@ -1,0 +1,67 @@
+{
+  "translations": [
+    {
+      "locale": "en",
+      "items": [
+        {
+          "question": "Are you available for new roles?",
+          "answer": "Yes. I’m open to senior software engineering and technical leadership opportunities, including remote work."
+        },
+        {
+          "question": "Which time zone do you work in?",
+          "answer": "I’m based in Managua, Nicaragua (UTC−6), and I’ve worked with teams in the United States and Costa Rica."
+        },
+        {
+          "question": "What do you work with day to day?",
+          "answer": "React, Next.js and TypeScript on the frontend; Node.js, NestJS and C#/.NET on the backend; SQL and NoSQL databases; and testing and delivery tools including Docker, Playwright and Jest."
+        },
+        {
+          "question": "Can I get your CV?",
+          "answer": "Yes. You can read it online or request a PDF by email from the CV page."
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "items": [
+        {
+          "question": "¿Estás disponible para nuevos puestos?",
+          "answer": "Sí. Estoy abierto a oportunidades de ingeniería de software senior y liderazgo técnico, incluido el trabajo remoto."
+        },
+        {
+          "question": "¿En qué zona horaria trabajas?",
+          "answer": "Estoy en Managua, Nicaragua (UTC−6), y he trabajado con equipos de Estados Unidos y Costa Rica."
+        },
+        {
+          "question": "¿Con qué tecnologías trabajas a diario?",
+          "answer": "React, Next.js y TypeScript en frontend; Node.js, NestJS y C#/.NET en backend; bases de datos SQL y NoSQL; y herramientas de pruebas y entrega como Docker, Playwright y Jest."
+        },
+        {
+          "question": "¿Puedo obtener tu CV?",
+          "answer": "Sí. Puedes leerlo en línea o solicitar el PDF por correo desde la página del CV."
+        }
+      ]
+    },
+    {
+      "locale": "nl",
+      "items": [
+        {
+          "question": "Sta je open voor nieuwe functies?",
+          "answer": "Ja. Ik sta open voor senior software engineering en technische leidinggevende functies, ook op afstand."
+        },
+        {
+          "question": "In welke tijdzone werk je?",
+          "answer": "Ik woon in Managua, Nicaragua (UTC−6), en heb gewerkt met teams in de Verenigde Staten en Costa Rica."
+        },
+        {
+          "question": "Met welke technologieën werk je dagelijks?",
+          "answer": "React, Next.js en TypeScript voor de frontend; Node.js, NestJS en C#/.NET voor de backend; SQL- en NoSQL-databases; en test- en deliverytools zoals Docker, Playwright en Jest."
+        },
+        {
+          "question": "Kan ik je cv krijgen?",
+          "answer": "Ja. Je kunt het online lezen of via de cv-pagina per e-mail een pdf aanvragen."
+        }
+      ]
+    }
+  ]
+}

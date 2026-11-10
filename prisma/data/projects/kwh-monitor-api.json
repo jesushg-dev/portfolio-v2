@@ -938,7 +938,7 @@
     }
   ],
   "skillKeys": ["Nodejs", "Express", "Mysql"],
-  "order": 18,
+  "order": 23,
   "kind": "PERSONAL",
   "slug": "kwh-monitor-api",
   "caseStudyEnabled": true

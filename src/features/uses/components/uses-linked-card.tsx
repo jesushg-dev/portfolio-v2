@@ -8,8 +8,8 @@ import { ProcessRevealStaggerItem } from "@/features/process-pages/components/pr
 interface UsesLinkedCardProps {
   href: string;
   title: string;
-  description?: string;
-  imageSrc: string;
+  description?: string | null;
+  imageSrc: string | null;
   imageAlt: string;
   index: number;
   layout?: "row" | "stack";
@@ -25,6 +25,7 @@ export function UsesLinkedCard({
   layout = "row",
 }: UsesLinkedCardProps) {
   const shouldReduceMotion = useReducedMotion();
+  const safeImageSrc = imageSrc ?? "/uses/setup.webp";
 
   if (layout === "stack") {
     return (
@@ -41,7 +42,7 @@ export function UsesLinkedCard({
             className="flex flex-col items-center gap-1.5"
           >
             <MediaImage
-              src={imageSrc}
+              src={safeImageSrc}
               alt={imageAlt}
               width={48}
               height={48}
@@ -70,7 +71,7 @@ export function UsesLinkedCard({
           className="flex flex-row items-start gap-4"
         >
           <MediaImage
-            src={imageSrc}
+            src={safeImageSrc}
             alt={imageAlt}
             width={48}
             height={48}

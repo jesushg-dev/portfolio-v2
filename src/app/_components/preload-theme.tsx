@@ -7,7 +7,7 @@ const PreloadTheme = () => {
         let t = localStorage.getItem("theme"),
             c = localStorage.getItem("color-mode"),
             d = window.matchMedia("(prefers-color-scheme: dark)").matches,
-            theme = t ?? (d ? "dark" : "light"),
+            theme = t ?? (d ? "main-dark" : "main-light"),
             isDark = c ? c === "dark" : d;
         
         document.documentElement.classList.remove("light", "dark");

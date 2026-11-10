@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -27,9 +27,9 @@ export function ProcessFaqSection({
     <section
       id={id}
       aria-labelledby={processSectionHeadingId(id)}
-      className="px-6 py-20"
+      className="border-border/80 border-t py-20 md:py-28"
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto w-full px-4 sm:px-6 lg:container lg:px-20">
         <ProcessReveal>
           <ProcessSectionHeader
             sectionId={id}
@@ -37,24 +37,24 @@ export function ProcessFaqSection({
             title={title}
           />
 
-          <div className="border-border divide-border divide-y border-t border-b">
+          <div className="border-border/80 divide-border/80 mx-auto max-w-3xl divide-y border-t border-b">
             {items.map((faq) => (
-              <details key={faq.question} className="group py-2">
+              <details key={faq.question} className="group">
                 <summary
                   className={cn(
                     processTextLinkStyles,
-                    "text-foreground w-full justify-between rounded-lg px-1 py-3 font-semibold [&::-webkit-details-marker]:hidden",
+                    "text-foreground flex w-full cursor-pointer list-none items-center justify-between py-6 text-lg font-medium [&::-webkit-details-marker]:hidden",
                   )}
                 >
-                  {faq.question}
-                  <ChevronDown
+                  <span className="flex-1 pr-4">{faq.question}</span>
+                  <Plus
                     aria-hidden
-                    className="text-muted-foreground ml-4 size-4 shrink-0 group-open:rotate-180 motion-safe:transition-transform"
+                    className="text-muted-foreground size-5 shrink-0 transition-transform duration-200 group-open:rotate-45"
                   />
                 </summary>
-                <p className="text-muted-foreground px-1 pb-3 text-sm leading-relaxed">
-                  {faq.answer}
-                </p>
+                <div className="text-muted-foreground pb-6 text-base leading-relaxed">
+                  <p>{faq.answer}</p>
+                </div>
               </details>
             ))}
           </div>

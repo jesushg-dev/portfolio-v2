@@ -135,13 +135,11 @@ export async function evaluateInterviewAnswer(
       });
       const response = await client.models.generateContent({
         model: AI_PROVIDER_MODELS.gemini,
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }],
-          },
-        ],
-        config: { responseMimeType: "application/json" },
+        contents: userPrompt,
+        config: {
+          systemInstruction: systemPrompt,
+          responseMimeType: "application/json",
+        },
       });
       result = InterviewAnswerEvaluationSchema.parse(
         parseAiJsonResponse(response.text ?? "{}"),

@@ -13,9 +13,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { Link } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
@@ -207,67 +205,73 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
           >
             <section
               id="cv-email-panel"
-              className="bg-card text-card-foreground border-border rounded-2xl border p-5 shadow-sm"
+              className="border-border/80 bg-foreground/[0.04] rounded-3xl border p-6 shadow-sm sm:p-8"
             >
-              <div className="mb-4">
-                <h2 className="text-foreground text-base font-semibold">
-                  {tPdf("title")}
-                </h2>
-                <p className="text-muted-foreground mt-1 text-sm">
-                  {tPdf("description")}
-                </p>
+              <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_1.15fr] md:gap-8">
+                <div>
+                  <h2 className="text-foreground text-lg font-semibold tracking-tight sm:text-xl">
+                    {tPdf("title")}
+                  </h2>
+                  <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+                    {tPdf("description")}
+                  </p>
+                </div>
+
+                <div>
+                  <Form {...form}>
+                    <form
+                      onSubmit={(e) => void form.handleSubmit(handleSubmit)(e)}
+                      className="flex flex-col gap-2"
+                    >
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <div className="bg-background border-border/80 focus-within:border-primary focus-within:ring-primary/20 relative flex items-center rounded-full border p-1 pl-4 shadow-inner transition-all focus-within:ring-2">
+                            <input
+                              {...field}
+                              id="cv-pdf-email"
+                              type="email"
+                              autoComplete="email"
+                              inputMode="email"
+                              autoCapitalize="none"
+                              spellCheck={false}
+                              autoFocus
+                              disabled={isSending}
+                              placeholder={tPdf("form.email.placeholder")}
+                              className="text-foreground placeholder:text-muted-foreground w-full border-none bg-transparent text-sm outline-hidden focus:ring-0 focus:outline-hidden"
+                            />
+                            <Button
+                              type="submit"
+                              disabled={isSending}
+                              size="sm"
+                              className="min-h-9 shrink-0 gap-1.5 rounded-full px-5"
+                              aria-busy={isSending}
+                            >
+                              {isSending ? (
+                                <Loader2
+                                  className="size-3.5 animate-spin"
+                                  aria-hidden
+                                />
+                              ) : (
+                                <Send className="size-3.5" aria-hidden />
+                              )}
+                              <span>
+                                {isSending
+                                  ? tPdf("form.sending")
+                                  : tPdf("form.submit")}
+                              </span>
+                            </Button>
+                          </div>
+                        )}
+                      />
+                      <p className="text-muted-foreground pl-2 text-xs">
+                        {tPdf("footnote", { fullName })}
+                      </p>
+                    </form>
+                  </Form>
+                </div>
               </div>
-
-              <Form {...form}>
-                <FormRoot
-                  className="flex flex-col gap-3 overflow-visible p-0.5 sm:flex-row sm:items-end"
-                  onSubmit={form.handleSubmit(handleSubmit)}
-                >
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem
-                        label={tPdf("form.email.label")}
-                        inputId="cv-pdf-email"
-                        className="flex-1"
-                      >
-                        <Input
-                          {...field}
-                          id="cv-pdf-email"
-                          type="email"
-                          name="email"
-                          autoComplete="email"
-                          inputMode="email"
-                          autoCapitalize="none"
-                          spellCheck={false}
-                          autoFocus
-                          disabled={isSending}
-                          placeholder={tPdf("form.email.placeholder")}
-                        />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button
-                    type="submit"
-                    disabled={isSending}
-                    className="rounded-full sm:mb-0.5"
-                    aria-busy={isSending}
-                  >
-                    {isSending ? (
-                      <Loader2 className="size-4 animate-spin" aria-hidden />
-                    ) : (
-                      <Send className="size-4" aria-hidden />
-                    )}
-                    {isSending ? tPdf("form.sending") : tPdf("form.submit")}
-                  </Button>
-                </FormRoot>
-              </Form>
-
-              <p className="text-muted-foreground mt-3 text-xs">
-                {tPdf("footnote", { fullName })}
-              </p>
             </section>
           </motion.div>
         ) : null}

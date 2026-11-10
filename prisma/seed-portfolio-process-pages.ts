@@ -223,6 +223,7 @@ function mapQaContent(page: Record<string, unknown>): ProcessPageContent {
         description: str(roles.description),
         myRolesLabel: str(roles.myRolesLabel),
         myRoles: numbered(roles.myRoles).map((item) => str(item)),
+        ecosystemRolesLabel: str(roles.ecosystemRolesLabel) || "",
         ecosystemRoles: numbered(roles.ecosystem).map((item) => str(item)),
         testingLabel: str(roles.testingLabel),
         testingTags: numbered(roles.testing).map((item) => str(item)),

@@ -187,7 +187,15 @@ jest.mock("next-intl", () => {
 
   return {
     useTranslations: (namespace: string) => {
-      const translate = (key: string) => resolveMessage(namespace, key);
+      const translate = (key: string, values?: Record<string, unknown>) => {
+        let msg = resolveMessage(namespace, key);
+        if (values && typeof msg === "string") {
+          for (const [k, v] of Object.entries(values)) {
+            msg = msg.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+          }
+        }
+        return msg;
+      };
       translate.rich = (
         key: string,
         values: Record<string, (chunks: ReactNode) => ReactNode>,
@@ -316,7 +324,7 @@ jest.mock("next-intl/navigation", () => ({
       ...props
     }: PropsWithChildren<{ href: string; prefetch?: boolean }>) => {
       const rest = { ...props };
-      delete (rest as { prefetch?: boolean }).prefetch;
+      delete rest.prefetch;
       return createElement("a", { href, ...rest }, children);
     },
     redirect: jest.fn(),

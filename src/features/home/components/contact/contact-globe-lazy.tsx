@@ -14,8 +14,10 @@ const ContactGlobe = dynamic(
 
 export default function ContactGlobeLazy({
   location,
+  timezone,
 }: {
   location: OwnerMapLocation;
+  timezone?: string | null;
 }) {
-  return <ContactGlobe location={location} />;
+  return <ContactGlobe location={location} timezone={timezone} />;
 }

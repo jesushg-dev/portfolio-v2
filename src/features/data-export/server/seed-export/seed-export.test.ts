@@ -114,12 +114,16 @@ function hydrateServices(seeds: ServiceSeedRecord[]): ServiceExportRow[] {
     isActive: seed.isActive ?? true,
     order: seed.order ?? 0,
     image: seed.image,
+    visualType: seed.visualType ?? "network",
+    ServiceSkill: seed.skillTitles?.map((title) => ({ Skill: { title } })),
     ServiceTranslation: seed.translations.map((translation) => ({
       appLanguageId: translation.locale,
       title: translation.title,
       description: translation.description,
       badge: translation.badge ?? "",
       statsLabel: translation.statsLabel ?? "",
+      practicePoints: translation.practicePoints ?? "",
+      visualNodes: translation.visualNodes,
     })),
   }));
 }
@@ -591,12 +595,13 @@ describe("seed export serializers", () => {
 });
 
 describe("seed export zip", () => {
-  it("contains the nine seed JSON files and round-trips catalog data", async () => {
+  it("contains all seed JSON files and round-trips catalog data", async () => {
     const skillKeyByTitle = buildSkillKeyByTitle(skillsCatalog);
     const hydratedSoftSkills = hydrateSoftSkills();
     const hydratedUses = hydrateUses();
     const hydratedNow = hydrateNow();
     const data = {
+      faq: { translations: [] },
       skills: serializeSkills(hydrateSkills(skillsCatalog), languages),
       projects: serializeProjects(
         hydrateProjects(projectsCatalog),
@@ -641,6 +646,7 @@ describe("seed export zip", () => {
     );
 
     const expected = {
+      faq: { translations: [] },
       skills: skillsCatalog,
       projects: expectedProjects(projectsCatalog),
       services: servicesCatalog,

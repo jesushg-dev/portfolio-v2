@@ -133,3 +133,31 @@ export async function seedPortfolioTimeline(
 }
 
 export { portfolioTimeline };
+
+// Standalone execution support
+if (
+  process.argv[1]?.replace(/\\/g, "/").endsWith("seed-portfolio-timeline.ts")
+) {
+  const { PrismaClient } = await import("@prisma/client");
+  const prisma = new PrismaClient();
+
+  async function runStandalone() {
+    console.log(
+      "Seeding portfolio timeline from prisma/data/portfolio-timeline.json...",
+    );
+    const user = await prisma.user.findFirst();
+    if (!user) throw new Error("No user found in database");
+    await seedPortfolioTimeline(prisma, user.id);
+    console.log("Seeded timeline successfully.");
+  }
+
+  runStandalone()
+    .then(async () => {
+      await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+      console.error(e);
+      await prisma.$disconnect();
+      process.exit(1);
+    });
+}

@@ -38,8 +38,11 @@ async function requestJson(
       apiKey: key,
     }).models.generateContent({
       model: AI_PROVIDER_MODELS.gemini,
-      contents: `${prompt.systemPrompt}\n${prompt.userPrompt}`,
-      config: { responseMimeType: "application/json" },
+      contents: prompt.userPrompt,
+      config: {
+        systemInstruction: prompt.systemPrompt,
+        responseMimeType: "application/json",
+      },
     });
     text = response.text ?? "{}";
   } else {

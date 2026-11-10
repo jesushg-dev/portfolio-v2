@@ -66,13 +66,11 @@ async function completeJson(
       });
       const response = await client.models.generateContent({
         model: AI_PROVIDER_MODELS.gemini,
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: `${system}\n\n${user}` }],
-          },
-        ],
-        config: { responseMimeType: "application/json" },
+        contents: user,
+        config: {
+          systemInstruction: system,
+          responseMimeType: "application/json",
+        },
       });
       return parseAiJsonResponse(response.text ?? "{}");
     }

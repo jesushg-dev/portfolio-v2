@@ -6,6 +6,8 @@ import type { Prisma } from "@prisma/client";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import type { db } from "@/server/db";
 import type { ProfileHeroEditorDTO } from "@/features/profile/lib/profile-hero-editor-dto";
+import { TRPCError } from "@trpc/server";
+import { FaqItemsSchema, parseFaqItems } from "@/features/home/lib/faq-content";
 
 type DbClient = typeof db;
 type DbLike = Prisma.TransactionClient | DbClient;
@@ -220,6 +222,208 @@ export async function upsertProfileHeroFromMaps(
 }
 
 export const profileAdminRouter = createTRPCRouter({
+  getContactPreferences: protectedProcedure.query(async ({ ctx }) => {
+    const [languages, header] = await Promise.all([
+      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ctx.db.portfolioHeader.findUnique({
+        where: { userId: ctx.user.id },
+        include: { translations: true },
+      }),
+    ]);
+    return languages.map((language) => ({
+      id: language.id,
+      name: language.name,
+      responseTime:
+        header?.translations.find((row) => row.appLanguageId === language.id)
+          ?.contactResponseTime ?? "",
+    }));
+  }),
+
+  upsertContactPreferences: protectedProcedure
+    .input(
+      z.object({
+        translations: z.record(z.string(), z.string().trim().max(160)),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const languages = await ctx.db.appLanguage.findMany({
+        orderBy: { code: "asc" },
+      });
+      if (
+        Object.keys(input.translations).some(
+          (id) => !languages.some((language) => language.id === id),
+        )
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Unknown language",
+        });
+      }
+      const header = await ctx.db.portfolioHeader.upsert({
+        where: { userId: ctx.user.id },
+        create: { userId: ctx.user.id, fullName: "" },
+        update: {},
+      });
+      for (const [appLanguageId, text] of Object.entries(input.translations)) {
+        await ctx.db.portfolioHeaderTranslation.upsert({
+          where: {
+            portfolioHeaderId_appLanguageId: {
+              portfolioHeaderId: header.id,
+              appLanguageId,
+            },
+          },
+          create: {
+            portfolioHeaderId: header.id,
+            appLanguageId,
+            contactResponseTime: text || null,
+          },
+          update: { contactResponseTime: text || null },
+        });
+      }
+      return { saved: true };
+    }),
+
+  getCareerAvailabilityEditor: protectedProcedure.query(async ({ ctx }) => {
+    const [languages, header] = await Promise.all([
+      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ctx.db.portfolioHeader.findUnique({
+        where: { userId: ctx.user.id },
+        include: { translations: true },
+      }),
+    ]);
+    return {
+      availableForWork: header?.availableForWork ?? false,
+      translations: languages.map((language) => {
+        const row = header?.translations.find(
+          (translation) => translation.appLanguageId === language.id,
+        );
+        return {
+          id: language.id,
+          name: language.name,
+          code: language.code,
+          title: row?.careerNextTitle ?? "",
+          description: row?.careerNextDescription ?? "",
+        };
+      }),
+    };
+  }),
+
+  upsertCareerAvailability: protectedProcedure
+    .input(
+      z.object({
+        availableForWork: z.boolean(),
+        translations: z.array(
+          z.object({
+            appLanguageId: z.string(),
+            title: z.string().max(160),
+            description: z.string().max(1000),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const languages = await ctx.db.appLanguage.findMany({
+        select: { id: true },
+      });
+      if (
+        input.translations.some(
+          (translation) =>
+            !languages.some(
+              (language) => language.id === translation.appLanguageId,
+            ),
+        )
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Unknown language",
+        });
+      }
+      await ctx.db.$transaction(async (tx) => {
+        const header = await tx.portfolioHeader.upsert({
+          where: { userId: ctx.user.id },
+          create: {
+            userId: ctx.user.id,
+            fullName: "",
+            availableForWork: input.availableForWork,
+          },
+          update: { availableForWork: input.availableForWork },
+        });
+        for (const translation of input.translations) {
+          const data = {
+            careerNextTitle: translation.title.trim() || null,
+            careerNextDescription: translation.description.trim() || null,
+          };
+          await tx.portfolioHeaderTranslation.upsert({
+            where: {
+              portfolioHeaderId_appLanguageId: {
+                portfolioHeaderId: header.id,
+                appLanguageId: translation.appLanguageId,
+              },
+            },
+            create: {
+              portfolioHeaderId: header.id,
+              appLanguageId: translation.appLanguageId,
+              ...data,
+            },
+            update: data,
+          });
+        }
+      });
+      return { success: true };
+    }),
+
+  getFaqEditor: protectedProcedure.query(async ({ ctx }) => {
+    const [languages, header] = await Promise.all([
+      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ctx.db.portfolioHeader.findUnique({
+        where: { userId: ctx.user.id },
+        include: { translations: true },
+      }),
+    ]);
+    return languages.map((language) => ({
+      id: language.id,
+      name: language.name,
+      code: language.code,
+      items: parseFaqItems(
+        header?.translations.find((row) => row.appLanguageId === language.id)
+          ?.faqItems,
+      ),
+    }));
+  }),
+
+  upsertFaq: protectedProcedure
+    .input(z.object({ appLanguageId: z.string(), items: FaqItemsSchema }))
+    .mutation(async ({ ctx, input }) => {
+      const language = await ctx.db.appLanguage.findUnique({
+        where: { id: input.appLanguageId },
+      });
+      if (!language)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Unknown language",
+        });
+      const header = await ctx.db.portfolioHeader.upsert({
+        where: { userId: ctx.user.id },
+        create: { userId: ctx.user.id, fullName: "" },
+        update: {},
+      });
+      await ctx.db.portfolioHeaderTranslation.upsert({
+        where: {
+          portfolioHeaderId_appLanguageId: {
+            portfolioHeaderId: header.id,
+            appLanguageId: input.appLanguageId,
+          },
+        },
+        create: {
+          portfolioHeaderId: header.id,
+          appLanguageId: input.appLanguageId,
+          faqItems: input.items,
+        },
+        update: { faqItems: input.items },
+      });
+      return { saved: true };
+    }),
+
   getHeroEditor: protectedProcedure.query(async ({ ctx }) => {
     return getProfileHeroEditorDto(ctx.db, ctx.user.id);
   }),

@@ -13,22 +13,123 @@
         "title": "Backend & Sistemas Distribuidos",
         "description": "Arquitectura de microservicios, APIs REST/tRPC y bases de datos escalables enfocadas en seguridad y alto rendimiento.",
         "badge": "Backend & APIs",
-        "statsLabel": "Disponibilidad · SQL & NoSQL"
+        "statsLabel": "Disponibilidad · SQL & NoSQL",
+        "practicePoints": "Diseñé APIs GraphQL/Nest.js que aumentaron aproximadamente un 90 % la confiabilidad de sincronización en Musa.\nDiseñé una plataforma de orquestación de servicios con Next.js, tRPC, Prisma y SQL Server en Claro.\nConstruí una API modular de comercio electrónico con Clean Architecture, Node.js y TypeScript.",
+        "visualNodes": [
+          {
+            "label": "Solicitud"
+          },
+          {
+            "label": "Acceso"
+          },
+          {
+            "label": "Pedidos"
+          },
+          {
+            "label": "Stock"
+          },
+          {
+            "label": "Eventos"
+          },
+          {
+            "label": "Datos"
+          },
+          {
+            "label": "Reintento seguro"
+          },
+          {
+            "label": "Entregado"
+          },
+          {
+            "label": "Sin perder mensajes"
+          }
+        ]
       },
       {
         "locale": "en",
         "title": "Backend & Distributed Systems",
         "description": "Building robust microservices, REST & tRPC APIs with Node.js, C# / .NET, and scalable SQL/NoSQL databases.",
         "badge": "Backend & APIs",
-        "statsLabel": "Uptime · SQL & NoSQL"
+        "statsLabel": "Uptime · SQL & NoSQL",
+        "practicePoints": "Designed GraphQL/Nest.js APIs that raised synchronization reliability by approximately 90% at Musa.\nArchitected a service orchestration platform with Next.js, tRPC, Prisma and SQL Server at Claro.\nBuilt a modular e-commerce API with Clean Architecture in Node.js and TypeScript.",
+        "visualNodes": [
+          {
+            "label": "Request"
+          },
+          {
+            "label": "Sign in"
+          },
+          {
+            "label": "Orders"
+          },
+          {
+            "label": "Stock"
+          },
+          {
+            "label": "Events"
+          },
+          {
+            "label": "Data"
+          },
+          {
+            "label": "Retry safely"
+          },
+          {
+            "label": "Delivered"
+          },
+          {
+            "label": "No message lost"
+          }
+        ]
       },
       {
         "locale": "nl",
         "title": "Backend & Gedistribueerde Systemen",
         "description": "Robuuste microservices, REST & tRPC API's met Node.js, C# / .NET en schaalbare databases.",
         "badge": "Backend & API's",
-        "statsLabel": "Uptime · SQL & NoSQL"
+        "statsLabel": "Uptime · SQL & NoSQL",
+        "practicePoints": "Ontwierp GraphQL/Nest.js-API’s die de betrouwbaarheid van synchronisatie bij Musa met ongeveer 90% verhoogden.\nOntwierp een platform voor serviceorkestratie met Next.js, tRPC, Prisma en SQL Server bij Claro.\nBouwde een modulaire e-commerce-API met Clean Architecture, Node.js en TypeScript.",
+        "visualNodes": [
+          {
+            "label": "Verzoek"
+          },
+          {
+            "label": "Inloggen"
+          },
+          {
+            "label": "Orders"
+          },
+          {
+            "label": "Voorraad"
+          },
+          {
+            "label": "Events"
+          },
+          {
+            "label": "Data"
+          },
+          {
+            "label": "Veilig herhalen"
+          },
+          {
+            "label": "Afgeleverd"
+          },
+          {
+            "label": "Geen bericht verloren"
+          }
+        ]
       }
+    ],
+    "visualType": "network",
+    "skillTitles": [
+      "Node.js",
+      "Nest.js",
+      "C#",
+      "tRPC",
+      "GraphQL",
+      "SQL Server",
+      "MySQL",
+      "MongoDB"
     ]
   },
   {
@@ -45,22 +146,73 @@
         "title": "Arquitectura de Sistemas",
         "description": "Diseño de sistemas distribuidos usando microservicios, DDD, Clean Architecture, REST/GraphQL y patrones guiados por eventos.",
         "badge": "Arquitectura",
-        "statsLabel": "Microservicios · DDD"
+        "statsLabel": "Microservicios · DDD",
+        "practicePoints": "Refactoricé sistemas hacia CQRS y patrones guiados por eventos para mejorar la escalabilidad y reducir el acoplamiento en Musa.\nLideré investigaciones de arquitectura y decisiones de diseño que redujeron aproximadamente un 25 % el retrabajo en Walmart.\nEstablecí registros de decisiones de arquitectura (ADR) y estándares de código.",
+        "visualNodes": [
+          {
+            "label": "DDD"
+          },
+          {
+            "label": "CQRS"
+          },
+          {
+            "label": "API"
+          },
+          {
+            "label": "DB"
+          }
+        ]
       },
       {
         "locale": "en",
         "title": "System Architecture",
         "description": "Designing distributed systems using microservices, DDD, Clean Architecture, REST/GraphQL, and event-driven patterns where appropriate.",
         "badge": "Architecture",
-        "statsLabel": "Microservices · DDD"
+        "statsLabel": "Microservices · DDD",
+        "practicePoints": "Refactored systems toward CQRS and event-driven patterns to improve scalability and reduce coupling at Musa.\nLed architecture investigations and design decisions that reduced rework by approximately 25% at Walmart.\nEstablished Architecture Decision Records (ADRs) and coding standards.",
+        "visualNodes": [
+          {
+            "label": "DDD"
+          },
+          {
+            "label": "CQRS"
+          },
+          {
+            "label": "API"
+          },
+          {
+            "label": "DB"
+          }
+        ]
       },
       {
         "locale": "nl",
         "title": "Systeemarchitectuur",
         "description": "Ontwerpen van gedistribueerde systemen met microservices, DDD, Clean Architecture, REST/GraphQL en event-driven patronen.",
         "badge": "Architectuur",
-        "statsLabel": "Microservices · DDD"
+        "statsLabel": "Microservices · DDD",
+        "practicePoints": "Herstructureerde systemen met CQRS en event-driven patronen om schaalbaarheid te verbeteren en koppeling te verminderen bij Musa.\nLeidde architectuuronderzoek en ontwerpbeslissingen die het herwerk bij Walmart met ongeveer 25% verminderden.\nIntroduceerde Architecture Decision Records (ADR’s) en codeerstandaarden.",
+        "visualNodes": [
+          {
+            "label": "DDD"
+          },
+          {
+            "label": "CQRS"
+          },
+          {
+            "label": "API"
+          },
+          {
+            "label": "DB"
+          }
+        ]
       }
+    ],
+    "visualType": "architecture",
+    "skillTitles": [
+      "Microservices",
+      "Domain Driven Design",
+      "Clean Architecture"
     ]
   },
   {
@@ -77,22 +229,103 @@
         "title": "Ingeniería Frontend",
         "description": "Sistemas frontend de alto rendimiento y accesibles construidos con React, Next.js y TypeScript.",
         "badge": "Frontend & UI/UX",
-        "statsLabel": "WCAG 2.2 AAA · UI Components"
+        "statsLabel": "WCAG 2.2 AAA · UI Components",
+        "practicePoints": "Migré interfaces de jQuery a React y TypeScript, mejorando aproximadamente un 35 % el rendimiento en Musa.\nDefiní una biblioteca de componentes y estándares adoptados en Contollo.\nEntregué funcionalidades en React, Flutter y VTEX para pagos, búsqueda y facturación en Walmart.",
+        "visualNodes": [
+          {
+            "label": "Experiencia de uso"
+          },
+          {
+            "label": "Cargando"
+          },
+          {
+            "label": "Listo para usar"
+          },
+          {
+            "label": "Explorar"
+          },
+          {
+            "label": "Accesible"
+          },
+          {
+            "label": "Adaptable"
+          },
+          {
+            "label": "Menos espera. Más interacción."
+          }
+        ]
       },
       {
         "locale": "en",
         "title": "Frontend Engineering",
         "description": "High-performance, accessible frontend systems built with React, Next.js, and TypeScript.",
         "badge": "Frontend & UI/UX",
-        "statsLabel": "WCAG 2.2 AAA · UI Components"
+        "statsLabel": "WCAG 2.2 AAA · UI Components",
+        "practicePoints": "Migrated jQuery interfaces to React and TypeScript, improving performance by approximately 35% at Musa.\nDefined a component library and standards adopted across Contollo.\nDelivered React, Flutter and VTEX features across checkout, search and billing at Walmart.",
+        "visualNodes": [
+          {
+            "label": "User experience"
+          },
+          {
+            "label": "Still loading"
+          },
+          {
+            "label": "Ready to use"
+          },
+          {
+            "label": "Explore"
+          },
+          {
+            "label": "Accessible"
+          },
+          {
+            "label": "Responsive"
+          },
+          {
+            "label": "Less waiting. More interaction."
+          }
+        ]
       },
       {
         "locale": "nl",
         "title": "Frontend Engineering",
         "description": "Snelle, toegankelijke frontendsystemen gebouwd met React, Next.js en TypeScript.",
         "badge": "Frontend & UI/UX",
-        "statsLabel": "WCAG 2.2 AAA · UI Components"
+        "statsLabel": "WCAG 2.2 AAA · UI Components",
+        "practicePoints": "Migreerde jQuery-interfaces naar React en TypeScript en verbeterde de prestaties bij Musa met ongeveer 35%.\nOntwikkelde een componentenbibliotheek en standaarden die binnen Contollo werden overgenomen.\nLeverde React-, Flutter- en VTEX-functionaliteit voor afrekenen, zoeken en facturatie bij Walmart.",
+        "visualNodes": [
+          {
+            "label": "Gebruikerservaring"
+          },
+          {
+            "label": "Nog laden"
+          },
+          {
+            "label": "Klaar voor gebruik"
+          },
+          {
+            "label": "Ontdekken"
+          },
+          {
+            "label": "Toegankelijk"
+          },
+          {
+            "label": "Responsief"
+          },
+          {
+            "label": "Minder wachten. Meer interactie."
+          }
+        ]
       }
+    ],
+    "visualType": "frontend",
+    "skillTitles": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Redux",
+      "Angular"
     ]
   },
   {
@@ -109,22 +342,102 @@
         "title": "Confiabilidad & DevOps",
         "description": "Administración de servidores Linux, contenedorización con Docker, integración continua CI/CD y despliegues en la nube.",
         "badge": "DevOps & Cloud",
-        "statsLabel": "Automatización CI/CD"
+        "statsLabel": "Automatización CI/CD",
+        "practicePoints": "Reduje los ciclos de pruebas de regresión de siete a cuatro días con pruebas de extremo a extremo en Playwright en Walmart.\nEstablecí pipelines CI/CD y estándares de revisión de código en Contollo.\nMejoré aproximadamente un 40 % el tiempo medio de recuperación mediante análisis de causa raíz y prevención de recurrencias.",
+        "visualNodes": [
+          {
+            "label": "Compilar"
+          },
+          {
+            "label": "Probar"
+          },
+          {
+            "label": "Revisar"
+          },
+          {
+            "label": "Publicar"
+          },
+          {
+            "label": "Automatizado"
+          },
+          {
+            "label": "Verificado"
+          },
+          {
+            "label": "Entregas confiables"
+          }
+        ]
       },
       {
         "locale": "en",
         "title": "Reliability & DevOps",
         "description": "Linux server administration, Docker containerization, CI/CD pipeline automation, and cloud deployments.",
         "badge": "DevOps & Cloud",
-        "statsLabel": "CI/CD Automation"
+        "statsLabel": "CI/CD Automation",
+        "practicePoints": "Reduced regression testing cycles from seven to four days with Playwright end-to-end tests at Walmart.\nEstablished CI/CD pipelines and code review standards at Contollo.\nImproved mean time to recovery by approximately 40% through root-cause analysis and recurrence prevention.",
+        "visualNodes": [
+          {
+            "label": "Build"
+          },
+          {
+            "label": "Test"
+          },
+          {
+            "label": "Scan"
+          },
+          {
+            "label": "Deploy"
+          },
+          {
+            "label": "Automated"
+          },
+          {
+            "label": "Checks passed"
+          },
+          {
+            "label": "Reliable releases"
+          }
+        ]
       },
       {
         "locale": "nl",
         "title": "Betrouwbaarheid & DevOps",
         "description": "Linux serverbeheer, Docker-containerisatie, CI/CD geautomatiseerde pipelines en cloud-deployments.",
         "badge": "DevOps & Cloud",
-        "statsLabel": "CI/CD Automatisering"
+        "statsLabel": "CI/CD Automatisering",
+        "practicePoints": "Verkortte regressietestcycli van zeven naar vier dagen met Playwright end-to-endtests bij Walmart.\nIntroduceerde CI/CD-pipelines en standaarden voor codereviews bij Contollo.\nVerbeterde de gemiddelde hersteltijd met ongeveer 40% door oorzaakanalyse en het voorkomen van herhaling.",
+        "visualNodes": [
+          {
+            "label": "Bouwen"
+          },
+          {
+            "label": "Testen"
+          },
+          {
+            "label": "Scannen"
+          },
+          {
+            "label": "Uitrollen"
+          },
+          {
+            "label": "Automatisch"
+          },
+          {
+            "label": "Gecontroleerd"
+          },
+          {
+            "label": "Betrouwbare releases"
+          }
+        ]
       }
+    ],
+    "visualType": "pipeline",
+    "skillTitles": [
+      "Docker",
+      "Azure",
+      "AWS",
+      "Google Cloud Platform",
+      "Playwright"
     ]
   },
   {
@@ -141,23 +454,124 @@
         "title": "Ingeniería de Software Segura",
         "description": "Código seguro, seguridad de dependencias, prácticas OWASP y DevSecOps.",
         "badge": "Seguridad",
-        "statsLabel": "OWASP & Snyk Compliance"
+        "statsLabel": "OWASP & Snyk Compliance",
+        "practicePoints": "Implementé control de acceso basado en roles (RBAC) y vistas de auditoría técnica en Claro.\nIntegré APIs y servicios seguros con QuickBooks y DevExpress Report Manager en Contollo.\nCompleté formación en Seguridad Digital y Protección de Datos con Numu y el BID en 2022.",
+        "visualNodes": [
+          {
+            "label": "Aplicación activa"
+          },
+          {
+            "label": "Actualizar"
+          },
+          {
+            "label": "Protegida"
+          },
+          {
+            "label": "Intento de ataque"
+          },
+          {
+            "label": "Bloqueado"
+          },
+          {
+            "label": "Ciclo de seguridad"
+          },
+          {
+            "label": "Se detecta una dependencia vulnerable"
+          },
+          {
+            "label": "Se verifica y publica la actualización"
+          },
+          {
+            "label": "El mismo ataque ya no puede entrar"
+          },
+          {
+            "label": "Detectar. Corregir. Verificar. Proteger."
+          }
+        ]
       },
       {
         "locale": "en",
         "title": "Secure Software Engineering",
         "description": "Secure coding, dependency security, OWASP practices, and DevSecOps.",
         "badge": "Security",
-        "statsLabel": "OWASP & Snyk Compliance"
+        "statsLabel": "OWASP & Snyk Compliance",
+        "practicePoints": "Implemented role-based access control (RBAC) and technical audit views at Claro.\nIntegrated secure APIs and services with QuickBooks and DevExpress Report Manager at Contollo.\nCompleted Digital Security and Data Protection training with Numu and IDB in 2022.",
+        "visualNodes": [
+          {
+            "label": "Live application"
+          },
+          {
+            "label": "Update needed"
+          },
+          {
+            "label": "Protected"
+          },
+          {
+            "label": "Attack attempt"
+          },
+          {
+            "label": "Blocked"
+          },
+          {
+            "label": "Security lifecycle"
+          },
+          {
+            "label": "A vulnerable dependency is detected"
+          },
+          {
+            "label": "The update is checked and deployed"
+          },
+          {
+            "label": "The same attack can no longer get through"
+          },
+          {
+            "label": "Detect. Fix. Verify. Protect."
+          }
+        ]
       },
       {
         "locale": "nl",
         "title": "Veilige Software-engineering",
         "description": "Veilige code, afhankelijkheidsbeveiliging, OWASP-praktijken en DevSecOps.",
         "badge": "Security",
-        "statsLabel": "OWASP & Snyk Compliance"
+        "statsLabel": "OWASP & Snyk Compliance",
+        "practicePoints": "Implementeerde rolgebaseerde toegangscontrole (RBAC) en technische auditweergaven bij Claro.\nIntegreerde veilige API’s en services met QuickBooks en DevExpress Report Manager bij Contollo.\nVolgde in 2022 de opleiding Digitale Veiligheid en Gegevensbescherming bij Numu en IDB.",
+        "visualNodes": [
+          {
+            "label": "Live applicatie"
+          },
+          {
+            "label": "Update nodig"
+          },
+          {
+            "label": "Beveiligd"
+          },
+          {
+            "label": "Aanvalspoging"
+          },
+          {
+            "label": "Geblokkeerd"
+          },
+          {
+            "label": "Beveiligingscyclus"
+          },
+          {
+            "label": "Een kwetsbare afhankelijkheid wordt ontdekt"
+          },
+          {
+            "label": "De update wordt gecontroleerd en uitgerold"
+          },
+          {
+            "label": "Dezelfde aanval komt niet meer binnen"
+          },
+          {
+            "label": "Detecteren. Herstellen. Controleren."
+          }
+        ]
       }
-    ]
+    ],
+    "visualType": "security",
+    "skillTitles": ["OWASP", "JWT"]
   },
   {
     "key": "mobile",
@@ -173,21 +587,201 @@
         "title": "Móvil",
         "description": "Aplicaciones móviles nativas y multiplataforma ágiles, modernas y fluidas con React Native para iOS y Android.",
         "badge": "Móvil Multiplataforma",
-        "statsLabel": "iOS & Android"
+        "statsLabel": "iOS & Android",
+        "practicePoints": "Construí Telo Wallet y Telo Business con React Native para el ecosistema de criptomonedas de Telo Group.\nIntegré eventos de pago con Socket.IO y flujos de cobro con códigos QR.\nEntregué funcionalidades en Flutter para el ecosistema de Walmart.",
+        "visualNodes": [
+          {
+            "label": "Pedidos"
+          },
+          {
+            "label": "Tienda"
+          },
+          {
+            "label": "Pagar"
+          },
+          {
+            "label": "Confirmado"
+          },
+          {
+            "label": "Escanear"
+          },
+          {
+            "label": "Pagado"
+          },
+          {
+            "label": "De descubrir un producto a comprarlo"
+          }
+        ]
       },
       {
         "locale": "en",
         "title": "Mobile",
         "description": "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
         "badge": "Cross-Platform Mobile",
-        "statsLabel": "iOS & Android"
+        "statsLabel": "iOS & Android",
+        "practicePoints": "Built Telo Wallet and Telo Business mobile applications with React Native for Telo Group’s crypto ecosystem.\nIntegrated Socket.IO payment events and QR-code checkout flows.\nDelivered Flutter features for Walmart’s ecosystem.",
+        "visualNodes": [
+          {
+            "label": "Orders"
+          },
+          {
+            "label": "Shop"
+          },
+          {
+            "label": "Checkout"
+          },
+          {
+            "label": "Placed"
+          },
+          {
+            "label": "Scan to pay"
+          },
+          {
+            "label": "Paid"
+          },
+          {
+            "label": "From discovery to a completed purchase"
+          }
+        ]
       },
       {
         "locale": "nl",
         "title": "Mobiel",
         "description": "Snel en vloeiend mobiel applicatieontwerp met React Native voor iOS en Android.",
         "badge": "Cross-Platform Mobiel",
-        "statsLabel": "iOS & Android"
+        "statsLabel": "iOS & Android",
+        "practicePoints": "Bouwde Telo Wallet en Telo Business met React Native voor het crypto-ecosysteem van Telo Group.\nIntegreerde Socket.IO-betaalgebeurtenissen en afrekenstromen met QR-codes.\nLeverde Flutter-functionaliteit voor het ecosysteem van Walmart.",
+        "visualNodes": [
+          {
+            "label": "Orders"
+          },
+          {
+            "label": "Winkel"
+          },
+          {
+            "label": "Afrekenen"
+          },
+          {
+            "label": "Geplaatst"
+          },
+          {
+            "label": "Scannen"
+          },
+          {
+            "label": "Betaald"
+          },
+          {
+            "label": "Van ontdekken tot een afgeronde aankoop"
+          }
+        ]
+      }
+    ],
+    "visualType": "mobile",
+    "skillTitles": ["React Native", "Flutter", "WebSockets", "Mapbox GL"]
+  },
+  {
+    "key": "ai",
+    "type": "AI",
+    "icon": "sparkles",
+    "visualType": "ai",
+    "statsValue": "",
+    "featured": false,
+    "order": 6,
+    "image": "",
+    "skillTitles": ["GitHub Copilot", "Claude 3.5", "Playwright"],
+    "translations": [
+      {
+        "locale": "es",
+        "title": "La IA acelera. Yo lo hago sólido.",
+        "description": "La IA acelera la investigación y el código. Reinvierto ese tiempo en pruebas, seguridad y revisión.",
+        "badge": "IA y herramientas",
+        "statsLabel": "",
+        "practicePoints": "Integré GitHub Copilot y Claude en flujos de generación de pruebas y tipado de clientes de API.\nReinvertí el tiempo ahorrado para aumentar un 30 % la cobertura de pruebas de extremo a extremo con Playwright en pagos y facturación en Walmart.\nEstablecí listas de revisión de código generado con IA que cubren privacidad, seguridad OWASP y tipos deterministas.",
+        "visualNodes": [
+          {
+            "label": "La IA crea el borrador"
+          },
+          {
+            "label": "Revisado y robusto"
+          },
+          {
+            "label": "Seguridad"
+          },
+          {
+            "label": "Pruebas"
+          },
+          {
+            "label": "Tipos"
+          },
+          {
+            "label": "Revisión"
+          },
+          {
+            "label": "La IA acelera. La ingeniería da confianza."
+          }
+        ]
+      },
+      {
+        "locale": "en",
+        "title": "AI makes it fast. I make it solid.",
+        "description": "AI speeds up research and code. I reinvest the time in tests, security, and review.",
+        "badge": "AI & Tooling",
+        "statsLabel": "",
+        "practicePoints": "Integrated GitHub Copilot and Claude into test generation and API client typing workflows.\nUsed the time saved to increase Playwright end-to-end coverage across checkout and billing flows by 30% at Walmart.\nEstablished AI code review checklists covering data privacy, OWASP security and deterministic types.",
+        "visualNodes": [
+          {
+            "label": "AI drafts quickly"
+          },
+          {
+            "label": "Reviewed and made reliable"
+          },
+          {
+            "label": "Security"
+          },
+          {
+            "label": "Tests"
+          },
+          {
+            "label": "Types"
+          },
+          {
+            "label": "Reviews"
+          },
+          {
+            "label": "AI adds speed. Engineering adds confidence."
+          }
+        ]
+      },
+      {
+        "locale": "nl",
+        "title": "AI versnelt. Ik maak het solide.",
+        "description": "AI versnelt onderzoek en code. De bespaarde tijd investeer ik in tests, beveiliging en review.",
+        "badge": "AI en tooling",
+        "statsLabel": "",
+        "practicePoints": "Integreerde GitHub Copilot en Claude in workflows voor testgeneratie en typering van API-clients.\nInvesteerde de bespaarde tijd in 30% meer Playwright end-to-enddekking voor afrekenen en facturatie bij Walmart.\nIntroduceerde checklists voor AI-codereviews met aandacht voor privacy, OWASP-beveiliging en deterministische types.",
+        "visualNodes": [
+          {
+            "label": "AI maakt snel een concept"
+          },
+          {
+            "label": "Gecontroleerd en betrouwbaar"
+          },
+          {
+            "label": "Beveiliging"
+          },
+          {
+            "label": "Tests"
+          },
+          {
+            "label": "Types"
+          },
+          {
+            "label": "Review"
+          },
+          {
+            "label": "AI biedt snelheid. Engineering vertrouwen."
+          }
+        ]
       }
     ]
   }

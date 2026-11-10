@@ -141,27 +141,26 @@ const mockSkills: SkillType[] = [
 ];
 
 describe("SkillsTerminal", () => {
-  it("renders header, summary badge, and initial AI category skills with trend badge and updated pill", () => {
-    render(<SkillsTerminal initialSkills={mockSkills} />);
+  it("renders header, summary badge, and initial AI category skills with trend badge", () => {
+    render(<SkillsTerminal initialSkills={mockSkills} showHeader />);
 
     // Header & summary badge
     expect(screen.getByTestId("header-article")).toBeInTheDocument();
     expect(screen.getByText("expertise.json")).toBeInTheDocument();
     expect(screen.getByText("OpenAI GPT-4o")).toBeInTheDocument();
     expect(screen.getByText("terminal.trend")).toBeInTheDocument();
-    expect(screen.getByText("terminal.updatedTechPill")).toBeInTheDocument();
 
     // React is frontend, so not visible under AI tab initially
     expect(screen.queryByText("React")).not.toBeInTheDocument();
   });
 
-  it("switches category tab when clicked", () => {
+  it("switches terminal file tabs without a dropdown", () => {
     render(<SkillsTerminal initialSkills={mockSkills} />);
 
-    const backendTab = screen.getByRole("tab", {
-      name: /tabs\.backend\.title/i,
-    });
-    fireEvent.click(backendTab);
+    const category = screen.getByRole("tab", { name: /tabs.backend.title/ });
+    fireEvent.click(category);
+    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+    expect(category).toHaveAttribute("aria-selected", "true");
 
     expect(screen.getByText("Node.js")).toBeInTheDocument();
     expect(screen.queryByText("React")).not.toBeInTheDocument();

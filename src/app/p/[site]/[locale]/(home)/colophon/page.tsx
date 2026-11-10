@@ -120,6 +120,12 @@ export default async function ColophonRoute({ params }: ColophonRouteProps) {
             brandLabel: t("carbon.badge.brand"),
             cleanerLabel: t("carbon.badge.cleaner"),
           },
+          carbonMetrics: {
+            firstVisit: t("carbon.metrics.firstVisit"),
+            returnVisits: t("carbon.metrics.returnVisits"),
+            websiteCarbon: t("carbon.metrics.websiteCarbon"),
+            digitalBeacon: t("carbon.metrics.digitalBeacon"),
+          },
         }}
       />
     </ProcessPageShell>

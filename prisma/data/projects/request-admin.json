@@ -8,7 +8,7 @@
   "websiteUrl": "https://request-admin.vercel.app",
   "isPrivate": false,
   "caseStudyEnabled": true,
-  "order": 6,
+  "order": 8,
   "skillKeys": [
     "Nextjs",
     "React",

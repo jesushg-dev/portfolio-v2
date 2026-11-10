@@ -12,6 +12,7 @@ import { clampPercent } from "@/features/uses/lib/workspace-tag-coords";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 import type { Prisma } from "@prisma/client";
 
 const UsesItemTypeSchema = z.enum(["EVERYDAY", "SOFTWARE", "BROWSER"]);
@@ -211,6 +212,44 @@ export const usesAdminRouter = createTRPCRouter({
       });
 
       return mapUsesItemToEditorDto(updated, languages);
+    }),
+
+  reorderItem: protectedProcedure
+    .input(z.object({ id: z.string(), direction: z.enum(["up", "down"]) }))
+    .mutation(async ({ ctx, input }) => {
+      const current = await ctx.db.usesItem.findFirst({
+        where: { id: input.id, userId: ctx.user.id },
+      });
+      if (!current) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const adjacent = await ctx.db.usesItem.findFirst({
+        where: {
+          userId: ctx.user.id,
+          type: current.type,
+          order:
+            input.direction === "up"
+              ? { lt: current.order }
+              : { gt: current.order },
+        },
+        orderBy: { order: input.direction === "up" ? "desc" : "asc" },
+      });
+
+      if (!adjacent) return { ok: true };
+
+      await ctx.db.$transaction([
+        ctx.db.usesItem.update({
+          where: { id: current.id },
+          data: { order: adjacent.order },
+        }),
+        ctx.db.usesItem.update({
+          where: { id: adjacent.id },
+          data: { order: current.order },
+        }),
+      ]);
+
+      return { ok: true };
     }),
 
   deleteItem: protectedProcedure

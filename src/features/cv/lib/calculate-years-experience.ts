@@ -52,4 +52,3 @@ export function calculateCumulativeYearsExperience(
   const totalMs = merged.reduce((acc, [start, end]) => acc + (end - start), 0);
   return Math.floor(totalMs / MS_PER_YEAR);
 }
-

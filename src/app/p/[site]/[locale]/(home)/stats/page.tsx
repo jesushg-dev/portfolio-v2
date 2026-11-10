@@ -27,7 +27,7 @@ export default async function StatsRoute({ params }: StatsRouteProps) {
     tenant
       ? getAnalyticsSummary(tenant.userId, {
           days: 30,
-          includeReferrers: false,
+          includeReferrers: true,
         })
       : Promise.resolve(emptyAnalyticsSummary()),
     api.portfolio.getStatsPublic({ locale }),

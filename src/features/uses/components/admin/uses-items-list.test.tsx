@@ -80,6 +80,12 @@ jest.mock("@/trpc/react", () => ({
           isPending: false,
         }),
       },
+      reorderItem: {
+        useMutation: () => ({
+          mutateAsync: jest.fn(),
+          isPending: false,
+        }),
+      },
     },
   },
 }));

@@ -2,15 +2,11 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { processDarkBandClass } from "./process-page-styles";
-
-export const processTerminalShellClass = cn(
-  "overflow-hidden rounded-2xl shadow-2xl",
-  processDarkBandClass,
-);
+export const processTerminalShellClass =
+  "overflow-hidden rounded-2xl border border-border/80 bg-card text-card-foreground shadow-2xl";
 
 export const processTerminalHeaderClass =
-  "flex items-center gap-2 border-b border-white/10 bg-slate-900/90 px-5 py-3";
+  "flex items-center gap-2 border-b border-border/80 bg-muted/40 px-5 py-3";
 
 interface ProcessTerminalPanelProps {
   title: string;
@@ -28,10 +24,10 @@ export function ProcessTerminalPanel({
   return (
     <div className={cn(processTerminalShellClass, className)}>
       <div className={processTerminalHeaderClass}>
-        <span aria-hidden className="size-3 rounded-full bg-red-500/80" />
-        <span aria-hidden className="size-3 rounded-full bg-yellow-500/80" />
-        <span aria-hidden className="size-3 rounded-full bg-green-500/80" />
-        <span className="ml-auto font-mono text-sm text-slate-100">
+        <span aria-hidden className="size-2.5 rounded-full bg-red-500/80" />
+        <span aria-hidden className="size-2.5 rounded-full bg-yellow-500/80" />
+        <span aria-hidden className="size-2.5 rounded-full bg-green-500/80" />
+        <span className="text-muted-foreground ml-auto font-mono text-sm">
           {title}
         </span>
         {badge}
@@ -57,18 +53,18 @@ export function ProcessTestRunnerOutput({
           key={`${line}-${index}`}
           className={
             index === 0
-              ? "text-slate-100"
+              ? "text-foreground font-semibold"
               : index >= lines.length - 3
-                ? "text-slate-100"
-                : "text-emerald-300"
+                ? "text-foreground"
+                : "text-emerald-500"
           }
         >
           {line}
         </p>
       ))}
-      <p className="mt-4 text-slate-100">
+      <p className="text-foreground mt-4">
         {cursorLabel}
-        <span className="text-sky-400 motion-safe:animate-pulse">▌</span>
+        <span className="text-primary motion-safe:animate-pulse">▌</span>
       </p>
     </div>
   );

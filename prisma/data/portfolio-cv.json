@@ -514,6 +514,7 @@
     {
       "key": "experience4",
       "company": "Musa",
+      "companyLogoUrl": "https://res.cloudinary.com/js-media/image/upload/v1793075691/portfolio/Musa_Banana_Swoosh_Logo-removebg-preview_zkqz61.png",
       "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador Full Stack",
@@ -619,6 +620,7 @@
     {
       "key": "experience5",
       "company": "Telo Group",
+      "companyLogoUrl": "https://res.cloudinary.com/js-media/image/upload/v1793075596/portfolio/telo_technology_logo_esmaeq.jpg",
       "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador de aplicaciones móviles",
@@ -716,6 +718,7 @@
       "key": "experience6",
       "company": "Asociación de Iglesias Reformadas",
       "employmentType": "FULL_TIME",
+      "companyLogoUrl": "https://res.cloudinary.com/js-media/image/upload/v1793076121/portfolio/ChatGPT_Image_Oct_26_2026_10_41_43_PM_brbpc4.png",
       "role": {
         "es": "Desarrollador Frontend y Técnico de TI",
         "en": "Frontend Developer and IT Technician",
