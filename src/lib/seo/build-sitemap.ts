@@ -71,6 +71,7 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/certificates/frontend",
   "/certificates/backend",
   "/certificates/cybersecurity",
+  "/certificates/devops",
   "/certificates/softskills",
   "/timeline",
   "/privacy",

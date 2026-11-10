@@ -302,6 +302,7 @@ export const auth = betterAuth({
     passkey({
       rpID: passkeyRelyingParty.rpID,
       rpName: passkeyRelyingParty.rpName,
+      origin: passkeyRelyingParty.origin,
       // Always require biometrics/PIN: a passkey sign-in bypasses the 2FA step by design.
       authenticatorSelection: {
         userVerification: "required",

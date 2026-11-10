@@ -17,6 +17,7 @@ export interface PasskeyRelyingPartyInput {
 export interface PasskeyRelyingParty {
   rpID: string;
   rpName: string;
+  origin: string[];
 }
 
 export const PASSKEY_RP_NAME = "Jehg";
@@ -30,23 +31,55 @@ function hostnameOf(value: string): string | null {
   }
 }
 
+function originOf(value: string, defaultProtocol = "https"): string | null {
+  const withScheme = /^https?:\/\//.test(value)
+    ? value
+    : `${defaultProtocol}://${value}`;
+  try {
+    return new URL(withScheme).origin.toLowerCase();
+  } catch {
+    return null;
+  }
+}
+
 export function resolvePasskeyRelyingParty(
   input: PasskeyRelyingPartyInput,
 ): PasskeyRelyingParty {
+  let rpID: string;
   if (input.betterAuthUrl) {
-    const explicit = hostnameOf(input.betterAuthUrl);
-    if (explicit) return { rpID: explicit, rpName: PASSKEY_RP_NAME };
+    rpID = hostnameOf(input.betterAuthUrl) ?? "localhost";
+  } else if (input.nodeEnv === "production") {
+    rpID = hostnameOf(input.primaryDomain) ?? input.primaryDomain;
+  } else {
+    rpID = hostnameOf(input.devDomain) ?? "localhost";
   }
 
-  if (input.nodeEnv === "production") {
-    return {
-      rpID: hostnameOf(input.primaryDomain) ?? input.primaryDomain,
-      rpName: PASSKEY_RP_NAME,
-    };
-  }
+  const explicitBetterAuthOrigin = input.betterAuthUrl
+    ? originOf(input.betterAuthUrl)
+    : null;
+
+  const rawOrigins: (string | null)[] =
+    input.nodeEnv === "production"
+      ? [
+          `https://${input.primaryDomain}`,
+          `https://www.${input.primaryDomain}`,
+          explicitBetterAuthOrigin,
+        ]
+      : [
+          "http://localhost:3000",
+          "http://127.0.0.1:3000",
+          originOf(input.devDomain, "http"),
+          "http://lvh.me:3000",
+          explicitBetterAuthOrigin,
+        ];
+
+  const origin = Array.from(
+    new Set(rawOrigins.filter((o): o is string => Boolean(o))),
+  );
 
   return {
-    rpID: hostnameOf(input.devDomain) ?? "localhost",
+    rpID,
     rpName: PASSKEY_RP_NAME,
+    origin,
   };
 }

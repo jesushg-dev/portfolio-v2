@@ -33,31 +33,28 @@ describe("CertificatesPage", () => {
     const ui = await CertificatesPage({
       params: Promise.resolve({ locale: "en", slug: ["FRONTEND"] }),
     });
-
-    const { container } = render(ui);
-    const el = screen.getByTestId("certification");
-    expect(el.getAttribute("data-slug")).toBe(JSON.stringify(["FRONTEND"]));
-    expect(container).toBeTruthy();
-  });
-
-  it("passes undefined slug when no filter is selected", async () => {
-    const ui = await CertificatesPage({
-      params: Promise.resolve({ locale: "en", slug: undefined as never }),
-    });
-
     render(ui);
-    const el = screen.getByTestId("certification");
-    expect(el.getAttribute("data-slug")).toBe("null");
-  });
-});
 
-describe("generateMetadata", () => {
-  it("returns certification namespace metadata", async () => {
-    const metadata = await generateMetadata({
-      params: Promise.resolve({ locale: "en", slug: undefined as never }),
+    const el = screen.getByTestId("certification");
+    expect(el).toHaveAttribute("data-slug", JSON.stringify(["FRONTEND"]));
+  });
+
+  it("renders when slug is omitted", async () => {
+    const ui = await CertificatesPage({
+      params: Promise.resolve({ locale: "en" }),
+    });
+    render(ui);
+
+    const el = screen.getByTestId("certification");
+    expect(el).toHaveAttribute("data-slug", JSON.stringify(null));
+  });
+
+  it("produces translated metadata for canonical certificates index", async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: "en" }),
     });
 
-    expect(metadata.title).toBe("Certificates");
-    expect(metadata.description).toBe("Empowering projects");
+    expect(meta.title).toBe("Certificates");
+    expect(meta.description).toBe("Empowering projects");
   });
 });

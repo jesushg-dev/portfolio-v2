@@ -173,6 +173,7 @@ export const portfolioRouter = createTRPCRouter({
       };
 
       const data = await ctx.db.certification.findMany({
+        where: baseWhere,
         include: {
           CertificationTranslation: {
             where: {
@@ -193,7 +194,6 @@ export const portfolioRouter = createTRPCRouter({
         },
         take: limit,
         skip: cursor ? 1 : 0,
-        where: baseWhere,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: [{ issuedDate: "desc" }, { createdAt: "desc" }],
       });
