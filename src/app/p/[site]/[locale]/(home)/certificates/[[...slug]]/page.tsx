@@ -8,9 +8,14 @@ import Certification from "@/features/certifications/components/certification";
 import type { stackTypes } from "@/utils/constants/certificates-type";
 
 export function generateStaticParams() {
-  return [[], ["frontend"], ["backend"], ["cybersecurity"], ["softskills"]].map(
-    (slug) => ({ slug }),
-  );
+  return [
+    [],
+    ["frontend"],
+    ["backend"],
+    ["cybersecurity"],
+    ["devops"],
+    ["softskills"],
+  ].map((slug) => ({ slug }));
 }
 
 interface ICvPageProps {

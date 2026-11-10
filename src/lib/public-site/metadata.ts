@@ -43,7 +43,9 @@ export async function createPublicTranslatedMetadata(
     const pathname =
       config.pathname === "/certificates" &&
       slug?.[0] &&
-      ["frontend", "backend", "cybersecurity", "softskills"].includes(slug[0])
+      ["frontend", "backend", "cybersecurity", "devops", "softskills"].includes(
+        slug[0],
+      )
         ? `/certificates/${slug[0]}`
         : config.pathname;
     const alternates = await buildPublicAlternates(

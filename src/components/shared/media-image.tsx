@@ -12,10 +12,23 @@ export function MediaImage({
   src,
   unoptimized,
   alt = "",
+  style,
   ...props
 }: MediaImageProps) {
+  const mergedStyle = props.fill
+    ? style
+    : { width: "auto", height: "auto", ...style };
+
   if (typeof src !== "string") {
-    return <Image src={src} alt={alt} unoptimized={unoptimized} {...props} />;
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        unoptimized={unoptimized}
+        style={mergedStyle}
+        {...props}
+      />
+    );
   }
 
   const remote = classifyMediaSrc(src) === "remote-url";
@@ -27,6 +40,7 @@ export function MediaImage({
       {...props}
       src={src}
       unoptimized={unoptimized ?? directRemote}
+      style={mergedStyle}
     />
   );
 }

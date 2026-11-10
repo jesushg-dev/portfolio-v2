@@ -119,7 +119,7 @@ const Footer = async ({
         }}
       />
 
-      <div className="mx-auto max-w-[67.5rem] px-6 py-12 lg:py-16">
+      <div className="mx-auto px-4 py-12 sm:px-6 lg:container lg:px-20 lg:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_0.9fr_1.4fr] lg:gap-8">
           {/* Column 1: Brand Mark & Info */}
           <div className="space-y-4">

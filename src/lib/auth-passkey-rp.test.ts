@@ -8,7 +8,11 @@ describe("resolvePasskeyRelyingParty", () => {
         primaryDomain: "jesushg.com",
         devDomain: "lvh.me:3000",
       }),
-    ).toEqual({ rpID: "jesushg.com", rpName: "Jehg" });
+    ).toEqual({
+      rpID: "jesushg.com",
+      rpName: "Jehg",
+      origin: ["https://jesushg.com", "https://www.jesushg.com"],
+    });
   });
 
   it("uses the dev domain host (without port) outside production", () => {

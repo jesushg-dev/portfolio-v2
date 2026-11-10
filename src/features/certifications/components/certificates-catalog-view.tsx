@@ -21,6 +21,7 @@ import {
   Terminal,
   Users,
   ExternalLink,
+  ChevronDown,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -732,18 +733,22 @@ export function CertificatesCatalogView({
               </kbd>
             </label>
 
-            <label className="w-full sm:w-56">
+            <label className="relative block w-full sm:w-56">
               <span className="sr-only">{t("catalog.sortLabel")}</span>
               <select
                 value={sort}
                 onChange={handleSortChange}
-                className="border-border/80 bg-background/80 text-foreground focus:border-primary focus:ring-primary/20 w-full cursor-pointer rounded-full border px-5 py-3 text-sm outline-hidden transition-all focus:ring-2"
+                className="border-border/80 bg-background/80 text-foreground focus:border-primary focus:ring-primary/20 w-full cursor-pointer appearance-none rounded-full border py-3 pr-10 pl-5 text-sm outline-hidden transition-all focus:ring-2"
               >
                 <option value="newest">{t("catalog.sorts.newest")}</option>
                 <option value="oldest">{t("catalog.sorts.oldest")}</option>
                 <option value="name">{t("catalog.sorts.name")}</option>
                 <option value="issuer">{t("catalog.sorts.issuer")}</option>
               </select>
+              <ChevronDown
+                className="text-muted-foreground pointer-events-none absolute top-1/2 right-4.5 size-4 -translate-y-1/2"
+                aria-hidden="true"
+              />
             </label>
           </div>
 
