@@ -57,7 +57,7 @@ const HeaderCV: FC<IHeaderCvProps> = ({
         ) : null}
       </div>
 
-      <span className="flex size-28 shrink-0 items-center justify-center overflow-hidden bg-white text-4xl font-bold text-slate-800">
+      <span className="flex aspect-[3/4] w-24 shrink-0 items-center justify-center overflow-hidden rounded-sm bg-white text-4xl font-bold text-slate-800 md:w-28">
         {header?.photoUrl ? (
           <ClientImage src={header.photoUrl} alt={alt || fullName} />
         ) : (

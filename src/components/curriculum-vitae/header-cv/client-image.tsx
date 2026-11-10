@@ -15,8 +15,8 @@ const ClientImage: FC<ClientImageProps> = ({ src, alt }) => {
       <MediaImage
         alt={alt ?? "Client Image"}
         loading="lazy"
-        width={112}
-        height={112}
+        width={300}
+        height={400}
         decoding="async"
         src={src}
         className="size-full object-cover"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FC, type ReactNode } from "react";
+import { useState, useMemo, type FC, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { ChartColumn, ChevronDown, Download, Eye, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +21,10 @@ import { TailoredAtsPreview } from "@/features/resume-engine/components/tailored
 import { ResumeAtsCheckerSummary } from "@/features/resume-engine/components/resume-ats-checker-summary";
 import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
 import { api } from "@/trpc/react";
+import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
 
 type PreviewMode = "word" | "pdf" | "ats" | "match";
 
@@ -177,24 +181,52 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
     }
   };
 
+  const fallbackBaseName = useMemo(() => {
+    if (!structuredSnapshot || typeof structuredSnapshot !== "object") {
+      return null;
+    }
+    const snap = structuredSnapshot as {
+      header?: { fullName?: string; degree?: string | null };
+      locale?: string;
+    };
+    if (!snap.header?.fullName) return null;
+    try {
+      return buildAtsCvFileName({
+        fullName: snap.header.fullName,
+        roleTrack: inferCvRoleTrack(snap.header.degree ?? ""),
+        locale: snap.locale ?? "en",
+        extension: "docx",
+      }).replace(/\.docx$/i, "");
+    } catch {
+      return null;
+    }
+  }, [structuredSnapshot]);
+
   const docxFilename = fileName
     ? fileName.toLowerCase().endsWith(".docx")
       ? fileName
       : `${fileName.replace(/\.[^/.]+$/, "")}.docx`
-    : "tailored-cv.docx";
+    : fallbackBaseName
+      ? `${fallbackBaseName}.docx`
+      : "CV.docx";
 
   const pdfFilename = fileName
     ? fileName.toLowerCase().endsWith(".pdf")
       ? fileName
       : `${fileName.replace(/\.[^/.]+$/, "")}.pdf`
-    : "tailored-cv.pdf";
+    : fallbackBaseName
+      ? `${fallbackBaseName}.pdf`
+      : "CV.pdf";
 
   const handleGeneratePdf = async (autoDownload = false) => {
     if (!exportId || generatePdfMutation.isPending) return;
     try {
       const res = await generatePdfMutation.mutateAsync({ exportId });
       if (autoDownload && res.pdfDownloadUrl) {
-        void triggerDownload(res.pdfDownloadUrl, pdfFilename);
+        void triggerDownload(
+          res.pdfDownloadUrl,
+          res.pdfFileName ?? pdfFilename,
+        );
       }
     } catch {
       // toast is handled in onError

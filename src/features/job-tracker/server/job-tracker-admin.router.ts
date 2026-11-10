@@ -43,6 +43,10 @@ import {
 } from "@/lib/google-calendar/sync";
 import { getGoogleCalendarConnectionForUser } from "@/lib/google-calendar/connection";
 import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
+import {
   getOpenJobSearch,
   startNewJobSearch,
 } from "@/features/job-tracker/server/active-job-search";
@@ -1173,7 +1177,13 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       const filename =
         input.attachmentName?.trim() ??
         application.cvFile?.name?.trim() ??
-        `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.pdf`;
+        buildAtsCvFileName({
+          fullName: draftCv?.header.fullName ?? "Candidate",
+          roleTrack: inferCvRoleTrack(draftCv?.header.degree ?? ""),
+          company: application.company.name,
+          locale: input.locale,
+          extension: "pdf",
+        });
 
       const toEmail = input.toEmail.toLowerCase();
       const bodyText = input.body;

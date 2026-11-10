@@ -238,7 +238,12 @@
   /*========== GLOBAL VARIABLES ==========*/
   /*========== MAIN-LIGHT THEME ==========*/
   [data-theme="main-light"] {
-    --brand2: #1d3fae;
+    --brand2: #4a54ae;
+    --gl1: rgba(255, 255, 255, 0.86);
+    --gl2: rgba(218, 230, 251, 0.74);
+    --gb: rgba(83, 111, 164, 0.24);
+    --gh: rgba(255, 255, 255, 0.92);
+    --gs: 0 1.125rem 3.125rem rgba(37, 61, 106, 0.16);
     /*========== REDUDANT OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #eff7ff;
     --color-primary-100: #dbeafe;
@@ -248,7 +253,7 @@
     --color-primary-500: #3b82f6;
     --color-primary-600: #2563eb;
     --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
+    --color-primary-800: #173888;
     --color-primary-900: #1e3a8a;
 
     --color-primaryDark-50: #b2e2f2;
@@ -273,16 +278,16 @@
     --color-primaryLight-800: #83b9dd;
     --color-primaryLight-900: #6baed2;
 
-    --color-primaryText-50: #3e3e3e;
-    --color-primaryText-100: #363636;
-    --color-primaryText-200: #2e2e2e;
-    --color-primaryText-300: #262626;
-    --color-primaryText-400: #1e1e1e;
-    --color-primaryText-500: #212121;
-    --color-primaryText-600: #191919;
-    --color-primaryText-700: #131313;
-    --color-primaryText-800: #0b0b0b;
-    --color-primaryText-900: #050505;
+    --color-primaryText-50: #475a78;
+    --color-primaryText-100: #3f526e;
+    --color-primaryText-200: #334665;
+    --color-primaryText-300: #2b3d5c;
+    --color-primaryText-400: #20334e;
+    --color-primaryText-500: #172940;
+    --color-primaryText-600: #122239;
+    --color-primaryText-700: #0f1d33;
+    --color-primaryText-800: #0b182a;
+    --color-primaryText-900: #07111e;
 
     --color-secondary-50: #ebfafe;
     --color-secondary-100: #d7f2fd;
@@ -306,8 +311,8 @@
     --color-secondaryText-800: #b3b3b3;
     --color-secondaryText-900: #a6a6a6;
 
-    --color-divider-50: #e2e8f0;
-    --color-divider-100: #cbd5e1;
+    --color-divider-50: #b8c9e0;
+    --color-divider-100: #9fb3d1;
     --color-divider-200: #94a3b8;
     --color-divider-300: #64748b;
     --color-divider-400: #475569;
@@ -317,9 +322,9 @@
     --color-divider-800: #020617;
     --color-divider-900: #000000;
 
-    --color-background-50: #ffffff;
-    --color-background-100: #f8fafc;
-    --color-background-200: #f1f5f9;
+    --color-background-50: #f5f8fe;
+    --color-background-100: #e9eff8;
+    --color-background-200: #dce6f3;
     --color-background-300: #ebebeb;
     --color-background-400: #e2e2e2;
     --color-background-500: #748ba7;
@@ -327,6 +332,20 @@
     --color-background-700: #676c96;
     --color-background-800: #f8fafc;
     --color-background-900: #111827;
+  }
+
+  [data-theme="main-light"] #top {
+    background:
+      radial-gradient(
+        ellipse 50% 65% at 76% 48%,
+        color-mix(in srgb, var(--brand2) 14%, transparent),
+        transparent 72%
+      ),
+      linear-gradient(130deg, #e2eaf7, #edf2fa 55%, #dde6f6);
+  }
+
+  [data-theme="main-light"] .hero-portrait-ring {
+    box-shadow: 0 1.5rem 3rem rgba(39, 69, 126, 0.2);
   }
 
   /*========== MAIN-DARK THEME ==========*/
@@ -424,6 +443,12 @@
 
   /*========== ORANGE-LIGHT THEME ==========*/
   [data-theme="orange-light"] {
+    --brand2: #93431f;
+    --gl1: rgba(255, 251, 245, 0.88);
+    --gl2: rgba(243, 225, 207, 0.76);
+    --gb: rgba(137, 91, 56, 0.25);
+    --gh: rgba(255, 255, 255, 0.93);
+    --gs: 0 1.125rem 3.125rem rgba(97, 60, 34, 0.16);
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #fff7ed;
     --color-primary-100: #ffefd1;
@@ -433,7 +458,7 @@
     --color-primary-500: #ffa948;
     --color-primary-600: #ff9a29;
     --color-primary-700: #ff8c0e;
-    --color-primary-800: #ff7d00;
+    --color-primary-800: #6e2e0a;
     --color-primary-900: #ff6e00;
 
     --color-primaryDark-50: #ffd5b6;
@@ -460,10 +485,10 @@
 
     --color-primaryText-50: #3e3e3e;
     --color-primaryText-100: #363636;
-    --color-primaryText-200: #2e2e2e;
+    --color-primaryText-200: #493b30;
     --color-primaryText-300: #262626;
     --color-primaryText-400: #1e1e1e;
-    --color-primaryText-500: #212121;
+    --color-primaryText-500: #34271e;
     --color-primaryText-600: #191919;
     --color-primaryText-700: #131313;
     --color-primaryText-800: #0b0b0b;
@@ -491,8 +516,8 @@
     --color-secondaryText-800: #b3b3b3;
     --color-secondaryText-900: #a6a6a6;
 
-    --color-divider-50: #e2e8f0;
-    --color-divider-100: #cbd5e1;
+    --color-divider-50: #ccb9a5;
+    --color-divider-100: #b69c84;
     --color-divider-200: #94a3b8;
     --color-divider-300: #64748b;
     --color-divider-400: #475569;
@@ -502,9 +527,9 @@
     --color-divider-800: #020617;
     --color-divider-900: #000000;
 
-    --color-background-50: #ffffff;
-    --color-background-100: #f8fafc;
-    --color-background-200: #f1f5f9;
+    --color-background-50: #fbf6ef;
+    --color-background-100: #f2e9dd;
+    --color-background-200: #eadccc;
     --color-background-300: #ebebeb;
     --color-background-400: #e2e2e2;
     --color-background-500: #748ba7;
@@ -512,6 +537,20 @@
     --color-background-700: #676c96;
     --color-background-800: #f8fafc;
     --color-background-900: #111827;
+  }
+
+  [data-theme="orange-light"] #top {
+    background:
+      radial-gradient(
+        ellipse 50% 65% at 76% 48%,
+        color-mix(in srgb, var(--brand2) 13%, transparent),
+        transparent 72%
+      ),
+      linear-gradient(130deg, #eee1d2, #f6ede2 55%, #e9d8c7);
+  }
+
+  [data-theme="orange-light"] .hero-portrait-ring {
+    box-shadow: 0 1.5rem 3rem rgba(108, 61, 30, 0.2);
   }
 
   /*========== ORANGE-DARK THEME ==========*/
@@ -608,6 +647,12 @@
 
   /*========== CHRISTMAS-LIGHT THEME ==========*/
   [data-theme="christmas-light"] {
+    --brand2: #124b38;
+    --gl1: rgba(255, 250, 251, 0.88);
+    --gl2: rgba(240, 219, 226, 0.75);
+    --gb: rgba(139, 82, 102, 0.25);
+    --gh: rgba(255, 255, 255, 0.93);
+    --gs: 0 1.125rem 3.125rem rgba(91, 49, 65, 0.16);
     --color-primary-50: #ffeeee;
     --color-primary-100: #fed7d7;
     --color-primary-200: #feb2b2;
@@ -616,7 +661,7 @@
     --color-primary-500: #e53e3e;
     --color-primary-600: #c53030;
     --color-primary-700: #9b2c2c;
-    --color-primary-800: #822727;
+    --color-primary-800: #74232d;
     --color-primary-900: #63171b;
 
     --color-primaryDark-50: #e4f9f5;
@@ -643,10 +688,10 @@
 
     --color-primaryText-50: #3e3e3e;
     --color-primaryText-100: #363636;
-    --color-primaryText-200: #2e2e2e;
+    --color-primaryText-200: #4b3945;
     --color-primaryText-300: #262626;
     --color-primaryText-400: #1e1e1e;
-    --color-primaryText-500: #212121;
+    --color-primaryText-500: #31202b;
     --color-primaryText-600: #191919;
     --color-primaryText-700: #131313;
     --color-primaryText-800: #0b0b0b;
@@ -674,8 +719,8 @@
     --color-secondaryText-800: #2e7d32;
     --color-secondaryText-900: #1b5e20;
 
-    --color-divider-50: #e2e8f0;
-    --color-divider-100: #cbd5e1;
+    --color-divider-50: #ccb8c1;
+    --color-divider-100: #b89eaa;
     --color-divider-200: #94a3b8;
     --color-divider-300: #64748b;
     --color-divider-400: #475569;
@@ -685,9 +730,9 @@
     --color-divider-800: #020617;
     --color-divider-900: #000000;
 
-    --color-background-50: #ffffff;
-    --color-background-100: #f8fafc;
-    --color-background-200: #f1f5f9;
+    --color-background-50: #faf4f6;
+    --color-background-100: #f1e8ec;
+    --color-background-200: #e8d9e1;
     --color-background-300: #ebebeb;
     --color-background-400: #e2e2e2;
     --color-background-500: #748ba7;
@@ -695,6 +740,20 @@
     --color-background-700: #676c96;
     --color-background-800: #f8fafc;
     --color-background-900: #111827;
+  }
+
+  [data-theme="christmas-light"] #top {
+    background:
+      radial-gradient(
+        ellipse 50% 65% at 76% 48%,
+        color-mix(in srgb, var(--brand2) 12%, transparent),
+        transparent 72%
+      ),
+      linear-gradient(130deg, #eee2e8, #f7edf1 55%, #e8dce5);
+  }
+
+  [data-theme="christmas-light"] .hero-portrait-ring {
+    box-shadow: 0 1.5rem 3rem rgba(86, 43, 66, 0.2);
   }
 
   /*========== CHRISTMAS-DARK THEME ==========*/

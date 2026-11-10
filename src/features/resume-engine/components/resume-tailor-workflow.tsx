@@ -54,6 +54,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     DEFAULT_CV_TEMPLATE_VERSION,
   );
   const [jobDescription, setJobDescription] = useState("");
+  const [tailoredFileName, setTailoredFileName] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [exportId, setExportId] = useState<string | null>(null);
   const [aiScore, setAiScore] = useState<number | null>(null);
@@ -139,6 +140,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     (result: {
       downloadUrl: string;
       exportId?: string;
+      fileName?: string | null;
       aiScore: number | null;
       matchNotes?: string | null;
       matchAnalysis?: unknown;
@@ -146,6 +148,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       pdfDownloadUrl?: string | null;
     }) => {
       setDownloadUrl(result.downloadUrl);
+      if (result.fileName) setTailoredFileName(result.fileName);
       setExportId(result.exportId ?? null);
       setAiScore(result.aiScore);
       setMatchNotes(result.matchNotes ?? null);
@@ -305,7 +308,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           <div className="mt-4">
             <ResumeTailorResultView
               previewFileUrl={previewFileUrl}
-              fileName={latestExport?.fileName ?? existingCvFile?.name}
+              fileName={
+                tailoredFileName ??
+                latestExport?.fileName ??
+                existingCvFile?.name
+              }
               mimeType={latestExport?.mimeType}
               structuredSnapshot={structuredSnapshot}
               downloadUrl={downloadUrl}
@@ -593,7 +600,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           <CardContent className="flex flex-col gap-4">
             <ResumeTailorResultView
               previewFileUrl={previewFileUrl}
-              fileName={latestExport?.fileName ?? existingCvFile?.name}
+              fileName={
+                tailoredFileName ??
+                latestExport?.fileName ??
+                existingCvFile?.name
+              }
               mimeType={latestExport?.mimeType}
               structuredSnapshot={structuredSnapshot}
               downloadUrl={downloadUrl}

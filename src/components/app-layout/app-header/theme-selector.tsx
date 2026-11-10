@@ -42,8 +42,8 @@ const THEME_GROUPS: ThemeGroupConfig[] = [
     light: {
       theme: ETheme.MAIN_LIGHT,
       isDark: false,
-      accent: "#3c8eff",
-      surface: "#f8fafc",
+      accent: "#173888",
+      surface: "#e9eff8",
     },
     dark: {
       theme: ETheme.MAIN_DARK,
@@ -57,8 +57,8 @@ const THEME_GROUPS: ThemeGroupConfig[] = [
     light: {
       theme: ETheme.ORANGE_LIGHT,
       isDark: false,
-      accent: "#ff7a00",
-      surface: "#fafaf9",
+      accent: "#6e2e0a",
+      surface: "#f2e9dd",
     },
     dark: {
       theme: ETheme.ORANGE_DARK,
@@ -72,8 +72,8 @@ const THEME_GROUPS: ThemeGroupConfig[] = [
     light: {
       theme: ETheme.CHRISTMAS_LIGHT,
       isDark: false,
-      accent: "#e11d48",
-      surface: "#fdf2f8",
+      accent: "#74232d",
+      surface: "#f1e8ec",
     },
     dark: {
       theme: ETheme.CHRISTMAS_DARK,
