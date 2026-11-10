@@ -893,14 +893,14 @@
       "techAria": "Technologieën"
     },
     "about": {
-      "title": "Engineering Aanpak",
-      "subtitle": "Hoe ik ontwikkel",
+      "title": "Iets over mij",
+      "subtitle": "Over mij",
       "terminalEmpty": {
         "title": "Terminal niet geconfigureerd",
         "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
       },
-      "titleLead": "Hoe ik",
-      "titleGradient": "bouw."
+      "titleLead": "Iets over",
+      "titleGradient": "mij."
     },
     "skills": {
       "title": "Technische Stack",
@@ -1209,7 +1209,7 @@
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Gebruik het formulier of de kanalen hieronder.",
+      "subtitle": "Zoek je een senior engineer of plan je een complex project? Vertel me wat je nodig hebt.",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
@@ -1231,7 +1231,7 @@
         "distanceFromVisitor": "Ik kom uit {place}, ongeveer <km>{distance}</km> van je huidige locatie, volgens je IP-adres."
       },
       "form": {
-        "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
+        "helper": "Vertel me over de rol of het project, de grootste uitdaging en je planning. Ik reageer met een concrete volgende stap.",
         "name": {
           "label": "Naam",
           "placeholder": "Jan Jansen",
@@ -1255,7 +1255,7 @@
         },
         "message": {
           "label": "Bericht",
-          "placeholder": "Vertel me over je project...",
+          "placeholder": "Aan welke rol of welk project denk je?",
           "success": "Bericht correct ingevoerd",
           "errors": {
             "required": "Voer je bericht in",
@@ -1298,7 +1298,7 @@
       "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
-      "description": "Functies, verantwoordelijkheden en vaardigheden uit de professionele loopbaan.",
+      "description": "Van frontendontwikkelaar tot senior engineer en teamleider, met jaren werk en groei onderweg.",
       "chart": {
         "eyebrow": "De weg tot nu toe",
         "monthsShown": "maanden in de getoonde functies",
@@ -1312,8 +1312,8 @@
         "nextStage": "Volgende stap",
         "letsTalk": "Laten we praten"
       },
-      "titleLead": "Professionele",
-      "titleGradient": "ervaring."
+      "titleLead": "De",
+      "titleGradient": "klim."
     },
     "impactStats": {
       "teamSize": {
@@ -1334,14 +1334,27 @@
       "subtitle": "Wat collega's zeggen"
     },
     "socialProof": {
-      "eyebrow": "Vertrouwd door ontwikkelaars",
-      "title": "Mensen met wie ik samenwerk",
-      "subtitle": "Collega's die mijn werk van dichtbij hebben gezien.",
-      "titleLead": "Mensen met wie",
-      "titleGradient": "ik samenwerk.",
-      "previous": "Vorige aanbeveling",
-      "next": "Volgende aanbeveling",
-      "navigation": "Aanbevelingen bekijken"
+      "subtitle": "Wat mijn collega’s zeggen, en de resultaten die dat onderbouwen.",
+      "titleLead": "Samenwerken",
+      "titleGradient": "met mij.",
+      "cards": {
+        "ownership": {
+          "eyebrow": "Eigenaarschap",
+          "title": "Van begin tot eind, zelfstandig."
+        },
+        "delivery": {
+          "eyebrow": "Oplevering",
+          "title": "Voorspelbaar, ook als er veel tegelijk speelt."
+        },
+        "growing": {
+          "eyebrow": "Anderen laten groeien",
+          "title": "Ik help de mensen om me heen beter te worden."
+        },
+        "judgment": {
+          "eyebrow": "Inzicht",
+          "title": "Goede keuzes zonder in te leveren op kwaliteit."
+        }
+      }
     },
     "faq": {
       "title": "Vragen?",

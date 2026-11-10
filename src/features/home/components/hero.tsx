@@ -80,7 +80,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 sm:px-6 lg:container lg:grid-cols-[1.25fr_1fr] lg:gap-16 lg:px-20">
+        <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 sm:px-6 md:grid-cols-[1.25fr_1fr] md:gap-16 lg:container lg:px-20">
           <HeroContent
             heroData={parsedHeroData}
             stats={stats}

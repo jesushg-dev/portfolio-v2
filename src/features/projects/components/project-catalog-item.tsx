@@ -84,7 +84,7 @@ function ProjectThumbnail({
 
   if (image && !hasError) {
     return (
-      <div className="border-border/80 bg-card group-hover:border-primary/50 relative aspect-video w-full overflow-hidden rounded-2xl border shadow-sm transition-all duration-300 group-hover:shadow-xl">
+      <div className="border-border/80 bg-card group-hover:border-primary/50 relative aspect-video w-full overflow-hidden rounded-[1.125rem] border shadow-sm transition-all duration-300 group-hover:shadow-xl">
         <MediaImage
           src={image}
           alt={title}
@@ -105,13 +105,13 @@ function ProjectThumbnail({
     <div
       style={{ background: gradient }}
       className={cn(
-        "relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-2xl transition-all duration-500 ease-out group-hover:scale-[1.02]",
+        "relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-[1.125rem] transition-all duration-500 ease-out group-hover:scale-[1.02]",
         isFeaturedHero
           ? "shadow-lg group-hover:shadow-2xl"
           : "shadow-sm group-hover:shadow-xl",
       )}
     >
-      <div className="flex h-[60%] w-[64%] items-center justify-center rounded-xl bg-white/14 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)] backdrop-blur-xs transition-transform duration-500 ease-out group-hover:scale-105">
+      <div className="flex h-[60%] w-[64%] items-center justify-center rounded-[0.625rem] bg-white/14 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)] backdrop-blur-xs transition-transform duration-500 ease-out group-hover:scale-105">
         <span
           className={cn(
             "font-heading font-bold tracking-wider text-white select-none",
@@ -172,8 +172,8 @@ function ProjectCatalogContent({
         {displayMeta ? (
           <p
             className={cn(
-              "text-muted-foreground font-normal",
-              isFeaturedHero ? "text-xs sm:text-sm" : "mt-4 text-xs sm:text-sm",
+              "text-muted-foreground text-sm font-normal",
+              isFeaturedHero ? "" : "mt-4",
             )}
           >
             {displayMeta}
@@ -183,10 +183,10 @@ function ProjectCatalogContent({
         <h3
           title={title}
           className={cn(
-            "text-foreground group-hover:text-primary font-bold tracking-tight transition-colors",
+            "text-foreground group-hover:text-primary font-semibold transition-colors",
             isFeaturedHero
-              ? "mt-2 text-2xl leading-tight sm:text-3xl lg:text-4xl"
-              : "mt-1 line-clamp-2 text-lg leading-snug font-semibold sm:text-xl",
+              ? "mt-1 text-[clamp(1.5rem,3vw,2.125rem)] leading-[1.3] tracking-[-0.025em]"
+              : "mt-1 line-clamp-2 text-[1.1875rem] leading-[1.3] tracking-[-0.015em]",
           )}
         >
           {title}
@@ -194,10 +194,10 @@ function ProjectCatalogContent({
 
         <p
           className={cn(
-            "text-muted-foreground leading-relaxed",
+            "text-muted-foreground",
             isFeaturedHero
-              ? "mt-3 line-clamp-4 text-base sm:text-lg"
-              : "mt-2 line-clamp-2 text-sm",
+              ? "mt-2 line-clamp-4 text-[1.0625rem] leading-relaxed"
+              : "mt-2 line-clamp-2 text-[0.9375rem] leading-normal",
           )}
         >
           {description}
@@ -283,8 +283,8 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
   const cardClassName = cn(
     "group focus-visible:ring-primary w-full text-left transition-all duration-300 focus-visible:ring-2 focus-visible:outline-hidden",
     isFeaturedHero
-      ? "from-primary/20 via-foreground/[0.04] hover:border-primary/40 grid grid-cols-1 items-center gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br to-transparent p-5 shadow-xl sm:gap-10 sm:p-7 md:grid-cols-[1.3fr_1fr]"
-      : "flex flex-col rounded-2xl hover:-translate-y-1",
+      ? "grid grid-cols-1 items-center gap-5 rounded-[2rem] bg-gradient-to-br from-[color-mix(in_srgb,var(--primary)_22%,transparent)] to-[color-mix(in_srgb,var(--foreground)_4%,transparent)] p-[1.125rem] shadow-xl md:grid-cols-[1.3fr_1fr] md:gap-10 md:p-7 border border-white/10 hover:border-primary/40"
+      : "flex flex-col rounded-[1.125rem] hover:-translate-y-1",
   );
 
   if (hasCaseStudyLink && slug) {

@@ -10,6 +10,7 @@ interface TestimonialSeed {
   linkedInUrl?: string;
   quote: LocaleMap;
   order: number;
+  isVisible?: boolean;
 }
 
 type LocaleCode = "es" | "en" | "nl";
@@ -38,7 +39,7 @@ export async function seedPortfolioTestimonials(
         avatarUrl: item.avatarUrl ?? null,
         linkedInUrl: item.linkedInUrl ?? null,
         order: item.order,
-        isVisible: true,
+        isVisible: item.isVisible ?? true,
         TestimonialTranslation: {
           create: appLanguages.map((lang) => ({
             appLanguageId: lang.id,

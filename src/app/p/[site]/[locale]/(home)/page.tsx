@@ -5,26 +5,30 @@ import { HomeTechMarquee } from "@/features/home/components/home-tech-marquee";
 import Portfolio from "@/features/home/components/portfolio";
 import Experience from "@/features/home/components/experience";
 import Services from "@/features/home/components/services";
-import About from "@/features/home/components/about";
 import Skills from "@/features/home/components/skills";
 import SocialProof from "@/features/home/components/social-proof";
+import SoftSkills from "@/features/home/components/soft-skills";
 import HomeFaq from "@/features/home/components/faq";
 import Contact from "@/features/home/components/contact";
 import HomeSection from "@/features/home/components/home-section";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { pickPublicRouteMessages } from "@/lib/public-site/messages";
+import { getCachedSoftSkillsPublic } from "@/lib/soft-skills/get-cached-soft-skills-public";
 
 export { generateMetadata } from "./metadata";
 
 export default async function Home() {
   const locale = await getPublicLocale();
-  const [stats, testimonials, messages, skills] = await Promise.all([
-    api.portfolio.getStatsPublic({ locale }),
-    api.portfolio.getTestimonialsPublic({ locale, limit: 3 }),
-    getMessages({ locale }),
-    api.portfolio.getSkills({ locale }),
-  ]);
+  const [stats, testimonials, messages, skills, softSkills] = await Promise.all(
+    [
+      api.portfolio.getStatsPublic({ locale }),
+      api.portfolio.getTestimonialsPublic({ locale, limit: 3 }),
+      getMessages({ locale }),
+      api.portfolio.getSkills({ locale }),
+      getCachedSoftSkillsPublic(locale),
+    ],
+  );
 
   return (
     <NextIntlClientProvider
@@ -41,20 +45,24 @@ export default async function Home() {
         <Experience />
       </HomeSection>
 
-      <HomeSection id="services" estimatedHeight="32rem">
-        <Services />
+      <HomeSection id="working" estimatedHeight="36rem">
+        <SocialProof
+          testimonials={testimonials}
+          proofItems={softSkills.items}
+          metrics={softSkills.metrics ?? []}
+        />
       </HomeSection>
 
-      <HomeSection id="about" estimatedHeight="32rem">
-        <About />
+      <HomeSection id="services" estimatedHeight="32rem">
+        <Services />
       </HomeSection>
 
       <HomeSection id="skills" estimatedHeight="32rem">
         <Skills locale={locale} />
       </HomeSection>
 
-      <HomeSection estimatedHeight="28rem">
-        <SocialProof testimonials={testimonials} />
+      <HomeSection id="soft-skills" estimatedHeight="28rem">
+        <SoftSkills />
       </HomeSection>
 
       <HomeSection estimatedHeight="24rem">

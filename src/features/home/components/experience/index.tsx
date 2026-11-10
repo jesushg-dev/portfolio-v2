@@ -6,7 +6,6 @@ import { ShowcaseHeading, ShowcaseSection } from "@/components/shared/showcase";
 import { api } from "@/trpc/server";
 import { locales, type Locale } from "@/i18n/config";
 import { CareerClimbChart } from "./career-climb-chart";
-import SoftSkills from "../soft-skills";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
@@ -25,29 +24,24 @@ const Experience: FC = async () => {
       ])
     : [[], null];
 
+  if (experiences.length === 0) return null;
+
   return (
-    <>
-      {experiences.length > 0 ? (
-        <ShowcaseSection ariaLabelledBy="experience-heading">
-          <ShowcaseHeading
-            sectionId="experience"
-            eyebrow={t("subtitle")}
-            title={t("titleLead")}
-            titleGradient={t("titleGradient")}
-            description={t("description")}
-          />
-
-          <CareerClimbChart
-            experiences={experiences}
-            viewAllLabel={t("viewAll")}
-            referenceDate={new Date()}
-            nextStage={hero?.careerNextStage}
-          />
-        </ShowcaseSection>
-      ) : null}
-
-      <SoftSkills />
-    </>
+    <ShowcaseSection ariaLabelledBy="experience-heading">
+      <ShowcaseHeading
+        sectionId="experience"
+        eyebrow={t("subtitle")}
+        title={t("titleLead")}
+        titleGradient={t("titleGradient")}
+        description={t("description")}
+      />
+      <CareerClimbChart
+        experiences={experiences}
+        viewAllLabel={t("viewAll")}
+        referenceDate={new Date()}
+        nextStage={hero?.careerNextStage}
+      />
+    </ShowcaseSection>
   );
 };
 

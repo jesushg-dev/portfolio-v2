@@ -51,7 +51,11 @@ const About: FC = async () => {
   const paragraphs = aboutData?.paragraphs ?? [];
 
   return (
-    <ShowcaseSection variant="tile-dark" ariaLabelledBy="about-heading">
+    <ShowcaseSection
+      variant="tile-dark"
+      ariaLabelledBy="about-heading"
+      className="border-border/80 border-t"
+    >
       {/* 2-column layout matching prototype: Info on left, Terminal on right */}
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
         <div>

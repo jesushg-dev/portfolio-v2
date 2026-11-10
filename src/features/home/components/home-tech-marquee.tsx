@@ -37,7 +37,7 @@ export const HomeTechMarquee: FC<HomeTechMarqueeProps> = ({ items }) => {
           {track1.map((tech, i) => (
             <span
               key={`r1-${tech.title}-${i}`}
-              className="border-border/70 bg-card/60 text-muted-foreground hover:text-foreground hover:border-primary/40 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors"
+              className="border-border/70 bg-card/60 text-muted-foreground hover:text-foreground hover:border-primary/40 inline-flex items-center gap-2.5 rounded-full border px-[1.375rem] py-2.5 text-[0.9375rem] font-semibold transition-colors"
             >
               {tech.image ? (
                 <SkillIcon
@@ -58,7 +58,7 @@ export const HomeTechMarquee: FC<HomeTechMarqueeProps> = ({ items }) => {
           {track2.map((tech, i) => (
             <span
               key={`r2-${tech.title}-${i}`}
-              className="border-border/70 bg-card/60 text-muted-foreground hover:text-foreground hover:border-primary/40 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors"
+              className="border-border/70 bg-card/60 text-muted-foreground hover:text-foreground hover:border-primary/40 inline-flex items-center gap-2.5 rounded-full border px-[1.375rem] py-2.5 text-[0.9375rem] font-semibold transition-colors"
             >
               {tech.image ? (
                 <SkillIcon

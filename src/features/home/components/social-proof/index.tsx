@@ -1,10 +1,11 @@
 "use client";
 
-import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { MediaImage } from "@/components/shared/media-image";
-import { ShowcaseSection, ShowcaseHeading } from "@/components/shared/showcase";
+import { ShowcaseHeading, ShowcaseSection } from "@/components/shared/showcase";
+import type {
+  SoftSkillBentoItem,
+  SoftSkillMetric,
+} from "@/features/home/components/soft-skills/soft-skills-bento";
 
 export interface TestimonialItem {
   id: string;
@@ -15,154 +16,163 @@ export interface TestimonialItem {
   linkedInUrl?: string | null;
 }
 
-function AuthorName({
-  author,
-  linkedInUrl,
-}: Pick<TestimonialItem, "author" | "linkedInUrl">) {
-  let href: string | null = null;
-  try {
-    const url = new URL(linkedInUrl ?? "");
-    if (["http:", "https:"].includes(url.protocol)) href = url.href;
-  } catch {}
-  return href ? (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-foreground hover:text-primary inline-flex min-h-11 items-center font-semibold hover:underline"
-    >
-      {author}
-    </a>
-  ) : (
-    <span className="text-foreground font-semibold">{author}</span>
+interface SocialProofProps {
+  testimonials: TestimonialItem[];
+  proofItems?: SoftSkillBentoItem[];
+  metrics?: SoftSkillMetric[];
+}
+
+function ProofMetric({ metric }: { metric?: SoftSkillMetric }) {
+  if (!metric) return null;
+  return (
+    <div className="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8">
+      <strong className="text-primary text-4xl font-bold tracking-tight whitespace-nowrap sm:text-5xl">
+        {metric.value}
+      </strong>
+      {metric.label ? (
+        <span className="text-muted-foreground min-w-0 text-sm leading-relaxed">
+          {metric.label}
+        </span>
+      ) : null}
+    </div>
   );
 }
 
-function TestimonialSpotlight({ item }: { item: TestimonialItem }) {
-  const initials = item.author
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("");
+function Attribution({ item }: { item: TestimonialItem }) {
+  let href: string | null = null;
+  try {
+    const url = new URL(item.linkedInUrl ?? "");
+    if (["http:", "https:"].includes(url.protocol)) href = url.href;
+  } catch {}
+
   return (
-    <figure className="grid items-center gap-8 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-12 lg:gap-16">
-      <figcaption className="flex items-center gap-4 md:flex-col md:items-start md:gap-5">
-        <span className="border-border/60 from-primary/15 to-card relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-3xl border bg-linear-to-br text-2xl font-medium shadow-lg md:size-36 md:rounded-[2rem]">
-          {item.avatarUrl ? (
-            <MediaImage
-              src={item.avatarUrl}
-              alt=""
-              fill
-              sizes="(min-width:48rem) 9rem, 5rem"
-              className="object-cover"
-            />
-          ) : (
-            <span className="text-primary" aria-hidden="true">
-              {initials}
-            </span>
-          )}
-        </span>
-        <div className="min-w-0 text-sm">
-          <AuthorName author={item.author} linkedInUrl={item.linkedInUrl} />
-          {item.role && (
-            <p className="text-muted-foreground mt-1.5 max-w-56 text-sm leading-relaxed">
-              {item.role}
-            </p>
-          )}
-        </div>
-      </figcaption>
-      <blockquote className="text-foreground text-lg leading-relaxed font-medium tracking-tight sm:text-xl lg:text-2xl lg:leading-relaxed">
-        <span className="text-primary/70 mr-1 text-3xl" aria-hidden="true">
-          “
-        </span>
-        {item.quote}
-        <span className="text-primary/70 ml-1 text-3xl" aria-hidden="true">
-          ”
-        </span>
+    <figcaption className="text-muted-foreground mt-4 text-sm leading-relaxed">
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-foreground hover:text-primary inline-flex min-h-11 items-center font-semibold hover:underline"
+        >
+          {item.author}
+        </a>
+      ) : (
+        <span className="text-foreground font-semibold">{item.author}</span>
+      )}
+      {item.role ? <span> · {item.role}</span> : null}
+    </figcaption>
+  );
+}
+
+function Quote({ item }: { item: TestimonialItem }) {
+  return (
+    <figure className="mt-5">
+      <blockquote className="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        “{item.quote}”
       </blockquote>
+      <Attribution item={item} />
     </figure>
+  );
+}
+
+function WorkingCard({
+  eyebrow,
+  title,
+  quote,
+  description,
+  metric,
+  wide = false,
+  placeholder = false,
+}: {
+  eyebrow: string;
+  title: string;
+  quote?: TestimonialItem;
+  description?: string;
+  metric?: SoftSkillMetric;
+  wide?: boolean;
+  placeholder?: boolean;
+}) {
+  return (
+    <li className={wide ? "md:col-span-2 lg:col-span-2" : ""}>
+      <article className="bg-card flex h-full flex-col rounded-[2rem] p-6 sm:p-10">
+        <p className="text-muted-foreground font-mono text-sm tracking-widest uppercase">
+          {eyebrow}
+        </p>
+        <h3 className="text-foreground mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
+          {title}
+        </h3>
+        {quote && !placeholder ? (
+          <Quote item={quote} />
+        ) : description ? (
+          <p
+            className={
+              placeholder
+                ? "text-muted-foreground mt-5 text-base leading-relaxed italic opacity-80 sm:text-lg"
+                : "text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg"
+            }
+          >
+            {description}
+          </p>
+        ) : null}
+        <ProofMetric metric={metric} />
+      </article>
+    </li>
   );
 }
 
 export default function SocialProof({
   testimonials,
-}: {
-  testimonials: TestimonialItem[];
-}) {
+  proofItems = [],
+  metrics = [],
+}: SocialProofProps) {
   const t = useTranslations("main.socialProof");
-  const id = useId();
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const activeIndex = Math.max(
-    0,
-    testimonials.findIndex(
-      (item) => item.id === (activeId ?? testimonials[0]?.id),
-    ),
+  const published = testimonials.filter(
+    (item) => item.author.trim().length > 0,
   );
-  const active = testimonials[activeIndex];
-  if (!active) return null;
+  const placeholder = testimonials.find(
+    (item) => item.author.trim().length === 0,
+  );
+  if (published.length === 0 && proofItems.length === 0) return null;
+
   return (
     <ShowcaseSection id="testimonials" ariaLabelledBy="testimonials-heading">
       <ShowcaseHeading
         sectionId="testimonials"
-        eyebrow={t("eyebrow")}
         title={t("titleLead")}
         titleGradient={t("titleGradient")}
         description={t("subtitle")}
-        align="left"
       />
-      <div className="border-border/60 mx-auto max-w-6xl border-t pt-9 sm:pt-12">
-        <div
-          id={id}
-          aria-live="polite"
-          aria-atomic="true"
-          className="md:min-h-72"
-        >
-          <TestimonialSpotlight item={active} />
-        </div>
-        {testimonials.length > 1 && (
-          <div className="mt-8 flex justify-end md:mt-10">
-            <div
-              role="group"
-              aria-label={t("navigation")}
-              className="glass-card inline-flex items-center gap-4 rounded-full p-1.5"
-            >
-              <button
-                type="button"
-                aria-label={t("previous")}
-                aria-controls={id}
-                onClick={() =>
-                  setActiveId(
-                    testimonials[
-                      (activeIndex - 1 + testimonials.length) %
-                        testimonials.length
-                    ].id,
-                  )
-                }
-                className="text-foreground hover:bg-muted/30 focus-visible:ring-ring grid size-11 cursor-pointer place-items-center rounded-full transition-colors focus-visible:ring-2"
-              >
-                <ArrowLeft className="size-4" aria-hidden="true" />
-              </button>
-              <span className="text-muted-foreground min-w-10 text-center font-mono text-sm tabular-nums">
-                {activeIndex + 1} / {testimonials.length}
-              </span>
-              <button
-                type="button"
-                aria-label={t("next")}
-                aria-controls={id}
-                onClick={() =>
-                  setActiveId(
-                    testimonials[(activeIndex + 1) % testimonials.length].id,
-                  )
-                }
-                className="text-foreground hover:bg-muted/30 focus-visible:ring-ring grid size-11 cursor-pointer place-items-center rounded-full transition-colors focus-visible:ring-2"
-              >
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      <ul className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <WorkingCard
+          wide
+          eyebrow={t("cards.ownership.eyebrow")}
+          title={t("cards.ownership.title")}
+          quote={published[0]}
+          description={proofItems[0]?.description}
+          metric={metrics[0]}
+        />
+        <WorkingCard
+          eyebrow={t("cards.delivery.eyebrow")}
+          title={t("cards.delivery.title")}
+          description={proofItems[0]?.description}
+          metric={metrics[1]}
+        />
+        <WorkingCard
+          eyebrow={t("cards.growing.eyebrow")}
+          title={t("cards.growing.title")}
+          description={placeholder?.quote ?? proofItems[1]?.description}
+          placeholder={Boolean(placeholder)}
+          metric={metrics[2]}
+        />
+        <WorkingCard
+          wide
+          eyebrow={t("cards.judgment.eyebrow")}
+          title={t("cards.judgment.title")}
+          quote={published[1]}
+          description={proofItems[2]?.description}
+          metric={metrics[3]}
+        />
+      </ul>
     </ShowcaseSection>
   );
 }

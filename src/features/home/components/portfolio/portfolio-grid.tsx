@@ -46,13 +46,13 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({
   return (
     <section aria-label={t("title")}>
       {/* 7 Showcase Projects (1 Featured Hero + 6 Grid Cards: 2 complete rows of 3) */}
-      <div className="mt-12 grid grid-cols-1 gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, idx) => (
           <div
             key={project.id}
             className={
               idx === 0
-                ? "col-span-1 md:col-span-2 lg:col-span-3"
+                ? "col-span-1 sm:col-span-2 lg:col-span-3"
                 : "col-span-1"
             }
           >

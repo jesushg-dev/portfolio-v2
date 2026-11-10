@@ -28,7 +28,7 @@ const Contact: FC = async () => {
   return (
     <section
       aria-labelledby="contact-heading"
-      className="relative isolate w-full overflow-hidden py-16 sm:py-20 lg:py-24"
+      className="border-border/80 relative isolate w-full overflow-hidden border-t py-16 sm:py-20 lg:py-24"
     >
       <div
         aria-hidden

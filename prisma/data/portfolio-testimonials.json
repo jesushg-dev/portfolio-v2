@@ -4,7 +4,7 @@
     "role": ".NET Developer · Ravn",
     "avatarUrl": "https://res.cloudinary.com/js-media/image/upload/v1785093768/portfolio/recommendations/1690239286713_w0dklu.jpg",
     "linkedInUrl": "https://www.linkedin.com/in/dlpz98/",
-    "order": 0,
+    "order": 1,
     "quote": {
       "es": "Trabajé con Jesús en Contollo, donde coordinaba el equipo técnico. Demostró sólidas capacidades full stack, cumplió de forma consistente con los plazos de entrega y abordó cada solución con una visión clara de escalabilidad. Destacó por su criterio técnico, autonomía y capacidad de resolver problemas complejos sin comprometer la calidad.",
       "en": "I worked with Jesús at Contollo, where I coordinated the technical team. He demonstrated strong full-stack capabilities, consistently met delivery deadlines, and approached every solution with a clear focus on scalability. He stood out for his technical judgment, autonomy, and ability to solve complex problems without compromising quality.",
@@ -16,11 +16,22 @@
     "role": "Software Engineer · Capstone Logistics (Contollo)",
     "avatarUrl": "https://res.cloudinary.com/js-media/image/upload/v1785093768/portfolio/recommendations/1773431697471_vmhc1z.jpg",
     "linkedInUrl": "https://www.linkedin.com/in/mauricio-areas/",
-    "order": 1,
+    "order": 0,
     "quote": {
       "es": "Trabajé con Jesús en Contollo liderando entregas complejas. Lo que lo define como un ingeniero senior es su nivel de ownership: asume el diseño de extremo a extremo, toma decisiones con gran criterio técnico y opera con total autonomía. Es el ingeniero al que le confías los problemas más difíciles sabiendo que los resolverá de forma definitiva.",
       "en": "I worked with Jesús at Contollo leading complex deliveries. What defines him as a senior engineer is his level of ownership: he takes on end-to-end design, makes decisions with great technical judgment, and operates with complete autonomy. He is the engineer you trust with the hardest problems, knowing they will be solved reliably.",
       "nl": "Ik werkte met Jesús bij Contollo waar we complexe projecten opleverden. Wat hem definieert als een senior engineer is zijn gevoel voor ownership: hij neemt de leiding in end-to-end design, neemt beslissingen met groot technisch inzicht en opereert met volledige autonomie. Hij is de engineer aan wie je de moeilijkste problemen toevertrouwt."
+    }
+  },
+  {
+    "author": "",
+    "role": "",
+    "order": 2,
+    "isVisible": true,
+    "quote": {
+      "en": "Quote from someone I mentored goes here. (Placeholder)",
+      "es": "Aquí irá la cita de alguien a quien acompañé como mentor. (Texto provisional)",
+      "nl": "Hier komt een citaat van iemand die ik heb begeleid. (Tijdelijke tekst)"
     }
   }
 ]

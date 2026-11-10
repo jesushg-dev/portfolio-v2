@@ -919,14 +919,14 @@
       "techAria": "Tecnologías"
     },
     "about": {
-      "title": "Enfoque de Ingeniería",
-      "subtitle": "Cómo desarrollo",
+      "title": "Un poco sobre mí",
+      "subtitle": "Sobre mí",
       "terminalEmpty": {
         "title": "Terminal no configurada",
         "description": "Añade una secuencia de terminal animada desde la pestaña Terminal del perfil en el admin."
       },
-      "titleLead": "Cómo",
-      "titleGradient": "desarrollo."
+      "titleLead": "Un poco sobre",
+      "titleGradient": "mí."
     },
     "skills": {
       "title": "Stack Técnico",
@@ -1235,7 +1235,7 @@
       "title": "Hablemos",
       "title2": "Envía un mensaje",
       "eyebrow": "Contacto",
-      "subtitle": "Usa el formulario o los canales de abajo.",
+      "subtitle": "¿Buscas a alguien para liderar ingeniería o sacar adelante un proyecto complejo? Cuéntame qué necesitas.",
       "divider": "o",
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
@@ -1257,7 +1257,7 @@
         "distanceFromVisitor": "Soy de {place}, a unos <km>{distance}</km> de tu ubicación actual, según tu dirección IP."
       },
       "form": {
-        "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
+        "helper": "Cuéntame sobre el puesto o proyecto, su mayor reto y los plazos. Te responderé con un siguiente paso concreto.",
         "name": {
           "label": "Nombre",
           "placeholder": "Jesús Hernández",
@@ -1281,7 +1281,7 @@
         },
         "message": {
           "label": "Mensaje",
-          "placeholder": "Cuéntame sobre tu proyecto...",
+          "placeholder": "¿Qué proyecto o puesto tienes en mente?",
           "success": "Mensaje ingresado correctamente",
           "errors": {
             "required": "El mensaje es requerido",
@@ -1324,7 +1324,7 @@
       "title": "Experiencia Profesional",
       "subtitle": "Empresas, roles e impacto medible",
       "viewAll": "Ver CV completo para el historial detallado",
-      "description": "Puestos, responsabilidades y habilidades de la trayectoria profesional.",
+      "description": "De desarrollador frontend a ingeniero senior y líder de equipo, con años de trabajo y aprendizaje en el camino.",
       "chart": {
         "eyebrow": "El camino recorrido",
         "monthsShown": "meses en los puestos mostrados",
@@ -1338,8 +1338,8 @@
         "nextStage": "Próxima etapa",
         "letsTalk": "Hablemos"
       },
-      "titleLead": "Experiencia",
-      "titleGradient": "profesional."
+      "titleLead": "La",
+      "titleGradient": "trayectoria."
     },
     "impactStats": {
       "teamSize": {
@@ -1360,14 +1360,27 @@
       "subtitle": "Lo que dicen colegas"
     },
     "socialProof": {
-      "eyebrow": "Respaldado por desarrolladores",
-      "title": "Lo que dicen mis colegas",
-      "subtitle": "Colegas que han visto mi trabajo de cerca.",
-      "titleLead": "Voces de",
-      "titleGradient": "mis colegas.",
-      "previous": "Recomendación anterior",
-      "next": "Siguiente recomendación",
-      "navigation": "Explorar recomendaciones"
+      "subtitle": "Lo que dicen mis colegas y los resultados que lo respaldan.",
+      "titleLead": "Trabajar",
+      "titleGradient": "conmigo.",
+      "cards": {
+        "ownership": {
+          "eyebrow": "Responsabilidad",
+          "title": "De principio a fin, con autonomía."
+        },
+        "delivery": {
+          "eyebrow": "Entregas",
+          "title": "Predecibles, incluso con varios frentes abiertos."
+        },
+        "growing": {
+          "eyebrow": "Desarrollo del equipo",
+          "title": "Ayudo a crecer a quienes trabajan conmigo."
+        },
+        "judgment": {
+          "eyebrow": "Criterio",
+          "title": "Buenas decisiones sin sacrificar la calidad."
+        }
+      }
     },
     "faq": {
       "title": "¿Preguntas?",
