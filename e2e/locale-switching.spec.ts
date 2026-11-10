@@ -19,10 +19,10 @@ test.describe("public locale switching", () => {
         page.getByRole("button", { name: snapshot.navAbout, exact: true }),
       ).toBeVisible();
 
-      const about = page.locator("#main-content #about:visible");
-      await expect(about).toHaveCount(1);
-      await about.scrollIntoViewIfNeeded();
-      await expect(about).toContainText(snapshot.aboutSnippet);
+      const services = page.locator("#main-content #services:visible");
+      await expect(services).toHaveCount(1);
+      await services.scrollIntoViewIfNeeded();
+      await expect(services).toContainText(snapshot.servicesSnippet);
     }
   });
 
