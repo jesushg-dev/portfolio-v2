@@ -137,7 +137,7 @@ export function CareerClimbChart({
   if (choices.length === 0) return null;
 
   return (
-    <div className="border-border/70 from-card via-card to-primary/5 overflow-hidden rounded-3xl border bg-linear-to-br shadow-xl">
+    <div className="home-card-surface from-card via-card to-primary/5 overflow-hidden rounded-3xl bg-linear-to-br">
       <div className="grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <div className="min-w-0 p-5 sm:p-8 lg:p-10">
           <div className="flex flex-wrap items-start justify-between gap-5">

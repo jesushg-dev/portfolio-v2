@@ -73,6 +73,37 @@ describe("canonical multilingual resume", () => {
     ).toThrow("locale: expected en");
   });
   it.each([
+    [
+      "Senior Software Engineer · Ingeniero en Computación",
+      "use one professional title",
+    ],
+    ["Software Engineer", "untranslated content for es"],
+    ["Ingeniero de software sénior", "seniority or leadership level"],
+    ["Desarrollador de TypeScript", "unsupported technologies: TypeScript"],
+  ])("rejects the professional title %s", (title, issue) => {
+    const { context, response } = setup("es");
+    response.fields.find((field) => field.id === "header.degree")!.text = title;
+    expect(() => validateTailoredResume(response, context)).toThrow(
+      `header.degree: ${issue}`,
+    );
+  });
+  it("offers a professional title even when the CMS header has none", () => {
+    const { context } = setup("es");
+    const source = {
+      ...drafts.es,
+      header: { ...drafts.es.header, degree: undefined },
+    };
+    context.drafts = { ...drafts, es: source };
+    const response = resumeResponseFixture(source, "v2");
+    expect(response.fields).toContainEqual({
+      id: "header.degree",
+      text: source.experiences[0].role,
+    });
+    expect(
+      validateTailoredResume(response, context).document.header.degree,
+    ).toBe(source.experiences[0].role);
+  });
+  it.each([
     "missing",
     "unknown",
     "duplicate",
@@ -388,7 +419,20 @@ describe("official Word templates", () => {
     "renders $template.id / $locale from the same persisted document as ATS",
     async ({ template, locale }) => {
       const { context, response } = setup(locale, template.id);
+      const title = {
+        en: "React Software Engineer",
+        es: "Desarrollador de React",
+        nl: "React-ontwikkelaar",
+      }[locale];
+      response.fields.find((field) => field.id === "header.degree")!.text =
+        title;
       const { document } = validateTailoredResume(response, context);
+      expect(document.experiences[0].role).toBe(
+        drafts[locale].experiences[0].role,
+      );
+      expect(document.education[0].degreeName).toBe(
+        drafts[locale].education[0].degreeName,
+      );
       const input = await loadCvTemplateDocxBuffer(template.id);
       const buffer = await renderResumeTemplate(input, document, template);
       const xml = await (
@@ -426,6 +470,9 @@ describe("official Word templates", () => {
         .async("string");
       expect(atsXml).toContain(document.header.availability);
       expect(atsXml).toContain(document.experiences[0].companyBlurb);
+      for (const exportedXml of [xml, atsXml]) {
+        expect(exportedXml.split(`>${title}<`)).toHaveLength(2);
+      }
       if (process.env.RESUME_QA_OUTPUT) {
         await mkdir("scratch/resume-qa", { recursive: true });
         await writeFile(

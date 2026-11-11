@@ -283,7 +283,7 @@ export const ProjectCatalogItem: FC<ProjectCatalogItemProps> = ({
   const cardClassName = cn(
     "group focus-visible:ring-primary w-full text-left transition-all duration-300 focus-visible:ring-2 focus-visible:outline-hidden",
     isFeaturedHero
-      ? "grid grid-cols-1 items-center gap-5 rounded-[2rem] bg-gradient-to-br from-[color-mix(in_srgb,var(--primary)_22%,transparent)] to-[color-mix(in_srgb,var(--foreground)_4%,transparent)] p-[1.125rem] shadow-xl md:grid-cols-[1.3fr_1fr] md:gap-10 md:p-7 border border-white/10 hover:border-primary/40"
+      ? "home-card-surface home-card-surface-interactive grid grid-cols-1 items-center gap-5 rounded-[2rem] bg-gradient-to-br from-[color-mix(in_srgb,var(--primary)_22%,transparent)] to-[color-mix(in_srgb,var(--foreground)_4%,transparent)] p-[1.125rem] md:grid-cols-[1.3fr_1fr] md:gap-10 md:p-7"
       : "flex flex-col rounded-[1.125rem] hover:-translate-y-1",
   );
 
