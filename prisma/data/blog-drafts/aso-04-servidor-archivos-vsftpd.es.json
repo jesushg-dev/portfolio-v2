@@ -1,0 +1,646 @@
+{
+  "slug": "aso-04-servidor-archivos-vsftpd",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 4,
+  "title": "Despliegue y Seguridad de un Servidor de Archivos FTP con vsftpd",
+  "excerpt": "Instalación de vsftpd en Ubuntu, enjaulado chroot de usuarios, cortafuegos UFW, políticas de permisos seguras y comprobación desde clientes Windows y Android.",
+  "tags": ["linux", "ftp", "vsftpd", "redes", "seguridad", "archivo-2020"],
+  "coverImage": "/images/blog/aso/image61.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Instalación y Verificación de vsftpd"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Actualizamos los repositorios e instalamos el demonio vsftpd (Very Secure FTP Daemon):"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt-get update\nsudo apt-get install vsftpd"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image38.png",
+          "alt": "Actualización de paquetes para vsftpd",
+          "title": "Actualización de paquetes para vsftpd"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image39.png",
+          "alt": "Instalación de vsftpd",
+          "title": "Instalación de vsftpd"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Comprobamos el estado del servicio:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "systemctl status vsftpd"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image40.png",
+          "alt": "Estado activo de vsftpd",
+          "title": "Estado activo de vsftpd"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Configuración del Cortafuegos (UFW)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Verificamos si el firewall UFW se encuentra activo y habilitamos el tráfico en los puertos de control y datos:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo ufw status\nsudo ufw allow 20/tcp && sudo ufw allow 21/tcp"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image41.png",
+          "alt": "Estado de UFW",
+          "title": "Estado de UFW"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image42.png",
+          "alt": "Reglas de firewall habilitadas",
+          "title": "Reglas de firewall habilitadas"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Creación de Usuario y Restricción de Acceso SSH"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creamos un usuario dedicado para el servicio FTP:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo adduser USUARIO"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image43.png",
+          "alt": "Creación de usuario FTP con adduser",
+          "title": "Creación de usuario FTP con adduser"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Para mitigar vectores de ataque, restringimos a este usuario el acceso a terminal remota SSH agregando 'DenyUsers USUARIO' en '/etc/ssh/sshd_config':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo nano /etc/ssh/sshd_config"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image44.png",
+          "alt": "Edición de sshd_config",
+          "title": "Edición de sshd_config"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image45.png",
+          "alt": "Directiva DenyUsers configurada",
+          "title": "Directiva DenyUsers configurada"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reiniciamos el servicio SSH:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo service sshd restart"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image46.png",
+          "alt": "Reinicio de sshd",
+          "title": "Reinicio de sshd"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Estructura de Directorios y Permisos Seguros"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creamos la raíz de la jaula FTP del usuario:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo mkdir /home/USUARIO/ftp"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image47.png",
+          "alt": "Creación de directorio /home/USUARIO/ftp",
+          "title": "Creación de directorio /home/USUARIO/ftp"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Asignamos la propiedad a nobody:nogroup y removemos permisos de escritura de la raíz de la jaula (requerido por vsftpd para prevenir escapes chroot):"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo chown nobody:nogroup /home/USUARIO/ftp\nsudo chmod a-w /home/USUARIO/ftp"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image48.png",
+          "alt": "Chown nobody:nogroup",
+          "title": "Chown nobody:nogroup"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image49.png",
+          "alt": "Chmod a-w en raíz de jaula",
+          "title": "Chmod a-w en raíz de jaula"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creamos el subdirectorio donde el usuario sí tendrá permisos de lectura y escritura:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo mkdir /home/USUARIO/ftp/archivos\nsudo chown USUARIO:USUARIO /home/USUARIO/ftp/archivos\nsudo chmod 755 /home/USUARIO/ftp/archivos"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image50.png",
+          "alt": "Creación de subdirectorio archivos",
+          "title": "Creación de subdirectorio archivos"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image51.png",
+          "alt": "Permisos de usuario sobre subdirectorio",
+          "title": "Permisos de usuario sobre subdirectorio"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Configuración de vsftpd.conf"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Editamos '/etc/vsftpd.conf':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo nano /etc/vsftpd.conf"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image52.png",
+          "alt": "Edición de vsftpd.conf",
+          "title": "Edición de vsftpd.conf"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Habilitamos escritura con 'write_enable=YES':"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image53.png",
+          "alt": "write_enable=YES",
+          "title": "write_enable=YES"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Enjaulamos usuarios locales con 'chroot_local_user=YES':"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image54.png",
+          "alt": "chroot_local_user=YES",
+          "title": "chroot_local_user=YES"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Definimos la raíz de navegación con 'user_sub_token=$USER' y 'local_root=/home/$USER/ftp':"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image55.png",
+          "alt": "user_sub_token y local_root",
+          "title": "user_sub_token y local_root"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reiniciamos el servicio vsftpd:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "systemctl restart vsftpd"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image56.png",
+          "alt": "Reinicio de vsftpd",
+          "title": "Reinicio de vsftpd"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Creamos un archivo de prueba para validar la lectura:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cd /home/USUARIO/ftp/archivos\necho \"Esto es una prueba: Servidor FTP\" > prueba.txt\nls -l"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image57.png",
+          "alt": "Archivo de prueba en subdirectorio",
+          "title": "Archivo de prueba en subdirectorio"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Determinamos la dirección IP privada del servidor con net-tools / ifconfig:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt install net-tools\nifconfig"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image58.png",
+          "alt": "Instalación de net-tools",
+          "title": "Instalación de net-tools"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image59.png",
+          "alt": "Comando ifconfig",
+          "title": "Comando ifconfig"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image60.png",
+          "alt": "IP privada del servidor",
+          "title": "IP privada del servidor"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "6. Comprobación Multiplataforma (Windows y Android)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "En Windows, conectamos mediante FileZilla Client ingresando IP, usuario, contraseña y puerto 21:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image61.png",
+          "alt": "Conexión exitosa desde FileZilla en Windows",
+          "title": "Conexión exitosa desde FileZilla en Windows"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "En Android, abrimos Cx File Explorer, accedemos a Red > '+' > FTP e ingresamos los parámetros del servidor:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image62.png",
+          "alt": "Cx File Explorer en Android - Selección de red",
+          "title": "Cx File Explorer en Android - Selección de red"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image63.png",
+          "alt": "Configuración de conexión FTP en Android",
+          "title": "Configuración de conexión FTP en Android"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image64.png",
+          "alt": "Autenticación del cliente Android",
+          "title": "Autenticación del cliente Android"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image65.png",
+          "alt": "Navegación de archivos remotos en Android",
+          "title": "Navegación de archivos remotos en Android"
+        }
+      }
+    ]
+  }
+}
