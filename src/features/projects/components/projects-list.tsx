@@ -284,8 +284,9 @@ export const ProjectsList: FC<ProjectsListProps> = ({
                   <SkillIcon
                     image={skill.image}
                     title={skill.title}
+                    tile
                     size="sm"
-                    className="size-3.5"
+                    className="size-3.5 rounded-xs text-[0.625rem]"
                   />
                   <span>{skill.title}</span>
                 </span>

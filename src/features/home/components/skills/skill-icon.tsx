@@ -48,7 +48,8 @@ const SkillIcon: FC<SkillIconProps> = ({
     return (
       <span
         className={cn(
-          "flex shrink-0 items-center justify-center font-mono font-black shadow-2xs transition-transform duration-200",
+          "flex shrink-0 items-center justify-center font-mono font-black",
+          "overflow-hidden shadow-2xs transition-transform duration-200",
           config.tile,
           className,
         )}
@@ -66,8 +67,8 @@ const SkillIcon: FC<SkillIconProps> = ({
             height={size === "lg" ? 28 : size === "md" ? 20 : 16}
             src={trimmed}
             alt={title}
-            className={cn("object-contain", config.img)}
-            style={{ width: "auto", height: "auto" }}
+            className={cn("max-h-full max-w-full object-contain", config.img)}
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
             onError={() => setFailed(true)}
           />
         )}
@@ -88,15 +89,24 @@ const SkillIcon: FC<SkillIconProps> = ({
   }
 
   return (
-    <MediaImage
-      width={17}
-      height={17}
-      src={trimmed}
-      alt={title}
-      className={cn("size-5 shrink-0 sm:size-4.25", className)}
-      style={{ width: "auto", height: "auto" }}
-      onError={() => setFailed(true)}
-    />
+    <span
+      className={cn(
+        "relative inline-flex shrink-0 items-center justify-center",
+        "overflow-hidden",
+        className ?? "size-5 sm:size-4.25",
+      )}
+      aria-hidden="true"
+    >
+      <MediaImage
+        width={17}
+        height={17}
+        src={trimmed}
+        alt={title}
+        className="size-full max-h-full max-w-full object-contain"
+        style={{ width: "100%", height: "100%" }}
+        onError={() => setFailed(true)}
+      />
+    </span>
   );
 };
 
