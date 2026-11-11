@@ -14,6 +14,7 @@ import { seedPortfolioTestimonials } from "./seed-portfolio-testimonials";
 import { seedPortfolioUses } from "./seed-portfolio-uses";
 import { seedPortfolioNow } from "./seed-portfolio-now";
 import { seedPortfolioProcessPages } from "./seed-portfolio-process-pages";
+import { seedPortfolioBlog } from "./seed-portfolio-blog";
 
 const prisma = new PrismaClient();
 
@@ -82,6 +83,8 @@ async function main() {
   await seedPortfolioNow(prisma, userId);
 
   await seedPortfolioProcessPages(prisma, userId);
+
+  await seedPortfolioBlog(prisma, langIds, userId);
 }
 
 main()

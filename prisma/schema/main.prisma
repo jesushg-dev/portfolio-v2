@@ -65,6 +65,7 @@ model User {
   NowSettings              NowSettings?
   NowFocus                 NowFocus[]
   ProcessPage              ProcessPage[]
+  BlogPost                 BlogPost[]
 
   // Job Tracker
   Company               Company[]
@@ -119,4 +120,5 @@ model AppLanguage {
   NowStatusSlotTranslation         NowStatusSlotTranslation[]
   ProcessPageTranslation           ProcessPageTranslation[]
   SoftSkillsMetricTranslation      SoftSkillsMetricTranslation[]
+  BlogPostTranslation              BlogPostTranslation[]
 }
