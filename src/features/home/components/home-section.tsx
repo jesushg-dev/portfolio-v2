@@ -15,7 +15,7 @@ export default function HomeSection({
   return (
     <div
       id={id}
-      className="scroll-mt-24 [content-visibility:auto] print:[content-visibility:visible]"
+      className="home-section scroll-mt-24 [content-visibility:auto] print:[content-visibility:visible]"
       style={{ containIntrinsicSize: `auto ${estimatedHeight}` }}
     >
       {children}

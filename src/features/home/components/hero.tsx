@@ -70,13 +70,13 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
       >
         {/* Radial Gradient Glow Effect */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)]"
+          className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)]"
           aria-hidden="true"
         />
 
         {/* Subtle Grid Backdrop Overlay */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(var(--border)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,var(--border)_0.0625rem,transparent_0.0625rem)] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,black_15%,transparent_75%)] bg-[size:3rem_3rem] opacity-30"
+          className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(var(--border)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,var(--border)_0.0625rem,transparent_0.0625rem)] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,black_15%,transparent_75%)] bg-[size:3rem_3rem] opacity-30"
           aria-hidden="true"
         />
 

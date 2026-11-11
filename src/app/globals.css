@@ -191,6 +191,8 @@
     --foreground: var(--color-primaryText-500);
     --card: var(--color-background-50);
     --card-foreground: var(--color-primaryText-500);
+    --card-outline: none;
+    --card-elevation: none;
     --popover: var(--color-background-50);
     --popover-foreground: var(--color-primaryText-500);
     --primary: var(--color-primary-800);
@@ -236,14 +238,23 @@
   }
 
   /*========== GLOBAL VARIABLES ==========*/
+  :is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  ) {
+    --card-outline: 0.0625rem solid var(--border);
+    --card-elevation: 0 1rem 2.25rem -1.25rem rgba(15, 23, 42, 0.18);
+  }
+
   /*========== MAIN-LIGHT THEME ==========*/
   [data-theme="main-light"] {
     --brand2: #4a54ae;
-    --gl1: rgba(255, 255, 255, 0.86);
-    --gl2: rgba(218, 230, 251, 0.74);
-    --gb: rgba(83, 111, 164, 0.24);
-    --gh: rgba(255, 255, 255, 0.92);
-    --gs: 0 1.125rem 3.125rem rgba(37, 61, 106, 0.16);
+    --gl1: rgba(255, 255, 255, 0.92);
+    --gl2: rgba(248, 249, 251, 0.8);
+    --gb: rgba(31, 41, 55, 0.13);
+    --gh: #ffffff;
+    --gs: 0 1.125rem 3.125rem rgba(15, 23, 42, 0.09);
     /*========== REDUDANT OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #eff7ff;
     --color-primary-100: #dbeafe;
@@ -311,8 +322,8 @@
     --color-secondaryText-800: #b3b3b3;
     --color-secondaryText-900: #a6a6a6;
 
-    --color-divider-50: #b8c9e0;
-    --color-divider-100: #9fb3d1;
+    --color-divider-50: #dce1e8;
+    --color-divider-100: #c5cbd4;
     --color-divider-200: #94a3b8;
     --color-divider-300: #64748b;
     --color-divider-400: #475569;
@@ -322,9 +333,9 @@
     --color-divider-800: #020617;
     --color-divider-900: #000000;
 
-    --color-background-50: #f5f8fe;
-    --color-background-100: #e9eff8;
-    --color-background-200: #dce6f3;
+    --color-background-50: #ffffff;
+    --color-background-100: #ffffff;
+    --color-background-200: #f3f5f7;
     --color-background-300: #ebebeb;
     --color-background-400: #e2e2e2;
     --color-background-500: #748ba7;
@@ -335,17 +346,11 @@
   }
 
   [data-theme="main-light"] #top {
-    background:
-      radial-gradient(
-        ellipse 50% 65% at 76% 48%,
-        color-mix(in srgb, var(--brand2) 14%, transparent),
-        transparent 72%
-      ),
-      linear-gradient(130deg, #e2eaf7, #edf2fa 55%, #dde6f6);
+    background: #ffffff;
   }
 
   [data-theme="main-light"] .hero-portrait-ring {
-    box-shadow: 0 1.5rem 3rem rgba(39, 69, 126, 0.2);
+    box-shadow: 0 1.5rem 3rem rgba(15, 23, 42, 0.14);
   }
 
   /*========== MAIN-DARK THEME ==========*/
@@ -443,12 +448,12 @@
 
   /*========== ORANGE-LIGHT THEME ==========*/
   [data-theme="orange-light"] {
-    --brand2: #93431f;
-    --gl1: rgba(255, 251, 245, 0.88);
-    --gl2: rgba(243, 225, 207, 0.76);
-    --gb: rgba(137, 91, 56, 0.25);
-    --gh: rgba(255, 255, 255, 0.93);
-    --gs: 0 1.125rem 3.125rem rgba(97, 60, 34, 0.16);
+    --brand2: #c05300;
+    --gl1: rgba(255, 255, 255, 0.92);
+    --gl2: rgba(248, 249, 251, 0.8);
+    --gb: rgba(31, 41, 55, 0.13);
+    --gh: #ffffff;
+    --gs: 0 1.125rem 3.125rem rgba(15, 23, 42, 0.09);
     /*========== OVERRIDE GLOBAL VARIABLES ==========*/
     --color-primary-50: #fff7ed;
     --color-primary-100: #ffefd1;
@@ -456,10 +461,10 @@
     --color-primary-300: #ffce8f;
     --color-primary-400: #ffbb6c;
     --color-primary-500: #ffa948;
-    --color-primary-600: #ff9a29;
-    --color-primary-700: #ff8c0e;
-    --color-primary-800: #6e2e0a;
-    --color-primary-900: #ff6e00;
+    --color-primary-600: #dc6300;
+    --color-primary-700: #c05300;
+    --color-primary-800: #a64200;
+    --color-primary-900: #833000;
 
     --color-primaryDark-50: #ffd5b6;
     --color-primaryDark-100: #ffc89b;
@@ -516,8 +521,8 @@
     --color-secondaryText-800: #b3b3b3;
     --color-secondaryText-900: #a6a6a6;
 
-    --color-divider-50: #ccb9a5;
-    --color-divider-100: #b69c84;
+    --color-divider-50: #dce1e8;
+    --color-divider-100: #c5cbd4;
     --color-divider-200: #94a3b8;
     --color-divider-300: #64748b;
     --color-divider-400: #475569;
@@ -527,9 +532,9 @@
     --color-divider-800: #020617;
     --color-divider-900: #000000;
 
-    --color-background-50: #fbf6ef;
-    --color-background-100: #f2e9dd;
-    --color-background-200: #eadccc;
+    --color-background-50: #ffffff;
+    --color-background-100: #ffffff;
+    --color-background-200: #f3f5f7;
     --color-background-300: #ebebeb;
     --color-background-400: #e2e2e2;
     --color-background-500: #748ba7;
@@ -540,17 +545,17 @@
   }
 
   [data-theme="orange-light"] #top {
-    background:
-      radial-gradient(
-        ellipse 50% 65% at 76% 48%,
-        color-mix(in srgb, var(--brand2) 13%, transparent),
-        transparent 72%
-      ),
-      linear-gradient(130deg, #eee1d2, #f6ede2 55%, #e9d8c7);
+    background: #ffffff;
   }
 
   [data-theme="orange-light"] .hero-portrait-ring {
-    box-shadow: 0 1.5rem 3rem rgba(108, 61, 30, 0.2);
+    background: conic-gradient(
+      from 210deg,
+      var(--primary) 0 70%,
+      #154c86 70% 78%,
+      var(--primary) 78% 100%
+    );
+    box-shadow: 0 1.5rem 3rem rgba(15, 23, 42, 0.14);
   }
 
   /*========== ORANGE-DARK THEME ==========*/
@@ -647,12 +652,12 @@
 
   /*========== CHRISTMAS-LIGHT THEME ==========*/
   [data-theme="christmas-light"] {
-    --brand2: #124b38;
-    --gl1: rgba(255, 250, 251, 0.88);
-    --gl2: rgba(240, 219, 226, 0.75);
-    --gb: rgba(139, 82, 102, 0.25);
-    --gh: rgba(255, 255, 255, 0.93);
-    --gs: 0 1.125rem 3.125rem rgba(91, 49, 65, 0.16);
+    --brand2: #bb3042;
+    --gl1: rgba(255, 255, 255, 0.92);
+    --gl2: rgba(248, 249, 251, 0.8);
+    --gb: rgba(31, 41, 55, 0.13);
+    --gh: #ffffff;
+    --gs: 0 1.125rem 3.125rem rgba(15, 23, 42, 0.09);
     --color-primary-50: #ffeeee;
     --color-primary-100: #fed7d7;
     --color-primary-200: #feb2b2;
@@ -660,9 +665,9 @@
     --color-primary-400: #f56565;
     --color-primary-500: #e53e3e;
     --color-primary-600: #c53030;
-    --color-primary-700: #9b2c2c;
-    --color-primary-800: #74232d;
-    --color-primary-900: #63171b;
+    --color-primary-700: #bb3042;
+    --color-primary-800: #a51e2c;
+    --color-primary-900: #781b27;
 
     --color-primaryDark-50: #e4f9f5;
     --color-primaryDark-100: #b6f7d4;
@@ -719,8 +724,8 @@
     --color-secondaryText-800: #2e7d32;
     --color-secondaryText-900: #1b5e20;
 
-    --color-divider-50: #ccb8c1;
-    --color-divider-100: #b89eaa;
+    --color-divider-50: #dce1e8;
+    --color-divider-100: #c5cbd4;
     --color-divider-200: #94a3b8;
     --color-divider-300: #64748b;
     --color-divider-400: #475569;
@@ -730,9 +735,9 @@
     --color-divider-800: #020617;
     --color-divider-900: #000000;
 
-    --color-background-50: #faf4f6;
-    --color-background-100: #f1e8ec;
-    --color-background-200: #e8d9e1;
+    --color-background-50: #ffffff;
+    --color-background-100: #ffffff;
+    --color-background-200: #f3f5f7;
     --color-background-300: #ebebeb;
     --color-background-400: #e2e2e2;
     --color-background-500: #748ba7;
@@ -743,17 +748,30 @@
   }
 
   [data-theme="christmas-light"] #top {
-    background:
-      radial-gradient(
-        ellipse 50% 65% at 76% 48%,
-        color-mix(in srgb, var(--brand2) 12%, transparent),
-        transparent 72%
-      ),
-      linear-gradient(130deg, #eee2e8, #f7edf1 55%, #e8dce5);
+    background: #ffffff;
   }
 
   [data-theme="christmas-light"] .hero-portrait-ring {
-    box-shadow: 0 1.5rem 3rem rgba(86, 43, 66, 0.2);
+    background: conic-gradient(
+      from 210deg,
+      var(--primary) 0 70%,
+      #146449 70% 78%,
+      var(--primary) 78% 100%
+    );
+    box-shadow: 0 1.5rem 3rem rgba(15, 23, 42, 0.14);
+  }
+
+  [data-theme="christmas-light"] .hero-availability-dot {
+    background-color: #146449;
+  }
+
+  :is(
+      [data-theme="main-light"],
+      [data-theme="orange-light"],
+      [data-theme="christmas-light"]
+    )
+    .hero-photo-frame::before {
+    opacity: 0.1;
   }
 
   /*========== CHRISTMAS-DARK THEME ==========*/
@@ -856,6 +874,90 @@
     --border: var(--color-divider-300);
     --input: var(--color-divider-300);
   }
+}
+
+.home-card-surface {
+  border: var(--card-outline);
+  box-shadow: var(--card-elevation);
+}
+
+.home-card-surface:focus-visible {
+  outline: 0.125rem solid var(--ring);
+  outline-offset: 0.25rem;
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  .home-card-surface-interactive:hover {
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  .site-footer {
+  background: #ffffff;
+  color: var(--foreground);
+  border-top: 0.0625rem solid var(--border);
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  :is(#main-content, .home-section, .home-tech-marquee) {
+  background: #ffffff;
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  .home-hero-backdrop {
+  display: none;
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  .site-footer
+  :is(
+    [class~="text-primary-foreground"],
+    [class~="text-primary-foreground/85"],
+    [class~="text-primary-foreground/90"],
+    [class~="text-white"],
+    [class~="hover:text-white"]:hover
+  ) {
+  color: var(--foreground);
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  .site-footer
+  :is([class~="bg-white/10"], [class~="bg-white/15"]) {
+  background-color: var(--muted);
+}
+
+:is(
+    [data-theme="main-light"],
+    [data-theme="orange-light"],
+    [data-theme="christmas-light"]
+  )
+  .site-footer
+  :is([class~="border-white/15"], [class~="border-white/20"]) {
+  border-color: var(--border);
 }
 
 @utility hero {
