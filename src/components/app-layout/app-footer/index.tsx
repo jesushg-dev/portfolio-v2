@@ -104,7 +104,7 @@ const Footer = async ({
   const calendlyUrl = getCalendlyUrl(data.contacts);
 
   return (
-    <footer className="from-primary to-primary-900 text-primary-foreground relative z-20 bg-linear-to-b">
+    <footer className="site-footer from-primary to-primary-900 text-primary-foreground relative z-20 bg-linear-to-b">
       {/* Subtle grid texture overlay */}
       <div
         aria-hidden
