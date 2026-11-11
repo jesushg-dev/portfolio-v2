@@ -24,11 +24,13 @@ import { seedExportRouter } from "@/features/data-export/server/seed-export/seed
 
 import { analyticsRouter } from "@/features/analytics/server/analytics.router";
 import { analyticsAdminRouter } from "@/features/analytics/server/analytics-admin.router";
+import { blogAdminRouter } from "@/features/blog/server/blog-admin.router";
 import { geoRouter } from "@/server/api/routers/geo";
 
 export const appRouter = createTRPCRouter({
   ...publicRouters,
   geo: geoRouter,
+  blogAdmin: blogAdminRouter,
   analytics: analyticsRouter,
   analyticsAdmin: analyticsAdminRouter,
   appLanguagesAdmin: appLanguagesAdminRouter,

@@ -20,6 +20,7 @@ import {
   MonitorSmartphone,
   Radio,
   Workflow,
+  BookOpen,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
@@ -59,7 +60,8 @@ interface NavItem {
     | "settings"
     | "uses"
     | "now"
-    | "processPages";
+    | "processPages"
+    | "blog";
   icon: typeof LayoutDashboard;
   group?: "portfolio" | "pages";
 }
@@ -126,6 +128,12 @@ const NAV_ITEMS: NavItem[] = [
     href: "/admin/process-pages",
     labelKey: "processPages",
     icon: Workflow,
+    group: "pages",
+  },
+  {
+    href: "/admin/blog",
+    labelKey: "blog",
+    icon: BookOpen,
     group: "pages",
   },
   // ── Config ─────────────────────────────────────────────
