@@ -213,6 +213,7 @@
 
     --brand: var(--primary);
     --brand2: var(--primary);
+    --display-accent: var(--primary);
     --bar: #1c3fae;
     --gl1: rgba(255, 255, 255, 0.13);
     --gl2: rgba(255, 255, 255, 0.04);
@@ -449,6 +450,7 @@
   /*========== ORANGE-LIGHT THEME ==========*/
   [data-theme="orange-light"] {
     --brand2: #c05300;
+    --display-accent: #a64200;
     --gl1: rgba(255, 255, 255, 0.92);
     --gl2: rgba(248, 249, 251, 0.8);
     --gb: rgba(31, 41, 55, 0.13);
@@ -463,7 +465,7 @@
     --color-primary-500: #ffa948;
     --color-primary-600: #dc6300;
     --color-primary-700: #c05300;
-    --color-primary-800: #a64200;
+    --color-primary-800: #883000;
     --color-primary-900: #833000;
 
     --color-primaryDark-50: #ffd5b6;
@@ -653,6 +655,7 @@
   /*========== CHRISTMAS-LIGHT THEME ==========*/
   [data-theme="christmas-light"] {
     --brand2: #bb3042;
+    --display-accent: #a51e2c;
     --gl1: rgba(255, 255, 255, 0.92);
     --gl2: rgba(248, 249, 251, 0.8);
     --gb: rgba(31, 41, 55, 0.13);
@@ -666,7 +669,7 @@
     --color-primary-500: #e53e3e;
     --color-primary-600: #c53030;
     --color-primary-700: #bb3042;
-    --color-primary-800: #a51e2c;
+    --color-primary-800: #951827;
     --color-primary-900: #781b27;
 
     --color-primaryDark-50: #e4f9f5;
@@ -1759,6 +1762,13 @@ video::-webkit-media-controls {
 /* Master Brand Gradient Text */
 .gt {
   background: linear-gradient(90deg, var(--brand), var(--brand2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-accent {
+  background: linear-gradient(90deg, var(--display-accent), var(--brand2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

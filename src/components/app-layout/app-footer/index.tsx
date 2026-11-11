@@ -314,8 +314,6 @@ const Footer = async ({
                   alt="Spotify"
                   width={60}
                   height={18}
-                  className="h-4.5 w-auto"
-                  style={{ width: "auto" }}
                 />
               </a>
             </div>

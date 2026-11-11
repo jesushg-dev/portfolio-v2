@@ -15,6 +15,7 @@ The home page has three light themes: `main-light`, `orange-light`, and `christm
 - `src/features/home/components/hero.tsx`, `home-tech-marquee.tsx`, and `home-section.tsx` expose those stable class hooks. Do not add new broad gradient backgrounds to these light-theme surfaces.
 - The theme selector previews use white surfaces and the theme's dark accent. No maximum widths were changed.
 - The main home cards (featured project, social proof, experience chart, expertise carousel, and skills terminal) use `.home-card-surface` with `--card-outline` and `--card-elevation`. Light themes set a border and soft shadow to separate white cards from the white page. Dark themes leave both tokens as `none` because their card surface already separates them. Keep functional inner dividers and the separate contact layout intact.
+- Orange and Christmas use `--color-primary-800` for both small accent text and primary button backgrounds. Check AAA contrast against white **and** `bg-primary/10` badges; a color that passes on white alone can still fail on the tinted badge. Large headings use the brighter `--display-accent` (plus `--brand2` in gradient text) to retain each theme's identity. The selector previews show this display accent, while small text and controls use the darker functional primary.
 
 ## Verification
 

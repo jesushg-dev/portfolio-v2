@@ -54,7 +54,7 @@ export default async function HeroContent({
       <div>
         <h1 className="text-foreground text-[clamp(2.375rem,6vw,4.25rem)] leading-[1.05] font-bold tracking-[-0.035em]">
           {t("greeting")}{" "}
-          <span className="text-primary font-bold">
+          <span className="font-bold text-[var(--display-accent)]">
             {firstName} {lastName}
           </span>
         </h1>
