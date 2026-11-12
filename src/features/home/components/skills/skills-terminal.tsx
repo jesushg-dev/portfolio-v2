@@ -116,7 +116,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
           setSearch("");
           setActiveCategory(category.id);
         }}
-        className="bg-card border-border/50 relative gap-0 overflow-hidden rounded-2xl border shadow-lg"
+        className="home-card-surface bg-card relative gap-0 overflow-hidden rounded-2xl"
       >
         {/* Terminal Chrome Bar */}
         <div className="border-border/30 bg-muted/20 flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
@@ -148,6 +148,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
               placeholder={t("terminal.searchPlaceholder")}
               aria-label={t("terminal.searchLabel")}
               autoComplete="off"
+              suppressHydrationWarning
               className="text-foreground placeholder:text-muted-foreground h-11 w-28 bg-transparent outline-none sm:w-36"
             />
             <kbd className="border-border/40 text-muted-foreground rounded border px-1.5 text-sm">

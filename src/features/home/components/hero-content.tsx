@@ -44,8 +44,8 @@ export default async function HeroContent({
       {heroData.availabilityBadge ? (
         <div className="bg-primary/10 text-primary ring-primary/40 mb-5 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-medium ring-1 ring-inset sm:text-sm">
           <span className="relative flex size-2">
-            <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
-            <span className="bg-primary relative inline-flex size-2 rounded-full" />
+            <span className="hero-availability-dot bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+            <span className="hero-availability-dot bg-primary relative inline-flex size-2 rounded-full" />
           </span>
           <span>{heroData.availabilityBadge}</span>
         </div>
@@ -54,7 +54,7 @@ export default async function HeroContent({
       <div>
         <h1 className="text-foreground text-[clamp(2.375rem,6vw,4.25rem)] leading-[1.05] font-bold tracking-[-0.035em]">
           {t("greeting")}{" "}
-          <span className="text-primary font-bold">
+          <span className="font-bold text-[var(--display-accent)]">
             {firstName} {lastName}
           </span>
         </h1>

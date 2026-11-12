@@ -94,7 +94,7 @@ function WorkingCard({
 }) {
   return (
     <li className={wide ? "md:col-span-2 lg:col-span-2" : ""}>
-      <article className="bg-card flex h-full flex-col rounded-[2rem] p-6 sm:p-10">
+      <article className="home-card-surface bg-card flex h-full flex-col rounded-[2rem] p-6 sm:p-10">
         <p className="text-muted-foreground font-mono text-sm tracking-widest uppercase">
           {eyebrow}
         </p>

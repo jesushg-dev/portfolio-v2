@@ -1,0 +1,204 @@
+{
+  "slug": "aso-01-ubuntu-mate-entorno",
+  "locale": "es",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Arquitectura de Sistemas Operativos: Kernel, Personalización y Servicios",
+  "seriesOrder": 1,
+  "title": "Ubuntu MATE como Entorno de Ingeniería de Sistemas Operativos",
+  "excerpt": "Reseña histórica de Ubuntu MATE, entorno de escritorio MATE vs GNOME 3, eficiencia de recursos y configuración inicial para desarrollo y administración de sistemas.",
+  "tags": [
+    "linux",
+    "ubuntu-mate",
+    "sistemas-operativos",
+    "universidad",
+    "archivo-2020"
+  ],
+  "coverImage": "/images/blog/aso/image37.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Nota histórica y de archivo: Este artículo forma parte de una serie de laboratorio desarrollada originalmente el 23 de noviembre de 2020 para la asignatura de Arquitectura de Sistemas Operativos en la Universidad Nacional de Ingeniería (UNI), Managua. Se preserva con fines didácticos e históricos, integrando notas técnicas actualizadas sobre estándares modernos de Linux y redes."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Introducción y Reseña de Ubuntu MATE"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ubuntu MATE es una distribución de software libre y código abierto, estable y accesible, diseñada con un entorno de escritorio configurable. Es ideal para estaciones de trabajo de desarrollo que buscan maximizar el rendimiento del hardware conservando una metáfora de escritorio tradicional y predecible."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "La distribución nació de la mano de Martin Wimpress y Alan Pope a partir de Ubuntu 14.10, convirtiéndose formalmente en sabor oficial de Canonical en febrero de 2015. Esto le permitió integrarse plenamente en la infraestructura de compilación, empaquetado y control de calidad de Canonical Ltd."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Arquitectura de Escritorio: MATE vs. GNOME 3"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "La principal diferenciación técnica de Ubuntu MATE radica en su entorno de escritorio. Mientras que el sabor principal de Ubuntu adoptó GNOME 3 (con su gestor Mutter y un consumo de memoria más intensivo), MATE preserva la arquitectura modular de GNOME 2 pero adaptada a bibliotecas modernas GTK3."
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Bajo consumo de memoria RAM: huella inicial inferior a 600 MB en reposo."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Menor latencia de renderizado de interfaz, liberando ciclos de CPU para tareas pesadas como compilación de código fuente."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Compatibilidad superior tanto en hardware moderno como en máquinas legadas o entornos virtuales."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Control granular de paneles, applets y componentes de interfaz."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Personalización de Entorno con MATE Tweak"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A través de la utilidad MATE Tweak, el usuario puede alternar entre distintas metáforas de interfaz gráfica con un solo clic: 'Traditional' (dos paneles clásicos al estilo GNOME 2), 'Redmond' (panel inferior con menú de inicio tipo Windows), 'Cupertino' (barra superior y dock al estilo macOS) o 'Mutiny' (panel lateral al estilo Unity)."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Preparación del Sistema para Laboratorios de Bajo Nivel"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Antes de emprender labores de compilación del kernel y configuración de servicios de red, es indispensable actualizar la base de datos de paquetes y verificar la integridad de los repositorios del sistema."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update && sudo apt upgrade -y\nsudo apt install -y build-essential curl wget git net-tools"
+          }
+        ]
+      }
+    ]
+  }
+}

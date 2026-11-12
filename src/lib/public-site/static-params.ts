@@ -37,3 +37,48 @@ export async function publicProcessParams() {
     select: { slug: true },
   });
 }
+
+export async function publicBlogParams() {
+  const tenant = await getPrimaryPublicTenant();
+  if (!tenant) return [];
+  const posts = await db.blogPost.findMany({
+    where: { userId: tenant.userId, status: "PUBLISHED" },
+    select: { slug: true },
+  });
+  return posts.flatMap(({ slug }) => (slug?.trim() ? [{ slug }] : []));
+}
+
+export async function publicBlogSeriesParams() {
+  const tenant = await getPrimaryPublicTenant();
+  if (!tenant) return [];
+  const posts = await db.blogPost.findMany({
+    where: {
+      userId: tenant.userId,
+      status: "PUBLISHED",
+      seriesName: { not: null },
+    },
+    select: { seriesName: true },
+    distinct: ["seriesName"],
+  });
+  return posts.flatMap(({ seriesName }) =>
+    seriesName?.trim() ? [{ series: seriesName.trim() }] : [],
+  );
+}
+
+export async function publicBlogTagParams() {
+  const tenant = await getPrimaryPublicTenant();
+  if (!tenant) return [];
+  const posts = await db.blogPost.findMany({
+    where: { userId: tenant.userId, status: "PUBLISHED" },
+    select: { tags: true },
+  });
+  const tags = new Set<string>();
+  for (const post of posts) {
+    for (const tag of post.tags) {
+      if (!tag.toLowerCase().startsWith("series:")) {
+        tags.add(tag);
+      }
+    }
+  }
+  return Array.from(tags).map((tag) => ({ tag }));
+}

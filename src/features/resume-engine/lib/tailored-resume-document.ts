@@ -22,6 +22,8 @@ import {
   changesProficiency,
   changesLanguageName,
   addsCredential,
+  addsRoleLevel,
+  RESUME_TITLE_SEPARATOR,
 } from "./resume-content-validation";
 
 export const TailoredResumeDocumentSchema = CvImportDraftSchema.omit({
@@ -149,7 +151,12 @@ export function resumeTextFields(
   const add = (id: string, text: string | undefined, budget = 180) => {
     if (text?.trim()) fields.push({ id, text, budget });
   };
-  add("header.degree", draft.header.degree, 90);
+  const savedTitle = draft.header.degree?.trim();
+  add(
+    "header.degree",
+    savedTitle?.length ? savedTitle : draft.experiences[0]?.role,
+    limits.title,
+  );
   add("header.summary", draft.header.summary, limits.summary);
   add("header.availability", draft.header.availability, 70);
   for (const exp of draft.experiences) {
@@ -217,6 +224,13 @@ export function validateTailoredResume(
   const sourceTools = new Set(
     extractJobTools(JSON.stringify(source)).map((tool) => tool.toLowerCase()),
   );
+  const sourceRoles = source.experiences.map((experience) => experience.role);
+  const titleEvidence = source.experiences
+    .flatMap((experience) => [experience.role, ...experience.responsibilities])
+    .join("\n");
+  const titleTools = new Set(
+    extractJobTools(titleEvidence).map((tool) => tool.toLowerCase()),
+  );
   for (const field of result.fields) {
     if (field.id === "header.fullName") {
       issues.push(
@@ -236,17 +250,31 @@ export function validateTailoredResume(
         `${field.id}: required text, maximum ${original.budget} characters`,
       );
     if (!text) continue;
-    const language = contentLanguage(text);
+    const isProfessionalTitle = field.id === "header.degree";
+    const language = contentLanguage(text, isProfessionalTitle ? 1 : 2);
     if (
       FOREIGN_PHRASES[result.locale].test(text) ||
       (language && language !== result.locale)
     )
       issues.push(`${field.id}: untranslated content for ${result.locale}`);
+    const sourceNumbers = numericResumeFacts(original.text);
+    const numbers = numericResumeFacts(text);
     if (
-      numericResumeFacts(text).join("|") !==
-      numericResumeFacts(original.text).join("|")
+      isProfessionalTitle
+        ? numbers.some((number) => !sourceNumbers.includes(number))
+        : numbers.join("|") !== sourceNumbers.join("|")
     )
       issues.push(`${field.id}: changed numeric facts or proficiency level`);
+    if (isProfessionalTitle) {
+      if (RESUME_TITLE_SEPARATOR.test(text))
+        issues.push(
+          `${field.id}: use one professional title without a second role or degree`,
+        );
+      if (addsRoleLevel(text, sourceRoles))
+        issues.push(
+          `${field.id}: seniority or leadership level is unsupported by the selected roles`,
+        );
+    }
     if (
       field.id.startsWith("language.") &&
       field.id.endsWith(".level") &&
@@ -259,8 +287,9 @@ export function validateTailoredResume(
       changesLanguageName(original.text, text)
     )
       issues.push(`${field.id}: changed language identity`);
+    const supportedTools = isProfessionalTitle ? titleTools : sourceTools;
     const unexpected = extractJobTools(text).filter(
-      (tool) => !sourceTools.has(tool.toLowerCase()),
+      (tool) => !supportedTools.has(tool.toLowerCase()),
     );
     if (unexpected.length)
       issues.push(

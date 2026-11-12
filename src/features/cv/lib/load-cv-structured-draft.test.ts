@@ -47,6 +47,10 @@ describe("loadCvStructuredDraft", () => {
               degree: "Math",
               heroSummary: "Public hero copy that must never enter the CV",
             },
+            {
+              appLanguageId: "lang-es",
+              degree: "Engineer · Licenciada en Matemáticas",
+            },
           ],
         }),
       },
@@ -73,6 +77,7 @@ describe("loadCvStructuredDraft", () => {
                 location: "Remote",
                 companyBlurb: "Widgets",
               },
+              { appLanguageId: "lang-es", role: "Ingeniera" },
             ],
             responsibilities: [
               {
@@ -155,6 +160,7 @@ describe("loadCvStructuredDraft", () => {
       locale: "en",
     });
     expect(draft?.header.fullName).toBe("Ada Lovelace");
+    expect(draft?.header.degree).toBe("Math");
     expect(draft?.header.summary).toBe("Builder");
     expect(draft?.experiences[0]?.responsibilities).toEqual(["Shipped UI"]);
     expect(draft?.experiences[0]?.atsResponsibilities).toEqual(["ATS only"]);
@@ -177,6 +183,10 @@ describe("loadCvStructuredDraft", () => {
       "achievement-additional",
     ]);
     expect(tailored?.experiences[0].atsResponsibilities).toEqual([]);
+    const spanish = await loadCvStructuredDraft(db as never, "user-1", {
+      locale: "es",
+    });
+    expect(spanish?.header.degree).toBe("Ingeniera");
   });
 
   it("does not automatically include unselected portfolio skills", async () => {

@@ -15,9 +15,7 @@ export function MediaImage({
   style,
   ...props
 }: MediaImageProps) {
-  const mergedStyle = props.fill
-    ? style
-    : { width: "auto", height: "auto", ...style };
+  const mergedStyle = style;
 
   if (typeof src !== "string") {
     return (

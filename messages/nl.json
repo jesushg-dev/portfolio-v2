@@ -1971,6 +1971,53 @@
       "countriesHintSimple": "Laatste 30 dagen. Alleen op landniveau.",
       "pagesHint": "Laatste 30 dagen.",
       "otherCountries": "Overige landen ({count})"
+    },
+    "blog": {
+      "eyebrow": "Technische artikelen en tutorials",
+      "title": "Blog",
+      "subtitle": "Gedachten, tutorials en technische analyses.",
+      "backToHome": "Terug naar portfolio",
+      "empty": "Nog geen berichten gepubliceerd.",
+      "emptyState": {
+        "title": "Nog geen artikelen gepubliceerd",
+        "description": "Technische diepgang, software-architecturen en tutorials worden momenteel voorbereid. Kom snel terug of bekijk de reeksen.",
+        "filteredTitle": "Geen artikelen gevonden",
+        "filteredDescription": "Geen artikelen gevonden die overeenkomen met je zoekopdracht of tag. Reset de filters om alle berichten te zien.",
+        "badge": "Blog",
+        "reset": "Filters resetten"
+      },
+      "readMore": "Lees meer",
+      "featured": "Uitgelicht bericht",
+      "searchPlaceholder": "Zoek op titel, onderwerp of tag...",
+      "clearSearch": "Zoekopdracht wissen",
+      "filterByTag": "Filter op tag:",
+      "clearFilters": "Filters wissen",
+      "showingFiltered": "{count, plural, one {# resultaat gevonden} other {# resultaten gevonden}}",
+      "allTags": "Alles",
+      "loadError": "Berichten laden mislukt.",
+      "retry": "Opnieuw proberen",
+      "backToBlog": "Terug naar blog",
+      "relatedPosts": "Gerelateerde berichten",
+      "minRead": "{minutes, plural, one {# min leestijd} other {# min leestijd}}",
+      "loadMore": "Meer laden",
+      "loading": "Laden...",
+      "tableOfContents": "Inhoudsopgave",
+      "series": "Serie",
+      "previousInSeries": "Vorige in serie",
+      "nextInSeries": "Volgende in serie",
+      "browseSeries": "Bekijk alle series",
+      "seriesTitle": "Series",
+      "seriesSubtitle": "Volg verbonden berichten als leerroutes en verdiepende analyses.",
+      "postsCount": "{count, plural, one {# bericht} other {# berichten}}",
+      "chapterOf": "Deel {current} van {total}",
+      "viewFeed": "Lijstweergave",
+      "viewGrid": "Raster",
+      "seriesStripTitle": "Leerseries en technische tracks",
+      "seriesStripSubtitle": "Stap-voor-stap handleidingen en diepgaande technische analyses.",
+      "viewSeries": "Bekijk serie",
+      "allArticles": "Alle artikelen",
+      "byAuthor": "Door Jesús Hernández",
+      "readArticle": "Artikel lezen"
     }
   },
   "admin": {
@@ -2016,7 +2063,8 @@
         "uses": "Uses",
         "now": "Now",
         "processPages": "Procespagina's",
-        "sidebar": "Admin-navigatie"
+        "sidebar": "Admin-navigatie",
+        "blog": "Blog"
       },
       "pageToolbar": "Paginakop",
       "pinSidebar": "Zijbalk open houden",
@@ -3594,6 +3642,32 @@
           "faq": "FAQ",
           "closingCta": "Afsluitende CTA"
         }
+      },
+      "blog": {
+        "generalSection": "Instellingen",
+        "contentSection": "Inhoud",
+        "slug": "Slug",
+        "slugRequired": "Slug is verplicht",
+        "coverImage": "Omslagafbeelding",
+        "status": "Status",
+        "statusDraft": "Concept",
+        "statusPublished": "Gepubliceerd",
+        "statusArchived": "Gearchiveerd",
+        "tags": "Tags",
+        "seriesName": "Serienaam",
+        "seriesOrder": "Hoofdstukvolgorde",
+        "title": "Titel",
+        "titleRequired": "Titel is verplicht voor de primaire taal",
+        "excerpt": "Samenvatting",
+        "content": "Inhoud",
+        "cancel": "Annuleren",
+        "saving": "Opslaan...",
+        "update": "Bijwerken",
+        "create": "Aanmaken",
+        "updatedSuccess": "Bericht bijgewerkt",
+        "createdSuccess": "Bericht aangemaakt",
+        "updateFailed": "Bijwerken mislukt",
+        "createFailed": "Aanmaken mislukt"
       }
     },
     "errors": {
@@ -4943,6 +5017,34 @@
       "invalid": "Vul elke vraag en elk antwoord in voordat je opslaat.",
       "loading": "Vragen laden…",
       "empty": "Geen vragen in deze taal. De sectie blijft verborgen totdat je inhoud toevoegt."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Schrijf en beheer blogberichten.",
+      "newPost": "Nieuw bericht",
+      "count": "{count, plural, one {# bericht} other {# berichten}}",
+      "empty": "Nog geen berichten.",
+      "deleted": "Bericht verwijderd.",
+      "reordered": "Serievolgorde bijgewerkt.",
+      "moveUp": "Omhoog verplaatsen",
+      "moveDown": "Omlaag verplaatsen",
+      "seriesLabel": "Serie: {name}",
+      "tabSeries": "Series en Leertrajecten",
+      "tabStandalone": "Losse Artikelen",
+      "tabAll": "Alle Artikelen",
+      "chaptersCount": "{count, plural, one {# hoofdstuk} other {# hoofdstukken}}",
+      "addChapter": "Hoofdstuk toevoegen",
+      "noSeries": "Nog geen series aangemaakt.",
+      "noStandalone": "Nog geen losse artikelen.",
+      "searchPlaceholder": "Zoek op titel, serie of slug...",
+      "statusPublished": "Gepubliceerd",
+      "statusDraft": "Concept",
+      "create": "Bericht aanmaken",
+      "edit": "Bericht bewerken",
+      "editDescription": "Bewerk blogbericht."
+    },
+    "sidebar": {
+      "blog": "Blog"
     }
   },
   "auth": {

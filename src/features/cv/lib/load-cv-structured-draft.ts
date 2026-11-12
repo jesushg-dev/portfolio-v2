@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 
 import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+import { RESUME_TITLE_SEPARATOR } from "@/features/resume-engine/lib/resume-content-validation";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { normalizeEmploymentType } from "./employment-type";
 import { resolveUserTechnicalSkills } from "./resolve-user-technical-skills";
@@ -105,6 +106,15 @@ export async function loadCvStructuredDraft(
   const activeLocale = options?.locale ?? profileDefaultLocale;
   const field = createLocalizedFieldResolver(appLanguages, activeLocale);
   const headerT = field.for(header.translations);
+  const [savedTitle, extraTitle] = headerT("degree").split(
+    RESUME_TITLE_SEPARATOR,
+  );
+  const professionalTitle =
+    extraTitle !== undefined && experiences[0]
+      ? field(experiences[0].translations, "role")
+          .split(RESUME_TITLE_SEPARATOR)[0]
+          ?.trim() || undefined
+      : undefined;
 
   const summary =
     (await db.cvAboutMe
@@ -121,7 +131,7 @@ export async function loadCvStructuredDraft(
       fullName: header.fullName,
       photoUrl: header.photoUrl ?? undefined,
       availability: headerT("availabilityBadge") || undefined,
-      degree: headerT("degree") || undefined,
+      degree: professionalTitle ?? (savedTitle?.trim() || undefined),
       summary: summary !== "" ? summary : undefined,
     },
     experiences: experiences.map((exp, index) => {

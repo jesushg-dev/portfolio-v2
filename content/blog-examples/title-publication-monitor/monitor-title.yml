@@ -1,0 +1,42 @@
+name: Mi monitor de título
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 14 * * 1-6"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: personal-title-monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - uses: actions/cache/restore@v5
+        with:
+          path: .title-monitor-state
+          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            personal-title-
+
+      - name: Consultar y avisar
+        run: node scripts/check-title.mjs
+        env:
+          TITLE_MONITOR_REGISTRY: ${{ vars.TITLE_MONITOR_REGISTRY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - uses: actions/cache/save@v5
+        with:
+          path: .title-monitor-state
+          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}

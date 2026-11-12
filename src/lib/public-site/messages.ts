@@ -25,6 +25,7 @@ const routeMainKeys = {
   certificates: [],
   curriculum: [],
   themeCustomizer: [],
+  blog: ["blog"],
 } as const satisfies Record<string, readonly (keyof Messages["main"])[]>;
 
 export type PublicMessageScope = keyof typeof routeMainKeys;

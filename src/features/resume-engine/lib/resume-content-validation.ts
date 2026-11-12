@@ -4,23 +4,23 @@ import type { Locale } from "@/i18n/config";
 // and short neutral labels are deliberately not classified as prose.
 const WORDS: Record<Locale, Set<string>> = {
   en: new Set(
-    "the with and for from through built developed improved designed implemented managed customers years working native available immediately professional proficiency basic developer engineer".split(
+    "the with and for from through built developed improved designed implemented managed customers years working native available immediately professional proficiency basic developer engineer programmer".split(
       " ",
     ),
   ),
   es: new Set(
-    "los las una para con del mediante desde desarrollé implementé mejoré diseñé construí clientes años experiencia desarrollador ingeniero nativo bilingüe disponibilidad inmediata básico español holandés".split(
+    "los las una para con del mediante desde desarrollé implementé mejoré diseñé construí clientes años experiencia desarrollador desarrolladora ingeniero ingeniera programador programadora nativo bilingüe disponibilidad inmediata básico español holandés".split(
       " ",
     ),
   ),
   nl: new Set(
-    "het een voor van met door gebouwd ontwikkeld verbeterd ontworpen klanten jaar ervaring beschikbaar moedertaal tweetalig vaardigheden ontwikkelaar spaans nederlands basiskennis".split(
+    "het een voor van met door gebouwd ontwikkeld verbeterd ontworpen klanten jaar ervaring beschikbaar moedertaal tweetalig vaardigheden ontwikkelaar softwareontwikkelaar webontwikkelaar ingenieur softwareingenieur programmeur spaans nederlands basiskennis".split(
       " ",
     ),
   ),
 };
 
-export function contentLanguage(text: string): Locale | null {
+export function contentLanguage(text: string, minimumScore = 2): Locale | null {
   const words = text.toLocaleLowerCase().match(/[\p{L}]+/gu) ?? [];
   const scores = (["en", "es", "nl"] as const)
     .map((locale) => ({
@@ -28,9 +28,28 @@ export function contentLanguage(text: string): Locale | null {
       score: words.filter((word) => WORDS[locale].has(word)).length,
     }))
     .sort((a, b) => b.score - a.score);
-  return scores[0].score >= 2 && scores[0].score > scores[1].score * 2
+  return scores[0].score >= minimumScore &&
+    scores[0].score > scores[1].score * 2
     ? scores[0].locale
     : null;
+}
+
+export const RESUME_TITLE_SEPARATOR = /[·•|\r\n]|\s[–—]\s/u;
+
+const ROLE_LEVELS = [
+  /\b(senior|sénior)\b/iu,
+  /\b(lead|líder|hoofdontwikkelaar|hoofdingenieur|teamleider)\b/iu,
+  /\bstaff\b/iu,
+  /\b(principal|hoofdarchitect)\b/iu,
+  /\b(manager|gerente|leidinggevende)\b/iu,
+  /\b(director|directora|directeur|head of)\b/iu,
+  /\bcto\b/iu,
+];
+
+export function addsRoleLevel(title: string, roles: string[]): boolean {
+  return ROLE_LEVELS.some(
+    (level) => level.test(title) && !roles.some((role) => level.test(role)),
+  );
 }
 
 export function numericResumeFacts(text: string): string[] {

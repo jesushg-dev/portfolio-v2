@@ -22,15 +22,28 @@ const getPrimaryUserId = unstable_cache(
 );
 
 export async function getPrimaryPublicTenant() {
-  const userId = await getPrimaryUserId();
+  const cachedUserId = await getPrimaryUserId();
+  const userId =
+    cachedUserId ??
+    (
+      await db.profile.findFirst({
+        where: { isPrimary: true },
+        select: { userId: true },
+      })
+    )?.userId ??
+    null;
+
   if (!userId) return null;
-  // Full Route Cache entries depend on this tag, so CMS writes invalidate HTML
-  // as well as the profile. Request headers and auth never enter this cache.
-  const profile = await unstable_cache(
+
+  const cachedProfile = await unstable_cache(
     () => db.profile.findUnique({ where: { userId } }),
     ["public-portfolio-profile", userId],
     { tags: [publicPortfolioTag(userId)], revalidate: 7200 },
   )();
+
+  const profile =
+    cachedProfile ?? (await db.profile.findUnique({ where: { userId } }));
+
   return profile ? profileToTenant(profile) : null;
 }
 

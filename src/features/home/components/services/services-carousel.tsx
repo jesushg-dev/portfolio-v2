@@ -223,7 +223,7 @@ function ExpertiseCard({
       <button
         type="button"
         onClick={() => onSelect(item)}
-        className="bg-card border-border/60 hover:border-primary/40 focus-visible:ring-ring group flex h-full min-h-[30rem] w-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] border text-left shadow-sm transition-all duration-300 focus-visible:ring-2 focus-visible:outline-none motion-safe:hover:-translate-y-1"
+        className="home-card-surface home-card-surface-interactive bg-card group flex h-full min-h-[30rem] w-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] text-left transition-all duration-300 motion-safe:hover:-translate-y-1"
       >
         <span className="sr-only">
           {t("viewDetails", { title: item.title })}

@@ -16,6 +16,7 @@ export interface ResumeTemplate {
   };
   maxPageCharacters: number[];
   limits: {
+    title: number;
     summary: number;
     bullet: number;
     bulletsPerExperience: number;
@@ -41,6 +42,7 @@ export const RESUME_TEMPLATES = {
     },
     maxPageCharacters: [3600],
     limits: {
+      title: 50,
       summary: 420,
       bullet: 160,
       bulletsPerExperience: 3,
@@ -50,7 +52,7 @@ export const RESUME_TEMPLATES = {
   },
   v2: {
     id: "v2",
-    revision: 1,
+    revision: 2,
     docx: "cv-template-v2.docx",
     pdf: "cv-template-v2.pdf",
     pages: 2,
@@ -64,6 +66,7 @@ export const RESUME_TEMPLATES = {
     },
     maxPageCharacters: [3400, 5200],
     limits: {
+      title: 60,
       summary: 650,
       bullet: 260,
       bulletsPerExperience: 5,

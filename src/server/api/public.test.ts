@@ -3,6 +3,7 @@ import { portfolioRouter } from "./routers/portfolio";
 import { contactRouter } from "./routers/contact";
 import { terminalRouter } from "@/features/terminal/server/terminal.router";
 import { processPagesRouter } from "@/features/process-pages/server/process-pages.router";
+import { blogPublicRouter } from "@/features/blog/server/blog-public.router";
 import {
   createRouterCaller,
   createTrpcTestContext,
@@ -18,9 +19,10 @@ it("composes only the RSC router families using their existing instances", () =>
     contact: contactRouter,
     terminal: terminalRouter,
     processPages: processPagesRouter,
+    blog: blogPublicRouter,
   });
   expect(Object.keys(publicRouter._def.record).sort()).toEqual(
-    ["portfolio", "contact", "terminal", "processPages"].sort(),
+    ["portfolio", "contact", "terminal", "processPages", "blog"].sort(),
   );
 });
 

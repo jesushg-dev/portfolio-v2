@@ -104,7 +104,7 @@ const Footer = async ({
   const calendlyUrl = getCalendlyUrl(data.contacts);
 
   return (
-    <footer className="from-primary to-primary-900 text-primary-foreground relative z-20 bg-linear-to-b">
+    <footer className="site-footer from-primary to-primary-900 text-primary-foreground relative z-20 bg-linear-to-b">
       {/* Subtle grid texture overlay */}
       <div
         aria-hidden
@@ -314,8 +314,6 @@ const Footer = async ({
                   alt="Spotify"
                   width={60}
                   height={18}
-                  className="h-4.5 w-auto"
-                  style={{ width: "auto" }}
                 />
               </a>
             </div>

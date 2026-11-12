@@ -63,3 +63,7 @@ Do not create custom icon dropdowns, inline string-based icon selects (`<Select>
 2. **For Dynamic Rendering from Database / String Keys (`DynamicIcon` / `resolveIcon`):**
    - Import `DynamicIcon` from `@/components/shared/dynamic-icon` to render any registered icon key in JSX.
    - Or import `resolveIcon` from `@/lib/icons/icon-registry` when passing the icon component directly to primitives like `TabItem`.
+
+# Light theme backgrounds
+
+When changing the three public light themes, read `docs/light-theme-backgrounds.md`. Their home page must keep one continuous solid white surface across the hero, technology marquee, and sections. Theme identity belongs in text, controls, and small accents. Check the page at wide and mobile viewports; changing `--background` alone does not cover decorative layers or section wrappers.

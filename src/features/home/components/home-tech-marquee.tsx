@@ -29,7 +29,7 @@ export const HomeTechMarquee: FC<HomeTechMarqueeProps> = ({ items }) => {
   return (
     <div
       aria-hidden="true"
-      className="relative w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] py-2 pb-14 select-none"
+      className="home-tech-marquee relative w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] py-2 pb-14 select-none"
     >
       <div className="grid gap-3.5">
         {/* Forward track */}

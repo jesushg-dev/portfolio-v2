@@ -1997,6 +1997,53 @@
       "countriesHintSimple": "Últimos 30 días. Solo a nivel de país.",
       "pagesHint": "Últimos 30 días.",
       "otherCountries": "Otros países ({count})"
+    },
+    "blog": {
+      "eyebrow": "Artículos técnicos y tutoriales",
+      "title": "Blog",
+      "subtitle": "Reflexiones, tutoriales y análisis técnicos.",
+      "backToHome": "Volver al portafolio",
+      "empty": "Aún no hay publicaciones.",
+      "emptyState": {
+        "title": "Aún no hay publicaciones",
+        "description": "Actualmente estoy preparando artículos técnicos, arquitecturas y tutoriales de ingeniería. Vuelve pronto o explora el catálogo de series.",
+        "filteredTitle": "No se encontraron artículos",
+        "filteredDescription": "Ninguna publicación coincide con la búsqueda o el filtro de etiquetas seleccionado. Prueba a restablecer los filtros para ver todo.",
+        "badge": "Blog",
+        "reset": "Restablecer filtros"
+      },
+      "readMore": "Leer más",
+      "featured": "Publicación destacada",
+      "searchPlaceholder": "Buscar por título, tema o etiqueta...",
+      "clearSearch": "Limpiar búsqueda",
+      "filterByTag": "Filtrar por etiqueta:",
+      "clearFilters": "Limpiar filtros",
+      "showingFiltered": "{count, plural, one {# resultado encontrado} other {# resultados encontrados}}",
+      "allTags": "Todo",
+      "loadError": "Error al cargar las publicaciones.",
+      "retry": "Reintentar",
+      "backToBlog": "Volver al blog",
+      "relatedPosts": "Publicaciones relacionadas",
+      "minRead": "{minutes, plural, one {# min de lectura} other {# min de lectura}}",
+      "loadMore": "Cargar más",
+      "loading": "Cargando...",
+      "tableOfContents": "Tabla de contenidos",
+      "series": "Serie",
+      "previousInSeries": "Anterior de la serie",
+      "nextInSeries": "Siguiente de la serie",
+      "browseSeries": "Ver todas las series",
+      "seriesTitle": "Series",
+      "seriesSubtitle": "Sigue publicaciones conectadas como rutas de aprendizaje y análisis profundos.",
+      "postsCount": "{count, plural, one {# publicación} other {# publicaciones}}",
+      "chapterOf": "Parte {current} de {total}",
+      "viewFeed": "Vista lista",
+      "viewGrid": "Cuadrícula",
+      "seriesStripTitle": "Series y rutas de aprendizaje",
+      "seriesStripSubtitle": "Guías paso a paso y análisis técnicos en profundidad.",
+      "viewSeries": "Explorar ruta",
+      "allArticles": "Todos los artículos",
+      "byAuthor": "Por Jesús Hernández",
+      "readArticle": "Leer artículo"
     }
   },
   "admin": {
@@ -2042,7 +2089,8 @@
         "uses": "Uses",
         "now": "Now",
         "processPages": "Páginas de proceso",
-        "sidebar": "Navegación de administración"
+        "sidebar": "Navegación de administración",
+        "blog": "Blog"
       },
       "pageToolbar": "Encabezado de página",
       "pinSidebar": "Mantener sidebar abierto",
@@ -3620,6 +3668,32 @@
           "faq": "FAQ",
           "closingCta": "CTA de cierre"
         }
+      },
+      "blog": {
+        "generalSection": "Configuración",
+        "contentSection": "Contenido",
+        "slug": "Slug",
+        "slugRequired": "El slug es obligatorio",
+        "coverImage": "Imagen de portada",
+        "status": "Estado",
+        "statusDraft": "Borrador",
+        "statusPublished": "Publicado",
+        "statusArchived": "Archivado",
+        "tags": "Etiquetas",
+        "seriesName": "Nombre de la serie",
+        "seriesOrder": "Orden del capítulo",
+        "title": "Título",
+        "titleRequired": "El título es obligatorio en el idioma principal",
+        "excerpt": "Extracto",
+        "content": "Contenido",
+        "cancel": "Cancelar",
+        "saving": "Guardando...",
+        "update": "Actualizar",
+        "create": "Crear",
+        "updatedSuccess": "Publicación actualizada",
+        "createdSuccess": "Publicación creada",
+        "updateFailed": "Error al actualizar",
+        "createFailed": "Error al crear"
       }
     },
     "errors": {
@@ -4969,6 +5043,34 @@
       "invalid": "Completa cada pregunta y respuesta antes de guardar.",
       "loading": "Cargando preguntas…",
       "empty": "No hay preguntas en este idioma. La sección permanecerá oculta hasta que añadas contenido."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Escribe y gestiona publicaciones.",
+      "newPost": "Nueva publicación",
+      "count": "{count, plural, one {# publicación} other {# publicaciones}}",
+      "empty": "Aún no hay publicaciones.",
+      "deleted": "Publicación eliminada.",
+      "reordered": "Orden de la serie actualizado.",
+      "moveUp": "Mover arriba",
+      "moveDown": "Mover abajo",
+      "seriesLabel": "Serie: {name}",
+      "tabSeries": "Series y Rutas",
+      "tabStandalone": "Artículos Independientes",
+      "tabAll": "Todos los Artículos",
+      "chaptersCount": "{count, plural, one {# capítulo} other {# capítulos}}",
+      "addChapter": "Añadir capítulo",
+      "noSeries": "No hay series creadas aún.",
+      "noStandalone": "No hay artículos independientes aún.",
+      "searchPlaceholder": "Buscar por título, serie o slug...",
+      "statusPublished": "Publicado",
+      "statusDraft": "Borrador",
+      "create": "Crear publicación",
+      "edit": "Editar publicación",
+      "editDescription": "Editar contenido de la publicación."
+    },
+    "sidebar": {
+      "blog": "Blog"
     }
   },
   "auth": {
