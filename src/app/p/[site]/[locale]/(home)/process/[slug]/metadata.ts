@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 
-import type { Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import { processPageHref } from "@/lib/process-pages/process-page-href";
+import { getPublicLocale } from "@/lib/public-site/locale";
 import { buildPublicAlternates } from "@/lib/public-site/metadata";
+import { SITE_NAME, SITE_URL, TWITTER_HANDLE } from "@/lib/seo/site";
 import { api } from "@/trpc/server";
-import { SITE_NAME, TWITTER_HANDLE } from "@/lib/seo/site";
 
 interface ProcessPageMetadataProps {
   params: Promise<{
@@ -17,7 +18,10 @@ export async function generateMetadata({
   params,
 }: ProcessPageMetadataProps): Promise<Metadata> {
   const { locale, slug } = await params;
-  const page = await api.processPages.getBySlug({ slug, locale });
+  const activeLocale = locales.includes(locale)
+    ? locale
+    : await getPublicLocale();
+  const page = await api.processPages.getBySlug({ slug, locale: activeLocale });
 
   if (!page) {
     return {};
@@ -25,8 +29,22 @@ export async function generateMetadata({
 
   const href = processPageHref(slug);
   const title = page.metaTitle || page.heroTitle || page.menuTitle;
-  const description = page.metaDescription || undefined;
-  const alternates = await buildPublicAlternates(locale, href);
+  const description = page.metaDescription || page.heroDescription || undefined;
+  const alternates = await buildPublicAlternates(activeLocale, href);
+
+  const previewImage =
+    slug === "how-i-use-ai" || slug === "qa-collaboration"
+      ? `${SITE_URL}/previews/process-${slug}.webp`
+      : undefined;
+
+  const ogImages = previewImage
+    ? [
+        {
+          url: previewImage,
+          alt: title,
+        },
+      ]
+    : undefined;
 
   return {
     title,
@@ -35,15 +53,17 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      type: "website",
+      type: "article",
       url: alternates.canonical,
       siteName: SITE_NAME,
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
       site: TWITTER_HANDLE,
+      images: previewImage ? [previewImage] : undefined,
     },
   };
 }
