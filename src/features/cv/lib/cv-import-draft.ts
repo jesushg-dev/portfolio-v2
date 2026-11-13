@@ -28,6 +28,8 @@ export const CvImportExperienceDraftSchema = z.object({
   location: z.string().optional(),
   /** Factual company context displayed in both visual and ATS exports. */
   companyBlurb: z.string().optional(),
+  /** Technologies linked to this experience in the CMS. */
+  technologies: z.array(z.string().min(1)).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   current: z.boolean().optional(),

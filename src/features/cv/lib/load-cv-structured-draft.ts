@@ -71,6 +71,11 @@ export async function loadCvStructuredDraft(
       where: { userId },
       include: {
         translations: true,
+        CvExperienceSkill: {
+          where: { skill: { userId } },
+          orderBy: { skillId: "asc" },
+          select: { skill: { select: { title: true } } },
+        },
         responsibilities: {
           include: { translations: true },
           orderBy: { order: "asc" },
@@ -157,6 +162,10 @@ export async function loadCvStructuredDraft(
         employmentType: normalizeEmploymentType(exp.employmentType),
         location: expT("location") || undefined,
         companyBlurb: expT("companyBlurb") || undefined,
+        technologies:
+          options?.evidenceScope === "all"
+            ? exp.CvExperienceSkill.map(({ skill }) => skill.title)
+            : undefined,
         startDate: formatExperienceDate(exp.startDate),
         endDate: formatExperienceDate(exp.endDate),
         current: exp.current,

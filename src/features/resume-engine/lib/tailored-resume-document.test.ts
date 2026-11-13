@@ -87,6 +87,33 @@ describe("canonical multilingual resume", () => {
       `header.degree: ${issue}`,
     );
   });
+  it("accepts .NET in the title when it is linked to a selected CMS role", () => {
+    const { context } = setup("es", "v1");
+    const source = {
+      ...drafts.es,
+      experiences: drafts.es.experiences.map((experience, index) =>
+        index === 0 ? { ...experience, technologies: [".NET"] } : experience,
+      ),
+    };
+    context.drafts = { ...drafts, es: source };
+    const selection = resumeSelectionFixture(source);
+    const title = "Desarrollador .NET";
+    const response = resumeResponseFixture(source, "v1", selection);
+    response.fields.find((field) => field.id === "header.degree")!.text = title;
+    expect(
+      validateTailoredResume(response, context).document.header.degree,
+    ).toBe(title);
+
+    const withoutRole = resumeResponseFixture(source, "v1", {
+      ...selection,
+      experiences: selection.experiences.slice(1),
+    });
+    withoutRole.fields.find((field) => field.id === "header.degree")!.text =
+      title;
+    expect(() => validateTailoredResume(withoutRole, context)).toThrow(
+      "header.degree: unsupported technologies: .NET",
+    );
+  });
   it("offers a professional title even when the CMS header has none", () => {
     const { context } = setup("es");
     const source = {

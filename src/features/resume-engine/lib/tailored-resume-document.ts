@@ -226,7 +226,11 @@ export function validateTailoredResume(
   );
   const sourceRoles = source.experiences.map((experience) => experience.role);
   const titleEvidence = source.experiences
-    .flatMap((experience) => [experience.role, ...experience.responsibilities])
+    .flatMap((experience) => [
+      experience.role,
+      ...(experience.technologies ?? []),
+      ...experience.responsibilities,
+    ])
     .join("\n");
   const titleTools = new Set(
     extractJobTools(titleEvidence).map((tool) => tool.toLowerCase()),
@@ -293,7 +297,7 @@ export function validateTailoredResume(
     );
     if (unexpected.length)
       issues.push(
-        `${field.id}: unsupported technologies: ${unexpected.join(", ")}`,
+        `${field.id}: unsupported technologies: ${unexpected.join(", ")}${isProfessionalTitle ? ". Use technologies linked to or demonstrated by a selected experience." : ""}`,
       );
     if (addsCredential(original.text, text))
       issues.push(`${field.id}: unsupported credential`);

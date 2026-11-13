@@ -45,7 +45,7 @@ Both generation modes accept exactly the same response shape:
     }
   ],
   "aiScore": 80,
-  "matchNotes": "Strong alignment with the role."
+  "matchNotes": "Coverage: build accessible web interfaces → CMS_RESPONSIBILITY_ID. Omitted: none."
 }
 ```
 
@@ -53,7 +53,9 @@ This abbreviated example is illustrative. The manual prompt contains the availab
 
 Return populated header/contact-location fields and every populated text field of selected records and achievements exactly once. Omitted records need neither IDs nor translations in `fields`. Empty strings are invalid, including selected certification titles. There is no adapter for the former all-fields/empty-string contract.
 
-`header.degree` holds the single professional title shown in the header. Write it in the CV's output language and adapt it to the vacancy where selected roles and achievements support the wording. Keep academic degrees in education and preserve the meaning of historical role titles. The field is available from the profile header or a saved role, and its length budget comes from the template.
+The prompt maps each explicit vacancy responsibility to CMS achievements. Keep the selected achievements in CMS order, preserve evidence for distinct responsibilities across stacks, and condense wording toward 60% of each field budget before removing evidence for space. The prompt requires a coverage report in `matchNotes` in the interface language. Cite selected achievement IDs for each responsibility, identify partial or missing coverage, and account for every omitted achievement ID with its reason. The reasons are a layout or selection limit, redundancy with a selected ID, or lack of relevance to the stated responsibilities.
+
+`header.degree` holds the single professional title shown in the header. Write it in the CV's output language and adapt it to the vacancy where selected roles and achievements support the wording. A technology in the title can be backed by a CMS skill link to a selected experience or by that experience's role or selected achievements. Keep academic degrees in education and preserve the meaning of historical role titles. The field is available from the profile header or a saved role, and its length budget comes from the template.
 
 Certifications default to none unless they add relevant evidence. v1 allows at most one and v2 at most two; these are ceilings, not quotas. v2 uses additional room primarily for experience and achievements. `requiredCoverage` in each locale's prompt preserves all spoken languages, the first two education records for one-page designs or three for multi-page designs, and balanced core technical categories. Multi-page designs preserve all roles when the role count fits their capacity. Core technical categories require up to three items in multi-page designs or two in one-page designs; additional useful technologies remain selectable. Submitted skill-item and achievement order is preserved; role chronology and category order remain fixed. Tailoring prioritizes achievements and concise descriptions before removing this coverage. The CV editor's technical skills take precedence over the portfolio-wide inventory; the latter is used only when no CV-specific list exists. All records remain in CMS. The persisted snapshot records the full selection in `selection.manifest`, omitted credential IDs in `selection.omittedCertificationIds`, and selection counts in match notes. Visible-text capacity excludes CMS IDs and JSON metadata, for both experience pages and the sidebar.
 
@@ -72,6 +74,8 @@ Each DOCX is editable in Word. In Developer → Properties, preserve the content
 - Education fields: `degree`, `institution`, `educationDates`. Skill fields: `category`, `items` or `itemsLeft`/`itemsRight`. Language fields: `name`, `level`. Certification field: `certification`.
 
 `render-template.ts` expands semantic controls while preserving the design's paragraph/run styles, tables, section geometry and decorative assets. It inserts CMS contact hyperlinks and the CMS photo, removing unreferenced sample media. Missing required or unknown tags fail clearly; there is no substitute template.
+
+The v2 sidebar background is a shape anchored to the first page in Word's first-page header. The body row can grow with its content while the background reaches the bottom edge.
 
 Contact icons are taken from the original design via `icon:TYPE` controls inside the contacts field. Contact values never show URI prefixes such as `mailto:` or `tel:`. Transparent photos are flattened onto white. Company images and bordered monograms occupy the same square drawing with rounded corners; source images retain their aspect ratio within that square. `optional:companyHeader` groups consecutive roles at the same employer without repeating its logo and context within a page. `optional:companyDates` contains `field:companyDates`, the group's earliest start and latest end (or present for an ongoing role); each role retains its own dates. A continuation page repeats the company header with the full group range. Separate stints at the same employer remain separate groups.
 
@@ -99,4 +103,4 @@ Tailoring includes all CMS achievements, including those marked ATS-only in the 
 
 The production prompt exposes `promptVersion` in both system instructions and input metadata. It is independent of the response's `schemaVersion` and must not be returned as an extra response property. Immutable CMS facts are shared once; locale inventories contain editable prose and per-locale coverage. Generation rejects inconsistent immutable facts across locales.
 
-Production uses TOON input for both the copied manual prompt and automatic generation. Model responses remain strict JSON and use the same selection, language, factual and layout validations. The active prompt version is `tailored-cv/2026-11-11.1`. The official TOON encoder is a production dependency.
+Production uses TOON input for both the copied manual prompt and automatic generation. Model responses remain strict JSON and use the same selection, language, factual and layout validations. The active prompt version is `tailored-cv/2026-11-12.2`. The official TOON encoder is a production dependency.
