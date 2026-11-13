@@ -13,11 +13,10 @@ import {
   extractWords,
   isSeriesTag,
 } from "@/features/blog/lib/blog-headings";
+import { SITE_URL } from "@/lib/seo/site";
 
 export { generateMetadata } from "./metadata";
-export {
-  publicBlogParams as generateStaticParams,
-} from "@/lib/public-site/static-params";
+export { publicBlogParams as generateStaticParams } from "@/lib/public-site/static-params";
 
 interface BlogPostPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -36,16 +35,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .filter((item) => item.tags.some((tag) => post.tags.includes(tag)))
     .slice(0, 3);
 
-  const seriesName =
-    post.seriesName ??
-    post.tags
-      .find((tag) => tag.toLowerCase().startsWith("series:"))
-      ?.replace(/^series:/i, "")
-      .trim() ??
-    null;
+  const seriesSlug = post.seriesSlug;
+  const seriesName = post.seriesName;
 
-  const seriesPosts = seriesName
-    ? (await api.blog.list({ locale, limit: 50, seriesName })).posts
+  const seriesPosts = seriesSlug
+    ? (await api.blog.list({ locale, limit: 50, seriesSlug })).posts
         .slice()
         .sort((a, b) => {
           const aOrder = a.seriesOrder ?? Number.MAX_SAFE_INTEGER;
@@ -70,8 +64,100 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const readingTime = Math.max(1, Math.ceil(words / 220));
   const headings = extractHeadings(post.content);
 
+  const postUrl = `${SITE_URL}/blog/${post.slug}`;
+  const blogUrl = `${SITE_URL}/blog`;
+  const seriesUrl = seriesSlug ? `${SITE_URL}/blog/series/${seriesSlug}` : null;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${postUrl}#article`,
+        headline: post.title,
+        description: post.excerpt,
+        image: post.coverImage ? [post.coverImage] : undefined,
+        datePublished: post.publishedAt,
+        dateModified: post.publishedAt,
+        inLanguage: locale,
+        wordCount: words,
+        timeRequired: `PT${readingTime}M`,
+        keywords: post.tags.join(", "),
+        author: {
+          "@type": "Person",
+          name: "Jesús Hernández",
+          url: SITE_URL,
+        },
+        publisher: {
+          "@type": "Person",
+          name: "Jesús Hernández",
+          url: SITE_URL,
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": postUrl,
+        },
+        ...(seriesName && seriesUrl
+          ? {
+              partOfSeries: {
+                "@type": "CreativeWorkSeries",
+                name: seriesName,
+                url: seriesUrl,
+                ...(post.seriesOrder ? { position: post.seriesOrder } : {}),
+              },
+            }
+          : {}),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${postUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: SITE_URL,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: t("title") || "Blog",
+            item: blogUrl,
+          },
+          ...(seriesName && seriesUrl
+            ? [
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: seriesName,
+                  item: seriesUrl,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 4,
+                  name: post.title,
+                  item: postUrl,
+                },
+              ]
+            : [
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: post.title,
+                  item: postUrl,
+                },
+              ]),
+        ],
+      },
+    ],
+  };
+
   return (
     <article className="mx-auto max-w-6xl px-4 pt-28 pb-16 md:px-10 md:pt-32 md:pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link
         href={{ pathname: "/blog" }}
         className="text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm font-medium transition-colors"
@@ -96,11 +182,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           ) : null}
 
           <header className="mb-10 max-w-2xl">
-            {seriesName ? (
+            {seriesSlug && seriesName ? (
               <Link
                 href={{
                   pathname: "/blog/series/[series]",
-                  params: { series: seriesName },
+                  params: { series: seriesSlug },
                 }}
                 className="text-primary mb-3 inline-flex text-xs font-semibold tracking-[0.14em] uppercase"
               >
@@ -177,12 +263,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         ) : null}
       </div>
 
-      {seriesName && (previousInSeries || nextInSeries) ? (
+      {seriesSlug && seriesName && (previousInSeries || nextInSeries) ? (
         <section className="border-border mt-16 border-t pt-10">
           <Link
             href={{
               pathname: "/blog/series/[series]",
-              params: { series: seriesName },
+              params: { series: seriesSlug },
             }}
             className="text-primary mb-4 inline-flex text-xs font-semibold tracking-[0.14em] uppercase"
           >

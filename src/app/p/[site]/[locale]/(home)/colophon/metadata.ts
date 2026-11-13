@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import type { Locale } from "next-intl";
+import type { Locale } from "@/i18n/config";
 import { getTranslations } from "next-intl/server";
+import { buildPublicAlternates } from "@/lib/public-site/metadata";
 
 export async function generateMetadata({
   params,
@@ -16,5 +17,6 @@ export async function generateMetadata({
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    alternates: await buildPublicAlternates(locale as Locale, "/colophon"),
   };
 }

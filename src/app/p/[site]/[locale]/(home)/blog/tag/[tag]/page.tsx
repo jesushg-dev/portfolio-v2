@@ -6,9 +6,8 @@ import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 import { BlogPostsGrid } from "@/features/blog/components/blog-posts-grid";
 
-export {
-  publicBlogTagParams as generateStaticParams,
-} from "@/lib/public-site/static-params";
+export { generateMetadata } from "./metadata";
+export { publicBlogTagParams as generateStaticParams } from "@/lib/public-site/static-params";
 
 interface TagPageProps {
   params: Promise<{ locale: Locale; tag: string }>;
@@ -60,12 +59,13 @@ export default async function BlogTagPage({ params }: TagPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 pb-28 sm:px-6 md:pb-36 lg:px-10">
+      <section className="mx-auto w-full px-4 pb-28 sm:px-6 md:pb-36 lg:container lg:px-20">
         <BlogPostsGrid
           locale={locale}
           initialTag={decoded}
           initialPosts={initialData.posts}
           initialNextCursor={initialData.nextCursor}
+          initialTotal={initialData.total}
           initialTags={initialTags}
         />
       </section>

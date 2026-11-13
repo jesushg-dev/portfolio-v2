@@ -2,8 +2,10 @@ import type { Locale } from "@/i18n/config";
 import { api } from "@/trpc/server";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { BlogEmptyState } from "@/features/blog/components/blog-empty-state";
+
+export { generateMetadata } from "./metadata";
 
 interface SeriesPageProps {
   params: Promise<{ locale: Locale }>;
@@ -44,26 +46,39 @@ export default async function BlogSeriesPage({ params }: SeriesPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-4xl px-4 pb-28 sm:px-6 md:pb-36 lg:px-10">
+      <section className="mx-auto w-full px-4 pb-28 sm:px-6 md:pb-36 lg:container lg:px-20">
         {series.length === 0 ? (
           <BlogEmptyState />
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {series.map((s) => (
               <Link
-                key={s.name}
+                key={s.slug}
                 href={{
                   pathname: "/blog/series/[series]",
-                  params: { series: s.name },
+                  params: { series: s.slug },
                 }}
-                className="border-border bg-card hover:border-primary/30 group rounded-2xl border p-6 transition-all hover:shadow-md"
+                className="border-border bg-card hover:border-primary/40 group flex flex-col justify-between rounded-2xl border p-6 transition-all hover:shadow-lg"
               >
-                <h2 className="text-foreground group-hover:text-primary mb-1 text-lg font-semibold tracking-tight transition-colors">
-                  {s.name}
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  {t("postsCount", { count: s.count })}
-                </p>
+                <div>
+                  <div className="text-primary bg-primary/10 mb-3 inline-flex size-9 items-center justify-center rounded-xl">
+                    <BookOpen className="size-4.5" aria-hidden="true" />
+                  </div>
+                  <h2 className="text-foreground group-hover:text-primary mb-1 text-xl font-bold tracking-tight transition-colors">
+                    {s.name}
+                  </h2>
+                  {s.description ? (
+                    <p className="text-muted-foreground mt-2 line-clamp-3 text-sm leading-relaxed">
+                      {s.description}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="border-border/60 text-muted-foreground mt-6 flex items-center justify-between border-t pt-4 text-xs font-semibold">
+                  <span>{t("postsCount", { count: s.count })}</span>
+                  <span className="text-primary group-hover:underline">
+                    {t("browseSeries")} &rarr;
+                  </span>
+                </div>
               </Link>
             ))}
           </div>

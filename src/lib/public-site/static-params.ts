@@ -51,18 +51,11 @@ export async function publicBlogParams() {
 export async function publicBlogSeriesParams() {
   const tenant = await getPrimaryPublicTenant();
   if (!tenant) return [];
-  const posts = await db.blogPost.findMany({
-    where: {
-      userId: tenant.userId,
-      status: "PUBLISHED",
-      seriesName: { not: null },
-    },
-    select: { seriesName: true },
-    distinct: ["seriesName"],
+  const seriesList = await db.blogSeries.findMany({
+    where: { userId: tenant.userId },
+    select: { slug: true },
   });
-  return posts.flatMap(({ seriesName }) =>
-    seriesName?.trim() ? [{ series: seriesName.trim() }] : [],
-  );
+  return seriesList.map(({ slug }) => ({ series: slug }));
 }
 
 export async function publicBlogTagParams() {

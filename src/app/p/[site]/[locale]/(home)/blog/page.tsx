@@ -62,11 +62,12 @@ export default async function BlogPage({ params }: BlogPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 pb-28 sm:px-6 md:pb-36 lg:px-10">
+      <section className="mx-auto w-full px-4 pb-28 sm:px-6 md:pb-36 lg:container lg:px-20">
         <BlogPostsGrid
           locale={locale}
           initialPosts={initialData.posts}
           initialNextCursor={initialData.nextCursor}
+          initialTotal={initialData.total}
           initialTags={initialTags}
           seriesList={seriesList}
         />

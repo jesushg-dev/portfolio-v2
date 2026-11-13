@@ -15,6 +15,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { pickPublicRouteMessages } from "@/lib/public-site/messages";
 import { getCachedSoftSkillsPublic } from "@/lib/soft-skills/get-cached-soft-skills-public";
+import { SITE_URL } from "@/lib/seo/site";
 
 export { generateMetadata } from "./metadata";
 
@@ -30,10 +31,41 @@ export default async function Home() {
     ],
   );
 
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: "Jesús Hernández Portfolio",
+        description: "Full-Stack Software Engineer & Solutions Architect",
+        inLanguage: locale,
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: "Jesús Hernández",
+        url: SITE_URL,
+        jobTitle: "Full-Stack Software Engineer",
+        sameAs: [
+          "https://github.com/jesushg",
+          "https://linkedin.com/in/jesushg",
+          "https://twitter.com/jesus_hg",
+        ],
+        knowsAbout: skills.map((s) => s.title),
+      },
+    ],
+  };
+
   return (
     <NextIntlClientProvider
       messages={pickPublicRouteMessages(messages, "home")}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <Hero stats={stats} />
       <HomeTechMarquee items={skills} />
 

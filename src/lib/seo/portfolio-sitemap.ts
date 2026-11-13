@@ -29,31 +29,51 @@ export async function buildPortfolioSitemap(
     return staticEntries;
   }
 
-  const [projects, skills, processPages] = await Promise.all([
-    db.project.findMany({
-      where: {
-        userId: profile.userId,
-        caseStudyEnabled: true,
-        slug: { not: null },
-        isPrivate: false,
-      },
-      select: { slug: true, createdAt: true },
-      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
-    }),
-    db.skill.findMany({
-      where: { userId: profile.userId },
-      select: { title: true, createdAt: true },
-      orderBy: { createdAt: "desc" },
-    }),
-    db.processPage.findMany({
-      where: {
-        userId: profile.userId,
-        isPublished: true,
-      },
-      select: { slug: true, updatedAt: true },
-      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-    }),
-  ]);
+  const [projects, skills, processPages, blogPosts, blogSeries] =
+    await Promise.all([
+      db.project.findMany({
+        where: {
+          userId: profile.userId,
+          caseStudyEnabled: true,
+          slug: { not: null },
+          isPrivate: false,
+        },
+        select: { slug: true, createdAt: true },
+        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+      }),
+      db.skill.findMany({
+        where: { userId: profile.userId },
+        select: { title: true, createdAt: true },
+        orderBy: { createdAt: "desc" },
+      }),
+      db.processPage.findMany({
+        where: {
+          userId: profile.userId,
+          isPublished: true,
+        },
+        select: { slug: true, updatedAt: true },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+      }),
+      db.blogPost?.findMany
+        ? db.blogPost.findMany({
+            where: {
+              userId: profile.userId,
+              status: "PUBLISHED",
+            },
+            select: { slug: true, publishedAt: true, updatedAt: true },
+            orderBy: { publishedAt: "desc" },
+          })
+        : Promise.resolve([]),
+      db.blogSeries?.findMany
+        ? db.blogSeries.findMany({
+            where: {
+              userId: profile.userId,
+            },
+            select: { slug: true, updatedAt: true },
+            orderBy: { slug: "asc" },
+          })
+        : Promise.resolve([]),
+    ]);
 
   const projectEntries = projects
     .filter((project): project is typeof project & { slug: string } =>
@@ -104,10 +124,42 @@ export async function buildPortfolioSitemap(
     ),
   );
 
+  const blogEntries = blogPosts.flatMap((post) =>
+    buildLocalizedSitemapEntries(
+      {
+        pathname: "/blog/[slug]",
+        params: { slug: post.slug },
+      },
+      {
+        origin,
+        lastModified: post.updatedAt ?? post.publishedAt ?? undefined,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      },
+    ),
+  );
+
+  const seriesEntries = blogSeries.flatMap((series) =>
+    buildLocalizedSitemapEntries(
+      {
+        pathname: "/blog/series/[series]",
+        params: { series: series.slug },
+      },
+      {
+        origin,
+        lastModified: series.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.7,
+      },
+    ),
+  );
+
   return [
     ...staticEntries,
     ...projectEntries,
     ...skillEntries,
     ...processPageEntries,
+    ...blogEntries,
+    ...seriesEntries,
   ];
 }
