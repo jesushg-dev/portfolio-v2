@@ -19,7 +19,7 @@ const ContactIllustration: FC<ContactIllustrationProps> = ({
   return (
     <div className="relative mt-2 flex h-72 w-full flex-col sm:h-80 lg:h-96">
       <ViewportSection
-        fallback={<Skeleton className="h-full w-full rounded-2xl" />}
+        fallback={<Skeleton className="h-full w-full rounded-[2rem]" />}
         minHeight="18rem"
         className="h-full"
       >

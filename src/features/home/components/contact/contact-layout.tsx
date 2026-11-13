@@ -11,8 +11,8 @@ export function ContactLayout({
   return (
     <div
       className={cn(
-        "border-border/50 bg-card/15 relative grid items-stretch overflow-hidden rounded-[2.5rem] border shadow-sm backdrop-blur-xl",
-        showContactForm && "lg:grid-cols-2",
+        "grid gap-4 sm:gap-5",
+        showContactForm ? "md:grid-cols-[1.5fr_1fr]" : "mx-auto max-w-3xl",
       )}
     >
       {children}

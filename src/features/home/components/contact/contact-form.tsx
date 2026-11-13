@@ -17,20 +17,13 @@ import { TurnstileWidget } from "@/components/shared/turnstile-widget";
 import { env } from "@/env";
 import { api, TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/sonner";
-import {
-  ContactAlternativeLinks,
-  type ContactAlternativeLinksProps,
-} from "./contact-alternative-links";
+import type { ContactAlternativeLinksProps } from "./contact-alternative-links";
 
 export interface ContactFormProps extends ContactAlternativeLinksProps {
   responseTime?: string | null;
 }
 
-const ContactForm: FC<ContactFormProps> = ({
-  linkedinUrl,
-  schedulingEnabled,
-  responseTime,
-}) => {
+const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
   const t = useTranslations("main.contact");
   const [isPending, startTransition] = useTransition();
   const [turnstileToken, setTurnstileToken] = useState<string>("");
@@ -119,119 +112,118 @@ const ContactForm: FC<ContactFormProps> = ({
     <Form {...form}>
       <FormRoot
         id="contact-form"
-        className="text-foreground box-border w-full min-w-0 flex-1 flex-col gap-7 overflow-visible p-0"
+        className="home-card-surface bg-card relative box-border flex w-full min-w-0 flex-1 flex-col justify-between overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="text-left">
+        <div>
           {responseTime && (
-            <p className="text-primary mb-3 text-sm font-semibold">
+            <p className="text-primary mb-2 text-xs font-semibold tracking-wider uppercase">
               {responseTime}
             </p>
           )}
 
-          <h3 className="text-foreground text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h3 className="text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
             {t("title2")}
           </h3>
-          <p className="text-muted-foreground mt-4 text-base leading-relaxed sm:text-lg">
+          <p className="text-muted-foreground mt-2 mb-6 text-sm leading-relaxed sm:text-base">
             {t("form.helper")}
           </p>
-        </div>
 
-        <div className="border-border/50 bg-background/25 divide-border/50 flex min-w-0 flex-1 flex-col divide-y overflow-hidden rounded-3xl border">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem
-                label={t("form.name.label")}
-                inputId="contact-name"
-                className="[&_label]:text-muted-foreground gap-1 p-4 pb-3 [&_label]:text-xs [&_label]:font-medium"
-              >
-                <Input
-                  {...field}
-                  autoComplete="name"
-                  placeholder={t("form.name.placeholder")}
-                  maxLength={80}
-                  className="focus-visible:bg-primary/5 focus-visible:ring-primary/20 h-11 rounded-xl border-0 bg-transparent px-3 text-base shadow-none transition-colors focus-visible:ring-2 md:text-base"
-                />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem
-                label={t("form.email.label")}
-                inputId="contact-email"
-                className="[&_label]:text-muted-foreground gap-1 p-4 pb-3 [&_label]:text-xs [&_label]:font-medium"
-              >
-                <Input
-                  {...field}
-                  type="email"
-                  autoComplete="email"
-                  placeholder={t("form.email.placeholder")}
-                  maxLength={120}
-                  className="focus-visible:bg-primary/5 focus-visible:ring-primary/20 h-11 rounded-xl border-0 bg-transparent px-3 text-base shadow-none transition-colors focus-visible:ring-2 md:text-base"
-                />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="message"
-            render={({ field }) => (
-              <FormItem
-                label={t("form.message.label")}
-                inputId="contact-message"
-                className="[&_label]:text-muted-foreground flex flex-1 flex-col gap-1 p-4 [&_label]:text-xs [&_label]:font-medium"
-              >
-                <Textarea
-                  {...field}
-                  rows={4}
-                  maxLength={2000}
-                  placeholder={t("form.message.placeholder")}
-                  className="focus-visible:bg-primary/5 focus-visible:ring-primary/20 min-h-32 flex-1 resize-y rounded-xl border-0 bg-transparent px-3 py-3 text-base shadow-none transition-colors focus-visible:ring-2 md:text-base"
-                />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <TurnstileWidget
-          siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          action="contact"
-          appearance="interaction-only"
-          onSuccess={handleTurnstileSuccess}
-          onExpire={handleTurnstileExpire}
-          onWidgetId={handleTurnstileWidgetId}
-          className="flex justify-center empty:hidden"
-        />
-
-        <button
-          type="submit"
-          disabled={isPending || sendMessage.isPending}
-          className="btn-primary-glow group focus-visible:outline-ring relative box-border inline-flex min-h-11 w-fit max-w-full cursor-pointer items-center justify-center gap-3 self-center rounded-full px-6 py-2.5 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-4 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {t("form.submit")}
-          <span className="inline-flex shrink-0">
-            {isPending || sendMessage.isPending ? (
-              <LoaderCircle aria-hidden className="size-4 animate-spin" />
-            ) : (
-              <Send
-                aria-hidden
-                className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          <div className="grid gap-3.5">
+            <div className="grid gap-3.5 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("form.name.label")}
+                    inputId="contact-name"
+                    className="[&_label]:text-muted-foreground gap-1.5 [&_label]:text-xs [&_label]:font-medium"
+                  >
+                    <Input
+                      {...field}
+                      autoComplete="name"
+                      placeholder={t("form.name.placeholder")}
+                      maxLength={80}
+                      className="bg-background/50 border-border/60 focus-visible:border-primary focus-visible:ring-primary/20 h-12 rounded-2xl px-4 text-base transition-colors md:text-sm"
+                    />
+                  </FormItem>
+                )}
               />
-            )}
-          </span>
-        </button>
 
-        <ContactAlternativeLinks
-          linkedinUrl={linkedinUrl}
-          schedulingEnabled={schedulingEnabled}
-        />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("form.email.label")}
+                    inputId="contact-email"
+                    className="[&_label]:text-muted-foreground gap-1.5 [&_label]:text-xs [&_label]:font-medium"
+                  >
+                    <Input
+                      {...field}
+                      type="email"
+                      autoComplete="email"
+                      placeholder={t("form.email.placeholder")}
+                      maxLength={120}
+                      className="bg-background/50 border-border/60 focus-visible:border-primary focus-visible:ring-primary/20 h-12 rounded-2xl px-4 text-base transition-colors md:text-sm"
+                    />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem
+                  label={t("form.message.label")}
+                  inputId="contact-message"
+                  className="[&_label]:text-muted-foreground gap-1.5 [&_label]:text-xs [&_label]:font-medium"
+                >
+                  <Textarea
+                    {...field}
+                    rows={4}
+                    maxLength={2000}
+                    placeholder={t("form.message.placeholder")}
+                    className="bg-background/50 border-border/60 focus-visible:border-primary focus-visible:ring-primary/20 min-h-36 resize-none rounded-2xl px-4 py-3 text-base transition-colors md:text-sm"
+                  />
+                </FormItem>
+              )}
+            />
+
+            <TurnstileWidget
+              siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+              action="contact"
+              appearance="interaction-only"
+              onSuccess={handleTurnstileSuccess}
+              onExpire={handleTurnstileExpire}
+              onWidgetId={handleTurnstileWidgetId}
+              className="flex justify-center empty:hidden"
+            />
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={isPending || sendMessage.isPending}
+                className="btn-primary-glow group focus-visible:outline-ring relative box-border inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:justify-self-start"
+              >
+                <span>{t("form.submit")}</span>
+                <span className="inline-flex shrink-0">
+                  {isPending || sendMessage.isPending ? (
+                    <LoaderCircle aria-hidden className="size-4 animate-spin" />
+                  ) : (
+                    <Send
+                      aria-hidden
+                      className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  )}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       </FormRoot>
     </Form>
   );
