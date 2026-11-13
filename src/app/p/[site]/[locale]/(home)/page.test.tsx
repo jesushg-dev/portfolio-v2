@@ -63,10 +63,6 @@ jest.mock("@/features/home/components/portfolio", () => ({
   __esModule: true,
   default: () => <Link href="/es/proyectos/portfolio">Caso de estudio</Link>,
 }));
-jest.mock("@/features/home/components/faq", () => ({
-  __esModule: true,
-  default: () => null,
-}));
 jest.mock("@/features/home/components/contact", () => ({
   __esModule: true,
   default: () => <a href="mailto:hello@example.com">Contacto</a>,

@@ -118,6 +118,7 @@ const tenant = {
   displayName: "Jane Doe",
   logoInitials: null,
   logoImageUrl: null,
+  customDomain: null,
 };
 
 function mockDbHappyPath() {

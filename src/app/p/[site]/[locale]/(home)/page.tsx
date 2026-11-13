@@ -8,7 +8,6 @@ import Services from "@/features/home/components/services";
 import Skills from "@/features/home/components/skills";
 import SocialProof from "@/features/home/components/social-proof";
 import SoftSkills from "@/features/home/components/soft-skills";
-import HomeFaq from "@/features/home/components/faq";
 import Contact from "@/features/home/components/contact";
 import HomeSection from "@/features/home/components/home-section";
 import { NextIntlClientProvider } from "next-intl";
@@ -77,7 +76,7 @@ export default async function Home() {
         <Experience />
       </HomeSection>
 
-      <HomeSection id="working" estimatedHeight="36rem">
+      <HomeSection id="testimonials" estimatedHeight="36rem">
         <SocialProof
           testimonials={testimonials}
           proofItems={softSkills.items}
@@ -95,10 +94,6 @@ export default async function Home() {
 
       <HomeSection id="soft-skills" estimatedHeight="28rem">
         <SoftSkills />
-      </HomeSection>
-
-      <HomeSection estimatedHeight="24rem">
-        <HomeFaq />
       </HomeSection>
 
       <HomeSection id="contact" estimatedHeight="28rem">

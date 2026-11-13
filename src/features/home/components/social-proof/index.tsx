@@ -135,7 +135,7 @@ export default function SocialProof({
   if (published.length === 0 && proofItems.length === 0) return null;
 
   return (
-    <ShowcaseSection id="testimonials" ariaLabelledBy="testimonials-heading">
+    <ShowcaseSection ariaLabelledBy="testimonials-heading">
       <ShowcaseHeading
         sectionId="testimonials"
         title={t("titleLead")}

@@ -33,6 +33,7 @@ describe("getUsesPageData", () => {
       displayName: "Ada",
       logoInitials: "AL",
       logoImageUrl: null,
+      customDomain: null,
     });
     jest.spyOn(db.usesSettings, "findUnique").mockResolvedValue({
       workspaceImage: "https://cdn.example/desk.png",

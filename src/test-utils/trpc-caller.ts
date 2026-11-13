@@ -23,6 +23,7 @@ export const mockOwnerTenant: ResolvedTenant = {
   displayName: "Owner",
   logoInitials: "OW",
   logoImageUrl: null,
+  customDomain: null,
 };
 
 export function createTrpcTestContext(options: {
