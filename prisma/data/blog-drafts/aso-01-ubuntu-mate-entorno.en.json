@@ -1,0 +1,204 @@
+{
+  "slug": "aso-01-ubuntu-mate-entorno",
+  "locale": "en",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Operating Systems Architecture: Kernel, Customization, and Services",
+  "seriesOrder": 1,
+  "title": "Ubuntu MATE as an Operating Systems Engineering Environment",
+  "excerpt": "Historical review of Ubuntu MATE, MATE vs GNOME 3 desktop environments, resource efficiency, and initial workstation setup for system administration.",
+  "tags": [
+    "linux",
+    "ubuntu-mate",
+    "sistemas-operativos",
+    "universidad",
+    "archivo-2020"
+  ],
+  "coverImage": "/images/blog/aso/image37.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Historical and archival note: This article is part of a laboratory series originally developed on November 23, 2020, for the Operating Systems Architecture course at Universidad Nacional de Ingeniería (UNI), Managua. It is preserved for educational and historical reference, integrating updated technical notes on modern Linux and networking standards."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Introduction and Overview of Ubuntu MATE"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ubuntu MATE is a free and open-source, stable, and accessible Linux distribution designed with a configurable desktop environment. It is ideal for engineering workstations aiming to maximize hardware performance while preserving a traditional and predictable desktop metaphor."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The distribution was created by Martin Wimpress and Alan Pope starting with Ubuntu 14.10, formally becoming an official Canonical flavor in February 2015. This allowed it to integrate fully into Canonical Ltd.'s compilation, packaging, and QA infrastructure."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Desktop Architecture: MATE vs. GNOME 3"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ubuntu MATE's primary technical differentiator lies in its desktop environment. While main Ubuntu adopted GNOME 3 (with Mutter and higher memory consumption), MATE preserves the modular architecture of GNOME 2 updated for modern GTK3 libraries."
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Low RAM usage: idle memory footprint under 600 MB."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Lower UI render latency, freeing CPU cycles for intensive tasks like source code compilation."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Superior compatibility across modern hardware, legacy machines, and virtual environments."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Granular control over panels, applets, and UI components."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Environment Customization with MATE Tweak"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Via the MATE Tweak utility, users can toggle between different graphical layout metaphors with a single click: 'Traditional' (classic dual panels GNOME 2 style), 'Redmond' (bottom panel with Windows-style start menu), 'Cupertino' (top bar and dock macOS style), or 'Mutiny' (side dock Unity style)."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Preparing the System for Low-Level Labs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Before undertaking kernel compilation and network service configuration, updating the package database and verifying repository integrity is essential."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update && sudo apt upgrade -y\nsudo apt install -y build-essential curl wget git net-tools"
+          }
+        ]
+      }
+    ]
+  }
+}

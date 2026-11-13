@@ -1,0 +1,772 @@
+{
+  "slug": "monitor-titulo-la-gaceta-nicaragua",
+  "locale": "en",
+  "status": "DRAFT",
+  "publishedAt": null,
+  "title": "Build Your Own Official Gazette Title Publication Monitor with JavaScript and Telegram",
+  "excerpt": "Learn how to query your registration, detect record updates, and receive instant alerts on Telegram with Node.js, Axios, and GitHub Actions automation.",
+  "tags": ["nicaragua", "automatizacion", "github-actions", "telegram"],
+  "coverImage": "/projects/kwh-monitor-api-scraper.jpg",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "If you are waiting for your university degree or professional title to appear in Nicaragua's official gazette (La Gaceta), you might find yourself checking the same web portal every morning. We will build a Node.js monitor that performs this search for you and notifies you on Telegram whenever status changes. The goal is for you to understand every line and run your own instance."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The workflow is simple: query the official portal, locate your registration record, compare it with previous runs, and dispatch a Telegram notification upon state changes. Finally, we automate it with GitHub Actions so it runs autonomously in the cloud without depending on your local machine. The full script is included below."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "What You Will Build"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "This version tracks a single official registration code formatted as YEAR-TPnumber. It notifies on first discovery and on any subsequent field updates. It deliberately avoids heuristic date predictions or fuzzy name searches to keep the architecture robust and clear."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "You need your registration code as it appears on the official lookup, a GitHub account, and Telegram. To execute the script locally, we use Node.js 22. If you do not have an official code yet, verify your status on the official portal first; this script cannot infer state from an absent record."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Official Gazette Title Lookup",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.lagaceta.gob.ni/consultas",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Prepare the Files"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Create a project directory for your monitor. Inside, create scripts/check-title.mjs. The .mjs extension enables ECMAScript modules in Node.js without requiring a package.json. The script relies solely on built-in APIs (fetch, node:fs/promises, node:path); no npm install is required."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We use environment variables to cleanly decouple secrets and config from code. TITLE_MONITOR_REGISTRY holds your registration code. TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID authenticate Telegram notifications. TITLE_MONITOR_DRY_RUN queries the portal and logs output without sending messages or mutating state."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Understand How La Gaceta is Queried"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "const url = new URL(\"https://www.lagaceta.gob.ni/consultas\");\nurl.searchParams.set(\"t\", \"1\");\nurl.searchParams.set(\"search\", registry);\nconst response = await fetch(url, {\n  signal: AbortSignal.timeout(30_000),\n});"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The URL constructor safely builds query strings and searchParams encodes the registration code. Parameter t=1 targets the university degree portal. A 30-second abort signal prevents hanging requests. An HTTP 200 OK simply indicates a valid server response; we must parse the HTML payload to confirm the exact row."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The endpoint returns HTML. fetchRecord extracts table rows matching consulta-row, splits cells, and performs an exact match on your registration code. Array indices map directly: cells[0] is registration code, cells[1] submission date, cells[3] applicant name, cells[4] gazette issue, cells[6] publication date, and cells[8] official processing status."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "decodeText strips tags and unescapes HTML entities like &aacute; into UTF-8 characters. This extraction depends on the portal's DOM structure; if La Gaceta changes columns or styling, the parser must be updated. This is why the script deliberately throws when a match cannot be confirmed rather than fabricating dummy states."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Compare Data, Not Timestamps"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "const changed = !previous || Object.keys(current).some(\n  (field) => current[field] !== previous[field],\n);"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "current contains tracked attributes. previous represents the last persisted state saved in .title-monitor-state/state.json. If the cache file does not exist yet, previous is null and the initial notification triggers. If it exists, some() evaluates whether any field has changed."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Execution timestamps are appended to notification messages, never to the cached data object itself; including timestamps in the compared state would trigger false alerts on every run. If no data changed, execution exits quietly without notifications."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The script awaits successful Telegram confirmation before committing new state to disk. If dispatch fails, previous state remains untouched so subsequent runs retry delivery, ensuring alerts are never swallowed unconfirmed."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Set Up Telegram"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Open @BotFather on Telegram, verify the official badge, and send /newbot. Follow the prompt to name your bot and securely copy the generated HTTP API token. Next, open your new bot's chat and press /start. Telegram bots cannot initiate unsolicited direct messages without this handshake."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Open BotFather on Telegram",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://t.me/BotFather",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "To obtain your personal numeric chat ID, replace YOUR_TOKEN in this URL with your bot token and open it in your browser:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "https://api.telegram.org/botTU_TOKEN/getUpdates"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Inside the JSON response under result, locate the message you just sent and copy message.chat.id. If result is empty, send another greeting to your bot and refresh. Ensure the bot is dedicated: getUpdates fails if an active webhook is configured."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The bot token grants full control over your bot. Never commit it to git, share it in screenshots, or expose it in public logs. If leaked, revoke and regenerate it immediately via BotFather. Store chat ID and bot token in separate environment variables."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "notifyTelegram issues an HTTP POST with JSON to the sendMessage endpoint. We transmit plain text to avoid unescaped HTML injection from official applicant names. Both HTTP status and the response payload's ok: true flag are verified before committing state."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Copy the Complete Script"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Save the following code in scripts/check-title.mjs. It is completely self-contained, incorporating module imports, helpers, and the main controller without external dependencies."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "import { mkdir, readFile, writeFile } from \"node:fs/promises\";\nimport path from \"node:path\";\n\nconst registry = process.env.TITLE_MONITOR_REGISTRY?.trim().toUpperCase();\nconst dryRun = process.env.TITLE_MONITOR_DRY_RUN === \"true\";\nconst stateDirectory = \".title-monitor-state\";\nconst statePath = path.join(stateDirectory, \"state.json\");\n\nfunction decodeText(html) {\n  const entities = {\n    nbsp: \" \", amp: \"&\", quot: '\"', apos: \"'\",\n    aacute: \"á\", eacute: \"é\", iacute: \"í\", oacute: \"ó\",\n    uacute: \"ú\", ntilde: \"ñ\", uuml: \"ü\",\n  };\n  return html\n    .replace(/<[^>]*>/g, \" \")\n    .replace(/&#(\\d+);/g, (_, number) => {\n      const point = Number(number);\n      return point <= 0x10ffff ? String.fromCodePoint(point) : _;\n    })\n    .replace(/&([a-z]+);/gi, (match, name) => {\n      const value = entities[name.toLowerCase()];\n      if (!value) return match;\n      return name[0] === name[0].toUpperCase() ? value.toUpperCase() : value;\n    })\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nasync function fetchRecord() {\n  const url = new URL(\"https://www.lagaceta.gob.ni/consultas\");\n  url.searchParams.set(\"t\", \"1\");\n  url.searchParams.set(\"search\", registry);\n\n  const response = await fetch(url, {\n    headers: { \"User-Agent\": \"personal-title-monitor/1.0\" },\n    signal: AbortSignal.timeout(30_000),\n  });\n  if (!response.ok) throw new Error(\"La Gaceta respondió HTTP \" + response.status);\n\n  const html = await response.text();\n  const rows = [...html.matchAll(/<tr class=\"consulta-row\">([\\s\\S]*?)<\\/tr>/gi)];\n  const records = rows.map((row) =>\n    [...row[1].matchAll(/<td[^>]*>([\\s\\S]*?)<\\/td>/gi)]\n      .map((cell) => decodeText(cell[1])),\n  );\n  const cells = records.find((row) =>\n    row.length >= 9 && row[0].toUpperCase() === registry,\n  );\n  if (!cells || !cells[3] || !cells[8]) {\n    throw new Error(\"No se confirmó el registro. Revisá la consulta oficial y el formato HTML.\");\n  }\n\n  return {\n    registry: cells[0],\n    receivedAt: cells[1],\n    holder: cells[3],\n    gazetteNumber: cells[4],\n    publicationDate: cells[6],\n    status: cells[8],\n  };\n}\n\nasync function loadPreviousRecord() {\n  try {\n    const saved = JSON.parse(await readFile(statePath, \"utf8\"));\n    if (!saved || typeof saved !== \"object\" || typeof saved.registry !== \"string\") {\n      throw new Error(\"El archivo de estado no tiene el formato esperado.\");\n    }\n    return saved;\n  } catch (error) {\n    if (error.code === \"ENOENT\") return null;\n    throw error;\n  }\n}\n\nasync function notifyTelegram(record) {\n  const token = process.env.TELEGRAM_BOT_TOKEN;\n  const chatId = process.env.TELEGRAM_CHAT_ID;\n  if (!token || !chatId) throw new Error(\"Faltan las credenciales de Telegram.\");\n\n  const message = [\n    \"Monitor personal de títulos — La Gaceta\",\n    \"Registro: \" + record.registry,\n    \"Titular: \" + record.holder,\n    \"Estado: \" + record.status,\n    \"Ingreso: \" + record.receivedAt,\n    \"Gaceta: \" + record.gazetteNumber,\n    \"Publicación: \" + record.publicationDate,\n    \"Comprobación: \" + new Date().toLocaleString(\"es-NI\", {\n      timeZone: \"America/Managua\",\n    }),\n    \"Confirmá los datos en https://www.lagaceta.gob.ni/consultas\",\n  ].join(\"\\n\");\n\n  const response = await fetch(\"https://api.telegram.org/bot\" + token + \"/sendMessage\", {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ chat_id: chatId, text: message }),\n    signal: AbortSignal.timeout(30_000),\n  });\n  if (!response.ok) throw new Error(\"Telegram respondió HTTP \" + response.status);\n  const result = await response.json();\n  if (!result.ok) throw new Error(\"Telegram no confirmó el envío.\");\n}\n\nasync function main() {\n  if (!registry || !/^\\d{4}-TP\\d+$/.test(registry)) {\n    throw new Error(\"Configurá TITLE_MONITOR_REGISTRY con tu código oficial AÑO-TPnúmero.\");\n  }\n  const current = await fetchRecord();\n  if (dryRun) {\n    console.log(current);\n    console.log(\"Prueba de consulta: no se envió Telegram ni se guardó estado.\");\n    return;\n  }\n\n  const previous = await loadPreviousRecord();\n  const changed = !previous || Object.keys(current).some(\n    (field) => current[field] !== previous[field],\n  );\n  if (changed) {\n    await notifyTelegram(current);\n    await mkdir(stateDirectory, { recursive: true });\n    await writeFile(statePath, JSON.stringify(current, null, 2) + \"\\n\");\n    console.log(\"Aviso enviado y estado guardado.\");\n  } else {\n    console.log(\"Sin cambios desde la última consulta.\");\n  }\n}\n\nmain().catch((error) => {\n  console.error(error.message);\n  process.exitCode = 1;\n});\n"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "6. Test the Query in Dry-Run Mode"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "In PowerShell, inside your project root, run the following commands. Replace 2026-TP12345 with your genuine registration code:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "powershell"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "$env:TITLE_MONITOR_REGISTRY = \"2026-TP12345\"\n$env:TITLE_MONITOR_DRY_RUN = \"true\"\nnode scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "On macOS or Linux, run:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "TITLE_MONITOR_REGISTRY=\"2026-TP12345\" TITLE_MONITOR_DRY_RUN=true node scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "DRY_RUN connects to the official portal but skips Telegram dispatch and local disk mutation. Verify that the output applicant name, issue number, and status match your dossier. Ensure dry-run succeeds before proceeding to automation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "To test real message delivery in PowerShell, set your credentials in session environment variables and remove the dry-run flag:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "powershell"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "$env:TELEGRAM_BOT_TOKEN = \"TU_TOKEN\"\n$env:TELEGRAM_CHAT_ID = \"TU_CHAT_ID\"\nRemove-Item Env:TITLE_MONITOR_DRY_RUN\nnode scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Wait for the initial Telegram alert and cross-reference with the official website. Run the script a second time: it should report 'No changes since last check' without sending duplicate messages. The state file is written immediately upon delivery confirmation."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "7. Create Your Repository and Set Variables"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Create a private or public repository on GitHub and add scripts/check-title.mjs. Also create a .gitignore file with the following line to prevent committing local state to git:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": ".title-monitor-state/"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Navigate to Settings → Secrets and variables → Actions. Under Secrets, add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID. Under Variables, add TITLE_MONITOR_REGISTRY with your registration code. Do not set DRY_RUN in production workflows."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Registration numbers are public configuration variables; Telegram credentials are encrypted secrets. If your repository is public, remember that Actions logs may be visible to anyone. Cache artifacts contain dossier details; never store credentials inside state files."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "8. Automate with GitHub Actions"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Create .github/workflows/monitor-title.yml with the workflow configuration below. Commit both files to main as your default branch."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "yaml"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "name: Mi monitor de título\n\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"30 14 * * 1-6\"\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: personal-title-monitor\n  cancel-in-progress: false\n\njobs:\n  check:\n    runs-on: ubuntu-latest\n    timeout-minutes: 3\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-node@v6\n        with:\n          node-version: 22\n\n      - uses: actions/cache/restore@v5\n        with:\n          path: .title-monitor-state\n          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}\n          restore-keys: |\n            personal-title-\n\n      - name: Consultar y avisar\n        run: node scripts/check-title.mjs\n        env:\n          TITLE_MONITOR_REGISTRY: ${{ vars.TITLE_MONITOR_REGISTRY }}\n          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}\n          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}\n\n      - uses: actions/cache/save@v5\n        with:\n          path: .title-monitor-state\n          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}\n"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "workflow_dispatch enables manual triggers via the GitHub UI. schedule sets a cron trigger Monday through Saturday at 08:30 Managua time (14:30 UTC). Note that GitHub Actions schedule cron triggers may experience queuing delays during peak cloud load."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The checkout step clones your repository and setup-node initializes Node.js 22. 'Query and notify' exposes environment variables to process.env and runs the script. We avoid push triggers so editing docs or code does not trigger alerts."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Each ephemeral Actions runner starts fresh. actions/cache restores previous state across workflow runs, while cache/save preserves updated results. Concurrency groups prevent race conditions between simultaneous runs. If querying or notification throws an error, the job fails before cache saving."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub Actions cache is temporary and evicts entries after inactivity. If the cache clears, the subsequent run behaves like the initial run and re-delivers the current status. For persistent multi-month records, external database storage is the recommended next architectural step."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "9. Verify Automation"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Navigate to Actions → My Title Monitor → Run workflow and select main. Enable GitHub Actions if prompted. Inspect workflow step logs and check your Telegram chat. Your local machine is completely independent from this cloud run."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Because your local state.json was git-ignored, the initial cloud run creates its own baseline cache and sends a baseline Telegram alert. Subsequent scheduled runs reuse this cache smoothly."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "If the 'Run workflow' button is missing, verify the YAML exists in your default branch and includes workflow_dispatch. Scheduled workflows on forks are disabled by default. On public repos, GitHub suspends scheduled actions after 60 days of inactivity."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Troubleshooting When Something Fails"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A confirmation failure typically points to a mistyped code, server rate limiting, or upstream HTML markup changes. Open the official portal in a browser to inspect table columns before altering parser regexes."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram errors usually stem from invalid bot tokens or unset chat handshakes (/start). HTTP 401 indicates an invalid token; HTTP 400 usually indicates an invalid or missing chat_id. Never post your bot token publicly when requesting assistance."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "To pause automated checks, choose 'Disable workflow' from GitHub Actions menu. When retiring the project, revoke the bot token directly via BotFather."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "How to Make It Your Own"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "You now have a clean foundation: an HTTP query, data model, state comparison, and notification dispatcher. You can extend it to track multiple registration codes in parallel, parse direct PDF links, or refine scheduling."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Fuzzy applicant searches introduce ambiguity, and estimating completion dates requires historical regression with explicit uncertainty margins. These are distinct features that are not prerequisites for a reliable personal tracker."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Sources and Optional References"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Query parameters and table DOM structures were verified against title-publication-monitor commit 9f3816b3e720cf9e98915b866d5717df77655f5c. The code in this tutorial is educational and structured for clarity."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reference implementation: multi-target and forecasting",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://github.com/jesushg-dev/title-publication-monitor/blob/9f3816b3e720cf9e98915b866d5717df77655f5c/scripts/check-lagaceta-title.mjs",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram: Bot creation and API tokens",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://core.telegram.org/bots/tutorial#obtain-your-bot-token",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram API: getUpdates and sendMessage",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://core.telegram.org/bots/api",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub Actions: Scheduled events",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub Actions: Disabling and enabling workflows",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

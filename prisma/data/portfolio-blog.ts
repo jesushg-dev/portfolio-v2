@@ -23,8 +23,15 @@ export interface LocalizedBlogPost {
   blocks: LocalizedBlock[];
 }
 
+export interface LocalizedBlogSeriesSeed {
+  slug: string;
+  coverImage?: string | null;
+  title: LocaleText;
+  description: LocaleText;
+}
+
 export interface LocalizedBlogSeed {
-  seriesName: string;
+  series: LocalizedBlogSeriesSeed;
   posts: LocalizedBlogPost[];
 }
 
@@ -65,7 +72,20 @@ export function explodePostBlocks(
 const HERO_COVER = "/projects/portfolio.jpg";
 
 export const portfolioBlog: LocalizedBlogSeed = {
-  seriesName: "Building this Portfolio",
+  series: {
+    slug: "building-this-portfolio",
+    coverImage: HERO_COVER,
+    title: t(
+      "Construyendo este Portafolio",
+      "Building this Portfolio",
+      "Dit Portfolio Bouwen",
+    ),
+    description: t(
+      "Cómo convertí mi portafolio personal en un producto multi-tenant con i18n real, tRPC y Next.js.",
+      "How I turned my personal portfolio into a multi-tenant product with real i18n, tRPC, and Next.js.",
+      "Hoe ik mijn persoonlijke portfolio veranderde in een multi-tenant product met echte i18n, tRPC en Next.js.",
+    ),
+  },
   posts: [
     {
       slug: "building-this-portfolio-overview",

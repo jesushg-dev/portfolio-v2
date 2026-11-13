@@ -1,13 +1,26 @@
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
+import type { Locale } from "@/i18n/config";
 
 import { BlogPostsList } from "@/features/blog/components/blog-posts-list";
 import { getUserBlogPosts } from "@/features/blog/server/blog-queries";
 
-const BlogPage: FC = async () => {
-  const [t, { data: initialPosts }] = await Promise.all([
-    getTranslations("admin.blog"),
-    getUserBlogPosts(),
+interface BlogPageProps {
+  params: Promise<{ locale: Locale }>;
+}
+
+const BlogPage: FC<BlogPageProps> = async ({ params }) => {
+  const { locale } = await params;
+  const [
+    t,
+    {
+      data: initialPosts,
+      series: initialSeries,
+      standalone: initialStandalone,
+    },
+  ] = await Promise.all([
+    getTranslations({ locale, namespace: "admin.blog" }),
+    getUserBlogPosts(locale),
   ]);
 
   return (
@@ -17,7 +30,11 @@ const BlogPage: FC = async () => {
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
       <div className="min-h-0 flex-1">
-        <BlogPostsList initialPosts={initialPosts} />
+        <BlogPostsList
+          initialPosts={initialPosts}
+          initialSeries={initialSeries}
+          initialStandalone={initialStandalone}
+        />
       </div>
     </div>
   );

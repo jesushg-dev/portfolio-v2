@@ -1,0 +1,288 @@
+{
+  "slug": "aso-03-personalizar-grub-plymouth",
+  "locale": "nl",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Besturingssysteemarchitectuur: Kernel, Aanpassing en Services",
+  "seriesOrder": 3,
+  "title": "Aanpassen van de bootloader: GRUB 2 en Plymouth splash screen in Linux",
+  "excerpt": "Resolutie en achtergronden aanpassen in /etc/default/grub, hergenereren met update-grub en vervangen van opstartlogo's in initramfs.",
+  "tags": [
+    "linux",
+    "grub",
+    "plymouth",
+    "bootloader",
+    "personalizacion",
+    "archivo-2020"
+  ],
+  "coverImage": "/images/blog/aso/image36.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Historische en archiefnotitie: Dit artikel maakt deel uit van een laboratoriumreeks die oorspronkelijk op 23 november 2020 werd ontwikkeld voor het vak Besturingssysteemarchitectuur aan de Universidad Nacional de Ingeniería (UNI) in Managua. Het wordt bewaard voor educatieve en historische doeleinden, aangevuld met actuele technische toelichtingen over moderne Linux- en netwerkstandaarden."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Aanpassen van de achtergrondafbeelding van het GRUB-menu"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "El fondo del menú de GRUB admite formatos PNG, JPG (de 8 bits/256 colores) o TGA. Se recomienda formato PNG para evitar distorsiones de color. Abrimos el archivo de configuración:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo nano /etc/default/grub"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image29.png",
+          "alt": "Edición de /etc/default/grub",
+          "title": "Edición de /etc/default/grub"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Descomentamos GRUB_GFXMODE e ingresamos la resolución soportada por nuestro monitor (consultada con 'xrandr'):"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image30.png",
+          "alt": "Configuración de GRUB_GFXMODE",
+          "title": "Configuración de GRUB_GFXMODE"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Añadimos la directiva GRUB_BACKGROUND indicando la ruta absoluta de la imagen PNG:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "GRUB_BACKGROUND=\"/home/usuario/Imágenes/logo.png\""
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image31.png",
+          "alt": "Directiva GRUB_BACKGROUND configurada",
+          "title": "Directiva GRUB_BACKGROUND configurada"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Regeneramos la configuración activa con update-grub:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo update-grub"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image32.png",
+          "alt": "Regeneración de GRUB",
+          "title": "Regeneración de GRUB"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Aanpassen van het opstartlogo met Plymouth"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Accedemos al directorio donde se ubica nuestra nueva imagen PNG:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image33.png",
+          "alt": "Ubicación de imagen de logo",
+          "title": "Ubicación de imagen de logo"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reemplazamos las imágenes de los temas oficiales de Plymouth en el sistema:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo cp logos.png /usr/share/plymouth/ubuntu-logo.png\nsudo cp logos.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo.png\nsudo cp logos.png /usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo16.png"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image34.png",
+          "alt": "Copia de logotipos en tema Plymouth",
+          "title": "Copia de logotipos en tema Plymouth"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Actualizamos el sistema de archivos en memoria (initramfs) para empacar la nueva imagen:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo update-initramfs -u"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image35.png",
+          "alt": "Actualización de initramfs",
+          "title": "Actualización de initramfs"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Visuele verificatie van het opstartproces"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Reiniciamos el sistema con 'sudo reboot'. Al encender, observamos el menú de GRUB con la imagen de fondo personalizada:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image36.png",
+          "alt": "Menú GRUB personalizado",
+          "title": "Menú GRUB personalizado"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Posteriormente, durante la transición de carga del sistema operativo, se aprecia el nuevo logo en Plymouth:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image37.png",
+          "alt": "Logo de Plymouth en pantalla de arranque",
+          "title": "Logo de Plymouth en pantalla de arranque"
+        }
+      }
+    ]
+  }
+}

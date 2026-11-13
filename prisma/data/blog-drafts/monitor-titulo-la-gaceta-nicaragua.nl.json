@@ -1,0 +1,772 @@
+{
+  "slug": "monitor-titulo-la-gaceta-nicaragua",
+  "locale": "nl",
+  "status": "DRAFT",
+  "publishedAt": null,
+  "title": "Bouw je eigen officiële Gazette-titelmonitor met JavaScript en Telegram",
+  "excerpt": "Leer hoe je jouw registratie opvraagt, statuswijzigingen detecteert en directe Telegram-meldingen ontvangt met Node.js en geautomatiseerde GitHub Actions.",
+  "tags": ["nicaragua", "automatizacion", "github-actions", "telegram"],
+  "coverImage": "/projects/kwh-monitor-api-scraper.jpg",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Als je wacht tot je academische titel of registratie verschijnt in La Gaceta van Nicaragua, controleer je waarschijnlijk elke dag dezelfde webpagina. We gaan een programma bouwen dat deze controle voor jou uitvoert en je via Telegram waarschuwt zodra de status verandert. Het doel is dat je de code begrijpt en je eigen versie kunt beheren."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "De flow is eenvoudig: raadpleeg de officiële pagina, zoek je registratie, vergelijk deze met eerdere resultaten en stuur een bericht bij wijzigingen. Aan het einde automatiseren we dit met GitHub Actions zodat het onafhankelijk van je computer draait. De volledige code is in deze gids opgenomen."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Wat je gaat bouwen"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Deze versie volgt één officiële code met de indeling JAAR-TPnummer. Het geeft een melding bij de eerste vondst en wanneer een veld wijzigt. Er worden bewust geen schattingen gemaakt of gezocht op persoonsnaam om de logica betrouwbaar en eenvoudig te houden."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Je hebt je registratiecode nodig zoals deze op de officiële portal staat, plus een GitHub-account en Telegram. Om het script lokaal uit te voeren gebruiken we Node.js 22. Als je nog geen code hebt, controleer dan eerst je dossier op de officiële website."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Titelregistratie raadplegen in La Gaceta",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.lagaceta.gob.ni/consultas",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Bereid de bestanden voor"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Maak een map aan voor je monitor. Maak daarin scripts/check-title.mjs aan. De extensie .mjs maakt ES-modules mogelijk in Node.js zonder dat je een package.json nodig hebt. Het script gebruikt uitsluitend ingebouwde Node.js-API's (fetch, node:fs/promises); er is geen npm install vereist."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We gebruiken omgevingsvariabelen om configuratie en geheimen gescheiden te houden van de code. TITLE_MONITOR_REGISTRY bevat je registratiecode. TELEGRAM_BOT_TOKEN en TELEGRAM_CHAT_ID versturen de berichten. Met TITLE_MONITOR_DRY_RUN kun je testen zonder daadwerkelijk berichten te sturen of status op te slaan."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Begrijp hoe La Gaceta wordt geraadpleegd"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "const url = new URL(\"https://www.lagaceta.gob.ni/consultas\");\nurl.searchParams.set(\"t\", \"1\");\nurl.searchParams.set(\"search\", registry);\nconst response = await fetch(url, {\n  signal: AbortSignal.timeout(30_000),\n});"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "De URL-constructor bouwt het adres veilig op en searchParams codeert de zoekterm. De parameter t=1 is bestemd voor titelregistraties. Een timeout van 30 seconden voorkomt dat het script blijft hangen. Een HTTP 200 betekent alleen dat de pagina reageert; we moeten de HTML parsen om de rij te controleren."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "De zoekopdracht levert HTML op. fetchRecord haalt de tabelrijen op met de klasse consulta-row en zoekt naar een exacte overeenkomst met je code. De array-indices zijn: cells[0] registratie, cells[1] ontvangstdatum, cells[3] naam van de houder, cells[4] editienummer, cells[6] publicatiedatum en cells[8] officiële status."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "decodeText verwijdert HTML-tags en zet entiteiten zoals &aacute; om in leesbare tekst. Deze extractie is afhankelijk van de DOM-structuur van de portal. Als La Gaceta kolommen aanpast, moet de parser worden bijgewerkt. Daarom genereert het script een fout als er geen bevestigde rij is."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Vergelijk de gegevens, niet het tijdstip"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "const changed = !previous || Object.keys(current).some(\n  (field) => current[field] !== previous[field],\n);"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "current bevat de velden die we willen volgen. previous is de laatst opgeslagen versie in .title-monitor-state/state.json. Als dit bestand nog niet bestaat, is previous null en wordt het eerste bericht verzonden. Als het wel bestaat, controleert some() of ten minste één veld is gewijzigd."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Het tijdstip van controle wordt toegevoegd aan het notificatiebericht, maar niet aan het vergelijkingsobject. Als we het tijdstip mee zouden nemen, zou elke run als een wijziging worden gezien. Als er niets is gewijzigd, wordt er geen nieuw bericht verstuurd."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We wachten eerst tot Telegram de ontvangst bevestigt voordat we de nieuwe status opslaan. Als het verzenden mislukt, blijft de oude status behouden zodat de volgende run het opnieuw probeert. Zo raakt er nooit een melding verloren."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Bereid Telegram voor"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Open @BotFather op Telegram, verifieer het officiële vinkje en stuur /newbot. Volg de instructies en bewaar de gegenereerde API-token. Open vervolgens de chat met je bot en stuur /start. Een Telegram-bot kan pas berichten sturen nadat je het gesprek hebt gestart."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Open BotFather op Telegram",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://t.me/BotFather",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Om je numerieke chat-ID te achterhalen, vervang je YOUR_TOKEN in deze URL door je token en open je de link in je browser:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "https://api.telegram.org/botTU_TOKEN/getUpdates"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Zoek in het JSON-antwoord onder result naar het bericht dat je stuurde en kopieer message.chat.id. Als result leeg is, stuur dan nog een bericht naar je bot en vernieuw de pagina. Gebruik een nieuwe bot zonder actieve webhook."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Met de bot-token heeft iedereen volledige controle over de bot. Plaats deze nooit in je code of commits. Als de token lekt, trek hem dan direct in via BotFather. Bewaar chat-ID en token in afzonderlijke variabelen."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "notifyTelegram stuurt een HTTP POST met JSON naar het sendMessage-eindpunt. We verzenden platte tekst zodat speciale tekens in namen geen parserfouten veroorzaken. Zowel de HTTP-status als de vlag ok: true worden geverifieerd."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Kopieer het volledige script"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Sla het volgende op in scripts/check-title.mjs. Het script is volledig zelfstandig en bevat alle benodigde functies en imports zonder externe npm-pakketten."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "javascript"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "import { mkdir, readFile, writeFile } from \"node:fs/promises\";\nimport path from \"node:path\";\n\nconst registry = process.env.TITLE_MONITOR_REGISTRY?.trim().toUpperCase();\nconst dryRun = process.env.TITLE_MONITOR_DRY_RUN === \"true\";\nconst stateDirectory = \".title-monitor-state\";\nconst statePath = path.join(stateDirectory, \"state.json\");\n\nfunction decodeText(html) {\n  const entities = {\n    nbsp: \" \", amp: \"&\", quot: '\"', apos: \"'\",\n    aacute: \"á\", eacute: \"é\", iacute: \"í\", oacute: \"ó\",\n    uacute: \"ú\", ntilde: \"ñ\", uuml: \"ü\",\n  };\n  return html\n    .replace(/<[^>]*>/g, \" \")\n    .replace(/&#(\\d+);/g, (_, number) => {\n      const point = Number(number);\n      return point <= 0x10ffff ? String.fromCodePoint(point) : _;\n    })\n    .replace(/&([a-z]+);/gi, (match, name) => {\n      const value = entities[name.toLowerCase()];\n      if (!value) return match;\n      return name[0] === name[0].toUpperCase() ? value.toUpperCase() : value;\n    })\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nasync function fetchRecord() {\n  const url = new URL(\"https://www.lagaceta.gob.ni/consultas\");\n  url.searchParams.set(\"t\", \"1\");\n  url.searchParams.set(\"search\", registry);\n\n  const response = await fetch(url, {\n    headers: { \"User-Agent\": \"personal-title-monitor/1.0\" },\n    signal: AbortSignal.timeout(30_000),\n  });\n  if (!response.ok) throw new Error(\"La Gaceta respondió HTTP \" + response.status);\n\n  const html = await response.text();\n  const rows = [...html.matchAll(/<tr class=\"consulta-row\">([\\s\\S]*?)<\\/tr>/gi)];\n  const records = rows.map((row) =>\n    [...row[1].matchAll(/<td[^>]*>([\\s\\S]*?)<\\/td>/gi)]\n      .map((cell) => decodeText(cell[1])),\n  );\n  const cells = records.find((row) =>\n    row.length >= 9 && row[0].toUpperCase() === registry,\n  );\n  if (!cells || !cells[3] || !cells[8]) {\n    throw new Error(\"No se confirmó el registro. Revisá la consulta oficial y el formato HTML.\");\n  }\n\n  return {\n    registry: cells[0],\n    receivedAt: cells[1],\n    holder: cells[3],\n    gazetteNumber: cells[4],\n    publicationDate: cells[6],\n    status: cells[8],\n  };\n}\n\nasync function loadPreviousRecord() {\n  try {\n    const saved = JSON.parse(await readFile(statePath, \"utf8\"));\n    if (!saved || typeof saved !== \"object\" || typeof saved.registry !== \"string\") {\n      throw new Error(\"El archivo de estado no tiene el formato esperado.\");\n    }\n    return saved;\n  } catch (error) {\n    if (error.code === \"ENOENT\") return null;\n    throw error;\n  }\n}\n\nasync function notifyTelegram(record) {\n  const token = process.env.TELEGRAM_BOT_TOKEN;\n  const chatId = process.env.TELEGRAM_CHAT_ID;\n  if (!token || !chatId) throw new Error(\"Faltan las credenciales de Telegram.\");\n\n  const message = [\n    \"Monitor personal de títulos — La Gaceta\",\n    \"Registro: \" + record.registry,\n    \"Titular: \" + record.holder,\n    \"Estado: \" + record.status,\n    \"Ingreso: \" + record.receivedAt,\n    \"Gaceta: \" + record.gazetteNumber,\n    \"Publicación: \" + record.publicationDate,\n    \"Comprobación: \" + new Date().toLocaleString(\"es-NI\", {\n      timeZone: \"America/Managua\",\n    }),\n    \"Confirmá los datos en https://www.lagaceta.gob.ni/consultas\",\n  ].join(\"\\n\");\n\n  const response = await fetch(\"https://api.telegram.org/bot\" + token + \"/sendMessage\", {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ chat_id: chatId, text: message }),\n    signal: AbortSignal.timeout(30_000),\n  });\n  if (!response.ok) throw new Error(\"Telegram respondió HTTP \" + response.status);\n  const result = await response.json();\n  if (!result.ok) throw new Error(\"Telegram no confirmó el envío.\");\n}\n\nasync function main() {\n  if (!registry || !/^\\d{4}-TP\\d+$/.test(registry)) {\n    throw new Error(\"Configurá TITLE_MONITOR_REGISTRY con tu código oficial AÑO-TPnúmero.\");\n  }\n  const current = await fetchRecord();\n  if (dryRun) {\n    console.log(current);\n    console.log(\"Prueba de consulta: no se envió Telegram ni se guardó estado.\");\n    return;\n  }\n\n  const previous = await loadPreviousRecord();\n  const changed = !previous || Object.keys(current).some(\n    (field) => current[field] !== previous[field],\n  );\n  if (changed) {\n    await notifyTelegram(current);\n    await mkdir(stateDirectory, { recursive: true });\n    await writeFile(statePath, JSON.stringify(current, null, 2) + \"\\n\");\n    console.log(\"Aviso enviado y estado guardado.\");\n  } else {\n    console.log(\"Sin cambios desde la última consulta.\");\n  }\n}\n\nmain().catch((error) => {\n  console.error(error.message);\n  process.exitCode = 1;\n});\n"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "6. Test de zoekopdracht zonder berichten te sturen"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Voer in PowerShell vanuit de projectmap het volgende uit. Vervang 2026-TP12345 door je eigen registratiecode:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "powershell"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "$env:TITLE_MONITOR_REGISTRY = \"2026-TP12345\"\n$env:TITLE_MONITOR_DRY_RUN = \"true\"\nnode scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Op macOS of Linux kun je het volgende uitvoeren:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "TITLE_MONITOR_REGISTRY=\"2026-TP12345\" TITLE_MONITOR_DRY_RUN=true node scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "DRY_RUN maakt wel verbinding met de officiële website, maar stuurt geen Telegram-bericht en wijzigt geen bestanden. Controleer of de gegevens kloppen voordat je de automatisering instelt."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Om een echte verzending in PowerShell te testen, stel je de inloggegevens in als sessievariabelen en verwijder je de dry-run vlag:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "powershell"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "$env:TELEGRAM_BOT_TOKEN = \"TU_TOKEN\"\n$env:TELEGRAM_CHAT_ID = \"TU_CHAT_ID\"\nRemove-Item Env:TITLE_MONITOR_DRY_RUN\nnode scripts/check-title.mjs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Wacht op het eerste bericht en vergelijk het met de website. Voer het script nogmaals uit: het zou moeten melden dat er geen wijzigingen zijn zonder opnieuw een bericht te sturen. Het statusbestand wordt direct na bevestiging aangemaakt."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "7. Maak je repository aan en configureer variabelen"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Maak een repository aan op GitHub en voeg scripts/check-title.mjs toe. Maak ook een .gitignore-bestand aan met de volgende regel zodat de lokale status niet naar git wordt geüpload:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": ".title-monitor-state/"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ga naar Settings → Secrets and variables → Actions. Maak onder Secrets twee repository secrets aan: TELEGRAM_BOT_TOKEN en TELEGRAM_CHAT_ID. Maak onder Variables de variabele TITLE_MONITOR_REGISTRY aan met je code."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Het registratienummer is een configuratievariabele; de inloggegevens zijn geheimen. Als de repository openbaar is, kunnen Actions-logs zichtbaar zijn. Gebruik de cache nooit voor het opslaan van tokens."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "8. Automatiseer met GitHub Actions"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Maak .github/workflows/monitor-title.yml aan met de onderstaande configuratie en commit deze naar je main-branch."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "yaml"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "name: Mi monitor de título\n\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"30 14 * * 1-6\"\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: personal-title-monitor\n  cancel-in-progress: false\n\njobs:\n  check:\n    runs-on: ubuntu-latest\n    timeout-minutes: 3\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-node@v6\n        with:\n          node-version: 22\n\n      - uses: actions/cache/restore@v5\n        with:\n          path: .title-monitor-state\n          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}\n          restore-keys: |\n            personal-title-\n\n      - name: Consultar y avisar\n        run: node scripts/check-title.mjs\n        env:\n          TITLE_MONITOR_REGISTRY: ${{ vars.TITLE_MONITOR_REGISTRY }}\n          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}\n          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}\n\n      - uses: actions/cache/save@v5\n        with:\n          path: .title-monitor-state\n          key: personal-title-${{ github.run_id }}-${{ github.run_attempt }}\n"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "workflow_dispatch maakt handmatige uitvoering mogelijk. schedule stelt een cron-taak in van maandag tot en met zaterdag om 08:30 Nicaragua-tijd (14:30 UTC). GitHub kan geplande taken soms met vertraging uitvoeren."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "checkout haalt je code op en setup-node installeert Node.js 22. De stap 'Controleren en melden' geeft de variabelen door en start het script. Er is geen push-trigger ingesteld om onnodige meldingen bij code-wijzigingen te voorkomen."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Elke runner start met een schone lei. actions/cache herstelt de meest recente status en slaat het nieuwe resultaat op met een unieke sleutel per run. Concurrency voorkomt gelijktijdige runs. Bij fouten breekt het script af voordat de cache wordt overschreven."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "De Actions-cache is niet permanent en kan na verloop van tijd verlopen. Als dat gebeurt, gedraagt de volgende run zich als de eerste en kan er een extra melding volgen. Voor permanente opslag is een externe database aanbevolen."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "9. Controleer de automatisering"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ga naar Actions → Mijn titelmonitor → Run workflow en selecteer main. Schakel Actions in als GitHub daarom vraagt. Controleer de logs en je Telegram-app."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Omdat je lokale statusbestand niet is geüpload, zal de eerste GitHub Actions-run een eigen basisstatus aanmaken en een eerste notificatie sturen. Latere runs hergebruiken deze cache."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Als je de knop 'Run workflow' niet ziet, controleer dan of het bestand in de standaardbranch staat met workflow_dispatch. Geplande workflows in forks staan standaard uitgeschakeld."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Wat te controleren bij fouten"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Een fout bij het bevestigen van de registratie kan duiden op een typefout in de code of een wijziging in de HTML-structuur van de portal. Verifieer de tabelstructuur in je browser."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram-fouten ontstaan meestal door een onjuiste token of het ontbreken van een actieve chat (/start). HTTP 401 duidt op een foute token; HTTP 400 op een ongeldige chat-ID."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Om controles te stoppen kies je 'Disable workflow' in GitHub Actions. Als je de bot niet meer gebruikt, kun je de token intrekken via BotFather."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Hoe je het verder kunt aanpassen"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Je hebt nu een solide basis: een HTTP-zoekopdracht, een datamodel, statusvergelijking en notificaties. Je kunt dit uitbreiden om meerdere codes tegelijk te volgen of directe links toe te voegen."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Zoeken op naam brengt dubbelzinnige resultaten met zich mee en het schatten van data vereist historische gegevens. Dit zijn nuttige uitbreidingen, maar geen vereisten voor een betrouwbare monitor."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bronnen en optionele referenties"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "De parameters en tabelstructuur zijn geverifieerd aan de hand van commit 9f3816b3e720cf9e98915b866d5717df77655f5c van title-publication-monitor."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Referentie-implementatie: meerdere doelen en schattingen",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://github.com/jesushg-dev/title-publication-monitor/blob/9f3816b3e720cf9e98915b866d5717df77655f5c/scripts/check-lagaceta-title.mjs",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram: Bots en API-tokens aanmaken",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://core.telegram.org/bots/tutorial#obtain-your-bot-token",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Telegram API: getUpdates en sendMessage",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://core.telegram.org/bots/api",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub Actions: Geplande taken",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GitHub Actions: Workflows in- en uitschakelen",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

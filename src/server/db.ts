@@ -24,7 +24,9 @@ if (
     !("cvTechnicalSkillSelection" in globalForPrisma.prisma) ||
     !("nowStatusSlot" in globalForPrisma.prisma) ||
     !("applicationEmailEvent" in globalForPrisma.prisma) ||
-    !("analyticsDailyStat" in globalForPrisma.prisma))
+    !("analyticsDailyStat" in globalForPrisma.prisma) ||
+    !("blogSeries" in globalForPrisma.prisma) ||
+    !("blogSeriesTranslation" in globalForPrisma.prisma))
 ) {
   globalForPrisma.prisma = undefined;
 }
