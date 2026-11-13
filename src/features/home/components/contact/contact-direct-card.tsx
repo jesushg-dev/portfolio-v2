@@ -95,7 +95,7 @@ export function ContactDirectCard({
   return (
     <div className="home-card-surface bg-card relative box-border flex h-full w-full min-w-0 flex-1 flex-col justify-between overflow-hidden rounded-[2rem] p-6 sm:p-8">
       <div>
-        <p className="text-muted-foreground font-mono text-[0.6875rem] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground font-mono text-sm tracking-wider uppercase">
           {t("direct.eyebrow")}
         </p>
 
@@ -103,7 +103,7 @@ export function ContactDirectCard({
           {/* Email row */}
           {email && (
             <li className="first:pt-1">
-              <p className="text-muted-foreground text-xs">
+              <p className="text-muted-foreground text-sm">
                 {t("direct.email")}
               </p>
               <p className="text-foreground mt-1 text-base font-semibold tracking-[-0.01em] break-words">
@@ -112,7 +112,7 @@ export function ContactDirectCard({
               <div className="mt-3 flex items-center gap-2">
                 <a
                   href={`mailto:${email}`}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:outline-ring inline-flex min-h-7.5 items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:outline-ring inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                   {t("direct.write")}
                 </a>
@@ -120,12 +120,12 @@ export function ContactDirectCard({
                   type="button"
                   onClick={handleCopy}
                   aria-label={t("direct.copyEmailAria")}
-                  className="bg-muted text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex min-h-7.5 cursor-pointer items-center justify-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="bg-muted text-muted-foreground hover:text-foreground focus-visible:outline-ring inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                   {isCopied ? (
                     <>
                       <Check
-                        className="size-3.5 text-emerald-500"
+                        className="size-4 text-emerald-500"
                         aria-hidden="true"
                       />
                       <span className="text-emerald-500">
@@ -145,10 +145,10 @@ export function ContactDirectCard({
             <li>
               <a
                 href={`tel:${phone.tel}`}
-                className="group focus-visible:outline-ring flex items-center justify-between transition-colors focus-visible:rounded-lg focus-visible:outline-2"
+                className="group focus-visible:outline-ring flex min-h-11 items-center justify-between py-1 transition-colors focus-visible:rounded-lg focus-visible:outline-2"
               >
                 <span>
-                  <span className="text-muted-foreground block text-xs">
+                  <span className="text-muted-foreground block text-sm">
                     {t("direct.phone")}
                   </span>
                   <span className="text-foreground group-hover:text-primary mt-1 block text-base font-semibold tracking-[-0.01em] transition-colors sm:text-[1.0625rem]">
@@ -170,10 +170,10 @@ export function ContactDirectCard({
                 href={linkedin.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group focus-visible:outline-ring flex items-center justify-between transition-colors focus-visible:rounded-lg focus-visible:outline-2"
+                className="group focus-visible:outline-ring flex min-h-11 items-center justify-between py-1 transition-colors focus-visible:rounded-lg focus-visible:outline-2"
               >
                 <span>
-                  <span className="text-muted-foreground block text-xs">
+                  <span className="text-muted-foreground block text-sm">
                     {t("direct.linkedin")}
                   </span>
                   <span className="text-foreground group-hover:text-primary mt-1 block text-base font-semibold tracking-[-0.01em] transition-colors sm:text-[1.0625rem]">
@@ -193,10 +193,10 @@ export function ContactDirectCard({
             <li>
               <Link
                 href={SCHEDULE_PATH}
-                className="group focus-visible:outline-ring flex items-center justify-between transition-colors focus-visible:rounded-lg focus-visible:outline-2"
+                className="group focus-visible:outline-ring flex min-h-11 items-center justify-between py-1 transition-colors focus-visible:rounded-lg focus-visible:outline-2"
               >
                 <span>
-                  <span className="text-muted-foreground block text-xs">
+                  <span className="text-muted-foreground block text-sm">
                     {t("direct.videoCall")}
                   </span>
                   <span className="text-foreground group-hover:text-primary mt-1 block text-base font-semibold tracking-[-0.01em] transition-colors sm:text-[1.0625rem]">

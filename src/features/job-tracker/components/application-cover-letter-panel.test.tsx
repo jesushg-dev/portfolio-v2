@@ -126,8 +126,8 @@ describe("ApplicationCoverLetterDialog", () => {
     renderWithIntl(<ApplicationCoverLetterDialog {...defaultProps} />);
 
     // Switch to manual mode via ResumeAiControls option
-    const manualModeBtn = screen.getByRole("button", {
-      name: /^manual/i,
+    const manualModeBtn = screen.getByRole("radio", {
+      name: /manual/i,
     });
     fireEvent.click(manualModeBtn);
 
