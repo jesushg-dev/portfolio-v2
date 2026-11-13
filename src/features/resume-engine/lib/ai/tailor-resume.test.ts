@@ -145,6 +145,30 @@ describe("automatic and manual resume contract", () => {
       "mirror the exact naming, casing, and phrasing used in the job description",
     );
   });
+  it.each([
+    ["v1", 3],
+    ["v2", 5],
+  ] as const)(
+    "requests an auditable coverage report for %s",
+    (templateId, limit) => {
+      const prompt = buildTailoredResumePrompt({ ...context, templateId });
+      const input = decode(prompt.userPrompt) as {
+        layoutLimits: { maxBulletsPerExperience: number };
+        responseContract: { matchNotesRule: string };
+      };
+      expect(input.layoutLimits.maxBulletsPerExperience).toBe(limit);
+      expect(input.responseContract.matchNotesRule).toContain(
+        "Account for every omitted CMS achievement ID",
+      );
+      expect(prompt.systemPrompt).toContain(
+        "Keep retained responsibilityIds in CMS order",
+      );
+      expect(prompt.systemPrompt).toContain("condense wording toward 60%");
+      expect(prompt.systemPrompt).toContain(
+        "COVERAGE REPORT (required in matchNotes)",
+      );
+    },
+  );
   it("produces exactly the document accepted by manual validation", async () => {
     const create = jest.fn().mockResolvedValue(completion(response));
     jest

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import type { Locale } from "@/i18n/config";
 
 import { BlogForm } from "@/features/blog/components/blog-form";
 import { getBlogEditPageData } from "@/features/blog/server/blog-queries";
@@ -6,12 +7,12 @@ import { getBlogEditPageData } from "@/features/blog/server/blog-queries";
 export default async function EditBlogPostPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: Locale }>;
 }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   const [t, pageData] = await Promise.all([
-    getTranslations("admin.blog"),
-    getBlogEditPageData(id),
+    getTranslations({ locale, namespace: "admin.blog" }),
+    getBlogEditPageData(id, locale),
   ]);
 
   if (!pageData) return null;
@@ -30,6 +31,7 @@ export default async function EditBlogPostPage({
           key={editorDto.id}
           initialData={editorDto}
           languages={languages}
+          availableSeries={pageData.availableSeries}
         />
       </div>
     </div>

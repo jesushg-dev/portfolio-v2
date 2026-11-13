@@ -1,6 +1,33 @@
 // ============================================================================
-// BLOG (per-user, multi-locale)
+// BLOG (per-user, multi-locale, normalized series)
 // ============================================================================
+
+model BlogSeries {
+  id           String                  @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                  @db.ObjectId
+  user         User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug         String
+  coverImage   String?
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  posts        BlogPost[]
+  translations BlogSeriesTranslation[]
+
+  @@unique([userId, slug])
+  @@index([userId])
+}
+
+model BlogSeriesTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  seriesId      String      @db.ObjectId
+  series        BlogSeries  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  appLanguageId String      @db.ObjectId
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  title         String
+  description   String?
+
+  @@unique([seriesId, appLanguageId])
+}
 
 model BlogPost {
   id           String                @id @default(auto()) @map("_id") @db.ObjectId
@@ -9,7 +36,8 @@ model BlogPost {
   slug         String
   coverImage   String?
   tags         String[]              @default([])
-  seriesName   String?
+  seriesId     String?               @db.ObjectId
+  series       BlogSeries?           @relation(fields: [seriesId], references: [id], onDelete: SetNull)
   seriesOrder  Int?
   status       BlogPostStatus        @default(DRAFT)
   publishedAt  DateTime?
@@ -19,7 +47,7 @@ model BlogPost {
 
   @@unique([userId, slug])
   @@index([userId, status])
-  @@index([userId, seriesName, seriesOrder])
+  @@index([userId, seriesId, seriesOrder])
 }
 
 model BlogPostTranslation {

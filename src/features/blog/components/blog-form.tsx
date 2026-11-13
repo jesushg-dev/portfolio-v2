@@ -42,9 +42,14 @@ import { TiptapEditor } from "@/features/blog/components/tiptap-editor";
 interface BlogFormProps {
   languages: AppLanguage[];
   initialData: BlogPostEditorDTO | BlogPostCreateFormDTO;
+  availableSeries?: { slug: string; title: string }[];
 }
 
-export const BlogForm: FC<BlogFormProps> = ({ initialData, languages }) => {
+export const BlogForm: FC<BlogFormProps> = ({
+  initialData,
+  languages,
+  availableSeries,
+}) => {
   const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.blog");
   const router = useRouter();
@@ -220,8 +225,21 @@ export const BlogForm: FC<BlogFormProps> = ({ initialData, languages }) => {
                 render={({ field }) => (
                   <FormItem label={t("seriesName")}>
                     <FormControl>
-                      <Input placeholder="react-performance" {...field} />
+                      <Input
+                        list="available-series-options"
+                        placeholder="operating-systems-architecture"
+                        {...field}
+                      />
                     </FormControl>
+                    {availableSeries && availableSeries.length > 0 ? (
+                      <datalist id="available-series-options">
+                        {availableSeries.map((s) => (
+                          <option key={s.slug} value={s.slug}>
+                            {s.title}
+                          </option>
+                        ))}
+                      </datalist>
+                    ) : null}
                   </FormItem>
                 )}
               />

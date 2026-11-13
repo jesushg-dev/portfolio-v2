@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Plus,
   Pencil,
@@ -21,15 +21,21 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link } from "@/i18n/routing";
-import type { BlogPostEditorDTO } from "@/features/blog/lib/blog-editor-dto";
+import type {
+  BlogPostEditorDTO,
+  BlogSeriesGroupDTO,
+} from "@/features/blog/lib/blog-editor-dto";
 
 interface BlogPostsListProps {
   initialPosts: BlogPostEditorDTO[];
+  initialSeries?: BlogSeriesGroupDTO[];
+  initialStandalone?: BlogPostEditorDTO[];
 }
 
 type BlogTranslations = ReturnType<typeof useTranslations<"admin.blog">>;
 
 interface SeriesCardProps {
+  seriesSlug?: string | null;
   seriesName: string;
   items: BlogPostEditorDTO[];
   onMove: (id: string, direction: "up" | "down") => void;
@@ -40,6 +46,7 @@ interface SeriesCardProps {
 }
 
 function SeriesCard({
+  seriesSlug,
   seriesName,
   items,
   onMove,
@@ -71,6 +78,7 @@ function SeriesCard({
         <Link
           href={{
             pathname: "/admin/blog/new",
+            query: { series: seriesSlug ?? seriesName },
           }}
           className={buttonVariants({ variant: "outline", size: "sm" })}
         >
@@ -81,9 +89,6 @@ function SeriesCard({
 
       <div className="divide-border/50 divide-y">
         {items.map((post, idx) => {
-          const primaryTitle =
-            Object.values(post.translations).find((tr) => tr.title)?.title ??
-            post.slug;
           const isFirst = idx === 0;
           const isLast = idx === items.length - 1;
 
@@ -99,7 +104,7 @@ function SeriesCard({
 
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground truncate text-sm font-semibold">
-                    {primaryTitle}
+                    {post.displayTitle}
                   </p>
                   <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-2 text-xs">
                     <Badge
@@ -188,9 +193,6 @@ function PostRow({
   t,
   showSeries = true,
 }: PostRowProps) {
-  const primaryTitle =
-    Object.values(post.translations).find((tr) => tr.title)?.title ?? post.slug;
-
   return (
     <div className="group flex flex-col gap-3 p-4 transition-colors sm:flex-row sm:items-center sm:justify-between">
       <div className="flex min-w-0 items-center gap-3">
@@ -200,7 +202,7 @@ function PostRow({
 
         <div className="min-w-0 flex-1">
           <p className="text-foreground truncate text-sm font-semibold">
-            {primaryTitle}
+            {post.displayTitle}
           </p>
           <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-2 text-xs">
             <Badge
@@ -254,16 +256,23 @@ function PostRow({
   );
 }
 
-export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
+export function BlogPostsList({
+  initialPosts,
+  initialSeries = [],
+  initialStandalone = [],
+}: BlogPostsListProps) {
   const t = useTranslations("admin.blog");
+  const locale = useLocale();
   const utils = api.useUtils();
   const [search, setSearch] = useState("");
 
   const { data } = api.blogAdmin.getMine.useQuery(
-    { page: 1, perPage: 100 },
+    { page: 1, perPage: 100, locale },
     {
       initialData: {
         data: initialPosts,
+        series: initialSeries,
+        standalone: initialStandalone,
         pageCount: 1,
         totalCount: initialPosts.length,
       },
@@ -285,46 +294,27 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
   });
 
   const posts = data?.data ?? initialPosts;
-
-  const grouped = useMemo(() => {
-    const seriesMap = new Map<string, BlogPostEditorDTO[]>();
-    const standalone: BlogPostEditorDTO[] = [];
-
-    for (const post of posts) {
-      const sName = post.seriesName?.trim();
-      if (sName) {
-        const list = seriesMap.get(sName) ?? [];
-        list.push(post);
-        seriesMap.set(sName, list);
-      } else {
-        standalone.push(post);
-      }
-    }
-
-    for (const list of seriesMap.values()) {
-      list.sort((a, b) => (a.seriesOrder ?? 0) - (b.seriesOrder ?? 0));
-    }
-
-    return {
-      series: Array.from(seriesMap.entries()).map(([name, items]) => ({
-        name,
-        items,
-      })),
-      standalone,
-    };
-  }, [posts]);
+  const series = data?.series ?? initialSeries;
+  const standalone = data?.standalone ?? initialStandalone;
 
   const filteredPosts = useMemo(() => {
     if (!search.trim()) return posts;
     const q = search.trim().toLowerCase();
     return posts.filter((p) => {
-      const title = Object.values(p.translations)
-        .map((tr) => tr.title)
-        .join(" ")
-        .toLowerCase();
-      const slug = p.slug.toLowerCase();
-      const sName = (p.seriesName ?? "").toLowerCase();
-      return title.includes(q) || slug.includes(q) || sName.includes(q);
+      const displayTitleMatches = p.displayTitle.toLowerCase().includes(q);
+      const titleMatches = Object.values(p.translations).some((tr) =>
+        tr.title.toLowerCase().includes(q),
+      );
+      const slugMatches = p.slug.toLowerCase().includes(q);
+      const seriesMatches = (p.seriesName ?? "").toLowerCase().includes(q);
+      const tagMatches = p.tags.some((tag) => tag.toLowerCase().includes(q));
+      return (
+        displayTitleMatches ||
+        titleMatches ||
+        slugMatches ||
+        seriesMatches ||
+        tagMatches
+      );
     });
   }, [posts, search]);
 
@@ -338,11 +328,11 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
           </Badge>
           <span className="text-muted-foreground">·</span>
           <span className="text-muted-foreground">
-            {grouped.series.length} series
+            {t("seriesCount", { count: series.length })}
           </span>
           <span className="text-muted-foreground">·</span>
           <span className="text-muted-foreground">
-            {grouped.standalone.length} standalone
+            {t("standaloneCount", { count: standalone.length })}
           </span>
         </div>
 
@@ -362,7 +352,7 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
             <Layers className="size-4" aria-hidden="true" />
             <span>{t("tabSeries")}</span>
             <Badge variant="secondary" className="text-[0.6875rem]">
-              {grouped.series.length}
+              {series.length}
             </Badge>
           </TabsTrigger>
 
@@ -370,7 +360,7 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
             <FileText className="size-4" aria-hidden="true" />
             <span>{t("tabStandalone")}</span>
             <Badge variant="secondary" className="text-[0.6875rem]">
-              {grouped.standalone.length}
+              {standalone.length}
             </Badge>
           </TabsTrigger>
 
@@ -385,16 +375,17 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
 
         {/* Tab 1: Structured by Series */}
         <TabsContent value="series" className="space-y-6 focus:outline-hidden">
-          {grouped.series.length === 0 ? (
+          {series.length === 0 ? (
             <div className="bg-card border-border rounded-2xl border p-12 text-center">
               <p className="text-muted-foreground text-sm">{t("noSeries")}</p>
             </div>
           ) : (
-            grouped.series.map((series) => (
+            series.map((item) => (
               <SeriesCard
-                key={series.name}
-                seriesName={series.name}
-                items={series.items}
+                key={item.key}
+                seriesSlug={item.slug}
+                seriesName={item.name}
+                items={item.items}
                 onMove={(id, direction) =>
                   moveInSeries.mutate({ id, direction })
                 }
@@ -412,7 +403,7 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
           value="standalone"
           className="space-y-4 focus:outline-hidden"
         >
-          {grouped.standalone.length === 0 ? (
+          {standalone.length === 0 ? (
             <div className="bg-card border-border rounded-2xl border p-12 text-center">
               <p className="text-muted-foreground text-sm">
                 {t("noStandalone")}
@@ -420,7 +411,7 @@ export function BlogPostsList({ initialPosts }: BlogPostsListProps) {
             </div>
           ) : (
             <div className="bg-card border-border divide-border/60 divide-y rounded-2xl border">
-              {grouped.standalone.map((post) => (
+              {standalone.map((post) => (
                 <PostRow
                   key={post.id}
                   post={post}

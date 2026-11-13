@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            colors: {
+              ink: "#14203f",
+              brand: "#1d3a8a",
+              soft: "#eef3ff",
+              line: "#e4e8f2",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="text-ink bg-white font-sans antialiased">
+    <!-- Fondo suave arriba, igual que tu sitio -->
+    <div
+      class="from-soft pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b to-white"
+    ></div>
+
+    <main class="relative mx-auto max-w-5xl px-4 pt-28 pb-24 sm:px-6">
+      <!-- HERO -->
+      <header class="text-center">
+        <a
+          href="#"
+          class="hover:text-brand focus-visible:outline-brand inline-flex items-center gap-1.5 rounded text-sm text-slate-500 focus-visible:outline focus-visible:outline-2"
+        >
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Back to portfolio
+        </a>
+        <p class="text-brand mt-8 text-sm font-semibold">
+          Engineering Journal &amp; Tutorials
+        </p>
+        <h1 class="mt-2 text-5xl font-extrabold tracking-tight sm:text-6xl">
+          Blog
+        </h1>
+        <p class="mx-auto mt-3 max-w-md text-lg text-slate-500">
+          Thoughts, tutorials, and technical deep-dives.
+        </p>
+        <a
+          href="#"
+          class="border-line text-brand hover:bg-soft focus-visible:outline-brand mt-5 inline-flex items-center gap-1.5 rounded-full border bg-white px-3.5 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2"
+          >Browse all series</a
+        >
+      </header>
+
+      <!-- TOOLBAR: búsqueda + orden + vista, y debajo los tags -->
+      <!-- Ajusta top-20 a la altura de tu navbar flotante -->
+      <section
+        class="border-line sticky top-20 z-20 mt-10 rounded-2xl border bg-white/85 p-3 shadow-[0_8px_30px_-12px_rgba(20,32,63,.18)] backdrop-blur"
+        aria-label="Filter posts"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="relative min-w-[200px] flex-1">
+            <span class="sr-only">Search posts</span>
+            <svg
+              class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+            <input
+              id="q"
+              type="search"
+              placeholder="Search by title, topic, or tag"
+              autocomplete="off"
+              class="border-line focus:border-brand focus:ring-brand/20 h-10 w-full rounded-xl border bg-slate-50 pr-10 pl-9 text-sm placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:outline-none"
+            />
+            <kbd
+              class="border-line pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded border bg-white px-1.5 text-[11px] font-medium text-slate-400 sm:block"
+              >/</kbd
+            >
+          </label>
+
+          <div class="relative" data-pop="series">
+            <button
+              type="button"
+              id="seriesBtn"
+              data-pop-btn
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              class="border-line hover:border-brand/40 focus-visible:outline-brand inline-flex h-10 items-center gap-2 rounded-xl border bg-white px-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2"
+            >
+              <svg
+                class="text-brand h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4 5a2 2 0 0 1 2-2h5v17H6a2 2 0 0 0-2 2V5Zm16 0a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2V5Z"
+                />
+              </svg>
+              <span id="seriesLabel" class="max-w-[10rem] truncate"
+                >All series</span
+              >
+              <svg
+                class="h-4 w-4 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            <div
+              data-pop-panel
+              hidden
+              class="border-line shadow-ink/10 absolute left-0 z-30 mt-2 w-[min(18rem,calc(100vw-3rem))] rounded-2xl border bg-white p-2 shadow-xl sm:right-0 sm:left-auto"
+            >
+              <input
+                type="search"
+                placeholder="Search"
+                aria-label="Search list"
+                class="border-line focus:border-brand focus:ring-brand/20 h-9 w-full rounded-lg border bg-slate-50 px-3 text-sm focus:bg-white focus:ring-2 focus:outline-none"
+              />
+              <ul class="mt-2 max-h-64 overflow-y-auto"></ul>
+            </div>
+          </div>
+
+          <label class="relative">
+            <span class="sr-only">Sort posts</span>
+            <select
+              id="sort"
+              class="border-line focus:border-brand focus:ring-brand/20 h-10 appearance-none rounded-xl border bg-white pr-8 pl-3 text-sm font-medium focus:ring-2 focus:outline-none"
+            >
+              <option value="new">Newest first</option>
+              <option value="old">Oldest first</option>
+              <option value="part" disabled>Reading order</option>
+            </select>
+            <svg
+              class="pointer-events-none absolute top-1/2 right-2.5 h-4 w-4 -translate-y-1/2 text-slate-400"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </label>
+
+          <div
+            class="border-line flex h-10 rounded-xl border bg-slate-50 p-0.5"
+            role="group"
+            aria-label="Layout"
+          >
+            <button
+              data-view="feed"
+              class="view-btn focus-visible:outline-brand flex items-center gap-1.5 rounded-[10px] px-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M4 6h16M4 12h16M4 18h16" /></svg
+              >Feed
+            </button>
+            <button
+              data-view="grid"
+              class="view-btn focus-visible:outline-brand flex items-center gap-1.5 rounded-[10px] px-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="4" y="4" width="7" height="7" rx="1" />
+                <rect x="13" y="4" width="7" height="7" rx="1" />
+                <rect x="4" y="13" width="7" height="7" rx="1" />
+                <rect x="13" y="13" width="7" height="7" rx="1" /></svg
+              >Grid
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center gap-1.5">
+          <div
+            id="chips"
+            class="contents"
+            role="group"
+            aria-label="Filter by tag"
+          ></div>
+          <div class="relative" data-pop="tags">
+            <button
+              type="button"
+              data-pop-btn
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              class="text-brand hover:bg-soft focus-visible:outline-brand inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold focus-visible:outline focus-visible:outline-2"
+            >
+              All topics
+              <span
+                id="topicsCount"
+                class="text-xs font-medium text-slate-400"
+              ></span>
+            </button>
+            <div
+              data-pop-panel
+              hidden
+              class="border-line shadow-ink/10 absolute left-0 z-30 mt-2 w-[min(18rem,calc(100vw-3rem))] rounded-2xl border bg-white p-2 shadow-xl"
+            >
+              <input
+                type="search"
+                placeholder="Search"
+                aria-label="Search list"
+                class="border-line focus:border-brand focus:ring-brand/20 h-9 w-full rounded-lg border bg-slate-50 px-3 text-sm focus:bg-white focus:ring-2 focus:outline-none"
+              />
+              <ul class="mt-2 max-h-64 overflow-y-auto"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Resultado + filtros activos -->
+      <div
+        class="mt-4 flex min-h-[28px] flex-wrap items-center justify-between gap-2 px-1 text-sm text-slate-500"
+      >
+        <p id="count" aria-live="polite"></p>
+        <button
+          id="clear"
+          class="text-brand hover:bg-soft focus-visible:outline-brand hidden rounded-lg px-2 py-1 font-semibold focus-visible:outline focus-visible:outline-2"
+        >
+          Clear filters
+        </button>
+      </div>
+
+      <div id="banner"></div>
+
+      <!-- LISTA -->
+      <section id="list" class="mt-2"></section>
+      <div class="mt-8 text-center">
+        <button
+          id="more"
+          class="border-line hover:border-brand/40 hover:bg-soft focus-visible:outline-brand hidden rounded-xl border px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2"
+        ></button>
+      </div>
+    </main>
+
+    <script>
+      /* ---------- Datos de ejemplo: reemplaza por tu API/DB ---------- */
+      const POSTS = [
+        {
+          slug: "monitor-gaceta",
+          featured: true,
+          title:
+            "Construí tu propio monitor de títulos de La Gaceta con JavaScript y Telegram",
+          excerpt:
+            "Aprendé a consultar el registro, detectar cambios y enviar avisos a Telegram. Código completo explicado paso a paso y automatización con GitHub Actions.",
+          date: "2024-10-31",
+          read: 12,
+          tags: ["nicaragua", "automatizacion", "github-actions", "telegram"],
+          hue: 215,
+          dark: true,
+        },
+        {
+          slug: "seed",
+          series: "Building this Portfolio",
+          n: 8,
+          title: "This post can be deleted. That is why the seed exists",
+          excerpt:
+            "If the local portfolio does not look like production, it is almost always because I played in Mongo and forgot. The seed is the “tell it to me again” button.",
+          date: "2026-02-15",
+          read: 2,
+          tags: ["seed", "dx"],
+          hue: 222,
+        },
+        {
+          slug: "cv-jobs-music",
+          series: "Building this Portfolio",
+          n: 7,
+          title: "The CV, the jobs and the music: one key for all of it",
+          excerpt:
+            "I did not want three apps. I wanted to show up on Sunday, change the about, see what I am listening to, and if I am job hunting, move a vacancy without switching products.",
+          date: "2026-02-13",
+          read: 2,
+          tags: ["auth", "cv"],
+          hue: 200,
+        },
+        {
+          slug: "project-card",
+          series: "Building this Portfolio",
+          n: 6,
+          title: "A project is not a card with three logos",
+          excerpt:
+            "I got tired of portfolios that look like a technology carousel. I wanted to tell what broke, what we decided, and what before and after looked like.",
+          date: "2026-02-11",
+          read: 2,
+          tags: ["case-study", "projects"],
+          hue: 228,
+          dark: true,
+        },
+        {
+          slug: "write-here",
+          series: "Building this Portfolio",
+          n: 5,
+          title: "I wanted to write here, not somewhere else",
+          excerpt:
+            "This post was not born on Medium. It was born in the same admin I use for skills. That is why I care that it feels like reading, not like a Jira ticket.",
+          date: "2026-02-09",
+          read: 2,
+          tags: ["blog", "tiptap"],
+          hue: 210,
+        },
+        {
+          slug: "admin-mondays",
+          series: "Building this Portfolio",
+          n: 4,
+          title: "The admin is the product I use on Mondays",
+          excerpt:
+            "If I cannot change a skill at 8am without opening VS Code, the portfolio is theater. The panel exists out of enlightened selfishness.",
+          date: "2026-02-07",
+          read: 2,
+          tags: ["admin", "trpc"],
+          hue: 218,
+        },
+        {
+          slug: "dutch-i18n",
+          series: "Building this Portfolio",
+          n: 3,
+          title: "Dutch forced me to take languages seriously",
+          excerpt:
+            "I did not want a site “in English with a toggle”. I wanted to write the about in the language I think in, and send the CV in the language they ask for.",
+          date: "2026-02-05",
+          read: 2,
+          tags: ["i18n", "next-intl"],
+          hue: 205,
+        },
+        {
+          slug: "subdomain",
+          series: "Building this Portfolio",
+          n: 2,
+          title: "I wanted “your site” to be a subdomain, not a fork",
+          excerpt:
+            "The first time I opened jesus.lvh.me:3000 and saw my CV, I understood the portfolio was no longer a folder. It was a tenant.",
+          date: "2026-02-03",
+          read: 2,
+          tags: ["multi-tenant", "nextjs"],
+          hue: 250,
+          dark: true,
+        },
+        {
+          slug: "portfolio-product",
+          series: "Building this Portfolio",
+          n: 1,
+          title: "I started with a portfolio. I ended up with a product",
+          excerpt:
+            "The story of why jesushg.com is not a pretty landing page, but the same software I use, that someone else could run on their own subdomain.",
+          date: "2026-02-01",
+          read: 2,
+          tags: ["portfolio", "nextjs", "saas"],
+          hue: 235,
+          dark: true,
+        },
+        {
+          slug: "kernel-open",
+          series: "Arquitectura de Sistemas Operativos",
+          n: 2,
+          title: "Qué hace realmente el kernel cuando abrís un archivo",
+          excerpt:
+            "Seguimos una llamada open() desde el programa hasta el disco: syscalls, modo usuario y modo kernel, sin magia.",
+          date: "2026-01-20",
+          read: 7,
+          tags: ["kernel", "linux"],
+          hue: 190,
+        },
+        {
+          slug: "so-contract",
+          series: "Arquitectura de Sistemas Operativos",
+          n: 1,
+          title: "Un sistema operativo es un contrato, no un programa",
+          excerpt:
+            "Antes de tocar el kernel conviene entender qué le promete un SO a las aplicaciones y qué les esconde.",
+          date: "2026-01-12",
+          read: 6,
+          tags: ["linux", "fundamentos"],
+          hue: 195,
+          dark: true,
+        },
+      ];
+
+      const PAGE = 6;
+      const state = {
+        q: "",
+        tag: null,
+        series: null,
+        sort: "new",
+        view: "feed",
+        limit: PAGE,
+      };
+      const $ = (s) => document.querySelector(s);
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      const fmt = (d) =>
+        new Date(d + "T12:00:00").toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      const norm = (s) =>
+        s
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+
+      /* ---------- Tags ordenados por frecuencia ---------- */
+      const tagCounts = {};
+      POSTS.forEach((p) =>
+        p.tags.forEach((t) => (tagCounts[t] = (tagCounts[t] || 0) + 1)),
+      );
+      const TAGS = Object.entries(tagCounts).sort(
+        (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+      );
+      const VISIBLE_TAGS = 6;
+
+      /* ---------- Miniatura de ejemplo (reemplaza por <img>) ---------- */
+      function thumb(p, cls = "") {
+        const bg = p.dark
+          ? `background:linear-gradient(135deg,hsl(${p.hue} 55% 14%),hsl(${p.hue + 25} 50% 26%))`
+          : `background:linear-gradient(135deg,hsl(${p.hue} 90% 97%),hsl(${p.hue} 70% 92%))`;
+        const fg = p.dark ? "bg-white/25" : "bg-brand/20";
+        return `<div class="relative overflow-hidden rounded-xl border border-line ${cls}" style="${bg}" aria-hidden="true">
+    <div class="absolute inset-x-[12%] top-[16%] bottom-0 rounded-t-lg ${p.dark ? "bg-white/10" : "bg-white/90"} p-2.5 shadow-sm">
+      <div class="h-1.5 w-1/3 rounded ${fg}"></div>
+      <div class="mt-2 h-1 w-4/5 rounded ${fg}"></div>
+      <div class="mt-1.5 h-1 w-3/5 rounded ${fg}"></div>
+      <div class="mt-3 grid grid-cols-3 gap-1.5"><i class="h-6 rounded ${fg}"></i><i class="h-6 rounded ${fg}"></i><i class="h-6 rounded ${fg}"></i></div>
+    </div></div>`;
+      }
+
+      const tagBtn = (t) =>
+        `<button type="button" data-tag="${esc(t)}" class="relative z-10 rounded-full bg-soft px-2.5 py-0.5 text-xs font-medium text-brand transition hover:bg-brand hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">#${esc(t)}</button>`;
+
+      const clock = `<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`;
+      const meta = (
+        p,
+      ) => `<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-slate-500">
+  ${p.series ? `<button type="button" data-series="${esc(p.series)}" class="relative z-10 inline-flex max-w-[15rem] items-center gap-1.5 rounded-full border border-line bg-white px-2.5 py-0.5 font-semibold text-ink transition hover:border-brand/40 hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"><span class="truncate">${esc(p.series)}</span><span class="font-medium text-brand">#${p.n}</span></button>` : ""}
+  <time datetime="${p.date}">${fmt(p.date)}</time>
+  <span class="inline-flex items-center gap-1">${clock}${p.read} min read</span>
+</div>`;
+
+      /* ---------- Featured: fijado al inicio de la lista, solo sin filtros ---------- */
+      const featuredCard = (
+        p,
+      ) => `<article class="group relative mb-2 grid gap-5 rounded-2xl border border-line bg-gradient-to-br from-white to-soft/70 p-4 sm:grid-cols-[1fr_220px] sm:items-center sm:p-5">
+  <div class="min-w-0 sm:order-1">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-slate-500">
+      <span class="rounded-full bg-brand px-2.5 py-0.5 font-semibold text-white">Featured</span>
+      <time datetime="${p.date}">${fmt(p.date)}</time>
+      <span class="inline-flex items-center gap-1">${clock}${p.read} min read</span>
+    </div>
+    <h3 class="mt-3 text-xl font-extrabold leading-snug tracking-tight sm:text-2xl">
+      <a href="#${p.slug}" class="after:absolute after:inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand group-hover:text-brand">${esc(p.title)}</a>
+    </h3>
+    <p class="mt-2 line-clamp-2 max-w-prose text-[15px] leading-relaxed text-slate-600">${esc(p.excerpt)}</p>
+    <div class="mt-3 flex flex-wrap gap-1.5">${p.tags.map(tagBtn).join("")}</div>
+  </div>
+  ${thumb(p, "aspect-[16/10] w-full sm:order-2")}
+</article>`;
+
+      /* ---------- Series derivadas de los posts (en producción: viene de tu API) ---------- */
+      const seriesCounts = {};
+      POSTS.forEach(
+        (p) =>
+          p.series &&
+          (seriesCounts[p.series] = (seriesCounts[p.series] || 0) + 1),
+      );
+      const SERIES = Object.entries(seriesCounts).sort(
+        (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+      );
+
+      function pickSeries(name) {
+        state.series = name || null;
+        state.sort = state.series
+          ? "part"
+          : state.sort === "part"
+            ? "new"
+            : state.sort;
+        update();
+      }
+
+      /* ---------- Popover con búsqueda: escala a cientos de series o tags ---------- */
+      const pops = {};
+      const closePops = () => Object.values(pops).forEach((f) => f());
+      function setupPop(name, items, onPick) {
+        const root = document.querySelector(`[data-pop="${name}"]`);
+        const btn = root.querySelector("[data-pop-btn]"),
+          panel = root.querySelector("[data-pop-panel]");
+        const input = panel.querySelector("input"),
+          ul = panel.querySelector("ul");
+        const draw = () => {
+          const q = norm(input.value);
+          ul.innerHTML =
+            items()
+              .filter((i) => norm(i.label).includes(q))
+              .map(
+                (i) =>
+                  `<li><button type="button" data-v="${esc(i.value)}" class="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-soft ${i.active ? "bg-soft font-semibold text-brand" : ""}"><span class="truncate">${esc(i.label)}</span><span class="text-xs text-slate-400">${i.count}</span></button></li>`,
+              )
+              .join("") ||
+            '<li class="px-3 py-6 text-center text-sm text-slate-500">No results</li>';
+        };
+        const close = () => {
+          panel.hidden = true;
+          btn.setAttribute("aria-expanded", "false");
+        };
+        btn.addEventListener("click", () => {
+          const wasClosed = panel.hidden;
+          closePops();
+          if (wasClosed) {
+            panel.hidden = false;
+            btn.setAttribute("aria-expanded", "true");
+            input.value = "";
+            draw();
+            input.focus();
+          }
+        });
+        input.addEventListener("input", draw);
+        ul.addEventListener("click", (e) => {
+          const b = e.target.closest("[data-v]");
+          if (b) {
+            close();
+            onPick(b.dataset.v);
+          }
+        });
+        pops[name] = close;
+      }
+      setupPop(
+        "series",
+        () => [
+          { value: "", label: "All series", count: "", active: !state.series },
+          ...SERIES.map(([n, c]) => ({
+            value: n,
+            label: n,
+            count: c,
+            active: state.series === n,
+          })),
+        ],
+        pickSeries,
+      );
+      setupPop(
+        "tags",
+        () =>
+          TAGS.map(([t, c]) => ({
+            value: t,
+            label: "#" + t,
+            count: c,
+            active: state.tag === t,
+          })),
+        (v) => {
+          state.tag = state.tag === v ? null : v;
+          update();
+        },
+      );
+
+      function renderToolbar() {
+        const on = !!state.series,
+          b = $("#seriesBtn");
+        $("#seriesLabel").textContent = state.series || "All series";
+        [
+          ["border-brand", on],
+          ["bg-soft", on],
+          ["text-brand", on],
+          ["border-line", !on],
+          ["bg-white", !on],
+        ].forEach(([c, v]) => b.classList.toggle(c, v));
+        $("#sort").value = state.sort;
+        $("#sort").querySelector('[value="part"]').disabled = !on;
+      }
+
+      /* ---------- Chips: solo los tags más usados; el resto vive en "All topics" ---------- */
+      function renderChips() {
+        const active = "bg-brand text-white border-brand";
+        const idle =
+          "bg-white text-slate-600 border-line hover:border-brand/40 hover:text-brand";
+        const chip = (label, count, on, tag) =>
+          `<button type="button" data-chip="${tag ?? ""}" aria-pressed="${on}" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand ${on ? active : idle}">${label}<span class="text-xs ${on ? "text-white/70" : "text-slate-400"}">${count}</span></button>`;
+        const top = TAGS.slice(0, VISIBLE_TAGS);
+        let html = chip("All", POSTS.length, !state.tag, null);
+        html += top
+          .map(([t, c]) => chip("#" + esc(t), c, state.tag === t, esc(t)))
+          .join("");
+        if (state.tag && !top.some(([t]) => t === state.tag))
+          html += chip(
+            "#" + esc(state.tag),
+            tagCounts[state.tag],
+            true,
+            esc(state.tag),
+          );
+        $("#chips").innerHTML = html;
+        $("#topicsCount").textContent = TAGS.length;
+      }
+
+      function renderBanner() {
+        const el = $("#banner");
+        if (!state.series) {
+          el.innerHTML = "";
+          return;
+        }
+        const sp = POSTS.filter((p) => p.series === state.series).sort(
+          (a, b) => a.n - b.n,
+        );
+        el.innerHTML = `<div class="mx-auto mt-2 mb-4 flex max-w-3xl flex-wrap items-center justify-between gap-3 rounded-2xl bg-soft p-4">
+    <div class="min-w-0"><p class="text-xs font-semibold text-brand">Series</p>
+      <h2 class="truncate text-lg font-bold">${esc(state.series)}</h2>
+      <p class="text-sm text-slate-600">${sp.length} ${sp.length === 1 ? "post" : "posts"}, best read in order</p></div>
+    <div class="flex gap-2">
+      <a href="#${sp[0].slug}" class="rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">Start with part ${sp[0].n}</a>
+      <a href="#" class="rounded-xl border border-line bg-white px-4 py-2 text-sm font-semibold hover:border-brand/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">Series page</a>
+    </div></div>`;
+      }
+
+      /* ---------- Lista ---------- */
+      const isFiltering = () => !!(state.q.trim() || state.tag || state.series);
+
+      function filtered() {
+        const q = norm(state.q.trim());
+        let list = POSTS.filter((p) => {
+          if (state.series && p.series !== state.series) return false;
+          if (state.tag && !p.tags.includes(state.tag)) return false;
+          if (!q) return true;
+          return norm(
+            [p.title, p.excerpt, p.series || "", ...p.tags].join(" "),
+          ).includes(q);
+        });
+        list.sort((a, b) =>
+          state.sort === "part"
+            ? (a.n ?? 0) - (b.n ?? 0)
+            : state.sort === "new"
+              ? b.date.localeCompare(a.date)
+              : a.date.localeCompare(b.date),
+        );
+        return list;
+      }
+
+      const arrow = `<svg class="h-4 w-4 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
+
+      const feedItem = (
+        p,
+      ) => `<article class="group relative grid gap-4 border-b border-line py-7 first:pt-3 sm:grid-cols-[1fr_220px] sm:gap-6">
+  <div class="min-w-0 sm:order-1">
+    ${meta(p)}
+    <h3 class="mt-3 text-xl font-bold leading-snug tracking-tight">
+      <a href="#${p.slug}" class="after:absolute after:inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand group-hover:text-brand">${esc(p.title)}</a>
+    </h3>
+    <p class="mt-2 line-clamp-2 max-w-prose text-[15px] leading-relaxed text-slate-600">${esc(p.excerpt)}</p>
+    <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap gap-1.5">${p.tags.map(tagBtn).join("")}</div>
+      <span class="inline-flex items-center gap-1 text-sm font-semibold text-brand">Read article ${arrow}</span>
+    </div>
+  </div>
+  ${thumb(p, "aspect-[16/10] w-full sm:order-2 sm:self-start transition group-hover:shadow-lg group-hover:shadow-brand/10")}
+</article>`;
+
+      const gridItem = (
+        p,
+      ) => `<article class="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-white p-3 transition hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5">
+  ${thumb(p, "aspect-[16/10] w-full")}
+  <div class="flex flex-1 flex-col px-1.5 pb-2 pt-4">
+    ${meta(p)}
+    <h3 class="mt-3 text-lg font-bold leading-snug tracking-tight">
+      <a href="#${p.slug}" class="after:absolute after:inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand group-hover:text-brand">${esc(p.title)}</a>
+    </h3>
+    <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">${esc(p.excerpt)}</p>
+    <div class="mt-auto flex flex-wrap gap-1.5 pt-4">${p.tags.map(tagBtn).join("")}</div>
+  </div>
+</article>`;
+
+      function renderList() {
+        const all = filtered();
+        const pin = isFiltering() ? null : all.find((p) => p.featured);
+        const rest = all.filter((p) => p !== pin);
+        const items = rest.slice(0, state.limit);
+        const pinHtml = pin ? featuredCard(pin) : "";
+        const list = $("#list");
+
+        if (!all.length) {
+          list.innerHTML = `<div class="rounded-2xl border border-dashed border-line px-6 py-16 text-center">
+      <p class="text-lg font-bold">No posts match your filters</p>
+      <p class="mt-1 text-slate-500">Try a different word or remove the tag.</p>
+      <button type="button" data-clear class="mt-5 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">Clear filters</button>
+    </div>`;
+        } else if (state.view === "grid") {
+          list.innerHTML =
+            pinHtml +
+            `<div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">${items.map(gridItem).join("")}</div>`;
+        } else {
+          list.innerHTML = `<div class="mx-auto max-w-3xl">${pinHtml}${items.map(feedItem).join("")}</div>`;
+        }
+
+        const left = rest.length - items.length;
+        const more = $("#more");
+        more.classList.toggle("hidden", left <= 0);
+        more.textContent = `Show ${Math.min(left, PAGE)} more`;
+
+        const n = all.length;
+        const parts = [];
+        if (state.series) parts.push(`in ${esc(state.series)}`);
+        if (state.tag) parts.push(`tagged #${esc(state.tag)}`);
+        if (state.q.trim()) parts.push(`matching “${esc(state.q.trim())}”`);
+        $("#count").innerHTML =
+          `<strong class="font-semibold text-ink">${n}</strong> ${n === 1 ? "post" : "posts"}${parts.length ? " " + parts.join(" and ") : ""}`;
+        $("#clear").classList.toggle("hidden", !isFiltering());
+
+        document.querySelectorAll(".view-btn").forEach((b) => {
+          const on = b.dataset.view === state.view;
+          b.setAttribute("aria-pressed", on);
+          b.className =
+            b.className
+              .replace(/bg-white shadow-sm text-brand|text-slate-500/g, "")
+              .trim() +
+            (on ? " bg-white shadow-sm text-brand" : " text-slate-500");
+        });
+      }
+
+      function update(resetLimit = true) {
+        if (resetLimit) state.limit = PAGE;
+        renderToolbar();
+        renderChips();
+        renderBanner();
+        renderList();
+      }
+
+      /* ---------- Eventos ---------- */
+      $("#q").addEventListener("input", (e) => {
+        state.q = e.target.value;
+        update();
+      });
+      $("#sort").addEventListener("change", (e) => {
+        state.sort = e.target.value;
+        update();
+      });
+      $("#more").addEventListener("click", () => {
+        state.limit += PAGE;
+        update(false);
+      });
+      $("#clear").addEventListener("click", clearAll);
+      document.querySelectorAll(".view-btn").forEach((b) =>
+        b.addEventListener("click", () => {
+          state.view = b.dataset.view;
+          update(false);
+        }),
+      );
+
+      function clearAll() {
+        state.q = "";
+        state.tag = null;
+        state.series = null;
+        if (state.sort === "part") state.sort = "new";
+        $("#q").value = "";
+        update();
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest("[data-pop]")) closePops();
+        const sr = e.target.closest("[data-series]");
+        if (sr) {
+          e.preventDefault();
+          return pickSeries(sr.dataset.series);
+        }
+        const chip = e.target.closest("[data-chip]");
+        if (chip) {
+          state.tag = chip.dataset.chip || null;
+          return update();
+        }
+        const t = e.target.closest("[data-tag]");
+        if (t) {
+          e.preventDefault();
+          state.tag = state.tag === t.dataset.tag ? null : t.dataset.tag;
+          return update();
+        }
+        if (e.target.closest("[data-clear]")) clearAll();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        const typing = /input|textarea|select/i.test(
+          document.activeElement.tagName,
+        );
+        if (e.key === "/" && !typing) {
+          e.preventDefault();
+          $("#q").focus();
+        }
+        if (e.key === "Escape") {
+          closePops();
+          if (document.activeElement === $("#q")) $("#q").blur();
+        }
+      });
+
+      update();
+    </script>
+  </body>
+</html>

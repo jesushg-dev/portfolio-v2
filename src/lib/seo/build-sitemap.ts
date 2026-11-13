@@ -6,10 +6,19 @@ import { SITE_URL } from "@/lib/seo/site";
 
 type StaticHref = Parameters<typeof getPathname>[0]["href"];
 
-interface DynamicHref {
-  pathname: "/projects/[slug]" | "/skills/[slug]" | "/process/[slug]";
-  params: { slug: string };
-}
+export type DynamicHref =
+  | {
+      pathname:
+        | "/projects/[slug]"
+        | "/skills/[slug]"
+        | "/process/[slug]"
+        | "/blog/[slug]";
+      params: { slug: string };
+    }
+  | {
+      pathname: "/blog/series/[series]";
+      params: { series: string };
+    };
 
 function absoluteUrl(path: string, origin: string): string {
   return new URL(path, origin).href;
@@ -23,13 +32,19 @@ function buildLanguageAlternates(
 
   for (const locale of locales) {
     languages[locale] = absoluteUrl(
-      getPathname({ locale: locale, href: href }),
+      getPathname({
+        locale,
+        href: href,
+      }),
       origin,
     );
   }
 
   languages["x-default"] = absoluteUrl(
-    getPathname({ locale: defaultLocale, href: href }),
+    getPathname({
+      locale: defaultLocale,
+      href: href,
+    }),
     origin,
   );
 
@@ -79,6 +94,8 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/now",
   "/colophon",
   "/stats",
+  "/blog",
+  "/blog/series",
 ] as const satisfies readonly StaticHref[];
 
 export const INDEXABLE_SITEMAP_PATHS = PUBLIC_SITEMAP_PATHS.filter(
@@ -95,7 +112,9 @@ export const PUBLIC_SITEMAP_PRIORITIES: Partial<
   "/curriculum-vitae": 0.9,
   "/projects": 0.8,
   "/certificates": 0.8,
+  "/blog": 0.8,
   "/timeline": 0.7,
+  "/blog/series": 0.7,
   "/schedule": 0.6,
   "/uses": 0.6,
   "/now": 0.6,
@@ -121,4 +140,6 @@ export const PUBLIC_SITEMAP_CHANGE_FREQUENCY: Partial<
   "/colophon": "yearly",
   "/stats": "weekly",
   "/privacy": "yearly",
+  "/blog": "weekly",
+  "/blog/series": "weekly",
 };

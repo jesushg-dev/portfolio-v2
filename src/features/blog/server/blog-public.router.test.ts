@@ -7,7 +7,10 @@ import {
 function setup() {
   const db = {
     appLanguage: { findUnique: jest.fn().mockResolvedValue({ id: "lang-es" }) },
-    blogPost: { findMany: jest.fn().mockResolvedValue([]) },
+    blogPost: {
+      findMany: jest.fn().mockResolvedValue([]),
+      count: jest.fn().mockResolvedValue(0),
+    },
   };
   return {
     db,
@@ -76,10 +79,28 @@ describe("public blog browsing", () => {
       { tags: ["nicaragua", "telegram"] },
     ]);
     expect(await caller.getTags({})).toEqual(["nicaragua", "telegram"]);
+    expect(await caller.getTagCounts({})).toEqual([
+      { tag: "telegram", count: 2 },
+      { tag: "nicaragua", count: 1 },
+    ]);
     expect(db.blogPost.findMany).toHaveBeenCalledWith({
       where: { userId: "user-1", status: "PUBLISHED" },
       select: { tags: true },
     });
+  });
+
+  it("applies reading order sort when requested or when browsing a series", async () => {
+    const { db, caller } = setup();
+    await caller.list({ locale: "es", seriesName: "Guide", sort: "part" });
+    expect(db.blogPost.findMany).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        orderBy: [
+          { seriesOrder: "asc" },
+          { publishedAt: "asc" },
+          { id: "asc" },
+        ],
+      }),
+    );
   });
 
   it("returns no posts or tags without a resolved tenant", async () => {
@@ -88,7 +109,11 @@ describe("public blog browsing", () => {
       blogPublicRouter,
       createTrpcTestContext({ db, tenant: null }),
     );
-    expect(await caller.list({})).toEqual({ posts: [], nextCursor: null });
+    expect(await caller.list({})).toEqual({
+      posts: [],
+      nextCursor: null,
+      total: 0,
+    });
     expect(await caller.getTags({})).toEqual([]);
     expect(db.blogPost.findMany).not.toHaveBeenCalled();
   });

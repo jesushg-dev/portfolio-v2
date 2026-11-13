@@ -52,7 +52,7 @@ export const RESUME_TEMPLATES = {
   },
   v2: {
     id: "v2",
-    revision: 2,
+    revision: 3,
     docx: "cv-template-v2.docx",
     pdf: "cv-template-v2.pdf",
     pages: 2,

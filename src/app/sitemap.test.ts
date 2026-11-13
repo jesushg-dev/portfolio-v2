@@ -2,10 +2,21 @@ jest.mock("@/i18n/routing", () => ({
   getPathname: ({
     href,
   }: {
-    href: string | { pathname: string; params: { slug: string } };
+    href:
+      | string
+      | {
+          pathname: string;
+          params: { slug?: string; series?: string };
+        };
   }) => {
     if (typeof href === "string") return href;
-    return href.pathname.replace("[slug]", href.params.slug);
+    if ("slug" in href.params) {
+      return href.pathname.replace("[slug]", href.params.slug ?? "");
+    }
+    if ("series" in href.params) {
+      return href.pathname.replace("[series]", href.params.series ?? "");
+    }
+    return href.pathname;
   },
 }));
 
@@ -17,6 +28,8 @@ jest.mock("@/server/db", () => ({
     project: { findMany: jest.fn() },
     skill: { findMany: jest.fn() },
     processPage: { findMany: jest.fn() },
+    blogPost: { findMany: jest.fn() },
+    blogSeries: { findMany: jest.fn() },
   },
 }));
 
@@ -31,7 +44,7 @@ describe("sitemap", () => {
     expect(findProjectsSpy).not.toHaveBeenCalled();
   });
 
-  it("adds project, skill, and process page URLs", async () => {
+  it("adds project, skill, process page, blog post, and series URLs", async () => {
     jest.spyOn(db.profile, "findFirst").mockResolvedValue({
       userId: "user-1",
       updatedAt: new Date("2026-01-01"),
@@ -50,11 +63,26 @@ describe("sitemap", () => {
       .mockResolvedValue([
         { slug: "how-i-use-ai", updatedAt: new Date("2026-01-04") },
       ] as never);
+    jest.spyOn(db.blogPost, "findMany").mockResolvedValue([
+      {
+        slug: "building-this-portfolio",
+        publishedAt: new Date("2026-01-05"),
+        updatedAt: new Date("2026-01-05"),
+      },
+    ] as never);
+    jest.spyOn(db.blogSeries, "findMany").mockResolvedValue([
+      {
+        slug: "os-architecture",
+        updatedAt: new Date("2026-01-05"),
+      },
+    ] as never);
 
     const entries = await sitemap();
     const urls = entries.map((entry) => entry.url).join(" ");
     expect(urls).toContain("eleven");
     expect(urls).toContain("next-js");
     expect(urls).toContain("how-i-use-ai");
+    expect(urls).toContain("building-this-portfolio");
+    expect(urls).toContain("os-architecture");
   });
 });

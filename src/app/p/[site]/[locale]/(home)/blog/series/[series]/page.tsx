@@ -6,9 +6,8 @@ import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 import { BlogPostsGrid } from "@/features/blog/components/blog-posts-grid";
 
-export {
-  publicBlogSeriesParams as generateStaticParams,
-} from "@/lib/public-site/static-params";
+export { generateMetadata } from "./metadata";
+export { publicBlogSeriesParams as generateStaticParams } from "@/lib/public-site/static-params";
 
 interface SeriesDetailPageProps {
   params: Promise<{ locale: Locale; series: string }>;
@@ -21,16 +20,20 @@ export default async function BlogSeriesDetailPage({
   const t = await getTranslations({ locale, namespace: "main.blog" });
   const decoded = decodeURIComponent(series);
 
-  const [initialData, initialTags] = await Promise.all([
+  const [seriesMeta, initialData, initialTags] = await Promise.all([
+    api.blog.getSeriesBySlug({ slug: decoded, locale }),
     api.blog.list({
       locale,
       limit: 50,
-      seriesName: decoded,
+      seriesSlug: decoded,
     }),
-    api.blog.getTags({ seriesName: decoded }),
+    api.blog.getTags({ seriesSlug: decoded }),
   ]);
 
-  if (initialData.posts.length === 0) notFound();
+  if (!seriesMeta && initialData.posts.length === 0) notFound();
+
+  const title = seriesMeta?.title ?? decoded;
+  const description = seriesMeta?.description ?? null;
 
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -54,20 +57,27 @@ export default async function BlogSeriesDetailPage({
             {t("series")}
           </p>
           <h1 className="text-foreground mx-auto max-w-2xl text-4xl leading-tight font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            {decoded}
+            {title}
           </h1>
-          <p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">
+          {description ? (
+            <p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">
+              {description}
+            </p>
+          ) : null}
+          <p className="text-muted-foreground mx-auto mt-2 text-sm font-medium">
             {t("postsCount", { count: initialData.posts.length })}
           </p>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 pb-28 sm:px-6 md:pb-36 lg:px-10">
+      <section className="mx-auto w-full px-4 pb-28 sm:px-6 md:pb-36 lg:container lg:px-20">
         <BlogPostsGrid
           locale={locale}
-          initialSeriesName={decoded}
+          initialSeriesSlug={seriesMeta?.slug ?? decoded}
+          initialSeriesName={title}
           initialPosts={initialData.posts}
           initialNextCursor={initialData.nextCursor}
+          initialTotal={initialData.total}
           initialTags={initialTags}
         />
       </section>

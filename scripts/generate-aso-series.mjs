@@ -429,7 +429,7 @@ const posts = [
       {
         type: "code",
         language: "c",
-        text: '/* Debajo de numa_default_policy() */\nprintk(KERN_ALERT "=======================================\\n");\nprintk(KERN_ALERT "[UNI-ASO] Kernel Linux Modificado!\\n");\nprintk(KERN_ALERT "Jesus Hernandez & Juan Lopez\\n");\nprintk(KERN_ALERT "=======================================\\n");\nmdelay(10000);',
+        text: '/* Debajo de numa_default_policy() */\nprintk(KERN_ALERT "=======================================\\n");\nprintk(KERN_ALERT "[UNI-ASO] Kernel Linux Modificado!\\n");\nprintk(KERN_ALERT "Jesus Hernandez\\n");\nprintk(KERN_ALERT "=======================================\\n");\nmdelay(10000);',
       },
       {
         type: "image",

@@ -1,9 +1,10 @@
-import { buildPublicAlternates } from "@/lib/public-site/metadata";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "next-intl";
 
+import { buildPublicAlternates } from "@/lib/public-site/metadata";
 import { getSkillDetailCached } from "@/features/home/components/skills/get-skill-detail";
+import { SITE_NAME, TWITTER_HANDLE } from "@/lib/seo/site";
 
 interface SkillDetailMetadataProps {
   params: Promise<{
@@ -23,12 +24,29 @@ export async function generateMetadata({
     return { title: t("page.notFound") };
   }
 
+  const title = t("page.metaTitle", { title: detail.title });
+  const description = detail.description || undefined;
+  const alternates = await buildPublicAlternates(locale, {
+    pathname: "/skills/[slug]",
+    params: { slug },
+  });
+
   return {
-    alternates: await buildPublicAlternates(locale, {
-      pathname: "/skills/[slug]",
-      params: { slug },
-    }),
-    title: t("page.metaTitle", { title: detail.title }),
-    description: detail.description,
+    alternates,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: alternates.canonical,
+      siteName: SITE_NAME,
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      site: TWITTER_HANDLE,
+    },
   };
 }

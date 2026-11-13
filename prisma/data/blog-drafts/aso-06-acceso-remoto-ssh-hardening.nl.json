@@ -1,0 +1,289 @@
+{
+  "slug": "aso-06-acceso-remoto-ssh-hardening",
+  "locale": "nl",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Besturingssysteemarchitectuur: Kernel, Aanpassing en Services",
+  "seriesOrder": 6,
+  "title": "Veilige externe toegang en hardening met OpenSSH Server",
+  "excerpt": "Installatie van openssh-server, hardening van sshd_config tegen brute-force-aanvallen, uitschakelen van root-login en verificatie met SSH-clients.",
+  "tags": ["linux", "ssh", "seguridad", "sysadmin", "redes", "archivo-2020"],
+  "coverImage": "/images/blog/aso/image79.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Historische en archiefnotitie: Dit artikel maakt deel uit van een laboratoriumreeks die oorspronkelijk op 23 november 2020 werd ontwikkeld voor het vak Besturingssysteemarchitectuur aan de Universidad Nacional de Ingeniería (UNI) in Managua. Het wordt bewaard voor educatieve en historische doeleinden, aangevuld met actuele technische toelichtingen over moderne Linux- en netwerkstandaarden."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Installatie en configuratie van OpenSSH Server"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We werken de pakketbronnen bij en installeren het openssh-server-pakket:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt-get update\nsudo apt-get install openssh-server\nsudo gedit /etc/ssh/sshd_config"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image75.png",
+          "alt": "Apertura de sshd_config",
+          "title": "Apertura de sshd_config"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Defensieve hardening en beveiligingsparameters"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Aplicamos los ajustes de endurecimiento en 'sshd_config':"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Descomentar Port 22."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Ajustar LoginGraceTime a un tiempo prudencial."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Descomentar PermitRootLogin y establecerlo en 'no'."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Descomentar StrictModes y fijarlo en 'yes'."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Añadir directiva AllowUsers con el nombre del usuario autorizado."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Descomentar MaxAuthTries fijándolo en 5 intentos."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Descomentar MaxStartups fijándolo en 5."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image76.png",
+          "alt": "Parámetros defensivos configurados en sshd_config",
+          "title": "Parámetros defensivos configurados en sshd_config"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Guardamos los cambios, reiniciamos el servicio y verificamos que esté activo:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo service ssh restart\nsudo service ssh status"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image77.png",
+          "alt": "Estado activo de OpenSSH",
+          "title": "Estado activo de OpenSSH"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Verificatie vanaf externe clients (PuTTY)"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Descargamos e iniciamos PuTTY en el cliente, introduciendo la dirección IP del servidor y el puerto configurado:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image78.png",
+          "alt": "Configuración de sesión en PuTTY",
+          "title": "Configuración de sesión en PuTTY"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Iniciamos la sesión e ingresamos las credenciales autorizadas en la consola remota:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image79.png",
+          "alt": "Sesión remota SSH establecida con éxito",
+          "title": "Sesión remota SSH establecida con éxito"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Con esto se verifica el canal cifrado remoto, completando la suite de servicios de infraestructura del laboratorio."
+          }
+        ]
+      }
+    ]
+  }
+}

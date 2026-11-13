@@ -5,16 +5,46 @@ import { extractWords } from "@/features/blog/lib/blog-headings";
 
 const LanguageCode = z.enum(["es", "en", "nl"]);
 
+function pickLocalized<T extends { language?: { code: string } | null }>(
+  items: T[] | undefined | null,
+  locale?: string,
+): T | undefined {
+  if (!items || items.length === 0) return undefined;
+  return (
+    items.find((item) => item.language?.code === locale) ??
+    items.find((item) => item.language?.code === "en") ??
+    items.find((item) => item.language?.code === "es") ??
+    items[0]
+  );
+}
+
 export const blogPublicRouter = createTRPCRouter({
   getTags: publicProcedure
-    .input(z.object({ seriesName: z.string().optional() }))
+    .input(
+      z.object({
+        seriesSlug: z.string().optional(),
+        seriesName: z.string().optional(),
+      }),
+    )
     .query(async ({ input, ctx }) => {
       if (!ctx.tenant?.userId) return [];
+      const seriesFilter = input.seriesSlug ?? input.seriesName;
       const posts = await ctx.db.blogPost.findMany({
         where: {
           userId: ctx.tenant.userId,
           status: "PUBLISHED",
-          ...(input.seriesName ? { seriesName: input.seriesName } : {}),
+          ...(seriesFilter
+            ? {
+                OR: [
+                  { series: { slug: seriesFilter } },
+                  {
+                    series: {
+                      translations: { some: { title: seriesFilter } },
+                    },
+                  },
+                ],
+              }
+            : {}),
         },
         select: { tags: true },
       });
@@ -26,6 +56,52 @@ export const blogPublicRouter = createTRPCRouter({
         )
         .sort((a, b) => a.localeCompare(b));
     }),
+
+  getTagCounts: publicProcedure
+    .input(
+      z.object({
+        seriesSlug: z.string().optional(),
+        seriesName: z.string().optional(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      if (!ctx.tenant?.userId) return [];
+      const seriesFilter = input.seriesSlug ?? input.seriesName;
+      const posts = await ctx.db.blogPost.findMany({
+        where: {
+          userId: ctx.tenant.userId,
+          status: "PUBLISHED",
+          ...(seriesFilter
+            ? {
+                OR: [
+                  { series: { slug: seriesFilter } },
+                  {
+                    series: {
+                      translations: { some: { title: seriesFilter } },
+                    },
+                  },
+                ],
+              }
+            : {}),
+        },
+        select: { tags: true },
+      });
+      const counts: Record<string, number> = {};
+      posts.forEach((post) => {
+        post.tags.forEach((tag) => {
+          if (
+            !tag.toLowerCase().startsWith("series:") &&
+            !tag.toLowerCase().startsWith("archivo-")
+          ) {
+            counts[tag] = (counts[tag] || 0) + 1;
+          }
+        });
+      });
+      return Object.entries(counts)
+        .map(([tag, count]) => ({ tag, count }))
+        .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+    }),
+
   getSeries: publicProcedure
     .input(
       z.object({
@@ -36,79 +112,102 @@ export const blogPublicRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return [];
 
-      const appLanguage = await ctx.db.appLanguage.findUnique({
-        where: { code: input.locale },
-      });
-
-      const posts = await ctx.db.blogPost.findMany({
-        where: {
-          userId: tenantUserId,
-          status: "PUBLISHED",
-        },
-        select: {
-          tags: true,
-          seriesName: true,
-          seriesOrder: true,
-          publishedAt: true,
+      const seriesList = await ctx.db.blogSeries.findMany({
+        where: { userId: tenantUserId },
+        include: {
           translations: {
-            where: appLanguage ? { appLanguageId: appLanguage.id } : undefined,
-            select: { title: true },
+            include: { language: { select: { code: true } } },
+          },
+          posts: {
+            where: { status: "PUBLISHED" },
+            select: {
+              publishedAt: true,
+              translations: {
+                include: { language: { select: { code: true } } },
+              },
+            },
           },
         },
       });
 
-      const bySeries = new Map<
-        string,
-        {
-          name: string;
-          count: number;
-          latestPublishedAt: string | null;
-          sampleTitle: string;
-        }
-      >();
+      return seriesList
+        .map((series) => {
+          const trans = pickLocalized(series.translations, input.locale);
+          const publishedDates = series.posts
+            .map((p) => p.publishedAt?.toISOString() ?? null)
+            .filter(Boolean) as string[];
+          const latestPublishedAt =
+            publishedDates.slice().sort().reverse()[0] ?? null;
+          const sampleTrans = pickLocalized(
+            series.posts[0]?.translations,
+            input.locale,
+          );
+          const sampleTitle = sampleTrans?.title ?? "";
 
-      posts.forEach((post) => {
-        const sampleTitle = post.translations[0]?.title ?? "";
-        const tagDerived = post.tags
-          .filter((tag) => tag.toLowerCase().startsWith("series:"))
-          .map((tag) => tag.replace(/^series:/i, "").trim())
-          .filter(Boolean);
-        const rawNames = post.seriesName
-          ? [post.seriesName, ...tagDerived]
-          : tagDerived;
-        const seriesNames = Array.from(new Set(rawNames));
-
-        seriesNames.forEach((name) => {
-          const current = bySeries.get(name);
-          const publishedAt = post.publishedAt?.toISOString() ?? null;
-          if (!current) {
-            bySeries.set(name, {
-              name,
-              count: 1,
-              latestPublishedAt: publishedAt,
-              sampleTitle,
-            });
-            return;
-          }
-          const latest =
-            current.latestPublishedAt && publishedAt
-              ? current.latestPublishedAt > publishedAt
-                ? current.latestPublishedAt
-                : publishedAt
-              : (current.latestPublishedAt ?? publishedAt);
-          bySeries.set(name, {
-            ...current,
-            count: current.count + 1,
-            latestPublishedAt: latest,
-          });
+          return {
+            id: series.id,
+            slug: series.slug,
+            name: trans?.title ?? series.slug,
+            description: trans?.description ?? null,
+            coverImage: series.coverImage ?? null,
+            count: series.posts.length,
+            latestPublishedAt,
+            sampleTitle,
+          };
+        })
+        .filter((s) => s.count > 0)
+        .sort((a, b) => {
+          const aDate = a.latestPublishedAt
+            ? Date.parse(a.latestPublishedAt)
+            : 0;
+          const bDate = b.latestPublishedAt
+            ? Date.parse(b.latestPublishedAt)
+            : 0;
+          return bDate - aDate;
         });
+    }),
+
+  getSeriesBySlug: publicProcedure
+    .input(
+      z.object({
+        slug: z.string().min(1),
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return null;
+
+      const series = await ctx.db.blogSeries.findFirst({
+        where: {
+          userId: tenantUserId,
+          OR: [
+            { slug: input.slug },
+            { translations: { some: { title: input.slug } } },
+          ],
+        },
+        include: {
+          translations: {
+            include: { language: { select: { code: true } } },
+          },
+          posts: {
+            where: { status: "PUBLISHED" },
+            select: { id: true },
+          },
+        },
       });
 
-      return Array.from(bySeries.values()).sort((a, b) => {
-        const aDate = a.latestPublishedAt ? Date.parse(a.latestPublishedAt) : 0;
-        const bDate = b.latestPublishedAt ? Date.parse(b.latestPublishedAt) : 0;
-        return bDate - aDate;
-      });
+      if (!series) return null;
+
+      const trans = pickLocalized(series.translations, input.locale);
+      return {
+        id: series.id,
+        slug: series.slug,
+        title: trans?.title ?? series.slug,
+        description: trans?.description ?? null,
+        coverImage: series.coverImage ?? null,
+        count: series.posts.length,
+      };
     }),
 
   list: publicProcedure
@@ -118,23 +217,39 @@ export const blogPublicRouter = createTRPCRouter({
         limit: z.number().min(1).max(50).default(10),
         cursor: z.string().nullish(),
         tag: z.string().optional(),
+        seriesSlug: z.string().optional(),
         seriesName: z.string().optional(),
         search: z.string().trim().max(200).optional(),
+        sort: z.enum(["new", "old", "part"]).optional(),
       }),
     )
     .query(async ({ input, ctx }) => {
       const tenantUserId = ctx.tenant?.userId ?? null;
-      if (!tenantUserId) return { posts: [], nextCursor: null };
+      if (!tenantUserId) return { posts: [], nextCursor: null, total: 0 };
 
       const appLanguage = await ctx.db.appLanguage.findUnique({
         where: { code: input.locale },
       });
 
+      const seriesFilter = input.seriesSlug ?? input.seriesName;
+
       const where = {
         userId: tenantUserId,
         status: "PUBLISHED" as const,
         ...(input.tag ? { tags: { has: input.tag } } : {}),
-        ...(input.seriesName ? { seriesName: input.seriesName } : {}),
+        ...(seriesFilter
+          ? {
+              OR: [
+                { series: { slug: seriesFilter } },
+                {
+                  series: {
+                    translations: { some: { title: seriesFilter } },
+                  },
+                },
+                { tags: { has: `series:${seriesFilter}` } },
+              ],
+            }
+          : {}),
         ...(input.search
           ? {
               OR: [
@@ -165,19 +280,38 @@ export const blogPublicRouter = createTRPCRouter({
           : {}),
       };
 
-      const posts = await ctx.db.blogPost.findMany({
-        where,
-        include: {
-          translations: {
-            where: appLanguage ? { appLanguageId: appLanguage.id } : undefined,
+      const orderBy =
+        input.sort === "part" || (!input.sort && seriesFilter)
+          ? [
+              { seriesOrder: "asc" as const },
+              { publishedAt: "asc" as const },
+              { id: "asc" as const },
+            ]
+          : input.sort === "old"
+            ? [{ publishedAt: "asc" as const }, { id: "asc" as const }]
+            : [{ publishedAt: "desc" as const }, { id: "desc" as const }];
+
+      const [total, posts] = await Promise.all([
+        ctx.db.blogPost.count({ where }),
+        ctx.db.blogPost.findMany({
+          where,
+          include: {
+            series: {
+              include: {
+                translations: {
+                  include: { language: { select: { code: true } } },
+                },
+              },
+            },
+            translations: {
+              include: { language: { select: { code: true } } },
+            },
           },
-        },
-        orderBy: input.seriesName
-          ? [{ seriesOrder: "asc" }, { publishedAt: "asc" }, { id: "asc" }]
-          : [{ publishedAt: "desc" }, { id: "desc" }],
-        ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
-        take: input.limit + 1,
-      });
+          orderBy,
+          ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
+          take: input.limit + 1,
+        }),
+      ]);
 
       let nextCursor: string | null = null;
       if (posts.length > input.limit) {
@@ -186,7 +320,11 @@ export const blogPublicRouter = createTRPCRouter({
       }
 
       const mapped = posts.map((post) => {
-        const t = post.translations[0];
+        const t = pickLocalized(post.translations, input.locale);
+        const seriesTrans = pickLocalized(
+          post.series?.translations,
+          input.locale,
+        );
         const words = extractWords(t?.content ?? "");
         const readingTime = Math.max(1, Math.ceil(words / 220));
         return {
@@ -194,7 +332,9 @@ export const blogPublicRouter = createTRPCRouter({
           slug: post.slug,
           coverImage: post.coverImage,
           tags: post.tags,
-          seriesName: post.seriesName ?? null,
+          seriesId: post.seriesId ?? null,
+          seriesSlug: post.series?.slug ?? null,
+          seriesName: seriesTrans?.title ?? post.series?.slug ?? null,
           seriesOrder: post.seriesOrder ?? null,
           publishedAt: post.publishedAt?.toISOString() ?? null,
           title: t?.title ?? "",
@@ -203,7 +343,7 @@ export const blogPublicRouter = createTRPCRouter({
         };
       });
 
-      return { posts: mapped, nextCursor };
+      return { posts: mapped, nextCursor, total };
     }),
 
   getBySlug: publicProcedure
@@ -217,10 +357,6 @@ export const blogPublicRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return null;
 
-      const appLanguage = await ctx.db.appLanguage.findUnique({
-        where: { code: input.locale },
-      });
-
       const post = await ctx.db.blogPost.findFirst({
         where: {
           userId: tenantUserId,
@@ -228,21 +364,36 @@ export const blogPublicRouter = createTRPCRouter({
           status: "PUBLISHED",
         },
         include: {
+          series: {
+            include: {
+              translations: {
+                include: { language: { select: { code: true } } },
+              },
+            },
+          },
           translations: {
-            where: appLanguage ? { appLanguageId: appLanguage.id } : undefined,
+            include: { language: { select: { code: true } } },
           },
         },
       });
 
       if (!post) return null;
 
-      const t = post.translations[0];
+      const t = pickLocalized(post.translations, input.locale);
+      const seriesTrans = pickLocalized(
+        post.series?.translations,
+        input.locale,
+      );
+
       return {
         id: post.id,
         slug: post.slug,
         coverImage: post.coverImage,
         tags: post.tags,
-        seriesName: post.seriesName ?? null,
+        seriesId: post.seriesId ?? null,
+        seriesSlug: post.series?.slug ?? null,
+        seriesName: seriesTrans?.title ?? post.series?.slug ?? null,
+        seriesDescription: seriesTrans?.description ?? null,
         seriesOrder: post.seriesOrder ?? null,
         publishedAt: post.publishedAt?.toISOString() ?? null,
         title: t?.title ?? "",

@@ -1,0 +1,204 @@
+{
+  "slug": "aso-01-ubuntu-mate-entorno",
+  "locale": "nl",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Besturingssysteemarchitectuur: Kernel, Aanpassing en Services",
+  "seriesOrder": 1,
+  "title": "Ubuntu MATE als werkomgeving voor besturingssysteemtechniek",
+  "excerpt": "Historisch overzicht van Ubuntu MATE, MATE vs GNOME 3 desktopomgevingen, bron-efficiëntie en initiële configuratie voor systeembeheer en ontwikkeling.",
+  "tags": [
+    "linux",
+    "ubuntu-mate",
+    "sistemas-operativos",
+    "universidad",
+    "archivo-2020"
+  ],
+  "coverImage": "/images/blog/aso/image37.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Historische en archiefnotitie: Dit artikel maakt deel uit van een laboratoriumreeks die oorspronkelijk op 23 november 2020 werd ontwikkeld voor het vak Besturingssysteemarchitectuur aan de Universidad Nacional de Ingeniería (UNI) in Managua. Het wordt bewaard voor educatieve en historische doeleinden, aangevuld met actuele technische toelichtingen over moderne Linux- en netwerkstandaarden."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Introductie en overzicht van Ubuntu MATE"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Ubuntu MATE is een vrije en opensource, stabiele en toegankelijke Linux-distributie ontworpen met een configureerbare desktopomgeving. Het is ideaal voor ontwikkelwerkstations die hardwareprestaties willen maximaliseren met behoud van een traditionele desktopmetafoor."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "De distributie is ontstaan door Martin Wimpress en Alan Pope op basis van Ubuntu 14.10 en werd in februari 2015 officieel erkend als Canonical-smaak. Hierdoor kon het volledig integreren in de bouw-, packaging- en QA-infrastructuur van Canonical Ltd."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Desktoparchitectuur: MATE vs. GNOME 3"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Het belangrijkste technische onderscheid van Ubuntu MATE ligt in de desktopomgeving. Terwijl hoofd-Ubuntu GNOME 3 adopteerde (met Mutter en een hoger geheugengebruik), behoudt MATE de modulaire architectuur van GNOME 2 aangepast voor moderne GTK3-bibliotheken."
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Laag RAM-verbruik: initiële geheugenvoetafdruk van minder dan 600 MB in rust."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Lagere interface-renderlatentie, waardoor CPU-cycli vrijkomen voor zware taken zoals compilatie van broncode."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Superieure compatibiliteit op zowel moderne hardware als oudere machines of virtuele omgevingen."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Granulaire controle over panelen, applets en interfacecomponenten."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Omgevingsaanpassing met MATE Tweak"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Via het hulpprogramma MATE Tweak kan de gebruiker met één klik wisselen tussen verschillende interfacemetaforen: 'Traditional' (twee klassieke panelen in GNOME 2-stijl), 'Redmond' (onderpaneel met startmenu in Windows-stijl), 'Cupertino' (bovenbalk en dock in macOS-stijl) of 'Mutiny' (zijpaneel in Unity-stijl)."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Het systeem voorbereiden op low-level labs"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Voordat u begint met het compileren van de kernel en het configureren van netwerkdiensten, is het essentieel om de pakketdatabase bij te werken en de systeemrepository's te verifiëren."
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt update && sudo apt upgrade -y\nsudo apt install -y build-essential curl wget git net-tools"
+          }
+        ]
+      }
+    ]
+  }
+}

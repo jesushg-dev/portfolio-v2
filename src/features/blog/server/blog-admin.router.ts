@@ -4,12 +4,13 @@ import { extractStringFilter } from "@/lib/admin/filter-utils";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { assertOwner } from "@/lib/admin/portfolio-schemas";
 import {
+  groupBlogPosts,
   mapBlogPostToEditorDto,
   mapBlogPostsToEditorDto,
 } from "@/features/blog/lib/blog-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
-import { type Prisma } from "@prisma/client";
+import { type Prisma, type PrismaClient } from "@prisma/client";
 
 const BlogTranslationMapSchema = z.record(
   z.string(),
@@ -33,7 +34,11 @@ const blogUpsertInput = z.object({
 
 export const blogAdminRouter = createTRPCRouter({
   getMine: protectedProcedure
-    .input(dataTableParamsSchema)
+    .input(
+      dataTableParamsSchema.extend({
+        locale: z.string().optional(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const skip =
         input.page && input.perPage
@@ -58,7 +63,10 @@ export const blogAdminRouter = createTRPCRouter({
       const [posts, totalCount, languages] = await Promise.all([
         ctx.db.blogPost.findMany({
           where,
-          include: { translations: true },
+          include: {
+            translations: true,
+            series: { include: { translations: true } },
+          },
           orderBy: { createdAt: "desc" },
           skip,
           take,
@@ -67,33 +75,51 @@ export const blogAdminRouter = createTRPCRouter({
         ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
       ]);
 
+      const editorPosts = mapBlogPostsToEditorDto(
+        posts,
+        languages,
+        input.locale,
+      );
+      const { series, standalone } = groupBlogPosts(editorPosts);
+
       return {
-        data: mapBlogPostsToEditorDto(posts, languages),
+        data: editorPosts,
+        series,
+        standalone,
         pageCount: take ? Math.ceil(totalCount / take) : 1,
         totalCount,
       };
     }),
 
   getById: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.string(), locale: z.string().optional() }))
     .query(async ({ ctx, input }) => {
       const [post, languages] = await Promise.all([
         ctx.db.blogPost.findUnique({
           where: { id: input.id },
-          include: { translations: true },
+          include: {
+            translations: true,
+            series: { include: { translations: true } },
+          },
         }),
         ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
       ]);
 
       if (post?.userId !== ctx.user.id) return null;
-      return mapBlogPostToEditorDto(post, languages);
+      return mapBlogPostToEditorDto(post, languages, input.locale);
     }),
 
   createItem: protectedProcedure
     .input(blogUpsertInput)
     .mutation(async ({ ctx, input }) => {
-      const { translations, publishedAt, ...rest } = input;
-      const seriesName = rest.seriesName.trim();
+      const {
+        translations,
+        publishedAt,
+        seriesName: rawSeriesName,
+        ...rest
+      } = input;
+      const seriesName = rawSeriesName.trim();
+      const seriesId = await resolveSeriesId(ctx.db, ctx.user.id, seriesName);
       const tags = syncSeriesTag(rest.tags, seriesName);
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
@@ -104,7 +130,7 @@ export const blogAdminRouter = createTRPCRouter({
         data: {
           ...rest,
           tags,
-          seriesName: seriesName || null,
+          seriesId,
           userId: ctx.user.id,
           publishedAt:
             rest.status === "PUBLISHED"
@@ -116,7 +142,10 @@ export const blogAdminRouter = createTRPCRouter({
             ? { createMany: { data: translationRows } }
             : undefined,
         },
-        include: { translations: true },
+        include: {
+          translations: true,
+          series: { include: { translations: true } },
+        },
       });
 
       return mapBlogPostToEditorDto(created, languages);
@@ -125,8 +154,15 @@ export const blogAdminRouter = createTRPCRouter({
   updateItem: protectedProcedure
     .input(blogUpsertInput.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, translations, publishedAt, ...data } = input;
-      const seriesName = data.seriesName.trim();
+      const {
+        id,
+        translations,
+        publishedAt,
+        seriesName: rawSeriesName,
+        ...data
+      } = input;
+      const seriesName = rawSeriesName.trim();
+      const seriesId = await resolveSeriesId(ctx.db, ctx.user.id, seriesName);
       const tags = syncSeriesTag(data.tags, seriesName);
       await assertOwner(
         await ctx.db.blogPost.findUnique({ where: { id } }),
@@ -138,7 +174,7 @@ export const blogAdminRouter = createTRPCRouter({
         data: {
           ...data,
           tags,
-          seriesName: seriesName || null,
+          seriesId,
           publishedAt:
             data.status === "PUBLISHED"
               ? publishedAt
@@ -205,16 +241,16 @@ export const blogAdminRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const current = await ctx.db.blogPost.findUnique({
         where: { id: input.id },
-        select: { id: true, userId: true, seriesName: true },
+        select: { id: true, userId: true, seriesId: true },
       });
 
       await assertOwner(current, ctx.user.id);
-      if (!current?.seriesName) return { moved: false };
+      if (!current?.seriesId) return { moved: false };
 
       const siblings = await ctx.db.blogPost.findMany({
         where: {
           userId: ctx.user.id,
-          seriesName: current.seriesName,
+          seriesId: current.seriesId,
         },
         select: {
           id: true,
@@ -268,4 +304,48 @@ function syncSeriesTag(tags: string[], seriesName: string) {
   );
   if (!seriesName) return cleaned;
   return [...cleaned, `series:${seriesName}`];
+}
+
+async function resolveSeriesId(
+  db: PrismaClient,
+  userId: string,
+  seriesNameOrSlug: string,
+): Promise<string | null> {
+  const trimmed = seriesNameOrSlug.trim();
+  if (!trimmed) return null;
+  const slug = trimmed
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+  let series = await db.blogSeries.findFirst({
+    where: {
+      userId,
+      OR: [
+        { slug },
+        { slug: trimmed },
+        { translations: { some: { title: trimmed } } },
+      ],
+    },
+  });
+  if (!series) {
+    const langs = await db.appLanguage.findMany();
+    series = await db.blogSeries.create({
+      data: {
+        userId,
+        slug: slug || trimmed,
+        translations: {
+          createMany: {
+            data: langs.map((lang) => ({
+              appLanguageId: lang.id,
+              title: trimmed,
+            })),
+          },
+        },
+      },
+    });
+  }
+  return series.id;
 }

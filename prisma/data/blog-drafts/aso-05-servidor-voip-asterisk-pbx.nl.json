@@ -1,0 +1,296 @@
+{
+  "slug": "aso-05-servidor-voip-asterisk-pbx",
+  "locale": "nl",
+  "status": "DRAFT",
+  "publishedAt": "2020-11-23T00:00:00.000Z",
+  "createdAt": "2020-11-23T00:00:00.000Z",
+  "seriesName": "Besturingssysteemarchitectuur: Kernel, Aanpassing en Services",
+  "seriesOrder": 5,
+  "title": "IP-telefonie en VoIP-server met Asterisk PBX op Linux",
+  "excerpt": "Configuratie van een Asterisk-telefooncentrale, SIP-extensies en gebruikers aanmaken, dialplan in extensions.conf en testgesprekken met softphones.",
+  "tags": ["linux", "voip", "asterisk", "sip", "telefonia-ip", "archivo-2020"],
+  "coverImage": "/images/blog/aso/image72.png",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Historische en archiefnotitie: Dit artikel maakt deel uit van een laboratoriumreeks die oorspronkelijk op 23 november 2020 werd ontwikkeld voor het vak Besturingssysteemarchitectuur aan de Universidad Nacional de Ingeniería (UNI) in Managua. Het wordt bewaard voor educatieve en historische doeleinden, aangevuld met actuele technische toelichtingen over moderne Linux- en netwerkstandaarden."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Installatie en voorbereiding van CEL- en CDR-bestanden"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Actualizamos repositorios e instalamos Asterisk junto con los paquetes de sonido en español:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "sudo apt-get update\nsudo apt-get install asterisk\nsudo apt-get install asterisk-core-sounds-es-wav asterisk-prompt-es\nservice asterisk status"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Respaldamos y ajustamos la configuración de radiusclient en 'cel.conf':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cp /etc/asterisk/cel.conf /etc/asterisk/cel.conf.copia\ngedit /etc/asterisk/cel.conf"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image66.png",
+          "alt": "Ajuste en cel.conf",
+          "title": "Ajuste en cel.conf"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Repetimos en 'cdr.conf' descomentando la línea requerida y reiniciamos el servicio:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "cp /etc/asterisk/cdr.conf /etc/asterisk/cdr.conf.copia\ngedit /etc/asterisk/cdr.conf\nservice asterisk restart"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image67.png",
+          "alt": "Ajuste en cdr.conf",
+          "title": "Ajuste en cdr.conf"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. Extensies configureren in sip.conf"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Respaldamos 'sip.conf', limpiamos comentarios y creamos la plantilla de usuario y las extensiones 2001 y 2002:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "ini"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "[usuario](!)\ntype=friend\nhost=dynamic\ncontext=alksoft\n\n[ext2001](usuario)\nusername=juan\nsecret=ClaveExt2001!\n\n[ext2002](usuario)\nusername=jesus\nsecret=ClaveExt2002!\nport=5061"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Dialplan ontwerpen in extensions.conf"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Definimos el contexto de llamada en '/etc/asterisk/extensions.conf':"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "ini"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "[alksoft]\nexten => 2001,1,Dial(SIP/ext2001,20)\nsame => n,Hangup()\n\nexten => 2002,1,Dial(SIP/ext2002,20)\nsame => n,Hangup()"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image68.png",
+          "alt": "Configuración de extensions.conf",
+          "title": "Configuración de extensions.conf"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Recargamos el servicio:"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "bash"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "service asterisk reload"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Testen en spraakoproepen met Zoiper"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Descargamos e instalamos Zoiper en el equipo cliente y configuramos la cuenta con usuario, IP y clave:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image69.png",
+          "alt": "Zoiper - Ingreso de credenciales SIP",
+          "title": "Zoiper - Ingreso de credenciales SIP"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image70.png",
+          "alt": "Zoiper - Validación de host y nombre de usuario",
+          "title": "Zoiper - Validación de host y nombre de usuario"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image71.png",
+          "alt": "Zoiper - Protocolo SIP UDP detectado",
+          "title": "Zoiper - Protocolo SIP UDP detectado"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Marcamos la extensión remota desde el softphone y verificamos el enlace de voz activo:"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image72.png",
+          "alt": "Marcado de extensión en dialpad",
+          "title": "Marcado de extensión en dialpad"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image73.png",
+          "alt": "Recepción de llamada entrante",
+          "title": "Recepción de llamada entrante"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "src": "/images/blog/aso/image74.png",
+          "alt": "Comunicación de voz establecida",
+          "title": "Comunicación de voz establecida"
+        }
+      }
+    ]
+  }
+}
