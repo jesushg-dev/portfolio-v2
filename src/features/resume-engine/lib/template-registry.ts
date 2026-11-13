@@ -23,12 +23,14 @@ export interface ResumeTemplate {
     certifications: number;
     sidebarCharacters: number;
   };
+  recommended?: boolean;
 }
 
 export const RESUME_TEMPLATES = {
   v1: {
     id: "v1",
     revision: 1,
+    recommended: false,
     docx: "cv-template.docx",
     pdf: "cv-template.pdf",
     pages: 1,
@@ -53,6 +55,7 @@ export const RESUME_TEMPLATES = {
   v2: {
     id: "v2",
     revision: 3,
+    recommended: true,
     docx: "cv-template-v2.docx",
     pdf: "cv-template-v2.pdf",
     pages: 2,
