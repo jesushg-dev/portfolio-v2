@@ -10,7 +10,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { Form, FormField, FormControl } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -144,9 +144,7 @@ export const BlogForm: FC<BlogFormProps> = ({
                 name="slug"
                 render={({ field }) => (
                   <FormItem label={t("slug")}>
-                    <FormControl>
-                      <Input placeholder="my-blog-post" {...field} />
-                    </FormControl>
+                    <Input placeholder="my-blog-post" {...field} />
                   </FormItem>
                 )}
               />
@@ -155,12 +153,10 @@ export const BlogForm: FC<BlogFormProps> = ({
                 name="coverImage"
                 render={({ field }) => (
                   <FormItem label={t("coverImage")}>
-                    <FormControl>
-                      <Input
-                        placeholder="Cloudinary public ID or URL"
-                        {...field}
-                      />
-                    </FormControl>
+                    <Input
+                      placeholder="Cloudinary public ID or URL"
+                      {...field}
+                    />
                   </FormItem>
                 )}
               />
@@ -175,11 +171,9 @@ export const BlogForm: FC<BlogFormProps> = ({
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="DRAFT">
                           {t("statusDraft")}
@@ -200,20 +194,18 @@ export const BlogForm: FC<BlogFormProps> = ({
                 name="tags"
                 render={({ field }) => (
                   <FormItem label={t("tags")}>
-                    <FormControl>
-                      <Input
-                        placeholder="tag1, tag2, tag3"
-                        value={field.value.join(", ")}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value
-                              .split(",")
-                              .map((s) => s.trim())
-                              .filter(Boolean),
-                          )
-                        }
-                      />
-                    </FormControl>
+                    <Input
+                      placeholder="tag1, tag2, tag3"
+                      value={field.value.join(", ")}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value
+                            .split(",")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
+                        )
+                      }
+                    />
                   </FormItem>
                 )}
               />
@@ -223,14 +215,14 @@ export const BlogForm: FC<BlogFormProps> = ({
                 control={form.control}
                 name="seriesName"
                 render={({ field }) => (
-                  <FormItem label={t("seriesName")}>
-                    <FormControl>
+                  <>
+                    <FormItem label={t("seriesName")}>
                       <Input
                         list="available-series-options"
                         placeholder="operating-systems-architecture"
                         {...field}
                       />
-                    </FormControl>
+                    </FormItem>
                     {availableSeries && availableSeries.length > 0 ? (
                       <datalist id="available-series-options">
                         {availableSeries.map((s) => (
@@ -240,7 +232,7 @@ export const BlogForm: FC<BlogFormProps> = ({
                         ))}
                       </datalist>
                     ) : null}
-                  </FormItem>
+                  </>
                 )}
               />
               <FormField
@@ -248,19 +240,17 @@ export const BlogForm: FC<BlogFormProps> = ({
                 name="seriesOrder"
                 render={({ field }) => (
                   <FormItem label={t("seriesOrder")}>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        value={field.value ?? ""}
-                        onChange={(event) =>
-                          field.onChange(
-                            event.target.value === ""
-                              ? null
-                              : Number(event.target.value),
-                          )
-                        }
-                      />
-                    </FormControl>
+                    <Input
+                      type="number"
+                      value={field.value ?? ""}
+                      onChange={(event) =>
+                        field.onChange(
+                          event.target.value === ""
+                            ? null
+                            : Number(event.target.value),
+                        )
+                      }
+                    />
                   </FormItem>
                 )}
               />
@@ -281,9 +271,7 @@ export const BlogForm: FC<BlogFormProps> = ({
                     name={`translations.${lang.id}.title`}
                     render={({ field }) => (
                       <FormItem label={t("title")}>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
+                        <Input {...field} />
                       </FormItem>
                     )}
                   />
@@ -292,9 +280,7 @@ export const BlogForm: FC<BlogFormProps> = ({
                     name={`translations.${lang.id}.excerpt`}
                     render={({ field }) => (
                       <FormItem label={t("excerpt")}>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
+                        <Input {...field} />
                       </FormItem>
                     )}
                   />
