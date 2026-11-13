@@ -12,6 +12,7 @@ import SpotifyFullscreenProgress from "./spotify-fullscreen-progress";
 import { buildSpotifyFullscreenBg } from "../hooks/use-album-color";
 import { formatPlayedAt } from "../utils/format-played-at";
 import LyricsCard from "./lyrics-card";
+import SpotifyScrollingText from "./spotify-scrolling-text";
 import { useTrackLyrics } from "../hooks/use-track-lyrics";
 import { useSpotifyPlaybackContext } from "../context/spotify-playback-context";
 import type {
@@ -139,20 +140,20 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               href={playback.contentUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="block truncate text-[1.0625rem] leading-snug font-bold text-white hover:underline"
+              className="block overflow-hidden text-[1.0625rem] leading-snug font-bold text-white hover:underline"
               style={{ opacity: flyComplete ? 1 : 0 }}
             >
-              {playback.title}
+              <SpotifyScrollingText>{playback.title}</SpotifyScrollingText>
             </a>
 
             <a
               href={playback.subtitleUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-0.5 block truncate text-[0.8125rem] text-white/70 hover:text-white hover:underline"
+              className="mt-0.5 block overflow-hidden text-[0.8125rem] text-white/70 hover:text-white hover:underline"
               style={{ opacity: flyComplete ? 1 : 0 }}
             >
-              {playback.subtitle}
+              <SpotifyScrollingText>{playback.subtitle}</SpotifyScrollingText>
             </a>
 
             {playback.source === "now_playing" && (

@@ -51,6 +51,7 @@ import {
   ActionHint,
 } from "@/components/shared/action-hint";
 import RecentlyPlayedNotice from "./components/recently-played-notice";
+import SpotifyScrollingText from "./components/spotify-scrolling-text";
 
 interface ExpandableSpotifyPlayerProps {
   playback: SpotifyPlayback;
@@ -243,10 +244,10 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.title}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate overflow-hidden py-0.5 text-sm leading-tight font-bold text-white hover:underline sm:text-base"
-              style={{ opacity: isExpanded ? 0 : 1 }}
+              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full overflow-hidden py-0.5 text-sm leading-tight font-bold text-white hover:underline sm:text-base"
+              style={{ opacity: isExpanded ? 0 : 1, color: "#ffffff" }}
             >
-              {playback.title}
+              <SpotifyScrollingText>{playback.title}</SpotifyScrollingText>
             </a>
 
             <a
@@ -256,10 +257,13 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.subtitle}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block min-h-5 w-full max-w-full truncate overflow-hidden py-0.5 text-xs text-white/85 hover:text-white hover:underline sm:text-sm"
-              style={{ opacity: isExpanded ? 0 : 1 }}
+              className="relative z-10 mt-0.5 block min-h-5 w-full max-w-full overflow-hidden py-0.5 text-xs text-white/85 hover:text-white hover:underline sm:text-sm"
+              style={{
+                opacity: isExpanded ? 0 : 1,
+                color: "rgba(255, 255, 255, 0.85)",
+              }}
             >
-              {playback.subtitle}
+              <SpotifyScrollingText>{playback.subtitle}</SpotifyScrollingText>
             </a>
 
             {playback.source === "now_playing" && (
@@ -384,7 +388,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
 
                     <motion.p
                       className="pointer-events-none fixed z-102 truncate font-bold text-white"
-                      style={{ y }}
+                      style={{ y, color: "#ffffff" }}
                       initial={{
                         top: expandRects.title.top,
                         left: expandRects.title.left,
