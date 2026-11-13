@@ -572,7 +572,7 @@
             "cta": "Explore technical stack"
           },
           "services": {
-            "label": "Technical specialties",
+            "label": "Services",
             "short": "Architecture and modernization",
             "headline": "What I am best at",
             "description": "Designing software architecture, modernizing legacy platforms, and building the core of new products.",
@@ -583,7 +583,7 @@
             ],
             "statValue": "3",
             "statLabel": "specialties",
-            "cta": "View specialties"
+            "cta": "View services"
           },
           "soft-skills": {
             "label": "Leadership & competencies",
@@ -604,6 +604,16 @@
             "statValue": "100%",
             "statLabel": "positive feedback",
             "cta": "Read testimonials"
+          },
+          "contact": {
+            "label": "Contact",
+            "short": "Direct communication",
+            "headline": "Start a conversation",
+            "description": "Have a project in mind, want to discuss an opportunity, or need technical consulting? Send me a message.",
+            "chips": ["Direct message", "Consultation", "Collaboration"],
+            "statValue": "<24h",
+            "statLabel": "response time",
+            "cta": "Send message"
           },
           "projects": {
             "label": "Projects",
@@ -1214,8 +1224,20 @@
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "Hiring for a senior engineering role or planning a complex build? Tell me what you need.",
+      "subtitle": "I’m looking for a senior full-stack or tech-lead role, remote or from Managua, and I can start right away.",
       "divider": "or",
+      "direct": {
+        "eyebrow": "Reach me directly",
+        "email": "Email",
+        "phone": "Phone",
+        "linkedin": "LinkedIn",
+        "videoCall": "Video call",
+        "scheduleCall": "Schedule a call",
+        "write": "Write",
+        "copy": "Copy",
+        "copied": "Copied",
+        "copyEmailAria": "Copy email address"
+      },
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
       "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
       "globe": {
@@ -1236,7 +1258,7 @@
         "distanceFromVisitor": "I'm from {place}, roughly <km>{distance}</km> away from your current location, according to your IP address."
       },
       "form": {
-        "helper": "Share the role or project, its biggest challenge, and your timeline. I’ll reply with a clear next step.",
+        "helper": "Tell me about your project or inquiry and I’ll reply as soon as possible.",
         "name": {
           "label": "Name",
           "placeholder": "John Doe",
@@ -1360,10 +1382,6 @@
           "title": "Good calls that don’t cost quality."
         }
       }
-    },
-    "faq": {
-      "title": "Questions?",
-      "titleGradient": "Answers."
     },
     "qaCollaboration": {
       "metaTitle": "QA Collaboration",
@@ -2043,7 +2061,10 @@
       "layout": "Layout",
       "noResults": "No results",
       "searchList": "Search list",
-      "showMoreCount": "Show {count} more"
+      "showMoreCount": "Show {count} more",
+      "copyCode": "Copy",
+      "copiedCode": "Copied!",
+      "copyCodeAria": "Copy code to clipboard"
     }
   },
   "admin": {
@@ -5015,7 +5036,20 @@
       "tailorPdfOnDemandNotice": "To conserve your iLovePDF credits, the PDF is generated on demand upon request.",
       "tailorOutputLanguage": "Output language",
       "tailorOutputLanguageAuto": "Automatic (job description)",
-      "tailorTemplatePages": "{count, plural, one {# page} other {# pages}}"
+      "tailorTemplatePages": "{count, plural, one {# page} other {# pages}}",
+      "tailorTemplateRecommended": "Recommended",
+      "templates": {
+        "v1": {
+          "title": "Compact · 1 Page",
+          "subtitle": "Fast-screening & targeted roles",
+          "description": "Dense single-page layout focusing on recent impact and core skills."
+        },
+        "v2": {
+          "title": "Executive · 2 Pages",
+          "subtitle": "Comprehensive career & leadership",
+          "description": "Multi-page layout with company logos, multi-column contact bar and certifications."
+        }
+      }
     },
     "contactPreferences": {
       "title": "Contact preferences",
@@ -5026,23 +5060,6 @@
       "saved": "Contact preferences saved.",
       "error": "Could not save contact preferences.",
       "loading": "Loading contact preferences…"
-    },
-    "homeFaq": {
-      "title": "Home FAQ",
-      "description": "Manage questions for this portfolio in each language. Save FAQ changes separately. Empty languages stay hidden on the public site.",
-      "question": "Question",
-      "answer": "Answer",
-      "add": "Add question",
-      "remove": "Remove question",
-      "moveUp": "Move up",
-      "moveDown": "Move down",
-      "save": "Save FAQ",
-      "saving": "Saving…",
-      "saved": "FAQ saved.",
-      "error": "Could not load or save the FAQ. Try again.",
-      "invalid": "Complete every question and answer before saving.",
-      "loading": "Loading FAQ…",
-      "empty": "No questions in this language. The section is hidden until you add content."
     },
     "blog": {
       "title": "Blog",

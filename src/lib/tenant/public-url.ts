@@ -1,10 +1,10 @@
 import { env } from "@/env";
 import { SITE_URL } from "@/lib/seo/site";
 
-interface TenantPublicUrlInput {
+export interface TenantPublicUrlInput {
   username: string;
   isPrimary: boolean;
-  customDomain: string | null;
+  customDomain?: string | null;
 }
 
 export function getTenantPublicUrl(tenant: TenantPublicUrlInput): string {

@@ -46,11 +46,12 @@ describe("navigation-config", () => {
       const itemIds = aboutGroup?.items.map((i) => i.id);
       expect(itemIds).toEqual([
         "about",
-        "services",
-        "soft-skills",
-        "testimonials",
-        "skills",
         "experience",
+        "testimonials",
+        "services",
+        "skills",
+        "soft-skills",
+        "contact",
       ]);
     });
 

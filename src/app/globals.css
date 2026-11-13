@@ -245,7 +245,9 @@
     [data-theme="christmas-light"]
   ) {
     --card-outline: 0.0625rem solid var(--border);
-    --card-elevation: 0 1rem 2.25rem -1.25rem rgba(15, 23, 42, 0.18);
+    --card-elevation:
+      0 0.0625rem 0.1875rem rgba(15, 23, 42, 0.04),
+      0 0.375rem 0.875rem -0.25rem rgba(15, 23, 42, 0.05);
   }
 
   /*========== MAIN-LIGHT THEME ==========*/
@@ -896,17 +898,9 @@
   )
   .home-card-surface-interactive:hover {
   border-color: color-mix(in srgb, var(--primary) 40%, transparent);
-}
-
-:is(
-    [data-theme="main-light"],
-    [data-theme="orange-light"],
-    [data-theme="christmas-light"]
-  )
-  .site-footer {
-  background: #ffffff;
-  color: var(--foreground);
-  border-top: 0.0625rem solid var(--border);
+  box-shadow:
+    0 0.125rem 0.375rem rgba(15, 23, 42, 0.04),
+    0 0.625rem 1.25rem -0.25rem rgba(15, 23, 42, 0.07);
 }
 
 :is(
@@ -925,42 +919,6 @@
   )
   .home-hero-backdrop {
   display: none;
-}
-
-:is(
-    [data-theme="main-light"],
-    [data-theme="orange-light"],
-    [data-theme="christmas-light"]
-  )
-  .site-footer
-  :is(
-    [class~="text-primary-foreground"],
-    [class~="text-primary-foreground/85"],
-    [class~="text-primary-foreground/90"],
-    [class~="text-white"],
-    [class~="hover:text-white"]:hover
-  ) {
-  color: var(--foreground);
-}
-
-:is(
-    [data-theme="main-light"],
-    [data-theme="orange-light"],
-    [data-theme="christmas-light"]
-  )
-  .site-footer
-  :is([class~="bg-white/10"], [class~="bg-white/15"]) {
-  background-color: var(--muted);
-}
-
-:is(
-    [data-theme="main-light"],
-    [data-theme="orange-light"],
-    [data-theme="christmas-light"]
-  )
-  .site-footer
-  :is([class~="border-white/15"], [class~="border-white/20"]) {
-  border-color: var(--border);
 }
 
 @utility hero {
