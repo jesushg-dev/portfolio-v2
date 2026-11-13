@@ -22,6 +22,7 @@ import {
   inferCvRoleTrack,
 } from "@/lib/cv/build-ats-cv-file-name";
 import { getCvDeliveryEmailContent } from "@/features/cv/lib/cv-delivery-email-content";
+import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 
 const localeSchema = z.enum(["en", "es", "nl"]);
 type Locale = z.infer<typeof localeSchema>;
@@ -135,7 +136,45 @@ export const cvPublicRouter = createTRPCRouter({
         select: { email: true, name: true },
       });
 
-      const emailContent = getCvDeliveryEmailContent(locale);
+      const portfolioUrl = getTenantPublicUrl(ctx.tenant);
+      const headerFullName = draft.header.fullName?.trim();
+      const ownerUserName = owner?.name?.trim();
+      const ownerName =
+        headerFullName && headerFullName.length > 0
+          ? headerFullName
+          : ownerUserName && ownerUserName.length > 0
+            ? ownerUserName
+            : "Portfolio Owner";
+      const role = draft.header.degree?.trim();
+      const bio = draft.header.summary?.trim();
+
+      const linkedinContact = draft.contacts.find((c) => c.type === "LINKEDIN");
+      const githubContact = draft.contacts.find((c) => c.type === "GITHUB");
+      const locationContact = draft.contacts.find((c) => c.type === "LOCATION");
+
+      const socialLinks: { label: string; url: string }[] = [];
+      if (linkedinContact?.value) {
+        const url = linkedinContact.value.startsWith("http")
+          ? linkedinContact.value
+          : `https://${linkedinContact.value}`;
+        socialLinks.push({ label: "LinkedIn", url });
+      }
+      if (githubContact?.value) {
+        const url = githubContact.value.startsWith("http")
+          ? githubContact.value
+          : `https://${githubContact.value}`;
+        socialLinks.push({ label: "GitHub", url });
+      }
+
+      const emailContent = getCvDeliveryEmailContent({
+        locale,
+        ownerName,
+        role,
+        bio,
+        portfolioUrl,
+        socialLinks,
+        location: locationContact?.value,
+      });
 
       // --- CV delivery to visitor (multipart HTML + plain text with Reply-To) ---
       const { error: cvError } = await emailClient.resend.emails.send(

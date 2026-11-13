@@ -16,13 +16,29 @@ async function main() {
   for (const locale of locales) {
     // 1. CV Delivery
     const cvHtmlPreview = await render(
-      await CvDeliveryEmail({ recipientName: "John Lennon", locale }),
+      await CvDeliveryEmail({
+        recipientName: "John Lennon",
+        ownerName: "Jesús Hernández",
+        role: "Full Stack Developer | Computer Engineer",
+        portfolioUrl: "https://www.jesushg.com",
+        location: "Masaya, Nicaragua",
+        locale,
+      }),
       { pretty: true },
     );
     writeFileSync(`./out/cv-delivery-${locale}-preview.html`, cvHtmlPreview);
 
     const cvHtmlTemplate = await render(
-      await CvDeliveryEmail({ recipientName: "{{{RECIPIENT_NAME}}}", locale }),
+      await CvDeliveryEmail({
+        recipientName: "{{{RECIPIENT_NAME}}}",
+        ownerName: "{{{OWNER_NAME}}}",
+        role: "{{{OWNER_ROLE}}}",
+        bio: "{{{OWNER_BIO}}}",
+        portfolioUrl: "{{{PORTFOLIO_URL}}}",
+        portfolioLabel: "{{{PORTFOLIO_LABEL}}}",
+        location: "{{{LOCATION}}}",
+        locale,
+      }),
       { pretty: false },
     );
     templates[`cv-delivery-${locale}`] = cvHtmlTemplate;
@@ -35,6 +51,9 @@ async function main() {
         message:
           "Hola amigo, quisiera un nuevo servicio y tengo una nueva idea donde me puedes colaborar.",
         sentAt: "Jul 22, 2026, 3:41 PM",
+        domain: "jesushg.com",
+        brandName: "Jehg",
+        ownerName: "Jesús Hernández",
         locale,
       }),
       { pretty: true },
@@ -50,6 +69,9 @@ async function main() {
         senderEmail: "{{{SENDER_EMAIL}}}",
         message: "{{{MESSAGE}}}",
         sentAt: "{{{SENT_AT}}}",
+        domain: "{{{DOMAIN}}}",
+        brandName: "{{{BRAND_NAME}}}",
+        ownerName: "{{{OWNER_NAME}}}",
         locale,
       }),
       { pretty: false },

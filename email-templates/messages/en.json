@@ -1,41 +1,41 @@
 {
   "cv-delivery": {
     "preview": "My résumé is attached. Reply to this email and we’ll set up a call.",
-    "tagline": "Full Stack Developer | Computer Engineer",
+    "tagline": "Portfolio & Résumé",
     "greeting": "Hi,",
-    "body1": "Thanks for your interest. I’m Jesús, a Full Stack developer with 6+ years of experience in .NET Core, React/Next.js and TypeScript. I currently lead the e-commerce engineering team on VTEX for Walmart Global Tech in Central America.",
+    "body1": "Thanks for your interest in my profile. You will find my résumé attached to this email.",
     "body2": "My résumé is attached. If you’d like to talk, just reply to this email and we’ll set up a call.",
     "signOff": "Best regards,",
-    "name": "Jesús Hernández",
-    "role": "Full Stack Developer | Computer Engineer",
-    "footer": "Sent from the contact form at jesushg.com."
+    "name": "Candidate",
+    "role": "Professional Profile",
+    "footer": "Sent from the portfolio contact form at {domain}."
   },
   "contact-notification": {
-    "preview": "New message from {senderName} via jesushg.com",
+    "preview": "New message from {senderName} via {domain}",
     "eyebrow": "New message · contact form",
     "labelFrom": "From",
     "labelEmail": "Email",
     "labelReceived": "Received",
     "labelMessage": "Message",
     "replyButton": "Reply to {firstName}",
-    "footer": "Sent automatically from the contact form at jesushg.com."
+    "footer": "Sent automatically from the contact form at {domain}."
   },
   "reset-password": {
     "preview": "Reset your password",
     "eyebrow": "Account Security · Password Reset",
     "greeting": "Hi,",
-    "body1": "You requested to reset your password for your jesushg.com account.",
+    "body1": "You requested to reset your password for your account.",
     "button": "Reset Password",
     "body2": "If you didn't request a password reset, you can safely ignore this email.",
-    "footer": "Security alert sent from jesushg.com."
+    "footer": "Security alert sent from your portfolio account."
   },
   "two-factor-otp": {
     "preview": "Your sign-in code",
     "eyebrow": "Account Security · Two-factor sign-in",
     "greeting": "Hi,",
-    "body1": "Use this code to finish signing in to your jesushg.com account:",
+    "body1": "Use this code to finish signing in to your account:",
     "expires": "It expires in 5 minutes and can only be used once.",
     "body2": "If you didn't try to sign in, change your password right away — someone else knows it.",
-    "footer": "Security alert sent from jesushg.com."
+    "footer": "Security alert sent from your portfolio account."
   }
 }

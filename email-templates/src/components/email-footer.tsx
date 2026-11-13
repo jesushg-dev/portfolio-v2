@@ -1,16 +1,41 @@
 import { Section, Text, Link, Hr, Img } from "@react-email/components";
-import { theme, links } from "../theme";
+import { theme } from "../theme";
 import { icons } from "./icons";
 
+export interface EmailFooterLink {
+  label: string;
+  url: string;
+  icon?: string;
+}
+
+export interface EmailFooterProps {
+  note: string;
+  year?: number;
+  portfolioUrl?: string;
+  portfolioLabel?: string;
+  ownerName?: string;
+  location?: string;
+  links?: EmailFooterLink[];
+}
+
 /**
- * Standard footer across transactional emails — only `note` and `year` change.
- *
- * `year` must be passed explicitly — the template HTML is rendered ONCE at
- * publish time, so `new Date()` inside the component would freeze the year
- * to whenever `publish:resend` was last run. Pass it from the parent so
- * it's obvious at the call site and easy to keep correct.
+ * Standard footer across transactional emails — tenant aware.
  */
-export function EmailFooter({ note, year }: { note: string; year: number }) {
+export function EmailFooter({
+  note,
+  year = new Date().getFullYear(),
+  portfolioUrl,
+  portfolioLabel,
+  ownerName,
+  location,
+  links: customLinks,
+}: EmailFooterProps) {
+  const displayUrl = portfolioUrl || "https://www.jesushg.com";
+  const displayLabel =
+    portfolioLabel || displayUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+  const hasCustomLinks = customLinks && customLinks.length > 0;
+
   return (
     <Section style={{ padding: "4px 32px 28px" }}>
       <Hr style={{ borderColor: theme.colors.border, margin: "0 0 18px" }} />
@@ -18,59 +43,40 @@ export function EmailFooter({ note, year }: { note: string; year: number }) {
       <table role="presentation" cellPadding={0} cellSpacing={0} border={0}>
         <tbody>
           <tr>
-            <td style={{ paddingRight: 16 }}>
-              <Img
-                src={icons.linkedinMuted}
-                width={14}
-                height={14}
-                alt="LinkedIn"
-                style={{
-                  display: "inline-block",
-                  verticalAlign: "middle",
-                  marginRight: 5,
-                }}
-              />
-              <Link
-                href={links.linkedin}
-                style={{
-                  fontSize: 12,
-                  color: theme.colors.textSecondary,
-                  fontFamily: theme.font.sans,
-                  textDecoration: "none",
-                  verticalAlign: "middle",
-                }}
-              >
-                LinkedIn
-              </Link>
-            </td>
-            <td style={{ paddingRight: 16 }}>
-              <Img
-                src={icons.githubMuted}
-                width={14}
-                height={14}
-                alt="GitHub"
-                style={{
-                  display: "inline-block",
-                  verticalAlign: "middle",
-                  marginRight: 5,
-                }}
-              />
-              <Link
-                href={links.github}
-                style={{
-                  fontSize: 12,
-                  color: theme.colors.textSecondary,
-                  fontFamily: theme.font.sans,
-                  textDecoration: "none",
-                  verticalAlign: "middle",
-                }}
-              >
-                GitHub
-              </Link>
-            </td>
+            {hasCustomLinks
+              ? customLinks.map((item, idx) => (
+                  <td key={idx} style={{ paddingRight: 16 }}>
+                    {item.icon ? (
+                      <Img
+                        src={item.icon}
+                        width={14}
+                        height={14}
+                        alt={item.label}
+                        style={{
+                          display: "inline-block",
+                          verticalAlign: "middle",
+                          marginRight: 5,
+                        }}
+                      />
+                    ) : null}
+                    <Link
+                      href={item.url}
+                      style={{
+                        fontSize: 12,
+                        color: theme.colors.textSecondary,
+                        fontFamily: theme.font.sans,
+                        textDecoration: "none",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  </td>
+                ))
+              : null}
             <td>
               <Link
-                href={links.portfolio}
+                href={displayUrl}
                 style={{
                   fontSize: 12,
                   color: theme.colors.brand,
@@ -79,7 +85,7 @@ export function EmailFooter({ note, year }: { note: string; year: number }) {
                   fontWeight: 600,
                 }}
               >
-                jesushg.com
+                {displayLabel}
               </Link>
             </td>
           </tr>
@@ -105,7 +111,9 @@ export function EmailFooter({ note, year }: { note: string; year: number }) {
           fontFamily: theme.font.sans,
         }}
       >
-        © {year} Jesús Hernández · {links.location}
+        © {year}
+        {ownerName ? ` ${ownerName}` : ""}
+        {location ? ` · ${location}` : ""}
       </Text>
     </Section>
   );

@@ -142,6 +142,16 @@ export async function syncResendTemplatesForTenant(
         html: cvHtml,
         variables: [
           { key: "RECIPIENT_NAME", type: "string", fallbackValue: "there" },
+          { key: "OWNER_NAME", type: "string", fallbackValue: ownerName },
+          { key: "OWNER_ROLE", type: "string", fallbackValue: "" },
+          { key: "OWNER_BIO", type: "string", fallbackValue: "" },
+          {
+            key: "PORTFOLIO_URL",
+            type: "string",
+            fallbackValue: `https://${domain}`,
+          },
+          { key: "PORTFOLIO_LABEL", type: "string", fallbackValue: domain },
+          { key: "LOCATION", type: "string", fallbackValue: "" },
         ],
       });
       templateMap[cvName] = cvId;
@@ -167,6 +177,9 @@ export async function syncResendTemplatesForTenant(
           },
           { key: "MESSAGE", type: "string", fallbackValue: "" },
           { key: "SENT_AT", type: "string", fallbackValue: "" },
+          { key: "DOMAIN", type: "string", fallbackValue: domain },
+          { key: "BRAND_NAME", type: "string", fallbackValue: ownerName },
+          { key: "OWNER_NAME", type: "string", fallbackValue: ownerName },
         ],
       });
       templateMap[contactName] = contactId;

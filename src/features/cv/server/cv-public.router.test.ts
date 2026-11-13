@@ -106,7 +106,8 @@ describe("cvPublicRouter.sendPdfByEmail", () => {
     });
     (getPortfolioCvTemplateId as jest.Mock).mockResolvedValue("cv-tpl");
     (loadCvStructuredDraft as jest.Mock).mockResolvedValue({
-      header: { fullName: "Ada Lovelace" },
+      header: { fullName: "Ada Lovelace", degree: "Fullstack Developer" },
+      contacts: [],
     });
     (assertCvEmailRateLimit as jest.Mock).mockResolvedValue(undefined);
     (resolveCvPdfAsset as jest.Mock).mockResolvedValue({
@@ -141,9 +142,8 @@ describe("cvPublicRouter.sendPdfByEmail", () => {
     expect(payload?.from).toBe("me@example.com");
     expect(payload?.to).toBe("hire@example.com");
     expect(payload?.replyTo).toBe("owner@example.com");
-    expect(payload?.subject).toBe(
-      "Résumé – Jesús Hernández, Full Stack Developer",
-    );
+    expect(payload?.subject).toBe("Résumé – Ada Lovelace, Fullstack Developer");
+    expect(payload?.html).toContain("Ada Lovelace");
     expect(payload?.html).toContain("#1c58da");
     expect(payload?.text).toContain("My résumé is attached");
     expect(payload?.attachments[0]?.filename).toBe(
