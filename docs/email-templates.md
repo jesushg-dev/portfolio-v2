@@ -33,9 +33,18 @@ Variable names must stay in sync with `publish-to-resend.ts` (e.g. `RESET_URL`, 
 
 Next tracing **excludes** `email-templates/**` from serverless bundles (`next.config.ts`) so preview tooling does not ship to Vercel functions.
 
-## Branding
+## Multi-Tenant Branding & Personalization
 
-Subjects, footer wordmark, and `email-templates/messages/*.json` use **jesushg.com**. `links` in `src/theme.ts` match the public CV (site, GitHub `jesushg`, LinkedIn, photo URL). After editing templates, regenerate compiled HTML and republish:
+Templates are multi-tenant and adapt dynamically to each portfolio:
+
+- **CV Delivery**:
+  - The runtime (`cv-public.router.ts`) loads the tenant's structured CV draft and public URL, passing `ownerName`, `role`, `bio` (summary), `portfolioUrl`, `socialLinks`, and `location` to `getCvDeliveryEmailContent`.
+  - When published to a tenant's Resend account (`syncResendTemplatesForTenant`), templates support dynamic variables (`OWNER_NAME`, `OWNER_ROLE`, `OWNER_BIO`, `PORTFOLIO_URL`, `LOCATION`) with fallback values derived from the tenant's profile.
+- **Contact Notifications**:
+  - Sent via Resend template to the tenant's owner with variables (`SENDER_NAME`, `SENDER_EMAIL`, `MESSAGE`, `SENT_AT`, `DOMAIN`, `BRAND_NAME`, `OWNER_NAME`).
+  - Footers and reply headers dynamically display the tenant's domain and name rather than hardcoding platform defaults.
+
+After editing templates, regenerate compiled HTML and republish:
 
 ```bash
 cd email-templates
@@ -43,4 +52,4 @@ npm run preview          # writes src/compiled-templates.ts (tenant publisher)
 npm run publish:resend   # system templates on platform Resend
 ```
 
-Tenants pick up compiled HTML on the next Credentials → Resend save (`syncResendTemplatesForTenant`).
+Tenants pick up updated compiled HTML on the next Credentials → Resend save (`syncResendTemplatesForTenant`).

@@ -1090,7 +1090,7 @@ export function GlobeMap({
   };
 
   return (
-    <div className="border-border/50 bg-card/40 relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl border backdrop-blur-xs">
+    <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[2rem]">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
@@ -1109,14 +1109,14 @@ export function GlobeMap({
       />
 
       {/* Floating map controls toolbar */}
-      <div className="bg-card/90 border-border/60 absolute right-2 bottom-2 z-10 flex items-center gap-1 rounded-lg border p-1 shadow-md backdrop-blur-md">
+      <div className="glass-card absolute right-4 bottom-4 z-10 flex items-center gap-1 rounded-full p-1">
         <Button
           onClick={handleZoomIn}
           variant="ghost"
           size="icon-xs"
           title={t("zoomIn")}
           aria-label={t("zoomIn")}
-          className="text-foreground hover:bg-accent"
+          className="text-foreground hover:bg-accent/40 rounded-full"
         >
           <Plus className="size-3.5" />
         </Button>
@@ -1127,7 +1127,7 @@ export function GlobeMap({
           size="icon-xs"
           title={t("zoomOut")}
           aria-label={t("zoomOut")}
-          className="text-foreground hover:bg-accent"
+          className="text-foreground hover:bg-accent/40 rounded-full"
         >
           <Minus className="size-3.5" />
         </Button>
@@ -1140,7 +1140,7 @@ export function GlobeMap({
                 size="icon-xs"
                 title={t("options")}
                 aria-label={t("options")}
-                className="text-foreground hover:bg-accent"
+                className="text-foreground hover:bg-accent/40 rounded-full"
               >
                 <Settings className="size-3.5" />
               </Button>

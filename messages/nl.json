@@ -572,7 +572,7 @@
             "cta": "Verken technische stack"
           },
           "services": {
-            "label": "Technische specialismen",
+            "label": "Diensten",
             "short": "Architectuur en modernisering",
             "headline": "Waar ik in uitblink",
             "description": "Softwarearchitectuur ontwerpen, verouderde platforms moderniseren en de kern van nieuwe producten bouwen.",
@@ -583,7 +583,7 @@
             ],
             "statValue": "3",
             "statLabel": "specialismen",
-            "cta": "Bekijk specialismen"
+            "cta": "Bekijk diensten"
           },
           "soft-skills": {
             "label": "Leiderschap & competenties",
@@ -604,6 +604,16 @@
             "statValue": "100%",
             "statLabel": "positieve feedback",
             "cta": "Lees testimonials"
+          },
+          "contact": {
+            "label": "Contact",
+            "short": "Directe communicatie",
+            "headline": "Start een gesprek",
+            "description": "Heb je een project in gedachten, een kans om te bespreken of technisch advies nodig? Stuur me een direct bericht.",
+            "chips": ["Direct bericht", "Consulting", "Samenwerking"],
+            "statValue": "<24h",
+            "statLabel": "reactietijd",
+            "cta": "Stuur bericht"
           },
           "projects": {
             "label": "Projecten",
@@ -1209,8 +1219,20 @@
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Zoek je een senior engineer of plan je een complex project? Vertel me wat je nodig hebt.",
+      "subtitle": "Ik zoek een rol als senior full-stack engineer of tech-lead, op afstand of vanuit Managua, en ik kan direct starten.",
       "divider": "of",
+      "direct": {
+        "eyebrow": "Direct contact opnemen",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "linkedin": "LinkedIn",
+        "videoCall": "Videogesprek",
+        "scheduleCall": "Gesprek inplannen",
+        "write": "Schrijven",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "copyEmailAria": "E-mailadres kopiëren"
+      },
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "globe": {
@@ -1231,7 +1253,7 @@
         "distanceFromVisitor": "Ik kom uit {place}, ongeveer <km>{distance}</km> van je huidige locatie, volgens je IP-adres."
       },
       "form": {
-        "helper": "Vertel me over de rol of het project, de grootste uitdaging en je planning. Ik reageer met een concrete volgende stap.",
+        "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
         "name": {
           "label": "Naam",
           "placeholder": "Jan Jansen",
@@ -1355,10 +1377,6 @@
           "title": "Goede keuzes zonder in te leveren op kwaliteit."
         }
       }
-    },
-    "faq": {
-      "title": "Vragen?",
-      "titleGradient": "Antwoorden."
     },
     "qaCollaboration": {
       "metaTitle": "QA-samenwerking",
@@ -2038,7 +2056,10 @@
       "layout": "Indeling",
       "noResults": "Geen resultaten",
       "searchList": "Lijst doorzoeken",
-      "showMoreCount": "Toon nog {count}"
+      "showMoreCount": "Toon nog {count}",
+      "copyCode": "Kopiëren",
+      "copiedCode": "Gekopieerd!",
+      "copyCodeAria": "Code naar klembord kopiëren"
     }
   },
   "admin": {
@@ -4924,7 +4945,20 @@
       "tailorPdfOnDemandNotice": "Om je iLovePDF-tegoed te besparen, wordt de PDF alleen op verzoek gegenereerd.",
       "tailorOutputLanguage": "Taal van het cv",
       "tailorOutputLanguageAuto": "Automatisch (vacature)",
-      "tailorTemplatePages": "{count, plural, one {# pagina} other {# pagina’s}}"
+      "tailorTemplatePages": "{count, plural, one {# pagina} other {# pagina’s}}",
+      "tailorTemplateRecommended": "Aanbevolen",
+      "templates": {
+        "v1": {
+          "title": "Compact · 1 Pag.",
+          "subtitle": "Snelle screening & gerichte functies",
+          "description": "Compact ontwerp van 1 pagina gericht op recente impact en kernvaardigheden."
+        },
+        "v2": {
+          "title": "Executive · 2 Pag.",
+          "subtitle": "Volledige loopbaan & leiderschap",
+          "description": "Uitgebreid formaat van 2 pagina's met bedrijfslogo's, meerkoloms contactbalk en certificeringen."
+        }
+      }
     },
     "uses": {
       "title": "Uses",
@@ -5021,23 +5055,6 @@
       "saved": "Contactvoorkeuren opgeslagen.",
       "error": "Contactvoorkeuren konden niet worden opgeslagen.",
       "loading": "Contactvoorkeuren laden…"
-    },
-    "homeFaq": {
-      "title": "Veelgestelde vragen op de startpagina",
-      "description": "Beheer de vragen voor dit portfolio per taal. Sla deze wijzigingen apart op. De sectie blijft verborgen voor talen zonder vragen.",
-      "question": "Vraag",
-      "answer": "Antwoord",
-      "add": "Vraag toevoegen",
-      "remove": "Vraag verwijderen",
-      "moveUp": "Omhoog",
-      "moveDown": "Omlaag",
-      "save": "Vragen opslaan",
-      "saving": "Opslaan…",
-      "saved": "Vragen opgeslagen.",
-      "error": "De vragen konden niet worden geladen of opgeslagen. Probeer het opnieuw.",
-      "invalid": "Vul elke vraag en elk antwoord in voordat je opslaat.",
-      "loading": "Vragen laden…",
-      "empty": "Geen vragen in deze taal. De sectie blijft verborgen totdat je inhoud toevoegt."
     },
     "blog": {
       "title": "Blog",

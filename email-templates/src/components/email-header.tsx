@@ -1,18 +1,20 @@
 import { Section, Text } from "@react-email/components";
 import { theme } from "../theme";
 
+export interface EmailHeaderProps {
+  eyebrow?: string;
+  tagline?: string;
+  brandName?: string;
+}
+
 /**
- * Soft brand header: tinted background band + the real "Jehg" wordmark,
- * same weight/letter-spacing as the nav logo on jesushg.com. Gives the email
- * some visual presence without going back to a fake dark "app" banner.
+ * Brand header: tinted background band + brand name or wordmark.
  */
 export function EmailHeader({
   eyebrow,
   tagline,
-}: {
-  eyebrow?: string;
-  tagline?: string;
-}) {
+  brandName = "Portfolio",
+}: EmailHeaderProps) {
   return (
     <Section
       style={{
@@ -31,7 +33,7 @@ export function EmailHeader({
           letterSpacing: "-0.03em",
         }}
       >
-        Jehg
+        {brandName}
       </Text>
       {tagline ? (
         <Text

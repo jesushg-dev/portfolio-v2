@@ -37,7 +37,6 @@ import { ProfileAboutLivePreview } from "./profile-about-live-preview";
 import { ProfileIdentityTab } from "./profile-identity-tab";
 import { ProfileAboutTab } from "./profile-about-tab";
 import { ProfileSaveBar } from "./profile-save-bar";
-import { ProfileFaqEditor } from "./profile-faq-editor";
 import { ProfileCareerAvailabilityEditor } from "./profile-career-availability-editor";
 import { ProfileContactPreferencesEditor } from "./profile-contact-preferences-editor";
 
@@ -742,7 +741,6 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
 
       {activeTab === "about" && (
         <div className="mt-8">
-          <ProfileFaqEditor />
           <ProfileContactPreferencesEditor />
         </div>
       )}

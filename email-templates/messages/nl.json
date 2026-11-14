@@ -1,41 +1,41 @@
 {
   "cv-delivery": {
     "preview": "Mijn cv is bijgevoegd. Beantwoord deze e-mail en we plannen een gesprek.",
-    "tagline": "Full Stack Developer | Computer Engineer",
+    "tagline": "Portfolio en cv",
     "greeting": "Hallo,",
-    "body1": "Bedankt voor je interesse. Ik ben Jesús, Full Stack developer met 6+ jaar ervaring in .NET Core, React/Next.js en TypeScript. Momenteel leid ik het e-commerce engineering team op VTEX voor Walmart Global Tech in Centraal-Amerika.",
+    "body1": "Bedankt voor je interesse in mijn profiel. Je vindt mijn cv als bijlage bij deze e-mail.",
     "body2": "Mijn cv is bijgevoegd. Als je wilt praten, antwoord dan op deze e-mail en we plannen een gesprek.",
     "signOff": "Met vriendelijke groet,",
-    "name": "Jesús Hernández",
-    "role": "Full Stack Developer | Computer Engineer",
-    "footer": "Verzonden vanuit het contactformulier op jesushg.com."
+    "name": "Kandidaat",
+    "role": "Professioneel profiel",
+    "footer": "Verzonden vanuit het portfolio-contactformulier op {domain}."
   },
   "contact-notification": {
-    "preview": "Nieuw bericht van {senderName} via jesushg.com",
+    "preview": "Nieuw bericht van {senderName} via {domain}",
     "eyebrow": "Nieuw bericht · contactformulier",
     "labelFrom": "Van",
     "labelEmail": "E-mail",
     "labelReceived": "Ontvangen",
     "labelMessage": "Bericht",
     "replyButton": "Antwoord aan {firstName}",
-    "footer": "Automatisch verzonden vanuit het contactformulier op jesushg.com."
+    "footer": "Automatisch verzonden vanuit het contactformulier op {domain}."
   },
   "reset-password": {
     "preview": "Herstel je wachtwoord",
     "eyebrow": "Accountbeveiliging · Wachtwoord herstellen",
     "greeting": "Hallo,",
-    "body1": "Je hebt gevraagd om je wachtwoord voor je jesushg.com-account te herstellen.",
+    "body1": "Je hebt gevraagd om je wachtwoord voor je account te herstellen.",
     "button": "Wachtwoord herstellen",
     "body2": "Als je dit niet hebt aangevraagd, kun je deze e-mail veilig negeren.",
-    "footer": "Beveiligingswaarschuwing verzonden vanaf jesushg.com."
+    "footer": "Beveiligingswaarschuwing verzonden vanaf je portfolio-account."
   },
   "two-factor-otp": {
     "preview": "Je inlogcode",
     "eyebrow": "Accountbeveiliging · Tweestapsverificatie",
     "greeting": "Hallo,",
-    "body1": "Gebruik deze code om het inloggen bij je jesushg.com-account af te ronden:",
+    "body1": "Gebruik deze code om het inloggen bij je account af te ronden:",
     "expires": "De code verloopt na 5 minuten en is eenmalig te gebruiken.",
     "body2": "Heb je niet geprobeerd in te loggen? Wijzig dan meteen je wachtwoord — iemand anders kent het.",
-    "footer": "Beveiligingswaarschuwing verzonden vanaf jesushg.com."
+    "footer": "Beveiligingswaarschuwing verzonden vanaf je portfolio-account."
   }
 }

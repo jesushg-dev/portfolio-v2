@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, ReactNodeViewRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Image from "@tiptap/extension-image";
@@ -12,6 +12,7 @@ import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 import { createHeadingIdFactory } from "@/features/blog/lib/blog-headings";
+import { BlogCodeBlock } from "@/features/blog/components/blog-code-block";
 
 import "@/features/blog/styles/blog-prose.css";
 
@@ -27,7 +28,11 @@ export function TiptapRenderer({ content, className }: TiptapRendererProps) {
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({ codeBlock: false, link: false }),
-      CodeBlockLowlight.configure({ lowlight }),
+      CodeBlockLowlight.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(BlogCodeBlock);
+        },
+      }).configure({ lowlight }),
       Image.configure({ inline: false }),
       Youtube.configure({ width: 640, height: 360 }),
       Link.configure({ openOnClick: true }),

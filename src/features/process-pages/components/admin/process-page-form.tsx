@@ -301,7 +301,7 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
         onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
         className="-m-4 flex min-h-[calc(100vh-7rem)] flex-col md:-m-6"
       >
-        <header className="border-border bg-background/90 sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3 backdrop-blur">
+        <header className="border-border bg-background/95 sticky top-0 md:top-16 z-20 flex flex-wrap items-center justify-between gap-3 border-b px-4 py-2.5 backdrop-blur-md shadow-2xs">
           <div>
             <p className="text-sm font-semibold">
               {isEditMode ? t("editTitle") : t("addNew")}
@@ -333,8 +333,8 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
         >
-          <div className="grid min-h-0 flex-1 lg:grid-cols-[16rem_minmax(0,1fr)_18rem]">
-            <aside className="border-border bg-muted/30 overflow-y-auto border-r p-3">
+          <div className="grid min-h-0 flex-1 items-start lg:grid-cols-[16rem_minmax(0,1fr)_18rem]">
+            <aside className="border-border bg-muted/30 lg:sticky lg:top-[8.5rem] lg:self-start lg:max-h-[calc(100vh-8.5rem)] overflow-y-auto border-r p-3">
               <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-widest uppercase">
                 {t("widgetPalette")}
               </p>
@@ -359,7 +359,7 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
               t={t}
             />
 
-            <aside className="border-border overflow-y-auto border-l p-4">
+            <aside className="border-border bg-background lg:sticky lg:top-[8.5rem] lg:self-start lg:max-h-[calc(100vh-8.5rem)] overflow-y-auto border-l p-4">
               <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-widest uppercase">
                 {t("pageSettings")}
               </p>

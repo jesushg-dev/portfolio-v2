@@ -21,10 +21,15 @@ export const RecentlyPlayedNotice: FC<RecentlyPlayedNoticeProps> = ({
 
   return (
     <p
+      style={{
+        color: compact
+          ? "rgba(255, 255, 255, 0.7)"
+          : "rgba(255, 255, 255, 0.85)",
+      }}
       className={
         compact
-          ? "mb-1 line-clamp-2 text-[0.625rem] leading-snug text-amber-200/90"
-          : "mb-2 text-center text-xs font-medium text-amber-300/90"
+          ? "mb-1 line-clamp-2 text-[0.625rem] leading-snug"
+          : "mb-2 text-center text-xs font-medium"
       }
     >
       {compact ? (

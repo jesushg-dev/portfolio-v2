@@ -10,6 +10,7 @@ export function profileToTenant(profile: {
   displayName: string | null;
   logoInitials: string | null;
   logoImageUrl: string | null;
+  customDomain?: string | null;
 }): ResolvedTenant {
   return {
     userId: profile.userId,
@@ -19,6 +20,7 @@ export function profileToTenant(profile: {
     displayName: profile.displayName,
     logoInitials: profile.logoInitials,
     logoImageUrl: profile.logoImageUrl,
+    customDomain: profile.customDomain ?? null,
     defaultLocale: (locales as readonly string[]).includes(
       profile.defaultLocale,
     )

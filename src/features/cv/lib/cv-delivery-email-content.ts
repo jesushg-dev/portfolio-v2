@@ -1,5 +1,20 @@
 import type { Locale } from "@/i18n/config";
 
+export interface CvDeliverySocialLink {
+  label: string;
+  url: string;
+}
+
+export interface CvDeliveryEmailParams {
+  locale: Locale;
+  ownerName?: string;
+  role?: string;
+  bio?: string;
+  portfolioUrl?: string;
+  socialLinks?: CvDeliverySocialLink[];
+  location?: string;
+}
+
 export interface CvDeliveryEmailContent {
   subject: string;
   html: string;
@@ -7,70 +22,108 @@ export interface CvDeliveryEmailContent {
 }
 
 interface LocaleCopy {
-  title: string;
-  subject: string;
+  titleSuffix: string;
+  subjectPrefix: string;
   preheader: string;
   greeting: string;
-  body1: string;
+  defaultBio: string;
   body2: string;
   signOff: string;
-  name: string;
-  role: string;
+  defaultRole: string;
   footerText: string;
 }
 
 const COPY: Record<Locale, LocaleCopy> = {
   es: {
-    title: "Jesús Hernández – CV",
-    subject: "CV – Jesús Hernández, Desarrollador Full Stack",
+    titleSuffix: "CV",
+    subjectPrefix: "CV",
     preheader:
       "Te dejo mi CV adjunto. Responde a este correo y coordinamos una llamada.",
     greeting: "Hola,",
-    body1:
-      "Gracias por tu interés. Soy Jesús, desarrollador Full Stack con más de 6 años de experiencia en .NET Core, React/Next.js y TypeScript. Actualmente lidero el equipo de ingeniería de e-commerce en VTEX para Walmart Global Tech en Centroamérica.",
+    defaultBio:
+      "Gracias por tu interés en mi perfil. Te dejo mi CV adjunto a este correo.",
     body2:
       "Te dejo mi CV adjunto. Si quieres conversar, responde a este correo y coordinamos una llamada.",
     signOff: "Saludos,",
-    name: "Jesús Hernández",
-    role: "Desarrollador Full Stack | Ingeniero en Computación",
-    footerText: "Enviado desde el formulario de contacto en",
+    defaultRole: "Perfil profesional",
+    footerText: "Enviado desde el portafolio en",
   },
   en: {
-    title: "Jesús Hernández – Résumé",
-    subject: "Résumé – Jesús Hernández, Full Stack Developer",
+    titleSuffix: "Résumé",
+    subjectPrefix: "Résumé",
     preheader:
       "My résumé is attached. Reply to this email and we’ll set up a call.",
     greeting: "Hi,",
-    body1:
-      "Thanks for your interest. I’m Jesús, a Full Stack developer with 6+ years of experience in .NET Core, React/Next.js and TypeScript. I currently lead the e-commerce engineering team on VTEX for Walmart Global Tech in Central America.",
+    defaultBio:
+      "Thanks for your interest in my profile. You will find my résumé attached to this email.",
     body2:
       "My résumé is attached. If you’d like to talk, just reply to this email and we’ll set up a call.",
     signOff: "Best regards,",
-    name: "Jesús Hernández",
-    role: "Full Stack Developer | Computer Engineer",
-    footerText: "Sent from the contact form at",
+    defaultRole: "Professional Profile",
+    footerText: "Sent from the portfolio at",
   },
   nl: {
-    title: "Jesús Hernández – CV",
-    subject: "CV – Jesús Hernández, Full Stack Developer",
+    titleSuffix: "CV",
+    subjectPrefix: "CV",
     preheader:
       "Mijn cv is bijgevoegd. Beantwoord deze e-mail en we plannen een gesprek.",
     greeting: "Hallo,",
-    body1:
-      "Bedankt voor je interesse. Ik ben Jesús, Full Stack developer met 6+ jaar ervaring in .NET Core, React/Next.js en TypeScript. Momenteel leid ik het e-commerce engineering team op VTEX voor Walmart Global Tech in Centraal-Amerika.",
+    defaultBio:
+      "Bedankt voor je interesse in mijn profiel. Je vindt mijn cv als bijlage bij deze e-mail.",
     body2:
       "Mijn cv is bijgevoegd. Als je wilt praten, antwoord dan op deze e-mail en we plannen een gesprek.",
     signOff: "Met vriendelijke groet,",
-    name: "Jesús Hernández",
-    role: "Full Stack Developer | Computer Engineer",
-    footerText: "Verzonden vanuit het contactformulier op",
+    defaultRole: "Professioneel profiel",
+    footerText: "Verzonden vanuit het portfolio op",
   },
 };
 
 export function getCvDeliveryEmailContent(
-  locale: Locale,
+  input: Locale | CvDeliveryEmailParams,
 ): CvDeliveryEmailContent {
+  const params: CvDeliveryEmailParams =
+    typeof input === "string" ? { locale: input } : input;
+  const locale = params.locale ?? "en";
   const c = COPY[locale] ?? COPY.en;
+
+  const rawOwnerName = params.ownerName?.trim();
+  const ownerName =
+    rawOwnerName && rawOwnerName.length > 0 ? rawOwnerName : "Jesús Hernández";
+  const role = params.role?.trim();
+  const rawBio = params.bio?.trim();
+  const bio = rawBio && rawBio.length > 0 ? rawBio : c.defaultBio;
+  const rawPortfolioUrl = params.portfolioUrl?.trim();
+  const portfolioUrl =
+    rawPortfolioUrl && rawPortfolioUrl.length > 0
+      ? rawPortfolioUrl
+      : "https://www.jesushg.com";
+  const portfolioDisplay = portfolioUrl
+    .replace(/^https?:\/\//, "")
+    .replace(/\/$/, "");
+  const socialLinks = params.socialLinks ?? [];
+  const location = params.location?.trim();
+
+  const rolePart = role ? `, ${role}` : "";
+  const subject = `${c.subjectPrefix} – ${ownerName}${rolePart}`;
+  const title = `${ownerName} – ${c.titleSuffix}`;
+
+  const linksHtmlParts: string[] = [
+    `<a class="link" href="${portfolioUrl}" style="color:#1c58da; text-decoration:none;">${portfolioDisplay}</a>`,
+  ];
+  for (const s of socialLinks) {
+    linksHtmlParts.push(
+      `<a class="link" href="${s.url}" style="color:#1c58da; text-decoration:none;">${s.label}</a>`,
+    );
+  }
+  const linksHtml = linksHtmlParts.join(
+    `<span class="muted" style="color:#9ca3af;">&nbsp;·&nbsp;</span>`,
+  );
+  const locationHtml = location
+    ? `<p class="muted" style="margin:0; font-size:14px; color:#6b7280;">${location}</p>`
+    : "";
+  const roleHtml = role
+    ? `<p class="muted" style="margin:0 0 16px 0; font-size:14px; color:#6b7280;">${role}</p>`
+    : "";
 
   const html = `<!DOCTYPE html>
 <html lang="${locale}">
@@ -79,7 +132,7 @@ export function getCvDeliveryEmailContent(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <meta name="supported-color-schemes" content="light dark">
-<title>${c.title}</title>
+<title>${title}</title>
 <style>
   @media only screen and (max-width: 620px) {
     .px { padding-left: 22px !important; padding-right: 22px !important; }
@@ -113,7 +166,7 @@ export function getCvDeliveryEmailContent(
             <p style="margin:0 0 16px 0;">${c.greeting}</p>
 
             <p style="margin:0 0 16px 0;">
-              ${c.body1}
+              ${bio}
             </p>
 
             <p style="margin:0 0 24px 0;">
@@ -121,23 +174,19 @@ export function getCvDeliveryEmailContent(
             </p>
 
             <p style="margin:0 0 4px 0;">${c.signOff}</p>
-            <p style="margin:0; font-weight:700;">${c.name}</p>
-            <p class="muted" style="margin:0 0 16px 0; font-size:14px; color:#6b7280;">${c.role}</p>
+            <p style="margin:0; font-weight:700;">${ownerName}</p>
+            ${roleHtml}
 
             <p style="margin:0 0 4px 0; font-size:14px;">
-              <a class="link" href="https://www.jesushg.com" style="color:#1c58da; text-decoration:none;">jesushg.com</a>
-              <span class="muted" style="color:#9ca3af;">&nbsp;·&nbsp;</span>
-              <a class="link" href="https://www.linkedin.com/in/jesushg-dev" style="color:#1c58da; text-decoration:none;">LinkedIn</a>
-              <span class="muted" style="color:#9ca3af;">&nbsp;·&nbsp;</span>
-              <a class="link" href="https://github.com/jesushg-dev" style="color:#1c58da; text-decoration:none;">GitHub</a>
+              ${linksHtml}
             </p>
-            <p class="muted" style="margin:0; font-size:14px; color:#6b7280;">Masaya, Nicaragua</p>
+            ${locationHtml}
 
           </td>
         </tr>
         <tr>
           <td class="px muted" style="padding:20px 36px 28px 36px; font-family:-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:12px; line-height:1.5; color:#9ca3af;">
-            ${c.footerText} <a class="link" href="https://www.jesushg.com" style="color:#9ca3af;">jesushg.com</a>.
+            ${c.footerText} <a class="link" href="${portfolioUrl}" style="color:#9ca3af;">${portfolioDisplay}</a>.
           </td>
         </tr>
       </table>
@@ -149,20 +198,28 @@ export function getCvDeliveryEmailContent(
 </body>
 </html>`;
 
-  const text = `${c.greeting}
+  const textLinks = [
+    portfolioDisplay,
+    ...socialLinks.map((s) => `${s.label}: ${s.url}`),
+  ].join(" · ");
 
-${c.body1}
-
-${c.body2}
-
-${c.signOff}
-${c.name}
-${c.role}
-jesushg.com · linkedin.com/in/jesushg-dev · github.com/jesushg-dev
-Masaya, Nicaragua`;
+  const textLines = [
+    c.greeting,
+    "",
+    bio,
+    "",
+    c.body2,
+    "",
+    c.signOff,
+    ownerName,
+    ...(role ? [role] : []),
+    textLinks,
+    ...(location ? [location] : []),
+  ];
+  const text = textLines.join("\n");
 
   return {
-    subject: c.subject,
+    subject,
     html,
     text,
   };

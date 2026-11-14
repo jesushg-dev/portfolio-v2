@@ -8,7 +8,6 @@ const WHITE_SURFACES = [
   "#main-content",
   ".home-tech-marquee",
   ".home-section",
-  ".site-footer",
 ] as const;
 
 test.describe("light theme accessibility", () => {

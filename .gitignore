@@ -44,9 +44,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-# typescript
+# typescript & lint
 *.tsbuildinfo
 next-env.d.ts
+.eslintcache
 
 # vscode
 .vscode/

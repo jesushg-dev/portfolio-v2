@@ -28,6 +28,7 @@ export interface ResolvedTenant {
   displayName: string | null;
   logoInitials: string | null;
   logoImageUrl: string | null;
+  customDomain: string | null;
 }
 
 /**

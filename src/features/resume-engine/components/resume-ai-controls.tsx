@@ -2,6 +2,7 @@
 
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
+import { Bot, FileCode } from "lucide-react";
 
 import {
   Select,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { ResumeOptionCard } from "./resume-option-card";
 
 export type AiProcessingMode = "auto" | "manual";
 
@@ -50,21 +52,6 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
     provider ?? defaultProvider ?? providers[0]?.id ?? "";
 
   const isCompact = layout === "compact";
-  const optionClassName = (active: boolean, disabled = false) =>
-    cn(
-      "rounded-md border text-left transition-colors",
-      isCompact
-        ? "flex flex-col gap-0.5 p-2.5"
-        : "border-input bg-background hover:bg-muted rounded-sm p-3",
-      active
-        ? isCompact
-          ? "border-primary bg-primary/5"
-          : "border-primary ring-ring ring-2"
-        : isCompact
-          ? "border-border bg-background hover:bg-muted/50"
-          : "border-input bg-background hover:bg-muted",
-      disabled && "cursor-not-allowed opacity-50",
-    );
 
   return (
     <div className="flex flex-col gap-4">
@@ -74,56 +61,40 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
         ) : (
           <Label>{t("aiModeLabel")}</Label>
         )}
-        <div className="grid gap-2 sm:grid-cols-2 lg:max-w-3xl lg:grid-cols-2">
-          <button
-            type="button"
+        <div
+          role="radiogroup"
+          aria-label={isCompact ? t("aiModeTitle") : t("aiModeLabel")}
+          className="grid grid-cols-2 gap-3"
+        >
+          <ResumeOptionCard
+            selected={mode === "auto"}
             disabled={!hasAutoProviders}
-            onClick={() => onModeChange("auto")}
-            className={optionClassName(mode === "auto", !hasAutoProviders)}
-          >
-            <p
-              className={cn(
-                "font-medium",
-                isCompact ? "text-[13px]" : "text-sm",
-                mode === "auto" && isCompact && "text-primary",
-              )}
-            >
-              {t("aiModeAuto")}
-            </p>
-            <p
-              className={cn(
-                "text-muted-foreground leading-snug",
-                isCompact ? "text-xs" : "mt-1 text-xs",
-              )}
-            >
-              {hasAutoProviders
+            onSelect={() => onModeChange("auto")}
+            title={t("aiModeAuto")}
+            subtitle={
+              hasAutoProviders
                 ? t("aiModeAutoHint")
-                : t("aiModeAutoUnavailable")}
-            </p>
-          </button>
-          <button
-            type="button"
-            onClick={() => onModeChange("manual")}
-            className={optionClassName(mode === "manual")}
-          >
-            <p
-              className={cn(
-                "font-medium",
-                isCompact ? "text-[13px]" : "text-sm",
-                mode === "manual" && isCompact && "text-primary",
-              )}
-            >
-              {t("aiModeManualShort")}
-            </p>
-            <p
-              className={cn(
-                "text-muted-foreground leading-snug",
-                isCompact ? "text-xs" : "mt-1 text-xs",
-              )}
-            >
-              {t("aiModeManualHint")}
-            </p>
-          </button>
+                : t("aiModeAutoUnavailable")
+            }
+            icon={
+              <div className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <Bot className="size-3.5" />
+              </div>
+            }
+            iconWellClassName="size-9 rounded-md bg-muted/30 p-0"
+          />
+          <ResumeOptionCard
+            selected={mode === "manual"}
+            onSelect={() => onModeChange("manual")}
+            title={t("aiModeManualShort")}
+            subtitle={t("aiModeManualHint")}
+            icon={
+              <div className="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                <FileCode className="size-3.5" />
+              </div>
+            }
+            iconWellClassName="size-9 rounded-md bg-muted/30 p-0"
+          />
         </div>
       </div>
 

@@ -68,6 +68,11 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
         aria-label={fullName}
         className="relative flex min-h-[calc(100vh-3.25rem)] w-full flex-col justify-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
       >
+        <span
+          id="about"
+          className="pointer-events-none absolute top-0 scroll-mt-24"
+          aria-hidden="true"
+        />
         {/* Radial Gradient Glow Effect */}
         <div
           className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)]"

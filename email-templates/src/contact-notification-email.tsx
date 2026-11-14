@@ -12,6 +12,10 @@ export interface ContactNotificationEmailProps {
   message?: string;
   sentAt?: string;
   locale?: Locale;
+  brandName?: string;
+  domain?: string;
+  portfolioUrl?: string;
+  ownerName?: string;
 }
 
 function InfoRow({
@@ -90,6 +94,10 @@ export default async function ContactNotificationEmail({
     timeStyle: "short",
   }),
   locale = "en",
+  brandName,
+  domain,
+  portfolioUrl,
+  ownerName,
 }: ContactNotificationEmailProps) {
   const messages = await loadMessages(locale);
   const t = createTranslator({
@@ -98,11 +106,16 @@ export default async function ContactNotificationEmail({
     namespace: "contact-notification",
   });
 
+  const domainLabel = domain?.trim() || "jesushg.com";
+  const brand = brandName?.trim() || "Portfolio";
   const firstName = senderName.split(" ")[0];
 
   return (
-    <EmailWrapper preview={t("preview", { senderName })} lang={locale}>
-      <EmailHeader eyebrow={t("eyebrow")} />
+    <EmailWrapper
+      preview={t("preview", { senderName, domain: domainLabel })}
+      lang={locale}
+    >
+      <EmailHeader eyebrow={t("eyebrow")} brandName={brand} />
 
       <Section style={{ padding: "22px 32px 0" }}>
         <table
@@ -187,7 +200,7 @@ export default async function ContactNotificationEmail({
 
       <Section style={{ padding: "22px 32px 8px" }}>
         <Button
-          href={`mailto:${senderEmail}?subject=${encodeURIComponent("Re: your message on jesushg.com")}`}
+          href={`mailto:${senderEmail}?subject=${encodeURIComponent(`Re: your message on ${domainLabel}`)}`}
           style={{
             backgroundColor: theme.colors.brand,
             color: "#FFFFFF",
@@ -204,7 +217,13 @@ export default async function ContactNotificationEmail({
         </Button>
       </Section>
 
-      <EmailFooter note={t("footer")} year={new Date().getFullYear()} />
+      <EmailFooter
+        note={t("footer", { domain: domainLabel })}
+        year={new Date().getFullYear()}
+        portfolioUrl={portfolioUrl ?? `https://${domainLabel}`}
+        portfolioLabel={domainLabel}
+        ownerName={ownerName}
+      />
     </EmailWrapper>
   );
 }

@@ -576,7 +576,7 @@
             "cta": "Explorar stack técnico"
           },
           "services": {
-            "label": "Especialidades técnicas",
+            "label": "Servicios",
             "short": "Arquitectura y modernización",
             "headline": "En qué destaco",
             "description": "Diseño de arquitectura de software, modernización de plataformas legacy y desarrollo de productos core.",
@@ -587,7 +587,7 @@
             ],
             "statValue": "3",
             "statLabel": "especialidades",
-            "cta": "Ver especialidades"
+            "cta": "Ver servicios"
           },
           "soft-skills": {
             "label": "Liderazgo y competencias",
@@ -612,6 +612,16 @@
             "statValue": "100%",
             "statLabel": "opiniones positivas",
             "cta": "Leer testimonios"
+          },
+          "contact": {
+            "label": "Contacto",
+            "short": "Comunicación directa",
+            "headline": "Inicia una conversación",
+            "description": "¿Tienes un proyecto en mente, una oportunidad laboral o necesitas consultoría técnica? Envíame un mensaje directo.",
+            "chips": ["Mensaje directo", "Consultoría", "Colaboración"],
+            "statValue": "<24h",
+            "statLabel": "tiempo de respuesta",
+            "cta": "Enviar mensaje"
           },
           "projects": {
             "label": "Proyectos",
@@ -1235,8 +1245,20 @@
       "title": "Hablemos",
       "title2": "Envía un mensaje",
       "eyebrow": "Contacto",
-      "subtitle": "¿Buscas a alguien para liderar ingeniería o sacar adelante un proyecto complejo? Cuéntame qué necesitas.",
+      "subtitle": "Busco un rol de senior full-stack o tech-lead, remoto o desde Managua, y puedo incorporarme de inmediato.",
       "divider": "o",
+      "direct": {
+        "eyebrow": "Contáctame directamente",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "linkedin": "LinkedIn",
+        "videoCall": "Videollamada",
+        "scheduleCall": "Agendar una llamada",
+        "write": "Escribir",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "copyEmailAria": "Copiar dirección de correo"
+      },
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "globe": {
@@ -1257,7 +1279,7 @@
         "distanceFromVisitor": "Soy de {place}, a unos <km>{distance}</km> de tu ubicación actual, según tu dirección IP."
       },
       "form": {
-        "helper": "Cuéntame sobre el puesto o proyecto, su mayor reto y los plazos. Te responderé con un siguiente paso concreto.",
+        "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
         "name": {
           "label": "Nombre",
           "placeholder": "Jesús Hernández",
@@ -1381,10 +1403,6 @@
           "title": "Buenas decisiones sin sacrificar la calidad."
         }
       }
-    },
-    "faq": {
-      "title": "¿Preguntas?",
-      "titleGradient": "Respuestas."
     },
     "qaCollaboration": {
       "metaTitle": "Colaboración con QA",
@@ -2064,7 +2082,10 @@
       "layout": "Diseño",
       "noResults": "Sin resultados",
       "searchList": "Buscar en la lista",
-      "showMoreCount": "Mostrar {count} más"
+      "showMoreCount": "Mostrar {count} más",
+      "copyCode": "Copiar",
+      "copiedCode": "¡Copiado!",
+      "copyCodeAria": "Copiar código al portapapeles"
     }
   },
   "admin": {
@@ -4950,7 +4971,20 @@
       "tailorPdfOnDemandNotice": "Para conservar tus créditos de iLovePDF, el PDF se genera bajo demanda al solicitarlo.",
       "tailorOutputLanguage": "Idioma del CV",
       "tailorOutputLanguageAuto": "Automático (oferta de trabajo)",
-      "tailorTemplatePages": "{count, plural, one {# página} other {# páginas}}"
+      "tailorTemplatePages": "{count, plural, one {# página} other {# páginas}}",
+      "tailorTemplateRecommended": "Recomendada",
+      "templates": {
+        "v1": {
+          "title": "Compacta · 1 Pág.",
+          "subtitle": "Revisión rápida y postulaciones directas",
+          "description": "Diseño condensado de 1 sola página centrado en experiencia reciente y habilidades esenciales."
+        },
+        "v2": {
+          "title": "Ejecutiva · 2 Págs.",
+          "subtitle": "Trayectoria completa y liderazgo",
+          "description": "Formato extendido en 2 páginas con logotipos de empresas, barra de contacto multicomlumna y certificaciones."
+        }
+      }
     },
     "uses": {
       "title": "Usos",
@@ -5047,23 +5081,6 @@
       "saved": "Preferencias de contacto guardadas.",
       "error": "No se pudieron guardar las preferencias.",
       "loading": "Cargando preferencias de contacto…"
-    },
-    "homeFaq": {
-      "title": "Preguntas frecuentes del inicio",
-      "description": "Gestiona las preguntas de este portafolio en cada idioma. Guarda estos cambios por separado. Los idiomas vacíos no muestran la sección pública.",
-      "question": "Pregunta",
-      "answer": "Respuesta",
-      "add": "Añadir pregunta",
-      "remove": "Eliminar pregunta",
-      "moveUp": "Subir",
-      "moveDown": "Bajar",
-      "save": "Guardar preguntas",
-      "saving": "Guardando…",
-      "saved": "Preguntas guardadas.",
-      "error": "No se pudieron cargar o guardar las preguntas. Inténtalo de nuevo.",
-      "invalid": "Completa cada pregunta y respuesta antes de guardar.",
-      "loading": "Cargando preguntas…",
-      "empty": "No hay preguntas en este idioma. La sección permanecerá oculta hasta que añadas contenido."
     },
     "blog": {
       "title": "Blog",

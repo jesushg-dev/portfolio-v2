@@ -2,15 +2,50 @@ import { Html, Head, Body, Preview } from "@react-email/components";
 import { createTranslator } from "use-intl";
 import { loadMessages, type Locale } from "./load-messages";
 
+export interface CvDeliverySocialLink {
+  label: string;
+  url: string;
+}
+
 export interface CvDeliveryEmailProps {
   locale?: Locale;
+  recipientName?: string;
+  ownerName?: string;
+  role?: string;
+  bio?: string;
+  portfolioUrl?: string;
+  portfolioLabel?: string;
+  socialLinks?: CvDeliverySocialLink[];
+  location?: string;
 }
 
 export default async function CvDeliveryEmail({
   locale = "en",
+  recipientName,
+  ownerName,
+  role,
+  bio,
+  portfolioUrl = "https://www.jesushg.com",
+  portfolioLabel,
+  socialLinks,
+  location,
 }: CvDeliveryEmailProps) {
   const messages = await loadMessages(locale);
   const t = createTranslator({ locale, messages, namespace: "cv-delivery" });
+
+  const resolvedName = ownerName?.trim() || t("name");
+  const resolvedRole = role?.trim() || t("role");
+  const resolvedBio = bio?.trim() || t("body1");
+  const resolvedLocation = location?.trim();
+  const domainLabel =
+    portfolioLabel?.trim() ||
+    portfolioUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+  const greeting = recipientName?.trim()
+    ? `${t("greeting")} ${recipientName.trim()},`
+    : t("greeting");
+
+  const hasSocialLinks = socialLinks && socialLinks.length > 0;
 
   return (
     <Html lang={locale}>
@@ -90,71 +125,71 @@ export default async function CvDeliveryEmail({
                           color: "#1a1a1a",
                         }}
                       >
-                        <p style={{ margin: "0 0 16px 0" }}>{t("greeting")}</p>
-                        <p style={{ margin: "0 0 16px 0" }}>{t("body1")}</p>
+                        <p style={{ margin: "0 0 16px 0" }}>{greeting}</p>
+                        <p style={{ margin: "0 0 16px 0" }}>{resolvedBio}</p>
                         <p style={{ margin: "0 0 24px 0" }}>{t("body2")}</p>
                         <p style={{ margin: "0 0 4px 0" }}>{t("signOff")}</p>
                         <p style={{ margin: 0, fontWeight: 700 }}>
-                          {t("name")}
+                          {resolvedName}
                         </p>
-                        <p
-                          className="muted"
-                          style={{
-                            margin: "0 0 16px 0",
-                            fontSize: 14,
-                            color: "#6b7280",
-                          }}
-                        >
-                          {t("role")}
-                        </p>
+                        {resolvedRole ? (
+                          <p
+                            className="muted"
+                            style={{
+                              margin: "0 0 16px 0",
+                              fontSize: 14,
+                              color: "#6b7280",
+                            }}
+                          >
+                            {resolvedRole}
+                          </p>
+                        ) : null}
                         <p style={{ margin: "0 0 4px 0", fontSize: 14 }}>
                           <a
                             className="link"
-                            href="https://www.jesushg.com"
+                            href={portfolioUrl}
                             style={{
                               color: "#1c58da",
                               textDecoration: "none",
                             }}
                           >
-                            jesushg.com
+                            {domainLabel}
                           </a>
-                          <span className="muted" style={{ color: "#9ca3af" }}>
-                            &nbsp;·&nbsp;
-                          </span>
-                          <a
-                            className="link"
-                            href="https://www.linkedin.com/in/jesushg-dev"
-                            style={{
-                              color: "#1c58da",
-                              textDecoration: "none",
-                            }}
-                          >
-                            LinkedIn
-                          </a>
-                          <span className="muted" style={{ color: "#9ca3af" }}>
-                            &nbsp;·&nbsp;
-                          </span>
-                          <a
-                            className="link"
-                            href="https://github.com/jesushg-dev"
-                            style={{
-                              color: "#1c58da",
-                              textDecoration: "none",
-                            }}
-                          >
-                            GitHub
-                          </a>
+                          {hasSocialLinks
+                            ? socialLinks.map((link, idx) => (
+                                <span key={idx}>
+                                  <span
+                                    className="muted"
+                                    style={{ color: "#9ca3af" }}
+                                  >
+                                    &nbsp;·&nbsp;
+                                  </span>
+                                  <a
+                                    className="link"
+                                    href={link.url}
+                                    style={{
+                                      color: "#1c58da",
+                                      textDecoration: "none",
+                                    }}
+                                  >
+                                    {link.label}
+                                  </a>
+                                </span>
+                              ))
+                            : null}
                         </p>
-                        <p
-                          className="muted"
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                            color: "#6b7280",
-                          }}
-                        >
-                          Masaya, Nicaragua
-                        </p>
+                        {resolvedLocation ? (
+                          <p
+                            className="muted"
+                            style={{
+                              margin: 0,
+                              fontSize: 14,
+                              color: "#6b7280",
+                            }}
+                          >
+                            {resolvedLocation}
+                          </p>
+                        ) : null}
                       </td>
                     </tr>
                     <tr>
@@ -169,7 +204,7 @@ export default async function CvDeliveryEmail({
                           color: "#9ca3af",
                         }}
                       >
-                        {t("footer")}
+                        {t("footer", { domain: domainLabel })}
                       </td>
                     </tr>
                   </tbody>

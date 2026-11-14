@@ -1,41 +1,41 @@
 {
   "cv-delivery": {
     "preview": "Te dejo mi CV adjunto. Responde a este correo y coordinamos una llamada.",
-    "tagline": "Desarrollador Full Stack | Ingeniero en Computación",
+    "tagline": "Portafolio y CV",
     "greeting": "Hola,",
-    "body1": "Gracias por tu interés. Soy Jesús, desarrollador Full Stack con más de 6 años de experiencia en .NET Core, React/Next.js y TypeScript. Actualmente lidero el equipo de ingeniería de e-commerce en VTEX para Walmart Global Tech en Centroamérica.",
+    "body1": "Gracias por tu interés en mi perfil. Encontrarás mi CV adjunto a este correo.",
     "body2": "Te dejo mi CV adjunto. Si quieres conversar, responde a este correo y coordinamos una llamada.",
     "signOff": "Saludos,",
-    "name": "Jesús Hernández",
-    "role": "Desarrollador Full Stack | Ingeniero en Computación",
-    "footer": "Enviado desde el formulario de contacto en jesushg.com."
+    "name": "Candidato",
+    "role": "Perfil profesional",
+    "footer": "Enviado desde el formulario del portafolio en {domain}."
   },
   "contact-notification": {
-    "preview": "Nuevo mensaje de {senderName} vía jesushg.com",
+    "preview": "Nuevo mensaje de {senderName} vía {domain}",
     "eyebrow": "Nuevo mensaje · formulario de contacto",
     "labelFrom": "De",
     "labelEmail": "Email",
     "labelReceived": "Recibido",
     "labelMessage": "Mensaje",
     "replyButton": "Responder a {firstName}",
-    "footer": "Enviado automáticamente desde el formulario de contacto en jesushg.com."
+    "footer": "Enviado automáticamente desde el formulario de contacto en {domain}."
   },
   "reset-password": {
     "preview": "Restablece tu contraseña",
     "eyebrow": "Seguridad de la cuenta · Restablecer contraseña",
     "greeting": "Hola,",
-    "body1": "Solicitaste restablecer la contraseña de tu cuenta en jesushg.com.",
+    "body1": "Solicitaste restablecer la contraseña de tu cuenta.",
     "button": "Restablecer contraseña",
     "body2": "Si no solicitaste este cambio, puedes ignorar este correo de forma segura.",
-    "footer": "Alerta de seguridad enviada desde jesushg.com."
+    "footer": "Alerta de seguridad enviada desde tu cuenta de portafolio."
   },
   "two-factor-otp": {
     "preview": "Tu código de inicio de sesión",
     "eyebrow": "Seguridad de la cuenta · Verificación en dos pasos",
     "greeting": "Hola,",
-    "body1": "Usa este código para terminar de iniciar sesión en tu cuenta de jesushg.com:",
+    "body1": "Usa este código para terminar de iniciar sesión en tu cuenta:",
     "expires": "Caduca en 5 minutos y solo se puede usar una vez.",
     "body2": "Si no intentaste iniciar sesión, cambia tu contraseña de inmediato: alguien más la conoce.",
-    "footer": "Alerta de seguridad enviada desde jesushg.com."
+    "footer": "Alerta de seguridad enviada desde tu cuenta de portafolio."
   }
 }

@@ -31,11 +31,18 @@ export async function publicSkillParams() {
 
 export async function publicProcessParams() {
   const tenant = await getPrimaryPublicTenant();
-  if (!tenant) return [];
-  return db.processPage.findMany({
+  if (!tenant) {
+    return [{ slug: "how-i-use-ai" }, { slug: "qa-collaboration" }];
+  }
+  const pages = await db.processPage.findMany({
     where: { userId: tenant.userId, isPublished: true },
     select: { slug: true },
   });
+  const results = pages.flatMap(({ slug }) =>
+    slug?.trim() ? [{ slug: slug.trim() }] : [],
+  );
+  if (results.length > 0) return results;
+  return [{ slug: "how-i-use-ai" }, { slug: "qa-collaboration" }];
 }
 
 export async function publicBlogParams() {

@@ -60,16 +60,16 @@ async function upsertTemplate(input: TemplateInput): Promise<string> {
 
 // CV delivery subjects per locale
 const cvSubjects: Record<Locale, string> = {
-  en: "Here is my CV — Jesús Hernández",
-  es: "Aquí está mi CV — Jesús Hernández",
-  nl: "Hier is mijn cv — Jesús Hernández",
+  en: "Here is my CV — {{{OWNER_NAME}}}",
+  es: "Aquí está mi CV — {{{OWNER_NAME}}}",
+  nl: "Hier is mijn cv — {{{OWNER_NAME}}}",
 };
 
 // Contact notification subjects per locale
 const contactSubjects: Record<Locale, string> = {
-  en: "New message from {{{SENDER_NAME}}} via jesushg.com",
-  es: "Nuevo mensaje de {{{SENDER_NAME}}} vía jesushg.com",
-  nl: "Nuevo mensaje de {{{SENDER_NAME}}} vía jesushg.com",
+  en: "New message from {{{SENDER_NAME}}} via {{{DOMAIN}}}",
+  es: "Nuevo mensaje de {{{SENDER_NAME}}} vía {{{DOMAIN}}}",
+  nl: "Nieuw bericht van {{{SENDER_NAME}}} via {{{DOMAIN}}}",
 };
 
 const resetPasswordSubjects: Record<Locale, string> = {
@@ -93,17 +93,40 @@ async function main() {
     console.log(`\n[${locale.toUpperCase()}] CV Delivery`);
 
     const cvHtml = await render(
-      await CvDeliveryEmail({ recipientName: "{{{RECIPIENT_NAME}}}", locale }),
+      await CvDeliveryEmail({
+        recipientName: "{{{RECIPIENT_NAME}}}",
+        ownerName: "{{{OWNER_NAME}}}",
+        role: "{{{OWNER_ROLE}}}",
+        bio: "{{{OWNER_BIO}}}",
+        portfolioUrl: "{{{PORTFOLIO_URL}}}",
+        portfolioLabel: "{{{PORTFOLIO_LABEL}}}",
+        location: "{{{LOCATION}}}",
+        locale,
+      }),
       { pretty: false },
     );
 
     const cvId = await upsertTemplate({
       name: `cv-delivery-${locale}`,
-      from: `Jesús Hernández <${links.email}>`,
+      from: `Portfolio <${links.email}>`,
       subject: cvSubjects[locale],
       html: cvHtml,
       variables: [
         { key: "RECIPIENT_NAME", type: "string", fallbackValue: "there" },
+        { key: "OWNER_NAME", type: "string", fallbackValue: "Portfolio Owner" },
+        { key: "OWNER_ROLE", type: "string", fallbackValue: "" },
+        { key: "OWNER_BIO", type: "string", fallbackValue: "" },
+        {
+          key: "PORTFOLIO_URL",
+          type: "string",
+          fallbackValue: links.portfolio,
+        },
+        {
+          key: "PORTFOLIO_LABEL",
+          type: "string",
+          fallbackValue: "jesushg.com",
+        },
+        { key: "LOCATION", type: "string", fallbackValue: "" },
       ],
     });
 
@@ -121,6 +144,9 @@ async function main() {
         senderEmail: "{{{SENDER_EMAIL}}}",
         message: "{{{MESSAGE}}}",
         sentAt: "{{{SENT_AT}}}",
+        domain: "{{{DOMAIN}}}",
+        brandName: "{{{BRAND_NAME}}}",
+        ownerName: "{{{OWNER_NAME}}}",
         locale,
       }),
       { pretty: false },
@@ -136,10 +162,17 @@ async function main() {
         {
           key: "SENDER_EMAIL",
           type: "string",
-          fallbackValue: "[email protected]",
+          fallbackValue: "visitor@example.com",
         },
         { key: "MESSAGE", type: "string", fallbackValue: "" },
         { key: "SENT_AT", type: "string", fallbackValue: "" },
+        { key: "DOMAIN", type: "string", fallbackValue: "jesushg.com" },
+        { key: "BRAND_NAME", type: "string", fallbackValue: "Portfolio" },
+        {
+          key: "OWNER_NAME",
+          type: "string",
+          fallbackValue: "Portfolio Owner",
+        },
       ],
     });
 
