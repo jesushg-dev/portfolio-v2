@@ -1,5 +1,11 @@
 import type { ComponentProps, ReactNode } from "react";
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import type { ReactNodeViewProps } from "@tiptap/react";
 import { BlogCodeBlock } from "./blog-code-block";
 
@@ -54,7 +60,10 @@ describe("BlogCodeBlock", () => {
   });
 
   it("renders code block with language label and copy button", () => {
-    const node = createMockNode({ language: "typescript" }, "const hello = 'world';");
+    const node = createMockNode(
+      { language: "typescript" },
+      "const hello = 'world';",
+    );
 
     render(<BlogCodeBlock node={node} />);
 
