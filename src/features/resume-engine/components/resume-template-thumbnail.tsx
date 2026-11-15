@@ -32,7 +32,7 @@ export const TemplateV1Thumbnail: FC<{
         className={cn(
           "relative flex h-full w-full flex-col overflow-hidden rounded-[0.2rem] border bg-white shadow-2xs transition-transform duration-200",
           selected
-            ? "border-primary/80 ring-1 ring-primary/40 shadow-xs"
+            ? "border-primary/80 ring-primary/40 shadow-xs ring-1"
             : "border-border/80 group-hover:scale-[1.02]",
         )}
       >
@@ -120,7 +120,7 @@ export const TemplateV2Thumbnail: FC<{
       {/* Page 2 (stacked behind with subtle rotation & offset) */}
       <div
         className={cn(
-          "absolute inset-0 flex aspect-[1/1.414] h-full w-[94%] flex-col overflow-hidden rounded-[0.2rem] border border-border/70 bg-zinc-100 shadow-2xs transition-transform duration-200",
+          "border-border/70 absolute inset-0 flex aspect-[1/1.414] h-full w-[94%] flex-col overflow-hidden rounded-[0.2rem] border bg-zinc-100 shadow-2xs transition-transform duration-200",
           "translate-x-1 translate-y-1 rotate-2 group-hover:translate-x-1.5 group-hover:rotate-3",
         )}
       >
@@ -140,7 +140,7 @@ export const TemplateV2Thumbnail: FC<{
         className={cn(
           "relative z-10 flex aspect-[1/1.414] h-full w-[94%] flex-col overflow-hidden rounded-[0.2rem] border bg-white shadow-xs transition-transform duration-200",
           selected
-            ? "border-primary/80 ring-1 ring-primary/40 shadow-xs"
+            ? "border-primary/80 ring-primary/40 shadow-xs ring-1"
             : "border-border/80 group-hover:scale-[1.01]",
         )}
       >
@@ -236,13 +236,13 @@ export const ResumeTemplateThumbnail: FC<ResumeTemplateThumbnailProps> = ({
   return (
     <div
       className={cn(
-        "flex aspect-[1/1.414] h-full max-h-16 flex-col items-center justify-center rounded-[0.2rem] border border-border/60 bg-muted/40 p-1 text-center text-muted-foreground",
+        "border-border/60 bg-muted/40 text-muted-foreground flex aspect-[1/1.414] h-full max-h-16 flex-col items-center justify-center rounded-[0.2rem] border p-1 text-center",
         className,
       )}
       aria-hidden="true"
     >
       <FileText className="size-4 opacity-60" />
-      <span className="mt-0.5 text-[0.5rem] font-semibold uppercase tracking-wider">
+      <span className="mt-0.5 text-[0.5rem] font-semibold tracking-wider uppercase">
         {effectiveVersion}
       </span>
     </div>

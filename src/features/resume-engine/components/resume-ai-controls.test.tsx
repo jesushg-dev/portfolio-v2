@@ -59,4 +59,3 @@ describe("ResumeAiControls", () => {
     expect(onModeChange).not.toHaveBeenCalled();
   });
 });
-

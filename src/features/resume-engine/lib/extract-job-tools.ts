@@ -2,9 +2,12 @@ const COMMON_TECH_KEYWORDS = [
   "TypeScript",
   "JavaScript",
   "React",
+  "React Native",
+  "React Router",
   "Next.js",
   "Vue",
   "Angular",
+  "AngularJS",
   "Svelte",
   "Node.js",
   "Python",
@@ -62,6 +65,50 @@ const COMMON_TECH_KEYWORDS = [
 
 function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function technologyNameKey(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+/** Match whole spellings, preferring complete technology names over prefixes. */
+export function createTechnologyMatcher(names: Iterable<string>) {
+  const alternatives = [...new Set(Array.from(names, technologyNameKey))]
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length)
+    .map((name) => escapeRegex(name).replace(/ /g, "[ \\t]+"))
+    .join("|");
+  const pattern = new RegExp(
+    "(?<![\\p{L}\\p{N}_+#.])(?:" +
+      (alternatives || "(?!)") +
+      ")(?![\\p{L}\\p{N}_+#]|\\.[\\p{L}\\p{N}])",
+    "giu",
+  );
+  return (text: string) =>
+    Array.from(text.matchAll(pattern), ({ 0: name, index }) => ({
+      name,
+      index,
+      key: technologyNameKey(name),
+    }));
+}
+
+export function createResumeTechnologyMatcher(names: Iterable<string>) {
+  const match = createTechnologyMatcher([...COMMON_TECH_KEYWORDS, ...names]);
+  return (text: string) =>
+    match(text).filter(
+      ({ name, index }) =>
+        !/^(go|rest|swift)$/u.test(name) &&
+        !(
+          name === "react" && /^\s+to\b/iu.test(text.slice(index + name.length))
+        ),
+    );
+}
+
+export function isCommonTechnology(name: string): boolean {
+  const key = technologyNameKey(name);
+  return COMMON_TECH_KEYWORDS.some(
+    (technology) => technologyNameKey(technology) === key,
+  );
 }
 
 /**

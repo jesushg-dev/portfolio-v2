@@ -70,7 +70,9 @@ describe("loadCvStructuredDraft", () => {
             current: false,
             startDate: new Date("2020-01-01"),
             endDate: new Date("2021-01-01"),
-            CvExperienceSkill: [{ skill: { title: ".NET" } }],
+            CvExperienceSkill: [
+              { skillId: "skill-dotnet", skill: { title: ".NET" } },
+            ],
             translations: [
               {
                 appLanguageId: "lang-en",
@@ -185,6 +187,8 @@ describe("loadCvStructuredDraft", () => {
     ]);
     expect(tailored?.experiences[0].atsResponsibilities).toEqual([]);
     expect(tailored?.experiences[0].technologies).toEqual([".NET"]);
+    expect(tailored?.experiences[0].technologyIds).toEqual(["skill-dotnet"]);
+    expect(tailored?.skills[0].skillIds).toEqual(["skill-react"]);
     const spanish = await loadCvStructuredDraft(db as never, "user-1", {
       locale: "es",
     });

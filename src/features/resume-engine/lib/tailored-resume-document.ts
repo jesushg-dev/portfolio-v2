@@ -1,3 +1,7 @@
+import {
+  paginateResumeExperiences,
+  experienceTextLength,
+} from "./resume-pagination";
 import { z } from "zod";
 import type { Locale } from "@/i18n/config";
 import {
@@ -8,7 +12,11 @@ import {
   CvMatchAnalysisSchema,
   CvScoreBreakdownSchema,
 } from "./cv-match-analysis";
-import { extractJobTools } from "./extract-job-tools";
+import {
+  createResumeTechnologyMatcher,
+  technologyNameKey,
+} from "./extract-job-tools";
+import { validateResumeTechnologyNames } from "./resume-technology-names";
 import { getResumeTemplate, type CvTemplateVersion } from "./template-registry";
 import { RESUME_LABELS } from "@/lib/cv/resume-labels";
 import {
@@ -26,7 +34,7 @@ import {
   RESUME_TITLE_SEPARATOR,
 } from "./resume-content-validation";
 
-export const TailoredResumeDocumentSchema = CvImportDraftSchema.omit({
+const ResumeSnapshotSchema = CvImportDraftSchema.omit({
   detectedLocale: true,
 })
   .extend({
@@ -34,12 +42,6 @@ export const TailoredResumeDocumentSchema = CvImportDraftSchema.omit({
     locale: z.enum(["en", "es", "nl"]),
     templateId: z.string().min(1),
     templateRevision: z.number().int().positive(),
-    selection: z
-      .object({
-        omittedCertificationIds: z.array(z.string()),
-        manifest: ResumeSelectionSchema.optional(),
-      })
-      .optional(),
     contacts: z.array(
       CvImportDraftSchema.shape.contacts.element.extend({
         id: z.string().min(1),
@@ -96,6 +98,14 @@ export const TailoredResumeDocumentSchema = CvImportDraftSchema.omit({
         });
     });
   });
+export const TailoredResumeDocumentSchema = ResumeSnapshotSchema.safeExtend({
+  selection: z
+    .object({
+      omittedCertificationIds: z.array(z.string()),
+      manifest: ResumeSelectionSchema.optional(),
+    })
+    .optional(),
+});
 export type TailoredResumeDocument = z.infer<
   typeof TailoredResumeDocumentSchema
 >;
@@ -104,6 +114,19 @@ export const TailoredResumeResponseSchema = z
     schemaVersion: z.literal(1),
     locale: z.enum(["en", "es", "nl"]),
     selection: ResumeSelectionSchema,
+    technologyNames: z
+      .array(
+        z
+          .object({
+            skillId: z.string().min(1),
+            name: z
+              .string()
+              .min(1)
+              .refine((name) => name === name.trim() && !/[\r\n]/u.test(name)),
+          })
+          .strict(),
+      )
+      .optional(),
     fields: z.array(z.object({ id: z.string(), text: z.string() }).strict()),
     aiScore: z.number().min(0).max(100),
     matchNotes: z.string().optional(),
@@ -134,7 +157,7 @@ export interface ResumeTextField {
   budget: number;
 }
 export interface TailorContext {
-  drafts: Record<Locale, CvImportDraft>;
+  source: CvImportDraft;
   templateId: CvTemplateVersion;
   targetLocale?: Locale;
   jobDescription: string;
@@ -204,6 +227,20 @@ const FOREIGN_PHRASES: Record<Locale, RegExp> = {
   nl: /\b(sobre mí|experiencia laboral|disponibilidad inmediata|nativo o bilingüe|competencia profesional|native or bilingual|professional working proficiency)\b/iu,
 };
 
+function applyVacancyTechnologyNames(
+  text: string,
+  mentions: ReturnType<ReturnType<typeof createResumeTechnologyMatcher>>,
+  spellings: Map<string, string>,
+) {
+  let result = "";
+  let end = 0;
+  for (const { name, key, index } of mentions) {
+    result += text.slice(end, index) + (spellings.get(key) ?? name);
+    end = index + name.length;
+  }
+  return result + text.slice(end);
+}
+
 export function validateTailoredResume(
   raw: unknown,
   context: TailorContext,
@@ -213,27 +250,48 @@ export function validateTailoredResume(
     throw new Error(
       `locale: expected ${context.targetLocale}, received ${result.locale}`,
     );
-  const profile = context.drafts[result.locale];
+  const profile = context.source;
   const template = getResumeTemplate(context.templateId);
-  validateResumeCoverage(profile, result.selection, template);
   const source = selectResumeSource(profile, result.selection);
+  validateResumeCoverage(profile, result.selection, template);
   const inventory = resumeTextFields(source, context.templateId);
   const supplied = new Map<string, string>();
   const allowed = new Map(inventory.map((field) => [field.id, field]));
   const issues: string[] = [];
-  const sourceTools = new Set(
-    extractJobTools(JSON.stringify(source)).map((tool) => tool.toLowerCase()),
+  const names = validateResumeTechnologyNames(
+    profile,
+    source,
+    result.technologyNames ?? [],
+    context.jobDescription,
   );
+  const profileNames = [
+    ...profile.skills.flatMap((skill) => skill.items),
+    ...profile.experiences.flatMap(
+      (experience) => experience.technologies ?? [],
+    ),
+  ];
+  const evidenceTechnologies = createResumeTechnologyMatcher(profileNames);
+  const matchTechnologies = createResumeTechnologyMatcher([
+    ...profileNames,
+    ...names.byId.values(),
+  ]);
+  const sourceTools = new Set([
+    ...source.skills.flatMap((skill) => skill.items.map(technologyNameKey)),
+    ...source.experiences.flatMap((experience) =>
+      (experience.technologies ?? []).map(technologyNameKey),
+    ),
+    ...inventory.flatMap(({ text }) =>
+      evidenceTechnologies(text).map(({ key }) => key),
+    ),
+  ]);
   const sourceRoles = source.experiences.map((experience) => experience.role);
-  const titleEvidence = source.experiences
-    .flatMap((experience) => [
-      experience.role,
-      ...(experience.technologies ?? []),
-      ...experience.responsibilities,
-    ])
-    .join("\n");
   const titleTools = new Set(
-    extractJobTools(titleEvidence).map((tool) => tool.toLowerCase()),
+    source.experiences.flatMap((experience) => [
+      ...(experience.technologies ?? []).map(technologyNameKey),
+      ...[experience.role, ...experience.responsibilities].flatMap((text) =>
+        evidenceTechnologies(text).map(({ key }) => key),
+      ),
+    ]),
   );
   for (const field of result.fields) {
     if (field.id === "header.fullName") {
@@ -247,7 +305,19 @@ export function validateTailoredResume(
       issues.push(`${field.id}: unknown, unselected or duplicate field`);
       continue;
     }
-    const text = field.text.trim();
+    const submittedText = field.text.trim();
+    const mentions = matchTechnologies(submittedText);
+    const tailorTechnologyNames =
+      field.id === "header.degree" ||
+      field.id === "header.summary" ||
+      /^experience\.[^.]+\.(?:role$|context$|bullet\.)/u.test(field.id);
+    const text = tailorTechnologyNames
+      ? applyVacancyTechnologyNames(
+          submittedText,
+          mentions,
+          names.displayNameBySpelling,
+        )
+      : submittedText;
     supplied.set(field.id, text);
     if (!text || text.length > original.budget)
       issues.push(
@@ -292,8 +362,10 @@ export function validateTailoredResume(
     )
       issues.push(`${field.id}: changed language identity`);
     const supportedTools = isProfessionalTitle ? titleTools : sourceTools;
-    const unexpected = extractJobTools(text).filter(
-      (tool) => !supportedTools.has(tool.toLowerCase()),
+    const unexpected = mentions.flatMap(({ key, name }) =>
+      supportedTools.has(names.catalogNameByVacancyName.get(key) ?? key)
+        ? []
+        : [name],
     );
     if (unexpected.length)
       issues.push(
@@ -360,6 +432,12 @@ export function validateTailoredResume(
       availability: supplied.get("header.availability"),
     },
     experiences,
+    skills: source.skills.map((skill) => ({
+      ...skill,
+      items: skill.items.map(
+        (name, index) => names.byId.get(skill.skillIds?.[index] ?? "") ?? name,
+      ),
+    })),
     education: source.education.map((edu) => ({
       ...edu,
       degreeName: supplied.get(`education.${edu.id}.degree`) ?? "",
@@ -396,39 +474,27 @@ export function validateTailoredResume(
       title: supplied.get(`certification.${cert.id}.title`) ?? "",
     })),
   });
-  let offset = 0;
-  if (
-    experiences.length >
-    template.experiencePages.reduce((sum, count) => sum + count, 0)
-  )
+  if (experiences.length > template.maxExperiences)
     throw new Error(
       "experiences: template capacity exceeded; choose a larger design",
     );
-  template.experiencePages.forEach((count, page) => {
-    const pageExperiences = experiences.slice(offset, offset + count);
-    const textLength =
-      pageExperiences
-        .map((exp) =>
-          [
-            exp.company,
-            exp.role,
-            exp.companyBlurb,
-            exp.location,
-            exp.startDate,
-            exp.endDate,
-            ...exp.responsibilities,
-          ]
-            .filter(Boolean)
-            .join("\n"),
-        )
-        .join("\n").length +
-      (page === 0 ? (document.header.summary?.length ?? 0) : 0);
-    if (textLength > template.maxPageCharacters[page])
-      issues.push(
-        `experiences.page.${page + 1}: shorten content to ${template.maxPageCharacters[page]} characters`,
-      );
-    offset += count;
-  });
+  paginateResumeExperiences(document, template).forEach(
+    (pageExperiences, page) => {
+      const textLength =
+        pageExperiences.reduce(
+          (sum, experience) => sum + experienceTextLength(experience) + 1,
+          0,
+        ) + (page === 0 ? (document.header.summary?.length ?? 0) : 0);
+      if (textLength > template.maxPageCharacters[page])
+        issues.push(
+          "experiences.page." +
+            (page + 1) +
+            ": shorten content to " +
+            template.maxPageCharacters[page] +
+            " characters",
+        );
+    },
+  );
   // Measure printed text, never serialized IDs, JSON keys or provenance.
   const sidebarSections = {
     education: document.education
@@ -513,7 +579,7 @@ export function documentToDraft(
 
 /** Existing export snapshots remain readable; they are never migrated or retranslated. */
 export function readResumeSnapshot(snapshot: unknown): CvImportDraft | null {
-  const document = TailoredResumeDocumentSchema.safeParse(snapshot);
+  const document = ResumeSnapshotSchema.safeParse(snapshot);
   if (document.success) return documentToDraft(document.data);
   const historical = CvImportDraftSchema.safeParse(snapshot);
   return historical.success ? historical.data : null;

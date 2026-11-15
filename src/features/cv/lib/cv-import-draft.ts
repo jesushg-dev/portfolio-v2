@@ -30,6 +30,7 @@ export const CvImportExperienceDraftSchema = z.object({
   companyBlurb: z.string().optional(),
   /** Technologies linked to this experience in the CMS. */
   technologies: z.array(z.string().min(1)).optional(),
+  technologyIds: z.array(z.string().min(1)).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   current: z.boolean().optional(),
@@ -65,6 +66,7 @@ export const CvImportSkillDraftSchema = z.object({
     "OTHER",
   ]),
   items: z.array(z.string().min(1)),
+  skillIds: z.array(z.string().min(1)).optional(),
 });
 
 export const CvImportLanguageDraftSchema = z.object({

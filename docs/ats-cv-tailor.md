@@ -4,15 +4,15 @@ CV Tailored uses saved CMS records exclusively. Resume Studio continues to impor
 
 ## Content flow
 
-CMS → job-relevant selection by CMS IDs → localized and tailored selected fields → validated `TailoredResumeDocument` → official Word design → stored DOCX and snapshot → visual preview, ATS DOCX and PDFs.
+CMS → job-relevant selection by CMS IDs → localized fields and vacancy spellings → validated `TailoredResumeDocument` → official Word design → stored DOCX and snapshot → visual preview, ATS DOCX and PDFs.
 
 `targetLocale` is independent of `uiLocale`. An explicit target always wins. Without one, the model detects `en`, `es` or `nl` from the job description. A conflicting model response fails validation; automatic generation gets one correction attempt. Manual generation returns field-specific errors for the pasted JSON. Neither path restores rejected text from a different language.
 
-`resolveTailorContext` loads all three CMS translations, including fallback text for missing translations. The model first chooses relevant experiences and achievements, education, skill items, languages and certifications, then translates only that selection. The complete profile is evidence for selection, not a checklist to print. This does not update CMS records. Structural labels, months and employment types come from the typed `resume-labels.ts` catalog.
+`resolveTailorContext` loads one CMS draft in the explicit CV language or the profile's default language in automatic mode. Missing translations use the CMS fallback. The model first chooses relevant experiences and achievements, education, skill items, languages and certifications, then translates only that selection. The complete profile is evidence for selection, not a checklist to print. This does not update CMS records. Structural labels, months and employment types come from the typed `resume-labels.ts` catalog.
 
 ## Shared contract
 
-`tailored-resume-document.ts` defines schema version 1, output locale, template ID/revision, header, experiences, education, skills, languages, contacts and certifications. Items and responsibility bullets keep stable CMS IDs. Identity, company/institution names, contacts, dates, skills, photo URL and credential years are copied from CMS, not returned by the model.
+`tailored-resume-document.ts` defines schema version 1, output locale, template ID/revision, header, experiences, education, skills, languages, contacts and certifications. Items and responsibility bullets keep stable CMS IDs. The application copies identity, company and institution names, contacts, dates, photo URL and credential years from CMS. Skill IDs resolve against visible catalogue selections. The model can propose a display name from the vacancy for a selected catalogue ID. The server verifies the selected ID, exact vacancy wording, version numbers and collisions with other known technologies. The substitution applies to the generated CV. A skill with no proposal uses its catalogue title.
 
 Both generation modes accept exactly the same response shape:
 
@@ -28,10 +28,11 @@ Both generation modes accept exactly the same response shape:
       }
     ],
     "educationIds": [],
-    "skills": [],
+    "skills": [{ "id": "CMS_SKILL_GROUP_ID", "skillIds": ["CMS_SKILL_ID"] }],
     "languageIds": [],
     "certificationIds": []
   },
+  "technologyNames": [{ "skillId": "CMS_SKILL_ID", "name": "React.js" }],
   "fields": [
     { "id": "header.degree", "text": "Software Engineer" },
     {
@@ -49,7 +50,7 @@ Both generation modes accept exactly the same response shape:
 }
 ```
 
-This abbreviated example is illustrative. The manual prompt contains the available records, field inventory and character budgets. Return `selection` with only the IDs and skill items worth including for this job. Every selected record must exist in CMS; duplicate IDs, unknown IDs, skills not in the selected group and achievements belonging to another role are rejected. Preserve source chronology. Each selected experience with available achievements needs at least one selected achievement.
+This abbreviated example is illustrative. The manual prompt contains the available records, field inventory and character budgets. Return `selection` with only the record and skill IDs worth including for this job. Every selected record must exist in CMS; duplicate IDs, unknown IDs, skill IDs outside the selected group and achievements belonging to another role are rejected. Preserve source chronology. Each selected experience with available achievements needs at least one selected achievement.
 
 Return populated header/contact-location fields and every populated text field of selected records and achievements exactly once. Omitted records need neither IDs nor translations in `fields`. Empty strings are invalid, including selected certification titles. There is no adapter for the former all-fields/empty-string contract.
 
@@ -57,7 +58,7 @@ The prompt maps each explicit vacancy responsibility to CMS achievements. Keep t
 
 `header.degree` holds the single professional title shown in the header. Write it in the CV's output language and adapt it to the vacancy where selected roles and achievements support the wording. A technology in the title can be backed by a CMS skill link to a selected experience or by that experience's role or selected achievements. Keep academic degrees in education and preserve the meaning of historical role titles. The field is available from the profile header or a saved role, and its length budget comes from the template.
 
-Certifications default to none unless they add relevant evidence. v1 allows at most one and v2 at most two; these are ceilings, not quotas. v2 uses additional room primarily for experience and achievements. `requiredCoverage` in each locale's prompt preserves all spoken languages, the first two education records for one-page designs or three for multi-page designs, and balanced core technical categories. Multi-page designs preserve all roles when the role count fits their capacity. Core technical categories require up to three items in multi-page designs or two in one-page designs; additional useful technologies remain selectable. Submitted skill-item and achievement order is preserved; role chronology and category order remain fixed. Tailoring prioritizes achievements and concise descriptions before removing this coverage. The CV editor's technical skills take precedence over the portfolio-wide inventory; the latter is used only when no CV-specific list exists. All records remain in CMS. The persisted snapshot records the full selection in `selection.manifest`, omitted credential IDs in `selection.omittedCertificationIds`, and selection counts in match notes. Visible-text capacity excludes CMS IDs and JSON metadata, for both experience pages and the sidebar.
+Certifications default to none unless they add relevant evidence. v1 allows at most one and v2 at most two; these are ceilings, not quotas. v2 uses additional room primarily for experience and achievements. `requiredCoverage` in the prompt preserves all spoken languages, the first two education records for one-page designs or three for multi-page designs, and balanced core technical categories. Multi-page designs preserve all roles when the role count fits their capacity. Core technical categories require up to three items in multi-page designs or two in one-page designs; additional useful technologies remain selectable. Submitted skill-item and achievement order is preserved; role chronology and category order remain fixed. Tailoring prioritizes achievements and concise descriptions before removing this coverage. Only visible skills selected in the CV editor are eligible for the CV skills section. All records remain in CMS. The persisted snapshot records the full selection in `selection.manifest`, omitted credential IDs in `selection.omittedCertificationIds`, and selection counts in match notes. Visible-text capacity excludes CMS IDs and JSON metadata, for both experience pages and the sidebar.
 
 Validation rejects unknown/duplicate/missing IDs, empty required content, numeric/CEFR changes, unsupported technologies, credential inflation, changed known language/proficiency labels, recognizable foreign-language prose and template capacity overflow. Language and factual checks are deterministic guardrails, not a semantic proof of arbitrary prose: review generated wording before applying. Source facts and proper names remain immutable regardless of model output.
 
@@ -101,6 +102,10 @@ Tailoring includes all CMS achievements, including those marked ATS-only in the 
 
 ## Prompt version and input format
 
-The production prompt exposes `promptVersion` in both system instructions and input metadata. It is independent of the response's `schemaVersion` and must not be returned as an extra response property. Immutable CMS facts are shared once; locale inventories contain editable prose and per-locale coverage. Generation rejects inconsistent immutable facts across locales.
+The production prompt exposes `promptVersion` in both system instructions and input metadata. It is independent of the response's `schemaVersion` and must not be returned as an extra response property. The prompt includes one inventory of editable fields and one set of coverage requirements. Technology names appear once in the structured catalogue. Skill groups and experiences refer to those entries by ID.
 
-Production uses TOON input for both the copied manual prompt and automatic generation. Model responses remain strict JSON and use the same selection, language, factual and layout validations. The active prompt version is `tailored-cv/2026-11-12.2`. The official TOON encoder is a production dependency.
+Production uses TOON input for both the copied manual prompt and automatic generation. Model responses remain strict JSON and use the same selection, language, factual and layout validations. The active prompt version is `tailored-cv/2026-11-14.4`. The official TOON encoder is a production dependency.
+
+The prompt declares the response shape once in responseContract and keeps behavioral rules in the system instructions. Layout metadata assigns selected roles to independent page budgets, including the summary on page one. Recent relevant roles can retain more detail and achievements within those budgets. Compression is requested only for an overflowing page. Character budgets are estimates of fit; actual Word pagination still requires rendered verification.
+
+Experience pagination fills pages in chronological order using estimated wrapped lines, company headers, summary height and page character budgets. Page one can contain three, four or more short roles. The renderer and validator share the page allocation. An empty continuation page is omitted. The estimate remains subject to verification in Word.
