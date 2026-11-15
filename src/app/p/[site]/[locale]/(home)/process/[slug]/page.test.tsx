@@ -26,14 +26,11 @@ jest.mock("@/lib/public-site/locale", () => ({
   getPublicLocale: jest.fn().mockResolvedValue("en"),
 }));
 
-jest.mock(
-  "@/features/process-pages/components/process-page-view",
-  () => ({
-    ProcessPageView: ({ page }: { page: { heroTitle: string } }) => (
-      <div data-testid="process-page-view">{page.heroTitle}</div>
-    ),
-  }),
-);
+jest.mock("@/features/process-pages/components/process-page-view", () => ({
+  ProcessPageView: ({ page }: { page: { heroTitle: string } }) => (
+    <div data-testid="process-page-view">{page.heroTitle}</div>
+  ),
+}));
 
 describe("ProcessPageRoute", () => {
   beforeEach(() => {
