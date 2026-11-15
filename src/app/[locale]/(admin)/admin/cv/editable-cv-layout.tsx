@@ -108,6 +108,8 @@ const EditableSection: FC<EditableSectionProps> = ({
     onClick();
   };
 
+  const isHeader = id === "header";
+
   const section = (
     <div
       id={id}
@@ -117,14 +119,18 @@ const EditableSection: FC<EditableSectionProps> = ({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group hover:border-cv/40 relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors hover:bg-black/3",
+        "group relative scroll-mt-32 transition-colors",
+        isHeader
+          ? "m-0 rounded-none border-0 p-0 hover:bg-transparent md:rounded-t-2xl"
+          : "hover:border-cv/40 -m-2 rounded-xl border border-transparent p-2 hover:bg-black/3",
         canHoverEdit ? "cursor-none" : "cursor-pointer",
         className,
       )}
     >
       <div
         className={cn(
-          "absolute top-2 right-2 z-10 transition-opacity",
+          "absolute z-10 transition-opacity",
+          isHeader ? "top-3 right-3" : "top-2 right-2",
           canHoverEdit
             ? "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100"
             : "opacity-100",
@@ -234,7 +240,7 @@ const EditableCvModernLayout: FC<CvLayoutContentProps> = ({
       </EditableSection>
 
       {/* Modern 2-Column Responsive Sheet Body */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_17rem]">
+      <div className="grid grid-cols-1 bg-white md:grid-cols-[1fr_17rem] md:rounded-b-2xl">
         {/* Left main column: About & Experience */}
         <div className="space-y-7 px-6 py-6 md:px-10 md:py-8">
           <EditableSection
@@ -246,11 +252,11 @@ const EditableCvModernLayout: FC<CvLayoutContentProps> = ({
             canHoverEdit={canHoverEdit}
           >
             <section className="mb-7">
-              <h2 className="text-primary before:bg-primary mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] uppercase before:h-4 before:w-1 before:rounded-full before:content-['']">
+              <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
                 {t("sections.aboutMe")}
               </h2>
               {aboutMeText ? (
-                <p className="text-foreground/90 text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed text-slate-800">
                   {aboutMeText}
                 </p>
               ) : null}
@@ -273,7 +279,7 @@ const EditableCvModernLayout: FC<CvLayoutContentProps> = ({
         </div>
 
         {/* Right sidebar: Technical skills, Education, Languages, Soft skills, Additional, References */}
-        <aside className="border-border/60 bg-muted/30 space-y-7 border-t px-6 py-6 md:border-t-0 md:border-l md:px-7 md:py-8">
+        <aside className="space-y-7 border-t border-slate-200 bg-[#f1f5fb] px-6 py-6 md:border-t-0 md:border-l md:px-7 md:py-8">
           <EditableSection
             id="skills"
             title={t("sections.technicalSkills")}
@@ -376,7 +382,7 @@ const EditableCvClassicLayout: FC<CvLayoutContentProps> = ({
         />
       </EditableSection>
 
-      <div className="grid grid-cols-1 bg-white p-5 pb-10 text-black sm:grid-cols-9">
+      <div className="grid grid-cols-1 bg-white p-5 pb-10 text-black sm:grid-cols-9 md:rounded-b-2xl">
         <div className="flex flex-col gap-6 sm:col-span-3">
           <EditableSection
             id="contacts"
@@ -424,7 +430,7 @@ const EditableCvClassicLayout: FC<CvLayoutContentProps> = ({
         </div>
 
         <div className="col-span-1 hidden w-full justify-center sm:flex">
-          <div className="border-border h-full w-px border-r" />
+          <div className="h-full w-px border-r border-slate-200" />
         </div>
 
         <div className="flex flex-col gap-6 sm:col-span-5">

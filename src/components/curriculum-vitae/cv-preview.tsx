@@ -43,8 +43,8 @@ const CvPreview: FC<ICvPreviewProps> = ({
       <div
         className={
           pdfMode
-            ? "grid grid-cols-1 px-5 pt-2 md:grid-cols-[1fr_17rem]"
-            : "grid grid-cols-1 md:grid-cols-[1fr_17rem]"
+            ? "grid grid-cols-1 bg-white px-5 pt-2 md:grid-cols-[1fr_17rem]"
+            : "grid grid-cols-1 bg-white md:grid-cols-[1fr_17rem] md:rounded-b-2xl"
         }
       >
         <div className="px-6 py-6 md:px-10 md:py-8">
