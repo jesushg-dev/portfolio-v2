@@ -50,6 +50,14 @@ jest.mock("@/features/home/components/soft-skills", () => ({
   __esModule: true,
   default: () => null,
 }));
+jest.mock("@/features/home/components/blog", () => ({
+  __esModule: true,
+  default: () => (
+    <section id="blog">
+      <h2>Blog</h2>
+    </section>
+  ),
+}));
 jest.mock("@/features/home/components/experience", () => ({
   __esModule: true,
   default: () => (

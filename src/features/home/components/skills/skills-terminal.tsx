@@ -1,22 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FC } from "react";
-import { ArrowRightIcon, TrendingUp } from "lucide-react";
+import { useMemo, type FC } from "react";
+import { ArrowRight, Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import HeaderArticle from "@/components/shared/header-article";
 import { Link } from "@/i18n/routing";
-import { LinkPreview } from "@/components/ui/link-preview";
-import type { SkillType } from "@/utils/interfaces/types";
+import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
-import {
-  countSkillsByCategory,
-  filterSkillsByCategory,
-  SKILL_CATEGORIES,
-  type SkillCategoryId,
-} from "./lib/skill-display";
-import SkillIcon from "./skill-icon";
+import { cn } from "@/lib/utils";
 
 export type CompactSkillType = Pick<
   SkillType,
@@ -28,286 +20,190 @@ export interface SkillsTerminalProps {
   showHeader?: boolean;
 }
 
+interface SpecCategory {
+  key: string;
+  types: SkillTypeType[];
+  fallbackTitles: string[];
+}
+
+const SPEC_CATEGORIES: SpecCategory[] = [
+  {
+    key: "frontend",
+    types: ["FRONTEND", "MOBILE", "DESKTOP"],
+    fallbackTitles: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Redux",
+      "Angular",
+    ],
+  },
+  {
+    key: "backend",
+    types: ["BACKEND"],
+    fallbackTitles: [
+      "Node.js",
+      "Nest.js",
+      "C# / .NET",
+      "GraphQL",
+      "REST",
+      "Prisma",
+    ],
+  },
+  {
+    key: "architecture",
+    types: ["ARCHITECTURE"],
+    fallbackTitles: [
+      "Clean Architecture",
+      "DDD",
+      "SOLID",
+      "Microservices",
+      "Event-driven",
+    ],
+  },
+  {
+    key: "ai",
+    types: ["AI"],
+    fallbackTitles: [
+      "OpenAI GPT-4o",
+      "Claude",
+      "Gemini",
+      "GitHub Copilot",
+      "Cursor",
+      "v0",
+    ],
+  },
+  {
+    key: "data",
+    types: ["DATA"],
+    fallbackTitles: ["MySQL", "MongoDB", "Firebase"],
+  },
+  {
+    key: "delivery",
+    types: ["QUALITY_DELIVERY", "DEVOPS", "TOOLS", "CYBERSECURITY"],
+    fallbackTitles: ["Jest", "Playwright", "Docker", "CI/CD", "Azure", "OWASP"],
+  },
+];
+
 const SkillsTerminal: FC<SkillsTerminalProps> = ({
   initialSkills,
   showHeader = false,
 }) => {
   const t = useTranslations("main.skills");
-  const searchRef = useRef<HTMLInputElement>(null);
 
-  const [activeCategory, setActiveCategory] = useState<SkillCategoryId>("ai");
-  const [search, setSearch] = useState("");
-
-  const skills = useMemo(() => initialSkills, [initialSkills]);
-  const counts = useMemo(() => countSkillsByCategory(skills), [skills]);
-  const isSearching = search.trim().length > 0;
-
-  const visibleSkills = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    if (query) {
-      return skills.filter((skill) =>
-        skill.title.toLowerCase().includes(query),
+  const specRows = useMemo(() => {
+    return SPEC_CATEGORIES.map((category) => {
+      const matchingSkills = initialSkills.filter((s) =>
+        category.types.includes(s.type),
       );
-    }
-    return filterSkillsByCategory(skills, activeCategory);
-  }, [activeCategory, search, skills]);
 
-  const featuredSkills = useMemo(
-    () => visibleSkills.filter((skill) => skill.featured),
-    [visibleSkills],
-  );
+      // Prioritize featured skills first, then regular
+      const sorted = [...matchingSkills].sort((a, b) => {
+        if (a.featured && !b.featured) return -1;
+        if (!a.featured && b.featured) return 1;
+        return a.title.localeCompare(b.title);
+      });
 
-  const regularSkills = useMemo(
-    () => visibleSkills.filter((skill) => !skill.featured),
-    [visibleSkills],
-  );
+      const titles = sorted.map((s) => s.title);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === "/" &&
-        !/INPUT|TEXTAREA/.test(
-          (document.activeElement as HTMLElement)?.tagName || "",
-        )
-      ) {
-        event.preventDefault();
-        searchRef.current?.focus();
+      // Fill in fallback titles if missing
+      for (const fallback of category.fallbackTitles) {
+        if (!titles.includes(fallback)) {
+          titles.push(fallback);
+        }
       }
 
-      if (
-        event.key === "Escape" &&
-        document.activeElement === searchRef.current
-      ) {
-        setSearch("");
-        searchRef.current?.blur();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const description = isSearching ? (
-    <span>
-      <span className="text-primary font-mono font-medium">
-        {t("terminal.matchCount", { count: visibleSkills.length })}
-      </span>
-      {t("terminal.searchFor", { query: search })}
-    </span>
-  ) : (
-    t(`tabs.${activeCategory}.description`)
-  );
+      return {
+        key: category.key,
+        titles,
+      };
+    });
+  }, [initialSkills]);
 
   return (
     <div className="relative z-10 mx-auto w-full py-6">
       {showHeader ? (
         <HeaderArticle
-          subtitle={t("terminal.eyebrow")}
+          subtitle={t("subtitle")}
           title={t("title")}
           description={t("description")}
         />
       ) : null}
 
-      <Tabs
-        value={activeCategory}
-        onValueChange={(value) => {
-          const category = SKILL_CATEGORIES.find((item) => item.id === value);
-          if (!category) return;
-          setSearch("");
-          setActiveCategory(category.id);
-        }}
-        className="home-card-surface bg-card relative gap-0 overflow-hidden rounded-2xl"
-      >
+      <div className="home-card-surface bg-card border-border/80 w-full overflow-hidden rounded-2xl border shadow-2xl">
         {/* Terminal Chrome Bar */}
-        <div className="border-border/30 bg-muted/20 flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
-          <div className="flex items-center gap-2">
-            <span
-              className="size-2.5 rounded-full bg-red-400/80"
-              aria-hidden="true"
-            />
-            <span
-              className="size-2.5 rounded-full bg-amber-400/80"
-              aria-hidden="true"
-            />
-            <span
-              className="size-2.5 rounded-full bg-emerald-400/80"
-              aria-hidden="true"
-            />
-            <span className="text-muted-foreground ml-2 font-mono text-sm">
-              expertise.json
-            </span>
-          </div>
-
-          <label className="border-border/40 bg-background/80 focus-within:border-primary flex min-h-11 items-center gap-2 rounded-xl border px-3 py-1 font-mono text-sm transition-colors">
-            <span className="text-primary font-bold">$</span>
-            <input
-              ref={searchRef}
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder={t("terminal.searchPlaceholder")}
-              aria-label={t("terminal.searchLabel")}
-              autoComplete="off"
-              suppressHydrationWarning
-              className="text-foreground placeholder:text-muted-foreground h-11 w-28 bg-transparent outline-none sm:w-36"
-            />
-            <kbd className="border-border/40 text-muted-foreground rounded border px-1.5 text-sm">
-              /
-            </kbd>
-          </label>
+        <div className="border-border/60 bg-muted/20 text-muted-foreground flex items-center gap-1.5 border-b px-4 py-3 text-sm">
+          <span
+            className="size-2.5 rounded-full bg-[#ff5f57]"
+            aria-hidden="true"
+          />
+          <span
+            className="size-2.5 rounded-full bg-[#febc2e]"
+            aria-hidden="true"
+          />
+          <span
+            className="size-2.5 rounded-full bg-[#28c840]"
+            aria-hidden="true"
+          />
+          <span className="text-muted-foreground ml-auto font-mono text-sm">
+            expertise.json
+          </span>
         </div>
 
-        <TabsList
-          variant="file"
-          aria-label={t("terminal.categoryLabel")}
-          className="w-full [scrollbar-width:thin] overflow-x-auto"
-        >
-          {SKILL_CATEGORIES.map((category) => (
-            <TabsTrigger
-              key={category.id}
-              value={category.id}
-              className="min-h-11 flex-none px-4 text-sm"
-              onFocus={(event) =>
-                event.currentTarget.scrollIntoView?.({
-                  block: "nearest",
-                  inline: "nearest",
-                })
-              }
+        {/* Spec Sheet Definition List */}
+        <dl className="divide-border/60 divide-y px-6 sm:px-8">
+          {specRows.map((row) => (
+            <div
+              key={row.key}
+              className="grid gap-2.5 py-5 md:grid-cols-[12rem_1fr] md:gap-8"
             >
-              <span>{t(`tabs.${category.id}.title`)}</span>
-              <span className="text-muted-foreground font-mono text-sm">
-                {counts[category.id]}
-              </span>
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        {/* Category blurb */}
-        <div className="text-muted-foreground px-6 pt-5">
-          <p role="status" className="text-sm font-medium">
-            {description}
-          </p>
-        </div>
-
-        {/* Chips & Cards */}
-        <TabsContent value={activeCategory} className="p-6 pt-4">
-          {visibleSkills.length === 0 ? (
-            <p className="text-muted-foreground py-10 text-center font-mono text-sm">
-              {t("terminal.noMatch", { query: search })}
-            </p>
-          ) : isSearching ? (
-            /* Search Results: Flat list of chips */
-            <ul
-              key={`search-${search}`}
-              className="animate-in fade-in flex flex-wrap gap-2.5 duration-200"
-            >
-              {visibleSkills.map((skill) => (
-                <li key={skill.id}>
+              <dt className="text-primary font-mono text-sm md:pt-1">
+                <span className="text-muted-foreground">&quot;</span>
+                {row.key}
+                <span className="text-muted-foreground">&quot;</span>
+              </dt>
+              <dd className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base font-semibold tracking-tight sm:text-lg md:text-xl">
+                {row.titles.map((title, i) => (
                   <Link
+                    key={title}
                     href={{
                       pathname: "/skills/[slug]",
-                      params: { slug: skillSlugFromTitle(skill.title) },
+                      params: { slug: skillSlugFromTitle(title) },
                     }}
                     scroll={false}
-                    className="border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 group flex cursor-pointer items-center gap-2.5 rounded-2xl border py-1.5 pr-4 pl-1.5 text-sm font-medium transition-all duration-150 hover:-translate-y-0.5 hover:shadow-xs"
+                    className={cn(
+                      "inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 transition-colors hover:text-primary hover:underline",
+                      i < 3
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground font-normal",
+                    )}
                   >
-                    <SkillIcon
-                      image={skill.image}
-                      title={skill.title}
-                      size="md"
-                      tile
-                    />
-                    <span className="text-muted-foreground group-hover:text-foreground">
-                      {skill.title}
-                    </span>
+                    {title}
                   </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            /* Category View: Featured Cards Grid + Regular Chips */
-            <div
-              key={activeCategory}
-              className="animate-in fade-in space-y-6 duration-200"
-            >
-              {featuredSkills.length > 0 ? (
-                <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                  {featuredSkills.map((skill) => (
-                    <li key={skill.id}>
-                      <Link
-                        href={{
-                          pathname: "/skills/[slug]",
-                          params: { slug: skillSlugFromTitle(skill.title) },
-                        }}
-                        scroll={false}
-                        className="group/feat border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 relative flex cursor-pointer flex-col rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs"
-                      >
-                        {skill.trend ? (
-                          <span className="border-primary/30 bg-primary/10 text-primary absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold backdrop-blur-xs">
-                            <TrendingUp
-                              className="size-3.5"
-                              aria-hidden="true"
-                            />
-                            <span>{t("terminal.trend")}</span>
-                          </span>
-                        ) : null}
-                        <SkillIcon
-                          image={skill.image}
-                          title={skill.title}
-                          size="lg"
-                          tile
-                        />
-                        <p className="text-foreground group-hover/feat:text-primary mt-4 text-sm font-bold tracking-tight transition-colors">
-                          {skill.title}
-                        </p>
-                        <p className="text-primary mt-0.5 text-sm font-semibold">
-                          {t("terminal.featured")}
-                        </p>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-
-              {regularSkills.length > 0 ? (
-                <ul className="flex flex-wrap gap-2.5">
-                  {regularSkills.map((skill) => (
-                    <li key={skill.id}>
-                      <Link
-                        href={{
-                          pathname: "/skills/[slug]",
-                          params: { slug: skillSlugFromTitle(skill.title) },
-                        }}
-                        scroll={false}
-                        className="border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 group flex cursor-pointer items-center gap-2.5 rounded-2xl border py-1.5 pr-4 pl-1.5 text-sm font-medium transition-all duration-150 hover:-translate-y-0.5 hover:shadow-xs"
-                      >
-                        <SkillIcon
-                          image={skill.image}
-                          title={skill.title}
-                          size="md"
-                          tile
-                        />
-                        <span className="text-muted-foreground group-hover:text-foreground">
-                          {skill.title}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
+                ))}
+              </dd>
             </div>
-          )}
-        </TabsContent>
-      </Tabs>
+          ))}
+        </dl>
 
-      <div className="mt-8 flex justify-center">
-        <LinkPreview
-          url="/certificates"
-          className="text-primary hover:text-primary/80 group inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
-        >
-          <span>{t("modal.seeCertificates")}</span>
-          <ArrowRightIcon className="size-4 transition-transform duration-150 group-hover:translate-x-1" />
-        </LinkPreview>
+        {/* Spec Sheet Footer */}
+        <div className="border-border/60 text-muted-foreground flex flex-wrap items-center justify-between gap-2 border-t px-6 py-3 font-mono text-sm sm:px-8">
+          <span className="flex items-center gap-1.5">
+            <Check className="size-4 text-emerald-400" aria-hidden="true" />
+            <span>{t("updatedTech")}</span>
+          </span>
+          <Link
+            href={{ pathname: "/certificates" }}
+            className="text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-1 font-semibold transition-colors hover:underline"
+          >
+            <span>{t("seeCertificates")}</span>
+            <ArrowRight
+              className="size-4 transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
       </div>
     </div>
   );

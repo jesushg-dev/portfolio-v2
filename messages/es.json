@@ -941,7 +941,9 @@
     "skills": {
       "title": "Stack Técnico",
       "subtitle": "Habilidades",
-      "description": "Tecnologías y herramientas de este portafolio.",
+      "description": "Tecnologías que he llevado a producción en sistemas a escala corporativa, plataformas financieras y entornos de alto cumplimiento.",
+      "updatedTech": "Tecnologías actualizadas 2024–2026",
+      "seeCertificates": "Ver certificados",
       "aux": "Cada tecnología listada aquí ha sido usada en proyectos reales, no solo tutoriales. La mayoría a escala, en producción y bajo presión.",
       "page": {
         "breadcrumbHome": "Inicio",
@@ -1240,6 +1242,15 @@
       },
       "titleLead": "Trabajo de ingeniería",
       "titleGradient": "seleccionado."
+    },
+    "homeBlog": {
+      "eyebrow": "Blog",
+      "titleLead": "Notas y",
+      "titleGradient": "artículos.",
+      "description": "Decisiones reales de ingeniería, no tutoriales genéricos.",
+      "browseAll": "Ver todas las publicaciones",
+      "minRead": "{count} min de lectura",
+      "part": "Parte {part}{total, select, undefined {} other {/{total}}}"
     },
     "contact": {
       "title": "Hablemos",

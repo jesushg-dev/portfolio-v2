@@ -915,7 +915,9 @@
     "skills": {
       "title": "Technische Stack",
       "subtitle": "Vaardigheden",
-      "description": "Technologieën en hulpmiddelen in dit portfolio.",
+      "description": "Technologieën die ik in productie heb geïmplementeerd in enterprise-systemen, financiële platforms en compliance-omgevingen.",
+      "updatedTech": "Bijgewerkte technologieën 2024–2026",
+      "seeCertificates": "Bekijk certificaten",
       "aux": "Elke hier vermelde technologie is gebruikt in echte projecten, niet alleen tutorials. De meeste op schaal, in productie, onder druk.",
       "page": {
         "breadcrumbHome": "Start",
@@ -1214,6 +1216,15 @@
       },
       "titleLead": "Geselecteerd",
       "titleGradient": "engineeringwerk."
+    },
+    "homeBlog": {
+      "eyebrow": "Blog",
+      "titleLead": "Artikelen &",
+      "titleGradient": "notities.",
+      "description": "Echte technische beslissingen, geen generieke tutorials.",
+      "browseAll": "Bekijk alle berichten",
+      "minRead": "{count} min leestijd",
+      "part": "Deel {part}{total, select, undefined {} other {/{total}}}"
     },
     "contact": {
       "eyebrow": "Contact",

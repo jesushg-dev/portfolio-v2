@@ -14,6 +14,7 @@ const routeMainKeys = {
     "experience",
     "portfolio",
     "contact",
+    "homeBlog",
   ],
   now: ["now"],
   timeline: ["timeline"],

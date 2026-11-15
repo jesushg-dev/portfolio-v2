@@ -920,7 +920,9 @@
     "skills": {
       "title": "Technical Stack",
       "subtitle": "Skills",
-      "description": "Technologies and tools in this portfolio.",
+      "description": "Technologies I’ve shipped in production across corporate-scale systems, financial platforms, and high-compliance environments.",
+      "updatedTech": "Updated technologies 2024–2026",
+      "seeCertificates": "See certificates",
       "aux": "Every technology listed here has been used in real-world projects, not just tutorials. Most at scale, in production, under pressure.",
       "page": {
         "breadcrumbHome": "Home",
@@ -1219,6 +1221,15 @@
       },
       "titleLead": "Selected engineering",
       "titleGradient": "work."
+    },
+    "homeBlog": {
+      "eyebrow": "Blog",
+      "titleLead": "Writing &",
+      "titleGradient": "notes.",
+      "description": "Real engineering decisions, not generic tutorials.",
+      "browseAll": "Browse all posts",
+      "minRead": "{count} min read",
+      "part": "Part {part}{total, select, undefined {} other {/{total}}}"
     },
     "contact": {
       "title": "Let's talk",

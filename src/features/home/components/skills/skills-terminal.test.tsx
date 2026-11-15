@@ -1,18 +1,19 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import SkillsTerminal from "./skills-terminal";
 import type { SkillType } from "@/utils/interfaces/types";
 
 // Mock next-intl
 jest.mock("next-intl", () => ({
-  useTranslations:
-    () => (key: string, params?: Record<string, string | number>) => {
-      if (key === "terminal.noMatch")
-        return `grep: no match for "${params?.query}"`;
-      if (typeof params?.count !== "undefined")
-        return `${params.count} skills found`;
-      if (typeof params?.query !== "undefined") return ` for "${params.query}"`;
-      return key;
-    },
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      title: "Technical Stack",
+      subtitle: "Skills",
+      description: "Technologies in this portfolio",
+      updatedTech: "Updated technologies 2024–2026",
+      seeCertificates: "See certificates",
+    };
+    return translations[key] ?? key;
+  },
   useLocale: () => "en",
 }));
 
@@ -24,16 +25,21 @@ jest.mock("@/i18n/routing", () => ({
     className,
   }: {
     children: React.ReactNode;
-    href: string | { pathname: string };
+    href: string | { pathname: string; params?: Record<string, string> };
     className?: string;
-  }) => (
-    <a
-      href={typeof href === "string" ? href : href.pathname}
-      className={className}
-    >
-      {children}
-    </a>
-  ),
+  }) => {
+    let resolvedHref = typeof href === "string" ? href : href.pathname;
+    if (typeof href !== "string" && href.params) {
+      for (const [key, val] of Object.entries(href.params)) {
+        resolvedHref = resolvedHref.replace(`[${key}]`, val);
+      }
+    }
+    return (
+      <a href={resolvedHref} className={className}>
+        {children}
+      </a>
+    );
+  },
 }));
 
 // Mock HeaderArticle
@@ -71,7 +77,7 @@ const mockSkills: SkillType[] = [
   {
     id: "0",
     userId: "user-1",
-    title: "System Design",
+    title: "Clean Architecture",
     type: "ARCHITECTURE",
     featured: true,
     trend: false,
@@ -140,58 +146,47 @@ const mockSkills: SkillType[] = [
   },
 ];
 
-describe("SkillsTerminal", () => {
-  it("renders header, summary badge, and initial AI category skills with trend badge", () => {
+describe("SkillsTerminal Spec Sheet", () => {
+  it("renders header, chrome bar with expertise.json, and all spec categories", () => {
     render(<SkillsTerminal initialSkills={mockSkills} showHeader />);
 
-    // Header & summary badge
     expect(screen.getByTestId("header-article")).toBeInTheDocument();
     expect(screen.getByText("expertise.json")).toBeInTheDocument();
-    expect(screen.getByText("OpenAI GPT-4o")).toBeInTheDocument();
-    expect(screen.getByText("terminal.trend")).toBeInTheDocument();
 
-    // React is frontend, so not visible under AI tab initially
-    expect(screen.queryByText("React")).not.toBeInTheDocument();
+    // Verify all JSON keys are present in definition list
+    expect(screen.getByText("frontend")).toBeInTheDocument();
+    expect(screen.getByText("backend")).toBeInTheDocument();
+    expect(screen.getByText("architecture")).toBeInTheDocument();
+    expect(screen.getByText("ai")).toBeInTheDocument();
+    expect(screen.getByText("data")).toBeInTheDocument();
+    expect(screen.getByText("delivery")).toBeInTheDocument();
   });
 
-  it("switches terminal file tabs without a dropdown", () => {
+  it("renders skills with links under their categories", () => {
     render(<SkillsTerminal initialSkills={mockSkills} />);
 
-    const category = screen.getByRole("tab", { name: /tabs.backend.title/ });
-    fireEvent.click(category);
-    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
-    expect(category).toHaveAttribute("aria-selected", "true");
+    const reactLink = screen.getByRole("link", { name: "React" });
+    expect(reactLink).toBeInTheDocument();
+    expect(reactLink).toHaveAttribute("href", "/skills/react");
 
-    expect(screen.getByText("Node.js")).toBeInTheDocument();
-    expect(screen.queryByText("React")).not.toBeInTheDocument();
-    expect(screen.queryByText("OpenAI GPT-4o")).not.toBeInTheDocument();
+    const nodeLink = screen.getByRole("link", { name: "Node.js" });
+    expect(nodeLink).toBeInTheDocument();
+    expect(nodeLink).toHaveAttribute("href", "/skills/node-js");
+
+    const openAiLink = screen.getByRole("link", { name: "OpenAI GPT-4o" });
+    expect(openAiLink).toBeInTheDocument();
+    expect(openAiLink).toHaveAttribute("href", "/skills/openai-gpt-4o");
   });
 
-  it("filters skills by search query across all categories", () => {
+  it("renders footer with updated technologies badge and certificates link", () => {
     render(<SkillsTerminal initialSkills={mockSkills} />);
 
-    const searchInput = screen.getByRole("searchbox");
-    fireEvent.change(searchInput, { target: { value: "docker" } });
-
-    expect(screen.getByText("Docker")).toBeInTheDocument();
-    expect(screen.queryByText("React")).not.toBeInTheDocument();
-    expect(screen.queryByText("Node.js")).not.toBeInTheDocument();
-  });
-
-  it("shows empty state when no skills match the search query", () => {
-    render(<SkillsTerminal initialSkills={mockSkills} />);
-
-    const searchInput = screen.getByRole("searchbox");
-    fireEvent.change(searchInput, { target: { value: "nonexistent" } });
-
-    expect(screen.getByText(/grep: no match for/i)).toBeInTheDocument();
-  });
-
-  it("renders see certificates link", () => {
-    render(<SkillsTerminal initialSkills={mockSkills} />);
+    expect(
+      screen.getByText("Updated technologies 2024–2026"),
+    ).toBeInTheDocument();
 
     const certLink = screen.getByRole("link", {
-      name: /modal\.seeCertificates/i,
+      name: /see certificates/i,
     });
     expect(certLink).toBeInTheDocument();
     expect(certLink).toHaveAttribute("href", "/certificates");
