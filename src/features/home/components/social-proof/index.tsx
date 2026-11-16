@@ -2,10 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import { ShowcaseHeading, ShowcaseSection } from "@/components/shared/showcase";
-import type {
-  SoftSkillBentoItem,
-  SoftSkillMetric,
-} from "@/features/home/components/soft-skills/soft-skills-bento";
 
 export interface TestimonialItem {
   id: string;
@@ -16,13 +12,18 @@ export interface TestimonialItem {
   linkedInUrl?: string | null;
 }
 
-interface SocialProofProps {
-  testimonials: TestimonialItem[];
-  proofItems?: SoftSkillBentoItem[];
-  metrics?: SoftSkillMetric[];
+interface SocialProofMetric {
+  value: string;
+  label?: string;
 }
 
-function ProofMetric({ metric }: { metric?: SoftSkillMetric }) {
+interface SocialProofProps {
+  testimonials: TestimonialItem[];
+  proofItems?: { description: string }[];
+  metrics?: SocialProofMetric[];
+}
+
+function ProofMetric({ metric }: { metric?: SocialProofMetric }) {
   if (!metric) return null;
   return (
     <div className="mt-auto flex flex-wrap items-baseline gap-x-3 gap-y-1 pt-8">
@@ -88,7 +89,7 @@ function WorkingCard({
   title: string;
   quote?: TestimonialItem;
   description?: string;
-  metric?: SoftSkillMetric;
+  metric?: SocialProofMetric;
   wide?: boolean;
   placeholder?: boolean;
 }) {

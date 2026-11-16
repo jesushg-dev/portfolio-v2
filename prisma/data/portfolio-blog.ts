@@ -100,8 +100,8 @@ export const portfolioBlog: LocalizedBlogSeed = {
       ),
       excerpt: t(
         "La historia de por qué jesushg.com no es una landing bonita, sino el mismo software que uso yo y que otra persona podría usar en su subdominio.",
-        "The story of why jesushg.com is not a pretty landing page, but the same software I use — that someone else could run on their own subdomain.",
-        "Het verhaal waarom jesushg.com geen mooie landingspagina is, maar dezelfde software die ik gebruik — en die iemand anders op een eigen subdomein kan draaien.",
+        "The story of jesushg.com, the same software I use and that someone else could run on their own subdomain.",
+        "Het verhaal van jesushg.com, de software die ik zelf gebruik en die iemand anders op een eigen subdomein kan draaien.",
       ),
       blocks: [
         {
@@ -132,9 +132,9 @@ export const portfolioBlog: LocalizedBlogSeed = {
         {
           type: "paragraph",
           text: t(
-            "No quería un blog en Substack, un CV en Notion y los proyectos en un Figma público. Tampoco quería pagar un CMS para cinco tipos de contenido. Quería una sola cuenta, un solo sitio, y que el español, el inglés y el holandés existieran de verdad — no un botón de Google Translate.",
-            "I did not want a blog on Substack, a CV in Notion, and projects in a public Figma. I also did not want to pay a CMS for five content types. I wanted one account, one site, and Spanish, English and Dutch for real — not a Google Translate button.",
-            "Ik wilde geen blog op Substack, een CV in Notion en projecten in een publieke Figma. Ook geen betaalde CMS voor vijf contenttypes. Eén account, één site, en Spaans, Engels en Nederlands écht — geen Google Translate-knop.",
+            "No quería un blog en Substack, un CV en Notion y los proyectos en un Figma público. Tampoco quería pagar un CMS para cinco tipos de contenido. Quería una sola cuenta, un solo sitio, y que el español, el inglés y el holandés existieran de verdad, no un botón de Google Translate.",
+            "I did not want a blog on Substack, a CV in Notion, and projects in a public Figma. I also did not want to pay a CMS for five content types. I wanted one account, one site, and Spanish, English and Dutch for real, not a Google Translate button.",
+            "Ik wilde geen blog op Substack, een CV in Notion en projecten in een publieke Figma. Ook geen betaalde CMS voor vijf contenttypes. Eén account, één site, en Spaans, Engels en Nederlands écht, geen Google Translate-knop.",
           ),
         },
         {
@@ -182,9 +182,9 @@ export const portfolioBlog: LocalizedBlogSeed = {
         {
           type: "blockquote",
           text: t(
-            "Esta serie no es un README. Es cómo llegué hasta aquí, capítulo a capítulo — incluyendo las cosas que Next.js ya decidió por mí, como el archivo proxy.ts.",
-            "This series is not a README. It is how I got here, chapter by chapter — including the things Next.js already decided for me, like the proxy.ts file.",
-            "Deze serie is geen README. Het is hoe ik hier kwam, hoofdstuk voor hoofdstuk — inclusief wat Next.js al voor me koos, zoals het bestand proxy.ts.",
+            "Esta serie no es un README. Es cómo llegué hasta aquí, capítulo a capítulo, incluyendo las cosas que Next.js ya decidió por mí, como el archivo proxy.ts.",
+            "This series is not a README. It is how I got here, chapter by chapter, including the things Next.js already decided for me, like the proxy.ts file.",
+            "Deze serie is geen README. Het is hoe ik hier kwam, hoofdstuk voor hoofdstuk, inclusief wat Next.js al voor me koos, zoals het bestand proxy.ts.",
           ),
         },
       ],
@@ -236,7 +236,7 @@ export const portfolioBlog: LocalizedBlogSeed = {
           text: t(
             "Después, resolveTenant() busca el Profile. Si no hay header, asumo el ápex: la persona marcada isPrimary. Envuelvo esa función en cache() de React, que no es “mi caché”: es la forma de React de no preguntarle a Mongo dos veces en la misma request.",
             "Then resolveTenant() looks up the Profile. If there is no header, I assume apex: the person marked isPrimary. I wrap that function in React’s cache(), which is not “my cache”: it is React’s way of not asking Mongo twice in the same request.",
-            "Daarna zoekt resolveTenant() het Profile. Geen header? Dan apex: de persoon met isPrimary. Ik wikkel dat in React’s cache() — niet “mijn cache”, maar React die Mongo niet twee keer in dezelfde request lastigvalt.",
+            "Daarna zoekt resolveTenant() het Profile. Geen header? Dan apex: de persoon met isPrimary. Ik wikkel dat in React’s cache() zodat React Mongo niet twee keer in dezelfde request lastigvalt.",
           ),
         },
         {
@@ -278,7 +278,7 @@ export const portfolioBlog: LocalizedBlogSeed = {
           text: t(
             "Las cookies entre subdominios en producción las activa Better Auth, no yo a mano. En local el truco es lvh.me. Si BETTER_AUTH_URL no coincide con el origen real, el login se siente “roto” y no es el código de los proyectos: es la cookie que no viaja.",
             "Cross-subdomain cookies in production are Better Auth’s job, not a handmade one. Locally the trick is lvh.me. If BETTER_AUTH_URL does not match the real origin, login feels “broken” and it is not the projects code: it is the cookie that will not travel.",
-            "Cross-subdomain cookies in productie zijn Better Auth, niet iets dat ik met de hand knutsel. Lokaal is de truc lvh.me. Klopt BETTER_AUTH_URL niet met het echte origin, dan voelt login “kapot” — niet de projectcode, de cookie die niet meereist.",
+            "Better Auth regelt de cookies tussen subdomeinen in productie. Lokaal gebruik ik lvh.me. Klopt BETTER_AUTH_URL niet met de echte origin, dan reist de cookie niet mee en lijkt het alsof inloggen kapot is.",
           ),
         },
       ],
@@ -328,9 +328,9 @@ export const portfolioBlog: LocalizedBlogSeed = {
         {
           type: "paragraph",
           text: t(
-            "Lo que yo escribo en un PR — “Back to blog”, “Load more”, el menú — vive en messages/es.json y amigos. Lo que un humano edita en el admin — el about, un post, el título de un proyecto — vive en Mongo, en una fila de traducción por idioma. El formulario no piensa en “es/en/nl”: piensa en el id del idioma en la base. Suena pedante. Evita un bug clásico: guardar el inglés encima del español porque los códigos se cruzaron.",
-            "What I write in a PR — “Back to blog”, “Load more”, the menu — lives in messages/es.json and friends. What a human edits in admin — the about, a post, a project title — lives in Mongo, one translation row per language. The form does not think in “es/en/nl”: it thinks in the language id in the database. It sounds pedantic. It avoids a classic bug: saving English on top of Spanish because the codes got crossed.",
-            "Wat ik in een PR schrijf — “Back to blog”, het menu — leeft in messages/*.json. Wat een mens in admin bewerkt — about, een post, een projecttitel — leeft in Mongo, één vertaalrij per taal. Het formulier denkt niet in “es/en/nl”, maar in het taal-id. Klinkt betweterig. Voorkomt de klassieker: Engels over Spaans bewaren omdat codes door elkaar liepen.",
+            "Lo que yo escribo en un PR (“Back to blog”, “Load more”, el menú) vive en messages/es.json y amigos. Lo que un humano edita en el admin (el about, un post, el título de un proyecto) vive en Mongo, en una fila de traducción por idioma. El formulario no piensa en “es/en/nl”: piensa en el id del idioma en la base. Suena pedante. Evita un bug clásico: guardar el inglés encima del español porque los códigos se cruzaron.",
+            "What I write in a PR (“Back to blog”, “Load more”, the menu) lives in messages/es.json and friends. What a human edits in admin (the about, a post, a project title) lives in Mongo, one translation row per language. The form does not think in “es/en/nl”: it thinks in the language id in the database. It sounds pedantic. It avoids a classic bug: saving English on top of Spanish because the codes got crossed.",
+            "Wat ik in een PR schrijf (“Back to blog”, het menu) leeft in messages/*.json. Wat een mens in admin bewerkt (about, een post, een projecttitel) leeft in Mongo, één vertaalrij per taal. Het formulier denkt niet in “es/en/nl”, maar in het taal-id. Klinkt betweterig. Voorkomt de klassieker: Engels over Spaans bewaren omdat codes door elkaar liepen.",
           ),
         },
         {
@@ -347,7 +347,7 @@ export const portfolioBlog: LocalizedBlogSeed = {
           text: t(
             "next-intl deja traducir paths. /admin en español es /panel; en holandés, /beheer. Agendar una llamada no es /schedule para todo el mundo. El blog lo dejé en /blog a propósito: es una palabra que ya viaja. Los links en código no son strings mágicos: son objetos con pathname y params, porque si no TypeScript te grita cuando agregas una ruta. Me ha salvado más de una tarde.",
             "next-intl lets you translate paths. /admin in Spanish is /panel; in Dutch, /beheer. Booking a call is not /schedule for everyone. I left the blog at /blog on purpose: it is a word that already travels. Links in code are not magic strings: they are objects with pathname and params, because otherwise TypeScript yells when you add a route. That has saved me more than one afternoon.",
-            "next-intl vertaalt paths. /admin is in het Spaans /panel, in het Nederlands /beheer. Een call plannen is niet overal /schedule. De blog liet ik bewust op /blog. Links in code zijn objecten met pathname en params — anders schreeuwt TypeScript als je een route toevoegt. Dat heeft me meer dan één middag gered.",
+            "next-intl vertaalt paths. /admin is in het Spaans /panel, in het Nederlands /beheer. Een call plannen is niet overal /schedule. De blog liet ik bewust op /blog. Links in code zijn objecten met pathname en params, anders schreeuwt TypeScript als je een route toevoegt. Dat heeft me meer dan één middag gered.",
           ),
         },
         {
@@ -457,8 +457,8 @@ export const portfolioBlog: LocalizedBlogSeed = {
         {
           type: "paragraph",
           text: t(
-            "Podría haber puesto MDX en el repo. Es elegante hasta que quieres corregir una coma en el celular, o hasta que Alice quiere su propio blog. Elegí Tiptap porque el documento es JSON, el core es gratis, y se parece a escribir en un doc — con permisos para código, imágenes y un video si algún día dejo de tener vergüenza.",
-            "I could have put MDX in the repo. It is elegant until you want to fix a comma on your phone, or until Alice wants her own blog. I chose Tiptap because the document is JSON, the core is free, and it feels like writing in a doc — with room for code, images, and a video if I ever stop being shy.",
+            "Podría haber puesto MDX en el repo. Es elegante hasta que quieres corregir una coma en el celular, o hasta que Alice quiere su propio blog. Elegí Tiptap porque el documento es JSON, el core es gratis, y se parece a escribir en un doc, con permisos para código, imágenes y un video si algún día dejo de tener vergüenza.",
+            "I could have put MDX in the repo. It is elegant until you want to fix a comma on your phone, or until Alice wants her own blog. I chose Tiptap because the document is JSON, the core is free, and it feels like writing in a doc, with room for code, images, and a video if I ever stop being shy.",
             "Ik had MDX in de repo kunnen zetten. Elegant, tot je een komma op je telefoon wilt fixen, of tot Alice haar eigen blog wil. Ik koos Tiptap omdat het document JSON is, de core gratis, en het voelt als schrijven in een doc.",
           ),
         },
@@ -587,9 +587,9 @@ export const portfolioBlog: LocalizedBlogSeed = {
         "Het CV, de vacatures en de muziek: één sleutel voor alles",
       ),
       excerpt: t(
-        "No quise tres apps. Quise llegar el domingo, cambiar el about, ver qué estoy escuchando, y si estoy en búsqueda, mover una vacante — sin cambiar de producto.",
-        "I did not want three apps. I wanted to show up on Sunday, change the about, see what I am listening to, and if I am job hunting, move a vacancy — without switching products.",
-        "Ik wilde geen drie apps. Ik wilde zondag langskomen, the about wijzigen, zien wat ik luister, en als ik zoek, een vacature verzetten — zonder van product te wisselen.",
+        "No quise tres apps. Quise llegar el domingo, cambiar el about, ver qué estoy escuchando, y si estoy en búsqueda, mover una vacante, sin cambiar de producto.",
+        "I did not want three apps. I wanted to show up on Sunday, change the about, see what I am listening to, and if I am job hunting, move a vacancy, without switching products.",
+        "Ik wilde geen drie apps. Ik wilde zondag langskomen, the about wijzigen, zien wat ik luister, en als ik zoek, een vacature verzetten, zonder van product te wisselen.",
       ),
       blocks: [
         {
@@ -637,9 +637,9 @@ export const portfolioBlog: LocalizedBlogSeed = {
         {
           type: "paragraph",
           text: t(
-            "Spotify está porque me gusta que el sitio respire. Uses y Now están porque la gente que contrato — y la que me contrata — quiere saber con qué trabajo y en qué ando, no solo qué hice en 2019.",
-            "Spotify is there because I like the site to breathe. Uses and Now are there because the people I hire — and the people who hire me — want to know what I work with and what I am in the middle of, not only what I did in 2019.",
-            "Spotify zit er omdat ik wil dat de site ademt. Uses en Now omdat mensen die ik aanneem — en die mij aannemen — willen weten waarmee ik werk en waar ik middenin zit, niet alleen wat ik in 2019 deed.",
+            "Spotify está porque me gusta que el sitio respire. Uses y Now están porque la gente que contrato (y la que me contrata) quiere saber con qué trabajo y en qué ando, no solo qué hice en 2019.",
+            "Spotify is there because I like the site to breathe. Uses and Now are there because the people I hire (and the people who hire me) want to know what I work with and what I am in the middle of, not only what I did in 2019.",
+            "Spotify zit er omdat ik wil dat de site ademt. Uses en Now omdat mensen die ik aanneem (en die mij aannemen) willen weten waarmee ik werk en waar ik middenin zit, niet alleen wat ik in 2019 deed.",
           ),
         },
         {
@@ -655,7 +655,7 @@ export const portfolioBlog: LocalizedBlogSeed = {
     {
       slug: "building-this-portfolio-seed-and-dx",
       seriesOrder: 8,
-      coverImage: "/projects/portfolio-admin-integrations.jpg",
+      coverImage: "/images/blog/portfolio-process-page-editor.png",
       tags: ["seed", "dx"],
       publishedAt: "2026-02-15T10:00:00.000Z",
       title: t(
@@ -714,9 +714,9 @@ export const portfolioBlog: LocalizedBlogSeed = {
         {
           type: "blockquote",
           text: t(
-            "Si clonas el repo y corres el seed, estos ocho capítulos vuelven. Incluido este, el que admite que el texto anterior era un README con disfraz. Gracias por leer hasta el final — de eso se trataba el portafolio: que alguien se quede un rato.",
-            "If you clone the repo and run the seed, these eight chapters come back. Including this one, the one that admits the previous text was a README in costume. Thanks for reading to the end — that was the point of the portfolio: that someone stays a while.",
-            "Clone je de repo en run je de seed, dan komen deze acht hoofdstukken terug. Inclusief deze, die toegeeft dat de vorige tekst een README in vermomming was. Dank je wel dat je tot het eind las — dát was het punt van het portfolio: dat iemand even blijft.",
+            "Si clonas el repo y corres el seed, estos ocho capítulos vuelven. Incluido este, el que admite que el texto anterior era un README con disfraz. Gracias por leer hasta el final. De eso se trataba el portafolio: que alguien se quede un rato.",
+            "If you clone the repo and run the seed, these eight chapters come back. Including this one, the one that admits the previous text was a README in costume. Thanks for reading to the end. That was the point of the portfolio: that someone stays a while.",
+            "Clone je de repo en run je de seed, dan komen deze acht hoofdstukken terug. Inclusief deze, die toegeeft dat de vorige tekst een README in vermomming was. Dank je wel dat je tot het eind las. Dat was het punt van het portfolio: dat iemand even blijft.",
           ),
         },
       ],

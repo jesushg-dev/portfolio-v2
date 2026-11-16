@@ -14,7 +14,6 @@ import {
   Radio,
   ScrollText,
   Server,
-  Sparkles,
   User,
 } from "lucide-react";
 
@@ -37,7 +36,6 @@ export type NavSectionId =
   | "experience"
   | "skills"
   | "services"
-  | "soft-skills"
   | "testimonials"
   | "portfolio"
   | "contact";
@@ -176,14 +174,6 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Layers,
         chips: [".NET", "C#", "Microservices", "Cloud"],
         stat: { value: "4", label: "core areas" },
-      },
-      {
-        kind: "section",
-        id: "soft-skills",
-        sectionId: "soft-skills",
-        icon: Sparkles,
-        chips: ["Team leadership", "Mentorship", "Communication"],
-        stat: { value: "6", label: "engineers led" },
       },
       {
         kind: "section",

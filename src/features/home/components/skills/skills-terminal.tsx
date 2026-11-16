@@ -1,136 +1,63 @@
-"use client";
-
-import { useMemo, type FC } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import HeaderArticle from "@/components/shared/header-article";
 import { Link } from "@/i18n/routing";
 import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
 import { cn } from "@/lib/utils";
 
-export type CompactSkillType = Pick<
-  SkillType,
-  "id" | "title" | "image" | "type" | "featured" | "trend"
->;
-
-export interface SkillsTerminalProps {
-  initialSkills: (SkillType | CompactSkillType)[];
-  showHeader?: boolean;
+interface SkillsTerminalProps {
+  skills: Pick<SkillType, "id" | "title" | "type" | "featured">[];
 }
 
 interface SpecCategory {
   key: string;
   types: SkillTypeType[];
-  fallbackTitles: string[];
 }
 
 const SPEC_CATEGORIES: SpecCategory[] = [
   {
     key: "frontend",
     types: ["FRONTEND", "MOBILE", "DESKTOP"],
-    fallbackTitles: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Redux",
-      "Angular",
-    ],
   },
   {
     key: "backend",
     types: ["BACKEND"],
-    fallbackTitles: [
-      "Node.js",
-      "Nest.js",
-      "C# / .NET",
-      "GraphQL",
-      "REST",
-      "Prisma",
-    ],
   },
   {
     key: "architecture",
     types: ["ARCHITECTURE"],
-    fallbackTitles: [
-      "Clean Architecture",
-      "DDD",
-      "SOLID",
-      "Microservices",
-      "Event-driven",
-    ],
   },
   {
     key: "ai",
     types: ["AI"],
-    fallbackTitles: [
-      "OpenAI GPT-4o",
-      "Claude",
-      "Gemini",
-      "GitHub Copilot",
-      "Cursor",
-      "v0",
-    ],
   },
   {
     key: "data",
     types: ["DATA"],
-    fallbackTitles: ["MySQL", "MongoDB", "Firebase"],
   },
   {
     key: "delivery",
     types: ["QUALITY_DELIVERY", "DEVOPS", "TOOLS", "CYBERSECURITY"],
-    fallbackTitles: ["Jest", "Playwright", "Docker", "CI/CD", "Azure", "OWASP"],
   },
 ];
 
-const SkillsTerminal: FC<SkillsTerminalProps> = ({
-  initialSkills,
-  showHeader = false,
-}) => {
+export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
   const t = useTranslations("main.skills");
 
-  const specRows = useMemo(() => {
-    return SPEC_CATEGORIES.map((category) => {
-      const matchingSkills = initialSkills.filter((s) =>
-        category.types.includes(s.type),
-      );
-
-      // Prioritize featured skills first, then regular
-      const sorted = [...matchingSkills].sort((a, b) => {
-        if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
-        return a.title.localeCompare(b.title);
-      });
-
-      const titles = sorted.map((s) => s.title);
-
-      // Fill in fallback titles if missing
-      for (const fallback of category.fallbackTitles) {
-        if (!titles.includes(fallback)) {
-          titles.push(fallback);
-        }
-      }
-
-      return {
-        key: category.key,
-        titles,
-      };
-    });
-  }, [initialSkills]);
+  const specRows = SPEC_CATEGORIES.map(({ key, types }) => ({
+    key,
+    skills: skills
+      .filter((skill) => types.includes(skill.type))
+      .sort(
+        (a, b) =>
+          Number(b.featured) - Number(a.featured) ||
+          a.title.localeCompare(b.title),
+      ),
+  })).filter((row) => row.skills.length > 0);
 
   return (
     <div className="relative z-10 mx-auto w-full py-6">
-      {showHeader ? (
-        <HeaderArticle
-          subtitle={t("subtitle")}
-          title={t("title")}
-          description={t("description")}
-        />
-      ) : null}
-
       <div className="home-card-surface bg-card border-border/80 w-full overflow-hidden rounded-2xl border shadow-2xl">
         {/* Terminal Chrome Bar */}
         <div className="border-border/60 bg-muted/20 text-muted-foreground flex items-center gap-1.5 border-b px-4 py-3 text-sm">
@@ -159,21 +86,25 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
               className="grid gap-2.5 py-5 md:grid-cols-[12rem_1fr] md:gap-8"
             >
               <dt className="text-primary font-mono text-sm md:pt-1">
-                <span className="text-muted-foreground">&quot;</span>
+                <span aria-hidden="true" className="text-muted-foreground">
+                  &quot;
+                </span>
                 {row.key}
-                <span className="text-muted-foreground">&quot;</span>
+                <span aria-hidden="true" className="text-muted-foreground">
+                  &quot;
+                </span>
               </dt>
               <dd className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base font-semibold tracking-tight sm:text-lg md:text-xl">
-                {row.titles.map((title, i) => (
+                {row.skills.map(({ id, title }, i) => (
                   <Link
-                    key={title}
+                    key={id}
                     href={{
                       pathname: "/skills/[slug]",
                       params: { slug: skillSlugFromTitle(title) },
                     }}
                     scroll={false}
                     className={cn(
-                      "inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 transition-colors hover:text-primary hover:underline",
+                      "hover:text-primary inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 transition-colors hover:underline",
                       i < 3
                         ? "text-foreground font-semibold"
                         : "text-muted-foreground font-normal",
@@ -195,7 +126,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
           </span>
           <Link
             href={{ pathname: "/certificates" }}
-            className="text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-1 font-semibold transition-colors hover:underline"
+            className="group text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-1 font-semibold transition-colors hover:underline"
           >
             <span>{t("seeCertificates")}</span>
             <ArrowRight
@@ -207,6 +138,4 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({
       </div>
     </div>
   );
-};
-
-export default SkillsTerminal;
+}

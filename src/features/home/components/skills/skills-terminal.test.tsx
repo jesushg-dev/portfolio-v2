@@ -42,23 +42,6 @@ jest.mock("@/i18n/routing", () => ({
   },
 }));
 
-// Mock HeaderArticle
-jest.mock("@/components/shared/header-article", () => ({
-  __esModule: true,
-  default: ({
-    title,
-    subtitle,
-  }: {
-    title: React.ReactNode;
-    subtitle?: React.ReactNode;
-  }) => (
-    <div data-testid="header-article">
-      <h2>{title}</h2>
-      <p>{subtitle}</p>
-    </div>
-  ),
-}));
-
 const mockSkills: SkillType[] = [
   {
     id: "ai-1",
@@ -147,10 +130,9 @@ const mockSkills: SkillType[] = [
 ];
 
 describe("SkillsTerminal Spec Sheet", () => {
-  it("renders header, chrome bar with expertise.json, and all spec categories", () => {
-    render(<SkillsTerminal initialSkills={mockSkills} showHeader />);
+  it("renders the terminal and categories populated by saved skills", () => {
+    render(<SkillsTerminal skills={mockSkills} />);
 
-    expect(screen.getByTestId("header-article")).toBeInTheDocument();
     expect(screen.getByText("expertise.json")).toBeInTheDocument();
 
     // Verify all JSON keys are present in definition list
@@ -158,12 +140,15 @@ describe("SkillsTerminal Spec Sheet", () => {
     expect(screen.getByText("backend")).toBeInTheDocument();
     expect(screen.getByText("architecture")).toBeInTheDocument();
     expect(screen.getByText("ai")).toBeInTheDocument();
-    expect(screen.getByText("data")).toBeInTheDocument();
+    expect(screen.queryByText("data")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Next.js" }),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("delivery")).toBeInTheDocument();
   });
 
   it("renders skills with links under their categories", () => {
-    render(<SkillsTerminal initialSkills={mockSkills} />);
+    render(<SkillsTerminal skills={mockSkills} />);
 
     const reactLink = screen.getByRole("link", { name: "React" });
     expect(reactLink).toBeInTheDocument();
@@ -179,7 +164,7 @@ describe("SkillsTerminal Spec Sheet", () => {
   });
 
   it("renders footer with updated technologies badge and certificates link", () => {
-    render(<SkillsTerminal initialSkills={mockSkills} />);
+    render(<SkillsTerminal skills={mockSkills} />);
 
     expect(
       screen.getByText("Updated technologies 2024–2026"),
