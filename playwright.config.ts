@@ -98,7 +98,6 @@ export default defineConfig({
     {
       name: "public-locale",
       testMatch: "**/locale-switching.spec.ts",
-      dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
       },

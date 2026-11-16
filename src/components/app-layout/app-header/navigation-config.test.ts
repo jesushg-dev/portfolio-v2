@@ -50,7 +50,6 @@ describe("navigation-config", () => {
         "testimonials",
         "services",
         "skills",
-        "soft-skills",
         "contact",
       ]);
     });

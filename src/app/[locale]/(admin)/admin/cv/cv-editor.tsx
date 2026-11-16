@@ -124,7 +124,7 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
 
       <div className="border-border bg-card w-full max-w-full min-w-0 rounded-xl border shadow-sm">
         {/* Canonical tabs and section links */}
-        <div className="border-border bg-muted/30 sticky top-0 z-20 space-y-3 rounded-t-xl border-b p-3 backdrop-blur md:top-16">
+        <div className="border-border bg-card/95 sticky top-0 z-20 space-y-3 rounded-t-xl border-b p-3 backdrop-blur-md md:top-16">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Canonical Line Tabs for View Switcher */}
             <Tabs
@@ -218,7 +218,7 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
                   <a
                     key={section.id}
                     href={`#${section.id}`}
-                    className="text-muted-foreground hover:bg-muted hover:text-foreground shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors"
+                    className="border-border/50 bg-background/60 hover:bg-muted hover:border-border text-muted-foreground hover:text-foreground shrink-0 rounded-lg border px-2.5 py-1 text-xs font-medium shadow-2xs transition-colors"
                   >
                     {label}
                   </a>

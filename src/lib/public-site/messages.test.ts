@@ -30,7 +30,6 @@ it.each([en, es, nl])(
     expect(home.main).not.toHaveProperty("howIUseAi");
     expect(home.main).toHaveProperty("services", messages.main.services);
     expect(messages.main.services.viewDetails).toContain("{title}");
-    expect(home.main).not.toHaveProperty("soft-skills");
     expect(home).not.toHaveProperty("curriculum");
     expect(now.main).toEqual({ now: messages.main.now });
     expect(now.global).toBe(messages.global);

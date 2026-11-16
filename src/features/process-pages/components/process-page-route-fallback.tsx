@@ -7,7 +7,7 @@ function ProcessNavSkeleton() {
       className="fixed top-1/2 left-10 z-20 hidden w-44 -translate-y-1/2 2xl:block"
     >
       <Skeleton className="mb-4 h-3.5 w-24 rounded" />
-      <div className="space-y-2 border-border/60 border-l-2 pl-4">
+      <div className="border-border/60 space-y-2 border-l-2 pl-4">
         <Skeleton className="h-4 w-28 rounded" />
         <Skeleton className="h-4 w-20 rounded" />
         <Skeleton className="h-4 w-24 rounded" />

@@ -52,10 +52,10 @@ export const ResumeOptionCard: FC<ResumeOptionCardProps> = ({
         "group relative flex items-center gap-2.5 rounded-xl border p-2 text-left transition-all outline-none select-none",
         "focus-visible:ring-ring focus-visible:ring-2",
         selected
-          ? "border-primary bg-primary/5 ring-1 ring-primary/40 shadow-xs text-card-foreground"
+          ? "border-primary bg-primary/5 ring-primary/40 text-card-foreground shadow-xs ring-1"
           : "border-border bg-card hover:border-primary/40 hover:bg-muted/20 text-card-foreground",
         disabled &&
-          "cursor-not-allowed opacity-50 hover:border-border hover:bg-card",
+          "hover:border-border hover:bg-card cursor-not-allowed opacity-50",
         className,
       )}
     >
@@ -63,7 +63,7 @@ export const ResumeOptionCard: FC<ResumeOptionCardProps> = ({
       {icon ? (
         <div
           className={cn(
-            "relative flex shrink-0 items-center justify-center overflow-hidden rounded-md border border-border/60 bg-muted/30 transition-colors group-hover:bg-muted/50",
+            "border-border/60 bg-muted/30 group-hover:bg-muted/50 relative flex shrink-0 items-center justify-center overflow-hidden rounded-md border transition-colors",
             iconWellClassName ?? "h-16 w-13 p-0.5",
           )}
         >
@@ -93,7 +93,7 @@ export const ResumeOptionCard: FC<ResumeOptionCardProps> = ({
           isSm ? "top-2 right-2 size-3.5" : "top-2 right-2 size-4",
           selected
             ? "bg-primary text-primary-foreground shadow-2xs"
-            : "border-border/80 bg-background/90 text-transparent border shadow-2xs group-hover:border-primary/50",
+            : "border-border/80 bg-background/90 group-hover:border-primary/50 border text-transparent shadow-2xs",
           disabled && "border-border/50 bg-muted/40",
         )}
         aria-hidden="true"
@@ -108,4 +108,3 @@ export const ResumeOptionCard: FC<ResumeOptionCardProps> = ({
     </button>
   );
 };
-

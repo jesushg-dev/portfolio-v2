@@ -1,3 +1,4 @@
+import { paginateResumeExperiences } from "../resume-pagination";
 import JSZip from "jszip";
 import { XMLValidator } from "fast-xml-parser";
 import type { ResumeTemplate } from "../template-registry";
@@ -120,7 +121,7 @@ export function validateResumeTemplate(
   if (
     template.capabilities.companyLogos &&
     tags.filter((tag) => tag === "image:companyLogo").length !==
-      template.experiencePages.length
+      template.experiencePageLayout.length
   )
     throw new Error(
       `Template ${template.id}: each experience block needs image:companyLogo`,
@@ -141,7 +142,7 @@ export function validateResumeTemplate(
     "label:education",
     "label:skills",
     "label:languages",
-    ...template.experiencePages.map((_, i) => `repeat:experiences:${i}`),
+    ...template.experiencePageLayout.map((_, i) => `repeat:experiences:${i}`),
   ]) {
     if (tags.filter((tag) => tag === required).length !== 1)
       throw new Error(`Template ${template.id}: expected one ${required}`);
@@ -183,11 +184,9 @@ export async function renderResumeTemplate(
   const xml = await zip.file("word/document.xml")?.async("string");
   if (!xml) throw new Error("Template has no document.xml");
   validateResumeTemplate(xml, template);
-  if (
-    document.experiences.length >
-    template.experiencePages.reduce((a, b) => a + b, 0)
-  )
+  if (document.experiences.length > template.maxExperiences)
     throw new Error("Too many experiences for template capacity");
+  const experiencePages = paginateResumeExperiences(document, template);
   const labels = RESUME_LABELS[document.locale];
   const companyGroups = groupConsecutiveExperiencesByCompany(
     document.experiences,
@@ -357,10 +356,7 @@ export async function renderResumeTemplate(
         } else content = replaceText(body, values[key]);
       } else if (tag.startsWith("optional:experiences:")) {
         const page = Number(tag.split(":")[2]);
-        const start = template.experiencePages
-          .slice(0, page)
-          .reduce((sum, count) => sum + count, 0);
-        content = document.experiences.length > start ? render(body) : "";
+        content = experiencePages[page]?.length ? render(body) : "";
       } else if (tag === "optional:companyHeader") {
         content = values.companyHeader ? render(body, values, bullets) : "";
       } else if (tag === "optional:companyDates") {
@@ -403,11 +399,7 @@ export async function renderResumeTemplate(
             );
       else if (tag.startsWith("repeat:experiences:")) {
         const page = Number(tag.split(":")[2]);
-        const offset = template.experiencePages
-          .slice(0, page)
-          .reduce((a, b) => a + b, 0);
-        content = document.experiences
-          .slice(offset, offset + template.experiencePages[page])
+        content = experiencePages[page]
           .map((exp, expIndex) => {
             const group = companyGroupById.get(exp.id)!;
             const hasProgression = group.roles.length > 1;

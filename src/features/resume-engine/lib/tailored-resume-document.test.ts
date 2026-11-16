@@ -1,3 +1,4 @@
+import { experienceTextLength } from "./resume-pagination";
 import {
   resumeSelectionFixture,
   resumeResponseFixture,
@@ -30,7 +31,7 @@ function setup(
   templateId: "v1" | "v2" = "v2",
 ) {
   const context: TailorContext = {
-    drafts,
+    source: drafts[locale],
     targetLocale: locale,
     templateId,
     jobDescription: "Buscamos una persona que programe con React.",
@@ -66,6 +67,155 @@ describe("canonical multilingual resume", () => {
       expect(readResumeSnapshot(document)?.detectedLocale).toBe(locale);
     },
   );
+  it("applies the vacancy's React spelling to the sidebar and prose in both DOCX formats", async () => {
+    const { context, response } = setup();
+    context.jobDescription =
+      "Experience in React.js, React Native and AngularJS.";
+    const { document } = validateTailoredResume(
+      {
+        ...response,
+        technologyNames: [{ skillId: "skill-react", name: "React.js" }],
+      },
+      context,
+    );
+
+    expect(context.source.skills[0].items[0]).toBe("React");
+    expect(document.skills[0].skillIds?.[0]).toBe("skill-react");
+    expect(document.skills[0].items[0]).toBe("React.js");
+    expect(document.header.summary).toContain("with React.js and TypeScript");
+    expect(document.experiences[0].responsibilities[0]).toContain(
+      "React.js interfaces",
+    );
+
+    const template = RESUME_TEMPLATES.v2;
+    const visual = await renderResumeTemplate(
+      await loadCvTemplateDocxBuffer(template.id),
+      document,
+      template,
+    );
+    const ats = await generateDocxFromStructured(readResumeSnapshot(document)!);
+    for (const buffer of [visual, ats]) {
+      const xml = await (
+        await JSZip.loadAsync(buffer)
+      )
+        .file("word/document.xml")!
+        .async("string");
+      expect(xml).toContain("React.js");
+      expect(xml).not.toContain("React Native");
+    }
+  });
+
+  it.each([
+    "React Native",
+    "React Router",
+    "React.js 19",
+    "Kubernetes",
+    "AngularJS",
+  ])("rejects unsupported claims about %s in a React CV", (technology) => {
+    const { context, response } = setup();
+    response.fields.find(
+      ({ id }) => id === "experience.exp-0.bullet.resp-0-1",
+    )!.text =
+      "Built accessible " + technology + " interfaces for the customer portal.";
+    expect(() => validateTailoredResume(response, context)).toThrow(
+      technology === "React.js 19"
+        ? "changed numeric facts"
+        : "unsupported technologies",
+    );
+  });
+
+  it("uses the vacancy's casing and keeps distinct technologies separate", () => {
+    const { context, response } = setup();
+    context.jobDescription = "Experience with reactjs and NextJS.";
+    const { document } = validateTailoredResume(
+      {
+        ...response,
+        technologyNames: [
+          { skillId: "skill-react", name: "reactjs" },
+          { skillId: "skill-next", name: "NextJS" },
+        ],
+      },
+      context,
+    );
+    expect(document.skills[0].items).toEqual([
+      "reactjs",
+      "TypeScript",
+      "NextJS",
+    ]);
+
+    context.jobDescription = "Experience with React Native and AngularJS.";
+    expect(
+      validateTailoredResume(response, context).document.skills[0].items,
+    ).toEqual(["React", "TypeScript", "Next.js"]);
+  });
+
+  it("accepts a vacancy acronym without a predefined spelling", () => {
+    const { context } = setup();
+    const frontend = context.source.skills[0];
+    context.source = {
+      ...context.source,
+      skills: [
+        {
+          ...frontend,
+          items: [...frontend.items, "Windows Presentation Foundation"],
+          skillIds: [...frontend.skillIds!, "skill-wpf"],
+        },
+        ...context.source.skills.slice(1),
+      ],
+    };
+    context.jobDescription = "Experience using WPF.";
+    const response = resumeResponseFixture(context.source, "v2");
+    const { document } = validateTailoredResume(
+      {
+        ...response,
+        technologyNames: [{ skillId: "skill-wpf", name: "WPF" }],
+      },
+      context,
+    );
+    expect(document.skills[0].items).toContain("WPF");
+  });
+
+  it.each([
+    [
+      "unknown-id",
+      "React.js",
+      "skill ID must belong to the selected CV evidence",
+    ],
+    ["skill-react", "react.js", "copy the complete display name verbatim"],
+    ["skill-react", "React Native", "different technology"],
+    ["skill-react", "React.js 19", "preserve technology versions"],
+  ])("rejects a display name proposal for %s as %s", (skillId, name, error) => {
+    const { context, response } = setup();
+    context.jobDescription =
+      "Experience with React.js, React Native, and React.js 19.";
+    expect(() =>
+      validateTailoredResume(
+        {
+          ...response,
+          technologyNames: [{ skillId, name }],
+        },
+        context,
+      ),
+    ).toThrow(error);
+  });
+
+  it("validates an auto-detected output locale against a profile sent in a single source locale", () => {
+    const { context } = setup();
+    context.targetLocale = undefined;
+    context.jobDescription = "Buscamos experiencia con React.js.";
+    const response = resumeResponseFixture(drafts.es, "v2");
+    const { document } = validateTailoredResume(
+      {
+        ...response,
+        technologyNames: [{ skillId: "skill-react", name: "React.js" }],
+      },
+      context,
+    );
+    expect(document.locale).toBe("es");
+    expect(document.header.summary).toContain(
+      "desarrollando plataformas web con React.js",
+    );
+  });
   it("rejects an AI locale conflicting with an explicit choice", () => {
     const { context, response } = setup();
     expect(() =>
@@ -95,7 +245,7 @@ describe("canonical multilingual resume", () => {
         index === 0 ? { ...experience, technologies: [".NET"] } : experience,
       ),
     };
-    context.drafts = { ...drafts, es: source };
+    context.source = source;
     const selection = resumeSelectionFixture(source);
     const title = "Desarrollador .NET";
     const response = resumeResponseFixture(source, "v1", selection);
@@ -120,7 +270,7 @@ describe("canonical multilingual resume", () => {
       ...drafts.es,
       header: { ...drafts.es.header, degree: undefined },
     };
-    context.drafts = { ...drafts, es: source };
+    context.source = source;
     const response = resumeResponseFixture(source, "v2");
     expect(response.fields).toContainEqual({
       id: "header.degree",
@@ -165,14 +315,11 @@ describe("canonical multilingual resume", () => {
   });
   it("does not silently fall back when a translation is missing or rejected", () => {
     const { context, response } = setup();
-    context.drafts = {
-      ...drafts,
-      en: {
-        ...drafts.en,
-        header: {
-          ...drafts.en.header,
-          availability: drafts.es.header.availability,
-        },
+    context.source = {
+      ...drafts.en,
+      header: {
+        ...drafts.en.header,
+        availability: drafts.es.header.availability,
       },
     };
     expect(
@@ -219,7 +366,7 @@ describe("canonical multilingual resume", () => {
         id: `exp-${i}`,
       })),
     };
-    context.drafts = { ...drafts, en: large };
+    context.source = large;
     const response = resumeResponseFixture(large, "v1");
     expect(() => validateTailoredResume(response, context)).toThrow(
       "template capacity exceeded",
@@ -259,11 +406,11 @@ describe("official Word templates", () => {
       );
       selection.skills = selection.skills.map((skill) => ({
         ...skill,
-        items: skill.items.slice(0, 3),
+        skillIds: skill.skillIds.slice(0, 3),
       }));
       selection.certificationIds = [source.certifications[0].id];
       const context: TailorContext = {
-        drafts: { ...drafts, [locale]: source },
+        source,
         templateId: template.id,
         targetLocale: locale,
         jobDescription: "Senior web engineer using Azure and .NET.",
@@ -330,7 +477,7 @@ describe("official Word templates", () => {
         response.selection.certificationIds[0],
       );
     if (kind === "unknownSkill")
-      response.selection.skills[0].items = ["Invented skill"];
+      response.selection.skills[0].skillIds = ["unknown-id"];
     if (kind === "foreignBullet")
       response.selection.experiences[0].responsibilityIds = ["resp-1-1"];
     if (kind === "emptyAchievements")
@@ -380,7 +527,7 @@ describe("official Word templates", () => {
       })),
     };
     const { context } = setup();
-    context.drafts = { ...drafts, en: source };
+    context.source = source;
     expect(() =>
       validateTailoredResume(resumeResponseFixture(source, "v2"), context),
     ).toThrow("selection.certificationIds: selected 3; maximum 2");
@@ -393,7 +540,7 @@ describe("official Word templates", () => {
       ],
     };
     const { context } = setup();
-    context.drafts = { ...drafts, en: source };
+    context.source = source;
     expect(() =>
       validateTailoredResume(resumeResponseFixture(source, "v2"), context),
     ).not.toThrow();
@@ -406,7 +553,7 @@ describe("official Word templates", () => {
       ],
     };
     const { context } = setup();
-    context.drafts = { ...drafts, en: source };
+    context.source = source;
     const response = resumeResponseFixture(source, "v2");
     response.fields.find(
       (field) => field.id === "certification.code.title",
@@ -640,11 +787,20 @@ describe("official Word templates", () => {
           current: false,
         },
       ];
+      const firstPageCharacters =
+        (document.header.summary?.length ?? 0) +
+        document.experiences
+          .slice(0, 2)
+          .reduce((sum, role) => sum + experienceTextLength(role) + 1, 0);
+      const template = {
+        ...RESUME_TEMPLATES.v2,
+        maxPageCharacters: [firstPageCharacters, 5200],
+      };
       const zip = await JSZip.loadAsync(
         await renderResumeTemplate(
           await loadCvTemplateDocxBuffer("v2"),
           document,
-          RESUME_TEMPLATES.v2,
+          template,
         ),
       );
       const xml = await zip.file("word/document.xml")!.async("string");
@@ -652,7 +808,7 @@ describe("official Word templates", () => {
         { startDate: "2023-08", endDate: "2025-03" },
         locale,
       );
-      // The group crosses the configured page boundary; both headers show its full range.
+      // The first-page text budget splits this company group; both headers show its full range.
       expect(xml.split(overallDates)).toHaveLength(3);
       for (const role of document.experiences)
         expect(xml).toContain(resumeDates(role, locale));

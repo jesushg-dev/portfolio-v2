@@ -585,16 +585,6 @@
             "statLabel": "specialismen",
             "cta": "Bekijk diensten"
           },
-          "soft-skills": {
-            "label": "Leiderschap & competenties",
-            "short": "Teams, mentorschap, communicatie",
-            "headline": "Hoe ik met mensen werk",
-            "description": "Teams leiden, ontwikkelaars begeleiden en helder communiceren met product- en businesspartners.",
-            "chips": ["Teamleiderschap", "Mentorschap", "Communicatie"],
-            "statValue": "6",
-            "statLabel": "begeleide engineers",
-            "cta": "Lees leiderschapsprincipes"
-          },
           "testimonials": {
             "label": "Testimonials",
             "short": "Woorden van collega's",
@@ -915,7 +905,10 @@
     "skills": {
       "title": "Technische Stack",
       "subtitle": "Vaardigheden",
-      "description": "Technologieën en hulpmiddelen in dit portfolio.",
+      "description": "Technologieën die ik in productie heb geïmplementeerd in enterprise-systemen, financiële platforms en compliance-omgevingen.",
+      "updatedTech": "Bijgewerkte technologieën 2024–2026",
+      "empty": "Er zijn nog geen technologieën toegevoegd.",
+      "seeCertificates": "Bekijk certificaten",
       "aux": "Elke hier vermelde technologie is gebruikt in echte projecten, niet alleen tutorials. De meeste op schaal, in productie, onder druk.",
       "page": {
         "breadcrumbHome": "Start",
@@ -1017,14 +1010,6 @@
       },
       "titleLead": "Technische",
       "titleGradient": "stack."
-    },
-    "soft-skills": {
-      "subtitle": "Leiderschap",
-      "title": "Leiderschap & Impact",
-      "description": "Technische vaardigheden zijn belangrijk. Maar ook hoe je leidt, samenwerkt en dingen voor elkaar krijgt met echte teams in echte projecten.",
-      "aux": "Dit zijn geen bijvoeglijke naamwoorden op een CV: het is de manier waarop ik in elke rol heb gewerkt.",
-      "titleLead": "Leiderschap &",
-      "titleGradient": "impact."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -1214,6 +1199,17 @@
       },
       "titleLead": "Geselecteerd",
       "titleGradient": "engineeringwerk."
+    },
+    "homeBlog": {
+      "titleLead": "Van de",
+      "titleGradient": "blog.",
+      "description": "Notities over het bouwen van software die standhoudt.",
+      "browseAll": "Alle berichten",
+      "latest": "Recent",
+      "readPost": "Lees het bericht",
+      "minRead": "{count} min leestijd",
+      "part": "Deel {part}",
+      "partOfTotal": "Deel {part}/{total}"
     },
     "contact": {
       "eyebrow": "Contact",

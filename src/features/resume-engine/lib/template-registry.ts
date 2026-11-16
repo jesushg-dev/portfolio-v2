@@ -7,7 +7,8 @@ export interface ResumeTemplate {
   pdf: string;
   pages: number;
   contactColumns: number;
-  experiencePages: number[];
+  maxExperiences: number;
+  experiencePageLayout: { charactersPerLine: number; maxLines: number }[];
   capabilities: {
     photo: boolean;
     availability: boolean;
@@ -35,7 +36,8 @@ export const RESUME_TEMPLATES = {
     pdf: "cv-template.pdf",
     pages: 1,
     contactColumns: 1,
-    experiencePages: [6],
+    maxExperiences: 6,
+    experiencePageLayout: [{ charactersPerLine: 76, maxLines: 60 }],
     capabilities: {
       photo: true,
       availability: true,
@@ -60,7 +62,11 @@ export const RESUME_TEMPLATES = {
     pdf: "cv-template-v2.pdf",
     pages: 2,
     contactColumns: 3,
-    experiencePages: [2, 6],
+    maxExperiences: 8,
+    experiencePageLayout: [
+      { charactersPerLine: 76, maxLines: 46 },
+      { charactersPerLine: 112, maxLines: 60 },
+    ],
     capabilities: {
       photo: true,
       availability: true,

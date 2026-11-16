@@ -166,6 +166,41 @@ describe("portfolioRouter", () => {
     });
   });
 
+  it("prefers the exact normalized skill slug over a partial title match", async () => {
+    const csharp = {
+      id: "csharp",
+      title: "C#",
+      SkillTranslation: [],
+      CertificateSkill: [],
+      CvExperienceSkill: [],
+      ProjectSkill: [],
+    };
+    const db = {
+      appLanguage: {
+        findUnique: jest.fn().mockResolvedValue({ id: "lang-en", code: "en" }),
+        findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
+      },
+      skill: {
+        findFirst: jest
+          .fn()
+          .mockResolvedValueOnce({ id: "react", title: "React" })
+          .mockResolvedValueOnce(csharp),
+        findMany: jest
+          .fn()
+          .mockResolvedValue([{ id: csharp.id, title: csharp.title }]),
+      },
+    };
+    const caller = createRouterCaller(
+      portfolioRouter,
+      createTrpcTestContext({ db }),
+    );
+
+    await expect(caller.getSkillBySlug({ slug: "c" })).resolves.toMatchObject({
+      id: "csharp",
+      title: "C#",
+    });
+  });
+
   it("formats related projects with csInfo in getSkillBySlug", async () => {
     const db = {
       appLanguage: {

@@ -101,9 +101,20 @@ export function resumeFixture(locale: Locale): CvImportDraft {
         id: "skills-front",
         category: "FRONTEND",
         items: ["React", "TypeScript", "Next.js"],
+        skillIds: ["skill-react", "skill-typescript", "skill-next"],
       },
-      { id: "skills-back", category: "BACKEND", items: ["Node.js", "SQL"] },
-      { id: "skills-devops", category: "DEVOPS", items: ["Docker", "Git"] },
+      {
+        id: "skills-back",
+        category: "BACKEND",
+        items: ["Node.js", "SQL"],
+        skillIds: ["skill-node", "skill-sql"],
+      },
+      {
+        id: "skills-devops",
+        category: "DEVOPS",
+        items: ["Docker", "Git"],
+        skillIds: ["skill-docker", "skill-git"],
+      },
     ],
     languages: [{ id: "lang-1", name: text.language, level: text.level }],
     contacts: [
@@ -131,7 +142,7 @@ export function resumeSelectionFixture(draft: CvImportDraft): ResumeSelection {
     educationIds: draft.education.map((edu) => edu.id),
     skills: draft.skills.map((skill) => ({
       id: skill.id!,
-      items: skill.items,
+      skillIds: [...(skill.skillIds ?? [])],
     })),
     languageIds: draft.languages.map((lang) => lang.id!),
     certificationIds: draft.certifications.map((cert) => cert.id!),

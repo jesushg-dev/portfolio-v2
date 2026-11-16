@@ -13,6 +13,8 @@ for (const pathname of ["/", "/es", "/nl"]) {
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.locator("#services h2")).not.toBeEmpty();
     await expect(page.locator("#experience-heading")).not.toBeEmpty();
+    await expect(page.locator("#testimonials-heading")).toBeVisible();
+    await expect(page.locator("#leadership, #soft-skills")).toHaveCount(0);
 
     const cards = page.locator("#portfolio article");
     expect(await cards.count()).toBeGreaterThan(0);
@@ -34,6 +36,25 @@ for (const pathname of ["/", "/es", "/nl"]) {
     );
     const image = cards.locator('img[loading="lazy"]').first();
     await expect(image).toHaveAttribute("src", /.+/);
+
+    const prefix = pathname === "/" ? "" : pathname;
+    const blog = page.locator("#blog");
+    await blog.scrollIntoViewIfNeeded();
+    await expect(blog.getByRole("heading", { level: 2 })).toBeVisible();
+    await expect(blog.locator(`a[href="${prefix}/blog"]`)).toBeVisible();
+    const featured = blog.getByRole("article");
+    await expect(featured.getByRole("heading", { level: 3 })).toBeVisible();
+
+    const latest = blog.getByRole("list");
+    await expect(latest.getByRole("listitem")).toHaveCount(3);
+    const postLinks = featured.getByRole("link").or(latest.getByRole("link"));
+    await expect(postLinks).toHaveCount(4);
+    for (const link of await postLinks.all()) {
+      await expect(link).toHaveAttribute(
+        "href",
+        new RegExp(`^${prefix}/blog/[^/]+$`),
+      );
+    }
   });
 }
 

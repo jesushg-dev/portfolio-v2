@@ -169,9 +169,7 @@ export function ResumeTemplateSelector({
               <ResumeOptionCard
                 key={template.id}
                 selected={templateVersion === template.id}
-                onSelect={() =>
-                  onTemplateVersionChange(template.id)
-                }
+                onSelect={() => onTemplateVersionChange(template.id)}
                 title={title}
                 subtitle={subtitle}
                 badge={
@@ -227,9 +225,9 @@ export function ResumeTemplateSelector({
                 indicatorSize="sm"
                 icon={
                   lang.isAuto ? (
-                    <Sparkles className="size-3.5 text-primary" />
+                    <Sparkles className="text-primary size-3.5" />
                   ) : (
-                    <span className="font-mono text-[0.625rem] font-bold text-muted-foreground uppercase">
+                    <span className="text-muted-foreground font-mono text-[0.625rem] font-bold uppercase">
                       {lang.code}
                     </span>
                   )

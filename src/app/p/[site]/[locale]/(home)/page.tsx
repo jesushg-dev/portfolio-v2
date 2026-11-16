@@ -7,7 +7,7 @@ import Experience from "@/features/home/components/experience";
 import Services from "@/features/home/components/services";
 import Skills from "@/features/home/components/skills";
 import SocialProof from "@/features/home/components/social-proof";
-import SoftSkills from "@/features/home/components/soft-skills";
+import HomeBlog from "@/features/home/components/blog";
 import Contact from "@/features/home/components/contact";
 import HomeSection from "@/features/home/components/home-section";
 import { NextIntlClientProvider } from "next-intl";
@@ -89,11 +89,11 @@ export default async function Home() {
       </HomeSection>
 
       <HomeSection id="skills" estimatedHeight="32rem">
-        <Skills locale={locale} />
+        <Skills locale={locale} skills={skills} />
       </HomeSection>
 
-      <HomeSection id="soft-skills" estimatedHeight="28rem">
-        <SoftSkills />
+      <HomeSection id="blog" estimatedHeight="54rem">
+        <HomeBlog locale={locale} />
       </HomeSection>
 
       <HomeSection id="contact" estimatedHeight="28rem">

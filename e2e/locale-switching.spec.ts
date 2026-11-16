@@ -26,25 +26,27 @@ test.describe("public locale switching", () => {
     }
   });
 
-  test("skills backend tab shows stack technologies", async ({ page }) => {
+  test("technical stack lists backend skills and links to their details", async ({
+    page,
+  }) => {
     await page.goto("/");
     const skills = page.locator("#skills");
     await skills.scrollIntoViewIfNeeded();
 
-    const backendTab = skills.getByRole("tab", { name: /^Backend/i });
-    await expect(backendTab).toBeVisible();
+    const backend = skills.locator("dl > div").filter({
+      has: page.locator("dt").filter({ hasText: /^"backend"$/ }),
+    });
+    const csharp = backend.getByRole("link", { name: "C#", exact: true });
+    const node = backend.getByRole("link", { name: "Node.js", exact: true });
 
-    // Tabs hydrate after ViewportSection mounts; retry the click until the
-    // backend list actually replaces the default frontend skills.
-    await expect(async () => {
-      await backendTab.click();
-      await expect(
-        skills.getByRole("link", { name: "C#" }).first(),
-      ).toBeVisible({ timeout: 3_000 });
-    }).toPass({ timeout: 15_000 });
+    await expect(csharp).toBeVisible();
+    await expect(node).toBeVisible();
+    await expect(node).toHaveAttribute("href", "/skills/node-js");
 
+    await csharp.press("Enter");
+    await expect(page).toHaveURL(/\/skills\/c$/);
     await expect(
-      skills.getByRole("link", { name: "Node.js" }).first(),
+      page.getByRole("heading", { name: "C#", exact: true }),
     ).toBeVisible();
   });
 });

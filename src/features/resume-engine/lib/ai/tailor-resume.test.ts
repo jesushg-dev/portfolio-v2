@@ -25,11 +25,7 @@ import {
 } from "../tailored-resume-document";
 
 const context: TailorContext = {
-  drafts: {
-    en: resumeFixture("en"),
-    es: resumeFixture("es"),
-    nl: resumeFixture("nl"),
-  },
+  source: resumeFixture("en"),
   templateId: "v2",
   targetLocale: "en",
   uiLocale: "es",
@@ -64,8 +60,8 @@ const response = {
     },
     strengths: ["Relevant delivery supported by the selected experience."],
   },
-  selection: resumeSelectionFixture(context.drafts.en),
-  fields: resumeTextFields(context.drafts.en, "v2").map(({ id, text }) => ({
+  selection: resumeSelectionFixture(context.source),
+  fields: resumeTextFields(context.source, "v2").map(({ id, text }) => ({
     id,
     text,
   })),
@@ -80,34 +76,29 @@ const completion = (value: unknown) => ({
   ],
 });
 describe("automatic and manual resume contract", () => {
-  it("rejects inconsistent shared facts instead of silently using another locale's data", () => {
-    const conflicting: TailorContext = {
-      ...context,
-      drafts: {
-        ...context.drafts,
-        es: {
-          ...context.drafts.es,
-          experiences: context.drafts.es.experiences.map((experience, index) =>
-            index === 0
-              ? { ...experience, company: "Different employer" }
-              : experience,
-          ),
-        },
-      },
-    };
-    expect(() => buildTailoredResumePrompt(conflicting)).toThrow(
-      "CMS facts differ across locales (es)",
-    );
-  });
   it("keeps the explicit CV locale distinct from the interface and job locale", () => {
-    const prompt = buildTailoredResumePrompt(context);
+    const prompt = buildTailoredResumePrompt({
+      ...context,
+      source: {
+        ...context.source,
+        experiences: context.source.experiences.map((experience) => ({
+          ...experience,
+          technologyIds: ["skill-react"],
+          technologies: ["React"],
+        })),
+      },
+    });
     const input = decode(prompt.userPrompt) as {
       targetLocale: string;
       uiLocale: string;
       promptVersion: string;
-      responseContract: { immutableIdentityRule: string };
-      facts: { experiences: unknown[] };
-      sources: { en: { fields: { id: string; text: string }[] } };
+      responseContract: { fields: unknown[] };
+      facts: {
+        experiences: unknown[];
+        skills: unknown[];
+        technologies: { id: string; name: string }[];
+      };
+      source: { locale: string; fields: { id: string; text: string }[] };
     };
     expect(() => {
       JSON.parse(prompt.userPrompt);
@@ -119,22 +110,35 @@ describe("automatic and manual resume contract", () => {
     });
     expect(prompt.systemPrompt).toContain("Every field ID");
     expect(prompt.systemPrompt).toContain("exclusive allowlist");
-    expect(input.responseContract.immutableIdentityRule).toContain(
-      "Do not include it in fields",
-    );
+    expect(input.responseContract.fields).toEqual([
+      { id: "SOURCE_FIELD_ID", text: "Selected visible text" },
+    ]);
+    expect(input.responseContract).not.toHaveProperty("fieldsRule");
     expect(prompt.userPrompt).toContain("experience.exp-0.bullet.resp-0-1");
-    const sources = input.sources;
+    const source = input.source;
     expect(input.facts.experiences[0]).not.toHaveProperty("responsibilities");
-    expect(sources.en).not.toHaveProperty("facts");
+    expect(input.facts.experiences[0]).toMatchObject({
+      technologyIds: ["skill-react"],
+    });
+    expect(input.facts.experiences[0]).not.toHaveProperty("technologies");
+    expect(source.locale).toBe("en");
+    expect(input).not.toHaveProperty("sources");
+    expect(prompt.userPrompt).not.toContain(resumeFixture("es").header.summary);
+    expect(
+      input.facts.technologies.filter(({ id }) => id === "skill-react"),
+    ).toEqual([{ id: "skill-react", name: "React" }]);
+    expect(input.facts.skills[0]).toMatchObject({
+      skillIds: ["skill-react", "skill-typescript", "skill-next"],
+    });
     expect(input.promptVersion).toBe(TAILORED_RESUME_PROMPT_VERSION);
-    expect(sources.en.fields).toContainEqual(
+    expect(source.fields).toContainEqual(
       expect.objectContaining({
         id: "experience.exp-0.bullet.resp-0-1",
-        text: context.drafts.en.experiences[0].responsibilities[0],
+        text: context.source.experiences[0].responsibilities[0],
       }),
     );
     expect(
-      sources.en.fields.some(
+      source.fields.some(
         (field: { id: string }) => field.id === "header.fullName",
       ),
     ).toBe(false);
@@ -154,34 +158,65 @@ describe("automatic and manual resume contract", () => {
       const prompt = buildTailoredResumePrompt({ ...context, templateId });
       const input = decode(prompt.userPrompt) as {
         layoutLimits: { maxBulletsPerExperience: number };
-        responseContract: { matchNotesRule: string };
       };
       expect(input.layoutLimits.maxBulletsPerExperience).toBe(limit);
-      expect(input.responseContract.matchNotesRule).toContain(
+      expect(prompt.systemPrompt).toContain(
         "Account for every omitted CMS achievement ID",
       );
       expect(prompt.systemPrompt).toContain(
         "Keep retained responsibilityIds in CMS order",
       );
-      expect(prompt.systemPrompt).toContain("condense wording toward 60%");
-      expect(prompt.systemPrompt).toContain(
-        "COVERAGE REPORT (required in matchNotes)",
-      );
+      expect(prompt.systemPrompt).toContain("condense achievements toward 60%");
+      expect(prompt.systemPrompt).toContain("ANALYSIS AND COVERAGE");
     },
   );
+  it("describes available page space without fixed role counts", () => {
+    const prompt = buildTailoredResumePrompt(context);
+    const input = decode(prompt.userPrompt) as {
+      layoutLimits: { pages: unknown[] };
+    };
+    expect(input.layoutLimits.pages).toEqual([
+      {
+        page: 1,
+        charactersPerLine: 76,
+        maxLines: 46,
+        maxCharacters: 3400,
+        includesSummary: true,
+      },
+      {
+        page: 2,
+        charactersPerLine: 112,
+        maxLines: 60,
+        maxCharacters: 5200,
+        includesSummary: false,
+      },
+    ]);
+    expect(prompt.systemPrompt).toContain(
+      "Never shorten first-page achievements to solve overflow on a continuation page",
+    );
+    expect(prompt.systemPrompt).toContain(
+      "Only when a page exceeds its budget",
+    );
+  });
   it("produces exactly the document accepted by manual validation", async () => {
-    const create = jest.fn().mockResolvedValue(completion(response));
+    const vacancy = { ...context, jobDescription: "Experiencia con React.js." };
+    const withDisplayName = {
+      ...response,
+      technologyNames: [{ skillId: "skill-react", name: "React.js" }],
+    };
+    const create = jest.fn().mockResolvedValue(completion(withDisplayName));
     jest
       .mocked(OpenAI)
       .mockImplementation(
         () => ({ chat: { completions: { create } } }) as never,
       );
-    const automatic = await tailorResumeDocument(context, {
+    const automatic = await tailorResumeDocument(vacancy, {
       keys: {},
       defaultProvider: null,
     });
+    expect(automatic.document.skills[0].items).toContain("React.js");
     expect(automatic.document).toEqual(
-      validateTailoredResume(response, context).document,
+      validateTailoredResume(withDisplayName, vacancy).document,
     );
   });
   it.each([completion({ ...response, locale: "es" }), completion("not json")])(

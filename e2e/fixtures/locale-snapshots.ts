@@ -5,23 +5,19 @@ export const localeSnapshots: Record<
   {
     navAbout: string;
     servicesSnippet: string;
-    skillsTabBackend: string;
   }
 > = {
   en: {
     navAbout: "About me",
     servicesSnippet: "Engineering expertise",
-    skillsTabBackend: "Backend",
   },
   es: {
     navAbout: "Sobre mí",
     servicesSnippet: "Experiencia en ingeniería",
-    skillsTabBackend: "Backend",
   },
   nl: {
     navAbout: "Over mij",
     servicesSnippet: "Technische expertise",
-    skillsTabBackend: "Backend",
   },
 };
 

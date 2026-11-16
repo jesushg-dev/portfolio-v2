@@ -589,16 +589,6 @@
             "statLabel": "especialidades",
             "cta": "Ver servicios"
           },
-          "soft-skills": {
-            "label": "Liderazgo y competencias",
-            "short": "Equipos, mentoría, comunicación",
-            "headline": "Cómo trabajo con las personas",
-            "description": "Liderazgo de equipos, mentoría de desarrolladores y comunicación fluida con producto y negocio.",
-            "chips": ["Liderazgo técnico", "Mentoría", "Comunicación"],
-            "statValue": "6",
-            "statLabel": "ingenieros guiados",
-            "cta": "Leer principios de liderazgo"
-          },
           "testimonials": {
             "label": "Testimonios",
             "short": "Palabras de colegas",
@@ -941,7 +931,10 @@
     "skills": {
       "title": "Stack Técnico",
       "subtitle": "Habilidades",
-      "description": "Tecnologías y herramientas de este portafolio.",
+      "description": "Tecnologías que he llevado a producción en sistemas a escala corporativa, plataformas financieras y entornos de alto cumplimiento.",
+      "updatedTech": "Tecnologías actualizadas 2024–2026",
+      "empty": "Aún no se han añadido tecnologías.",
+      "seeCertificates": "Ver certificados",
       "aux": "Cada tecnología listada aquí ha sido usada en proyectos reales, no solo tutoriales. La mayoría a escala, en producción y bajo presión.",
       "page": {
         "breadcrumbHome": "Inicio",
@@ -1043,14 +1036,6 @@
       },
       "titleLead": "Stack",
       "titleGradient": "técnico."
-    },
-    "soft-skills": {
-      "subtitle": "Liderazgo",
-      "title": "Liderazgo e Impacto",
-      "description": "Las habilidades técnicas importan. También importa cómo lideras, colaboras y haces que las cosas sucedan con equipos reales en proyectos reales.",
-      "aux": "Esto no son adjetivos escritos en un CV: es la forma en que he operado en cada rol.",
-      "titleLead": "Liderazgo e",
-      "titleGradient": "impacto."
     },
     "portfolio": {
       "subtitle": "Portafolio",
@@ -1240,6 +1225,17 @@
       },
       "titleLead": "Trabajo de ingeniería",
       "titleGradient": "seleccionado."
+    },
+    "homeBlog": {
+      "titleLead": "Desde el",
+      "titleGradient": "blog.",
+      "description": "Notas sobre cómo construir software que perdure.",
+      "browseAll": "Todas las publicaciones",
+      "latest": "Recientes",
+      "readPost": "Leer publicación",
+      "minRead": "{count} min de lectura",
+      "part": "Parte {part}",
+      "partOfTotal": "Parte {part}/{total}"
     },
     "contact": {
       "title": "Hablemos",

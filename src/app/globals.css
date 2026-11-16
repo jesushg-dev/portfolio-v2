@@ -878,6 +878,7 @@
     --accent-foreground: var(--color-primaryText-50);
     --border: var(--color-divider-300);
     --input: var(--color-divider-300);
+    --primary: var(--color-primary-500);
   }
 }
 

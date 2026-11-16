@@ -10,15 +10,11 @@ describe("persisted resume preview", () => {
   it.each(["en", "es", "nl"] as const)(
     "renders the document's %s locale independent of interface translations",
     (locale) => {
-      const drafts = {
-        en: resumeFixture("en"),
-        es: resumeFixture("es"),
-        nl: resumeFixture("nl"),
-      };
+      const source = resumeFixture(locale);
       const { document } = validateTailoredResume(
-        resumeResponseFixture(drafts[locale], "v2"),
+        resumeResponseFixture(source, "v2"),
         {
-          drafts,
+          source,
           templateId: "v2",
           targetLocale: locale,
           jobDescription: "A software engineering role.",

@@ -453,7 +453,10 @@ export const portfolioRouter = createTRPCRouter({
         },
       });
 
-      if (!skill && !isObjId) {
+      if (
+        !isObjId &&
+        (!skill || skillSlugFromTitle(skill.title) !== input.slug.toLowerCase())
+      ) {
         const allSkills = await ctx.db.skill.findMany({
           where: { userId: tenantUserId },
           select: { id: true, title: true },

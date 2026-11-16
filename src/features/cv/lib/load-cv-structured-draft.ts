@@ -20,7 +20,7 @@ function resolveLocale(value: string | undefined): Locale {
 }
 
 export interface LoadCvStructuredDraftOptions {
-  locale: Locale;
+  locale?: Locale;
   fallbackLocale?: Locale;
   /** Make all CMS achievements selectable for a single shared tailored document. */
   evidenceScope?: "visible" | "all";
@@ -36,10 +36,6 @@ export function certificationYear(
   if (!Number.isInteger(year) || year < 1000 || year > 9999)
     throw new Error("certification.issuedDate: invalid date");
   return year;
-}
-
-async function loadResumeTechnicalSkills(db: PrismaClient, userId: string) {
-  return resolveUserTechnicalSkills(db, userId);
 }
 
 export async function loadCvStructuredDraft(
@@ -74,7 +70,7 @@ export async function loadCvStructuredDraft(
         CvExperienceSkill: {
           where: { skill: { userId } },
           orderBy: { skillId: "asc" },
-          select: { skill: { select: { title: true } } },
+          select: { skillId: true, skill: { select: { title: true } } },
         },
         responsibilities: {
           include: { translations: true },
@@ -88,7 +84,7 @@ export async function loadCvStructuredDraft(
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    loadResumeTechnicalSkills(db, userId),
+    resolveUserTechnicalSkills(db, userId),
     db.cvContact.findMany({
       where: { userId },
       orderBy: { order: "asc" },
@@ -166,6 +162,10 @@ export async function loadCvStructuredDraft(
           options?.evidenceScope === "all"
             ? exp.CvExperienceSkill.map(({ skill }) => skill.title)
             : undefined,
+        technologyIds:
+          options?.evidenceScope === "all"
+            ? exp.CvExperienceSkill.map(({ skillId }) => skillId)
+            : undefined,
         startDate: formatExperienceDate(exp.startDate),
         endDate: formatExperienceDate(exp.endDate),
         current: exp.current,
@@ -190,6 +190,7 @@ export async function loadCvStructuredDraft(
       id: skill.id,
       category: skill.category,
       items: skill.items,
+      ...(options?.evidenceScope === "all" ? { skillIds: skill.skillIds } : {}),
     })),
     languages: languages.map((lang) => {
       const langT = field.for(lang.translations);

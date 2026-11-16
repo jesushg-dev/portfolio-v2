@@ -6,10 +6,7 @@ export function requiredResumeCoverage(
   source: CvImportDraft,
   template: ResumeTemplate,
 ) {
-  const capacity = template.experiencePages.reduce(
-    (sum, count) => sum + count,
-    0,
-  );
+  const capacity = template.maxExperiences;
   return {
     experienceIds:
       template.pages > 1 && source.experiences.length <= capacity
@@ -52,7 +49,7 @@ export function validateResumeCoverage(
     ...required.skills
       .filter(
         (group) =>
-          (selection.skills.find((skill) => skill.id === group.id)?.items
+          (selection.skills.find((skill) => skill.id === group.id)?.skillIds
             .length ?? 0) < group.minimumItems,
       )
       .map((group) => `skill group ${group.id} (${group.minimumItems} items)`),
@@ -78,7 +75,7 @@ export const ResumeSelectionSchema = z
       z
         .object({
           id: z.string().min(1),
-          items: z.array(z.string().min(1)).min(1),
+          skillIds: z.array(z.string().min(1)).min(1),
         })
         .strict(),
     ),
@@ -163,13 +160,17 @@ export function selectResumeSource(
     .map((skill) => {
       const selected = selection.skills.find((item) => item.id === skill.id)!;
       checkIds(
-        `selection.skills.${skill.id}.items`,
-        selected.items,
-        skill.items,
+        `selection.skills.${skill.id}.skillIds`,
+        selected.skillIds,
+        skill.skillIds ?? [],
       );
       return {
         ...skill,
-        items: selected.items.filter((item) => skill.items.includes(item)),
+        skillIds: selected.skillIds,
+        items: selected.skillIds.flatMap((id) => {
+          const index = skill.skillIds?.indexOf(id) ?? -1;
+          return index >= 0 ? [skill.items[index]] : [];
+        }),
       };
     });
   if (source.experiences.length && !experiences.length)

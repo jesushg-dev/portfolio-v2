@@ -77,7 +77,7 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
                 : t("aiModeAutoUnavailable")
             }
             icon={
-              <div className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <div className="bg-primary/10 text-primary flex size-7 items-center justify-center rounded-md">
                 <Bot className="size-3.5" />
               </div>
             }
@@ -89,7 +89,7 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
             title={t("aiModeManualShort")}
             subtitle={t("aiModeManualHint")}
             icon={
-              <div className="flex size-7 items-center justify-center rounded-md bg-muted text-muted-foreground">
+              <div className="bg-muted text-muted-foreground flex size-7 items-center justify-center rounded-md">
                 <FileCode className="size-3.5" />
               </div>
             }

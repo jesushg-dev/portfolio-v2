@@ -26,6 +26,7 @@ import {
 } from "@/lib/cv/build-ats-cv-file-name";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { getPublicCvPageData } from "@/features/cv/lib/get-public-cv-page-data";
+import { cn } from "@/lib/utils";
 import CvUnpublished from "./cv-unpublished";
 
 interface CvPageViewProps {
@@ -156,11 +157,19 @@ const CvPageView: FC<CvPageViewProps> = async ({
       </div>
       <main
         id="sheet"
-        className="sheet mx-auto w-full max-w-[51rem] overflow-hidden bg-white text-slate-900 shadow-[0_1.875rem_4.375rem_-1.875rem_rgba(10,61,122,0.45)] md:rounded-2xl print:m-0 print:w-[51rem] print:max-w-none print:rounded-none print:shadow-none"
+        className={cn(
+          "sheet mx-auto w-full max-w-[51rem] overflow-hidden text-slate-900 shadow-[0_1.875rem_4.375rem_-1.875rem_rgba(10,61,122,0.45)] md:rounded-2xl print:m-0 print:w-[51rem] print:max-w-none print:rounded-none print:shadow-none",
+          design === "ats" ? "bg-white" : "bg-[#0a3d7a]",
+        )}
       >
         <div
           id="cv-public-preview"
-          className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-slate-900`}
+          className={cn(
+            cvPreviewFont.variable,
+            cvPreviewFont.className,
+            "cv-docx-font text-slate-900",
+            design === "ats" && "bg-white",
+          )}
         >
           <PreviewComponent
             data={localizedData}

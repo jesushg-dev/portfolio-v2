@@ -27,7 +27,7 @@ const HeaderCV: FC<IHeaderCvProps> = ({
   const initials = getNameInitials(fullName);
 
   return (
-    <header className="flex items-start justify-between gap-6 bg-[#0a3d7a] px-6 py-6 text-white md:px-10 md:py-9">
+    <header className="flex items-start justify-between gap-6 bg-[#0a3d7a] px-6 py-6 text-white md:rounded-t-2xl md:px-10 md:py-9">
       <div className="min-w-0 flex-1">
         <h1 className="text-3xl leading-[1.1] font-bold text-white md:text-4xl">
           {fullName}

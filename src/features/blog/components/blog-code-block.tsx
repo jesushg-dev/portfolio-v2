@@ -72,16 +72,16 @@ export function BlogCodeBlock({ node }: BlogCodeBlockProps) {
   return (
     <NodeViewWrapper
       as="div"
-      className="blog-code-block group not-prose my-6 overflow-hidden rounded-xl border border-border bg-card/80 shadow-xs"
+      className="blog-code-block group not-prose border-border bg-card/80 my-6 overflow-hidden rounded-xl border shadow-xs"
     >
-      <div className="flex h-9.5 items-center justify-between border-b border-border/70 bg-muted/40 px-3.5 py-1.5 text-xs text-muted-foreground select-none">
+      <div className="border-border/70 bg-muted/40 text-muted-foreground flex h-9.5 items-center justify-between border-b px-3.5 py-1.5 text-xs select-none">
         <div className="flex items-center gap-2.5">
           <div className="flex items-center gap-1.5" aria-hidden="true">
-            <span className="size-2 rounded-full bg-border" />
-            <span className="size-2 rounded-full bg-border" />
-            <span className="size-2 rounded-full bg-border" />
+            <span className="bg-border size-2 rounded-full" />
+            <span className="bg-border size-2 rounded-full" />
+            <span className="bg-border size-2 rounded-full" />
           </div>
-          <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-muted-foreground font-mono text-xs font-semibold tracking-wider uppercase">
             {displayLanguage}
           </span>
         </div>
@@ -91,15 +91,15 @@ export function BlogCodeBlock({ node }: BlogCodeBlockProps) {
           onClick={onCopyClick}
           aria-label={copied ? copiedLabel : copyAriaLabel}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none",
+            "focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all select-none focus-visible:ring-1 focus-visible:outline-none",
             copied
-              ? "border border-primary/40 bg-primary/10 text-primary"
-              : "border border-border/60 bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-2xs",
+              ? "border-primary/40 bg-primary/10 text-primary border"
+              : "border-border/60 bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground border hover:shadow-2xs",
           )}
         >
           {copied ? (
             <>
-              <Check className="size-3.5 stroke-[2.5] text-primary" />
+              <Check className="text-primary size-3.5 stroke-[2.5]" />
               <span>{copiedLabel}</span>
             </>
           ) : (
@@ -120,4 +120,3 @@ export function BlogCodeBlock({ node }: BlogCodeBlockProps) {
     </NodeViewWrapper>
   );
 }
-
