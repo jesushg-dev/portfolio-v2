@@ -34,40 +34,35 @@ export function captureExpandRects(elements: {
   };
 }
 
-export const EXPANDED_COVER_WIDTH_RATIO = 0.94;
+export function getExpandedTargets(screen: HTMLElement): ExpandRects | null {
+  // The phone is centered once the opening rotation and scale settle.
+  const viewport = screen.ownerDocument.documentElement;
+  const screenLeft = (viewport.clientWidth - screen.offsetWidth) / 2;
+  const screenTop = (viewport.clientHeight - screen.offsetHeight) / 2;
 
-export function getExpandedTargets(screenRect: DOMRect) {
-  const coverSize = screenRect.width * EXPANDED_COVER_WIDTH_RATIO;
-  const coverLeft = screenRect.left + (screenRect.width - coverSize) / 2;
+  function measure(part: keyof ExpandRects): ElementRect | null {
+    const element = screen.querySelector<HTMLElement>(
+      `[data-spotify-flight="${part}"]`,
+    );
+    if (!element?.offsetWidth) return null;
 
-  const metaHeight = 6.75 * 16;
-  const blockHeight = coverSize + metaHeight;
-  const coverTop = screenRect.top + (screenRect.height - blockHeight) / 2 - 8;
+    let left = screenLeft;
+    let top = screenTop;
+    let node: HTMLElement | null = element;
+    // Layout offsets stay unchanged as the phone rotates.
+    while (node && node !== screen) {
+      left += node.offsetLeft;
+      top += node.offsetTop;
+      const parent: Element | null = node.offsetParent;
+      node = parent instanceof HTMLElement ? parent : null;
+    }
+    return node
+      ? { left, top, width: element.offsetWidth, height: element.offsetHeight }
+      : null;
+  }
 
-  const textLeft = screenRect.left + screenRect.width * 0.03;
-  const textWidth = screenRect.width * EXPANDED_COVER_WIDTH_RATIO;
-  const pillOffset = 40;
-  const titleTop = coverTop + coverSize + pillOffset;
-  const artistTop = titleTop + 26;
-
-  return {
-    cover: {
-      top: coverTop,
-      left: coverLeft,
-      width: coverSize,
-      height: coverSize,
-    },
-    title: {
-      top: titleTop,
-      left: textLeft,
-      width: textWidth,
-      height: 26,
-    },
-    artist: {
-      top: artistTop,
-      left: textLeft,
-      width: textWidth,
-      height: 20,
-    },
-  };
+  const cover = measure("cover");
+  const title = measure("title");
+  const artist = measure("artist");
+  return cover && title && artist ? { cover, title, artist } : null;
 }

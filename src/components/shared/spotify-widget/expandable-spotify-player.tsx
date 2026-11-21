@@ -12,7 +12,7 @@ import {
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Pause, Play, Volume2 } from "lucide-react";
 
 import { useOutsideClick } from "@/hooks/use-outside-click";
@@ -23,13 +23,8 @@ import ProgressTimer from "./components/progress-timer";
 import Player from "./components/player";
 import PlayingIndicator from "./components/playing-indicator";
 import AnimatedGradient from "./components/animated-gradient";
-import {
-  IOSDeviceMockup,
-  IOSNavigationStack,
-  IOSScreen,
-} from "@/components/shared/ios-device";
-import SpotifyNowPlayingScreen from "./components/spotify-now-playing-screen";
-import SpotifyLyricsScreen from "./components/spotify-lyrics-screen";
+import { IOSDeviceMockup } from "@/components/shared/ios-device";
+import { SpotifyDeviceScreens } from "../ios-device/apps/spotify/spotify-device-screens";
 import { useAlbumPalette } from "./hooks/use-album-color";
 import {
   captureExpandRects,
@@ -81,6 +76,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
   const t = useTranslations("global.footer");
   const locale = useLocale();
   const [isExpanded, setIsExpanded] = useState(false);
+  const reduceMotion = useReducedMotion();
   const isMounted = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -122,7 +118,10 @@ const ExpandableSpotifyPlayerContent: FC = () => {
     closeExpandedState();
   }, [resetDrag, closeExpandedState]);
 
-  useOutsideClick(expandedRef, closeExpanded);
+  const closeFromOutside = useCallback(() => {
+    if (isExpanded && expandedRef.current) closeExpanded();
+  }, [closeExpanded, isExpanded]);
+  useOutsideClick(expandedRef, closeFromOutside);
 
   useEffect(() => {
     if (!isExpanded) return;
@@ -136,17 +135,60 @@ const ExpandableSpotifyPlayerContent: FC = () => {
   }, [isExpanded]);
 
   useEffect(() => {
-    if (!isExpanded || !screenRef.current) return;
+    if (!isExpanded || !expandRects || !screenRef.current) return;
 
     const frame = requestAnimationFrame(() => {
       if (!screenRef.current) return;
-      setFlyTargets(
-        getExpandedTargets(screenRef.current.getBoundingClientRect()),
-      );
+      const targets = getExpandedTargets(screenRef.current);
+      setFlyTargets(targets);
+      if (!targets) setFlyComplete(true);
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [isExpanded]);
+  }, [expandRects, isExpanded]);
+
+  useEffect(() => {
+    if (!isExpanded) return;
+    const panel = expandedRef.current;
+    if (!panel) return;
+    const restoreFocus = document.activeElement;
+    panel.focus({ preventScroll: true });
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+      if (event.key === "Escape") closeExpanded();
+      if (event.key !== "Tab") return;
+      const stops = Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          "a[href], button, input, select, textarea, [tabindex]",
+        ),
+      ).filter(
+        (element) =>
+          element.tabIndex >= 0 &&
+          !element.matches(":disabled") &&
+          !element.closest("[inert]") &&
+          element.getClientRects().length > 0,
+      );
+      const first = stops[0];
+      const last = stops.at(-1);
+      const active = document.activeElement;
+      if (
+        !first ||
+        !panel.contains(active) ||
+        (event.shiftKey
+          ? active === first || active === panel
+          : active === last)
+      ) {
+        event.preventDefault();
+        (event.shiftKey ? (last ?? panel) : (first ?? panel)).focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      if (restoreFocus instanceof HTMLElement)
+        restoreFocus.focus({ preventScroll: true });
+    };
+  }, [closeExpanded, isExpanded]);
 
   useEffect(() => {
     if (!isExpanded || !expandRects || !flyTargets) return;
@@ -336,7 +378,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
         createPortal(
           <AnimatePresence>
             {isExpanded && (
-              <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+              <div className="fixed inset-0 z-100 flex items-center justify-center p-4 perspective-[68rem]">
                 <motion.button
                   type="button"
                   initial={{ opacity: 0 }}
@@ -448,29 +490,41 @@ const ExpandableSpotifyPlayerContent: FC = () => {
 
                 <motion.div
                   ref={expandedRef}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.94 }}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="Spotify"
+                  tabIndex={-1}
+                  initial={{
+                    opacity: 0,
+                    scale: reduceMotion ? 1 : 0.9,
+                    rotateY: reduceMotion ? 0 : -28,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    rotateY: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: reduceMotion ? 1 : 0.94,
+                    rotateY: reduceMotion ? 0 : -22,
+                  }}
                   transition={SPOTIFY_PANEL_SPRING}
-                  className="relative z-101 will-change-transform"
+                  className="relative z-101 will-change-transform outline-none transform-3d"
                 >
-                  <IOSDeviceMockup screenRef={screenRef}>
-                    <IOSNavigationStack initialRoute="now-playing">
-                      <IOSScreen id="now-playing">
-                        <SpotifyNowPlayingScreen
-                          accentColor={accentColor}
-                          locale={locale}
-                          flyComplete={flyComplete}
-                          coverSize={flyTargets?.cover.width}
-                          dragY={y}
-                          dragProps={dragProps}
-                          onClose={closeExpanded}
-                        />
-                      </IOSScreen>
-                      <IOSScreen id="lyrics" presentation="sheet">
-                        <SpotifyLyricsScreen accentColor={accentColor} />
-                      </IOSScreen>
-                    </IOSNavigationStack>
+                  <IOSDeviceMockup
+                    depth
+                    screenRef={screenRef}
+                    className="aspect-(--ios-device-ratio) h-[min(var(--ios-device-height),calc(100dvh-2rem))] w-auto"
+                  >
+                    <SpotifyDeviceScreens
+                      accentColor={accentColor}
+                      locale={locale}
+                      flyComplete={flyComplete}
+                      dragY={y}
+                      dragProps={dragProps}
+                      onClose={closeExpanded}
+                    />
                   </IOSDeviceMockup>
                 </motion.div>
               </div>

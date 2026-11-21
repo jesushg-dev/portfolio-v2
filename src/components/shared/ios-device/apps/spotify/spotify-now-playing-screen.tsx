@@ -9,34 +9,30 @@ import { SpotifyIcon } from "@/components/shared/brand-icons";
 import { useIOSNavigation } from "@/components/shared/ios-device";
 
 import SpotifyFullscreenProgress from "./spotify-fullscreen-progress";
-import { buildSpotifyFullscreenBg } from "../hooks/use-album-color";
-import { formatPlayedAt } from "../utils/format-played-at";
+import { buildSpotifyFullscreenBg } from "@/components/shared/spotify-widget/hooks/use-album-color";
+import { formatPlayedAt } from "@/components/shared/spotify-widget/utils/format-played-at";
 import LyricsCard from "./lyrics-card";
-import SpotifyScrollingText from "./spotify-scrolling-text";
-import { useTrackLyrics } from "../hooks/use-track-lyrics";
-import { useSpotifyPlaybackContext } from "../context/spotify-playback-context";
+import SpotifyScrollingText from "@/components/shared/spotify-widget/components/spotify-scrolling-text";
+import { useTrackLyrics } from "@/components/shared/spotify-widget/hooks/use-track-lyrics";
+import { useSpotifyPlaybackContext } from "@/components/shared/spotify-widget/context/spotify-playback-context";
 import type {
   SpotifyDragMotionValue,
   SpotifyDragToCloseProps,
-} from "../hooks/use-drag-to-close";
+} from "@/components/shared/spotify-widget/hooks/use-drag-to-close";
 
 interface SpotifyNowPlayingScreenProps {
   accentColor: string;
   locale: string;
   flyComplete: boolean;
-  coverSize?: number;
   dragY: SpotifyDragMotionValue;
   dragProps: SpotifyDragToCloseProps;
   onClose: () => void;
 }
 
-const DEFAULT_COVER = 220;
-
 const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
   accentColor,
   locale,
   flyComplete,
-  coverSize = DEFAULT_COVER,
   dragY,
   dragProps,
   onClose,
@@ -84,7 +80,8 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
       </header>
 
       <div
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3.5 pb-4"
+        data-ios-texture-scroll
+        className="min-h-0 flex-1 [scrollbar-width:none] overflow-x-hidden overflow-y-auto overscroll-contain px-3.5 pb-4"
         style={{ WebkitOverflowScrolling: "touch" }}
         onPointerDown={(event) => event.stopPropagation()}
       >
@@ -97,16 +94,11 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
           </p>
         )}
 
-        <div
-          className="mx-auto w-full shrink-0"
-          style={{ maxWidth: coverSize }}
-        >
+        <div className="mx-auto w-full max-w-[15.3125rem] shrink-0">
           <div
-            className="mx-auto aspect-square w-full touch-none"
-            style={{
-              maxWidth: coverSize,
-              opacity: flyComplete ? 1 : 0,
-            }}
+            data-spotify-flight="cover"
+            className="aspect-square w-full touch-none"
+            style={{ opacity: flyComplete ? 1 : 0 }}
           >
             <Image
               src={playback.imageUrl ?? "/images/spotify.png"}
@@ -137,6 +129,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
             </a>
 
             <a
+              data-spotify-flight="title"
               href={playback.contentUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -147,6 +140,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
             </a>
 
             <a
+              data-spotify-flight="artist"
               href={playback.subtitleUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -165,36 +159,27 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               </div>
             )}
           </motion.div>
+          {showLyrics && flyComplete && (
+            <div className="mt-3">
+              <LyricsCard
+                key={playback.contentId}
+                accentColor={accentColor}
+                lyricsState={lyricsState}
+                progressMs={liveProgressMs}
+                labels={{
+                  title: t("spotify.lyrics"),
+                  loading: t("spotify.lyricsLoading"),
+                  notFound: t("spotify.lyricsNotFound"),
+                  temporarilyUnavailable: t(
+                    "spotify.lyricsTemporarilyUnavailable",
+                  ),
+                  expand: t("spotify.lyricsExpand"),
+                }}
+                onExpand={() => presentSheet("lyrics")}
+              />
+            </div>
+          )}
         </div>
-
-        {showLyrics && flyComplete && (
-          <div
-            className="mt-3"
-            style={{
-              maxWidth: coverSize,
-              marginInline: "auto",
-              width: "100%",
-            }}
-          >
-            <LyricsCard
-              key={playback.contentId}
-              accentColor={accentColor}
-              height={Math.round(coverSize * 0.9)}
-              lyricsState={lyricsState}
-              progressMs={liveProgressMs}
-              labels={{
-                title: t("spotify.lyrics"),
-                loading: t("spotify.lyricsLoading"),
-                notFound: t("spotify.lyricsNotFound"),
-                temporarilyUnavailable: t(
-                  "spotify.lyricsTemporarilyUnavailable",
-                ),
-                expand: t("spotify.lyricsExpand"),
-              }}
-              onExpand={() => presentSheet("lyrics")}
-            />
-          </div>
-        )}
       </div>
     </motion.div>
   );

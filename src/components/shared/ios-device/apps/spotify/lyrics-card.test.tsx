@@ -1,4 +1,4 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 import LyricsCard from "./lyrics-card";
 
@@ -15,7 +15,6 @@ describe("LyricsCard component", () => {
     render(
       <LyricsCard
         accentColor="#1DB954"
-        height={200}
         lyricsState={{ status: "loading", lyrics: null }}
         progressMs={0}
         labels={labels}
@@ -30,7 +29,6 @@ describe("LyricsCard component", () => {
     render(
       <LyricsCard
         accentColor="#1DB954"
-        height={200}
         lyricsState={{ status: "empty", lyrics: null }}
         progressMs={0}
         labels={labels}
@@ -45,7 +43,6 @@ describe("LyricsCard component", () => {
     render(
       <LyricsCard
         accentColor="#1DB954"
-        height={200}
         lyricsState={{ status: "temporary", lyrics: null }}
         progressMs={0}
         labels={labels}
@@ -64,7 +61,6 @@ describe("LyricsCard component", () => {
     render(
       <LyricsCard
         accentColor="#1DB954"
-        height={200}
         lyricsState={{
           status: "ready",
           lyrics: {
@@ -90,7 +86,6 @@ describe("LyricsCard component", () => {
     render(
       <LyricsCard
         accentColor="#1DB954"
-        height={200}
         lyricsState={{
           status: "ready",
           lyrics: {

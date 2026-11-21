@@ -4,8 +4,8 @@ import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
 import LyricsFullscreen from "./lyrics-fullscreen";
-import { useTrackLyrics } from "../hooks/use-track-lyrics";
-import { useSpotifyPlaybackContext } from "../context/spotify-playback-context";
+import { useTrackLyrics } from "@/components/shared/spotify-widget/hooks/use-track-lyrics";
+import { useSpotifyPlaybackContext } from "@/components/shared/spotify-widget/context/spotify-playback-context";
 import { useIOSNavigation } from "@/components/shared/ios-device";
 
 interface SpotifyLyricsScreenProps {

@@ -6,8 +6,11 @@ import { useEffect, useMemo, useRef, type FC } from "react";
 import { ChevronDown } from "lucide-react";
 
 import SpotifyFullscreenProgress from "./spotify-fullscreen-progress";
-import { buildSpotifyFullscreenBg } from "../hooks/use-album-color";
-import { findActiveLyricIndex, parseLrc } from "../utils/parse-lrc";
+import { buildSpotifyFullscreenBg } from "@/components/shared/spotify-widget/hooks/use-album-color";
+import {
+  findActiveLyricIndex,
+  parseLrc,
+} from "@/components/shared/spotify-widget/utils/parse-lrc";
 import { LyricLineContent } from "./lyric-line-content";
 
 interface LyricsFullscreenProps {
@@ -110,7 +113,8 @@ const LyricsFullscreen: FC<LyricsFullscreenProps> = ({
 
       <div
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-2"
+        data-ios-texture-scroll
+        className="min-h-0 flex-1 [scrollbar-width:none] overflow-x-hidden overflow-y-auto overscroll-contain px-4 py-2"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {useSynced ? (

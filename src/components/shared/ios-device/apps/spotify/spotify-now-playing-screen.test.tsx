@@ -11,16 +11,16 @@ import {
 } from "@/test-utils/fixtures/spotify-data";
 
 import SpotifyNowPlayingScreen from "./spotify-now-playing-screen";
-import type { SpotifyPlayback } from "../types/types";
-import type { SpotifyDragMotionValue } from "../hooks/use-drag-to-close";
+import type { SpotifyPlayback } from "@/components/shared/spotify-widget/types/types";
+import type { SpotifyDragMotionValue } from "@/components/shared/spotify-widget/hooks/use-drag-to-close";
 import {
   mapEpisodeNowPlaying,
   mapRecentlyPlayed,
   mapTrackNowPlaying,
-} from "../utils/playback-mappers";
-import { SpotifyPlaybackProvider } from "../context/spotify-playback-context";
+} from "@/components/shared/spotify-widget/utils/playback-mappers";
+import { SpotifyPlaybackProvider } from "@/components/shared/spotify-widget/context/spotify-playback-context";
 
-jest.mock("../hooks/use-track-lyrics", () => ({
+jest.mock("@/components/shared/spotify-widget/hooks/use-track-lyrics", () => ({
   useTrackLyrics: () => ({ status: "empty", lyrics: null }),
   prefetchTrackLyrics: jest.fn(() => Promise.resolve()),
   previewLyricsLines: (text: string) =>
@@ -55,7 +55,6 @@ function renderNowPlayingScreen(
         accentColor="#1db954"
         locale="en"
         flyComplete
-        coverSize={220}
         dragY={motionY}
         dragProps={dragProps}
         onClose={jest.fn()}
@@ -89,7 +88,6 @@ describe("SpotifyNowPlayingScreen", () => {
 
     renderNowPlayingScreen(playback!, {
       accentColor: "#191414",
-      coverSize: undefined,
     });
 
     expect(screen.getByText("Last played")).toBeInTheDocument();
