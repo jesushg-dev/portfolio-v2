@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 jest.mock("@/features/resume-engine/lib/ai/tailor-resume-prompt", () => ({
   buildTailoredResumePrompt: jest.fn(),
 }));
@@ -51,6 +53,8 @@ jest.mock("@/lib/uploadthing/upload-buffer", () => ({
 }));
 
 import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persist";
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import superjson from "superjson";
 import { finalizeTailoredResume } from "@/features/resume-engine/lib/finalize-tailor-export";
 import {
   resumeFixture,
@@ -270,13 +274,96 @@ describe("resumeEngineAdminRouter", () => {
       locale: "en",
       templateId: "v2",
     });
+    const fieldId = "experience.exp-0.bullet.resp-0-2";
+    const field = response.fields.find(({ id }) => id === fieldId)!;
+    field.text = field.text.replace("25%", "50%");
+    const invalidResponse = await fetchRequestHandler({
+      endpoint: "/api/trpc",
+      router: resumeEngineAdminRouter,
+      createContext: () => createTrpcTestContext({ db: createDb() }),
+      req: new Request("http://localhost/api/trpc/tailorResumeManual", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          superjson.serialize({
+            templateVersion: "v2",
+            targetLocale: "en",
+            jobDescription: "Buscamos desarrollador de aplicaciones React.",
+            rawJson: JSON.stringify(response),
+          }),
+        ),
+      }),
+    });
+
+    expect(invalidResponse.status).toBe(400);
+    expect(await invalidResponse.json()).toMatchObject({
+      error: {
+        json: {
+          data: {
+            code: "BAD_REQUEST",
+            resumeTailorIssues: [
+              {
+                fieldId,
+                bullet: 2,
+                context: "Acme · Software Engineer",
+                reason: "numericFacts",
+                numericFacts: { original: ["25%"], proposed: ["50%"] },
+              },
+            ],
+          },
+        },
+      },
+    });
+  });
+  it("exports only confirmed vacancy terms, across case variants, without attributing them to jobs", async () => {
+    const source = resumeFixture("es");
+    source.skills[1].items.push("REST APIs");
+    source.skills[1].skillIds!.push("skill-rest");
+    const original = structuredClone(source);
+    jest.mocked(loadCvStructuredDraft).mockResolvedValue(source);
+    const caller = createRouterCaller(
+      resumeEngineAdminRouter,
+      createTrpcTestContext({ db: createDb() }),
+    );
+    const raw = resumeResponseFixture(source, "v1");
+    const input = {
+      templateVersion: "v1" as const,
+      jobDescription: "Stack: ASP.NET Core, MVC, APIs REST, quiet oak y React.",
+      confirmedTechnologies: [
+        "asp.net core",
+        "ASP.NET Core",
+        "quiet oak",
+        "React",
+        "APIs REST",
+      ],
+      rawJson: JSON.stringify({
+        ...raw,
+        technologyNames: [{ skillId: "skill-rest", name: "APIs REST" }],
+      }),
+    };
+    await caller.tailorResumeManual(input);
+    const doc = jest.mocked(finalizeTailoredResume).mock.lastCall![2].document;
+    expect(doc.skills.at(-1)?.items).toEqual(
+      expect.arrayContaining(["ASP.NET Core", "quiet oak"]),
+    );
+    expect(doc.skills.at(-1)?.items).toHaveLength(2);
+    expect(
+      doc.skills
+        .flatMap(({ items }) => items)
+        .filter((name) => name === "APIs REST"),
+    ).toHaveLength(1);
+    expect(doc.skills.flatMap((group) => group.items)).not.toContain("MVC");
+    expect(source).toEqual(original);
     await expect(
       caller.tailorResumeManual({
-        templateVersion: "v2",
-        targetLocale: "en",
-        jobDescription: "Buscamos desarrollador de aplicaciones React.",
-        rawJson: JSON.stringify({ ...response, fields: [] }),
+        ...input,
+        confirmedTechnologies: ["not in the vacancy"],
       }),
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    const bullet = raw.fields.find((field) => field.id.includes(".bullet."))!;
+    bullet.text += " ASP.NET Core";
+    await expect(
+      caller.tailorResumeManual({ ...input, rawJson: JSON.stringify(raw) }),
+    ).rejects.toThrow("unsupported technologies");
   });
 });

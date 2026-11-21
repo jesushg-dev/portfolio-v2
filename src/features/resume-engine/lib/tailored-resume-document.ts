@@ -4,6 +4,7 @@ import {
 } from "./resume-pagination";
 import { z } from "zod";
 import type { Locale } from "@/i18n/config";
+import type { SavedResumeFacts } from "@/features/cv/lib/load-cv-structured-draft";
 import {
   CvImportDraftSchema,
   type CvImportDraft,
@@ -13,12 +14,22 @@ import {
   CvScoreBreakdownSchema,
 } from "./cv-match-analysis";
 import {
-  createResumeTechnologyMatcher,
+  createTechnologyMatcher,
+  extractJobTools,
+  rewrittenTechnologyNames,
   technologyNameKey,
 } from "./extract-job-tools";
-import { validateResumeTechnologyNames } from "./resume-technology-names";
+import {
+  declaredResumeTechnologies,
+  validateResumeTechnologyNames,
+} from "./resume-technology-names";
 import { getResumeTemplate, type CvTemplateVersion } from "./template-registry";
 import { RESUME_LABELS } from "@/lib/cv/resume-labels";
+import {
+  ResumeTailorValidationError,
+  type ResumeTailorFieldIssue,
+  type ResumeTailorFieldKind,
+} from "./resume-tailor-validation-error";
 import {
   ResumeSelectionSchema,
   selectResumeSource,
@@ -129,7 +140,13 @@ export const TailoredResumeResponseSchema = z
       .optional(),
     fields: z.array(z.object({ id: z.string(), text: z.string() }).strict()),
     aiScore: z.number().min(0).max(100),
-    matchNotes: z.string().optional(),
+    matchNotes: z
+      .preprocess((val) => {
+        if (typeof val !== "string") return val;
+        const words = val.trim().split(/\s+/u);
+        return words.length > 250 ? words.slice(0, 250).join(" ") : val;
+      }, z.string())
+      .optional(),
     matchAnalysis: CvMatchAnalysisSchema.extend({
       scoreBreakdown: CvScoreBreakdownSchema,
       strengths: z.array(z.string().trim().min(1)).min(1),
@@ -158,6 +175,9 @@ export interface ResumeTextField {
 }
 export interface TailorContext {
   source: CvImportDraft;
+  localizedFacts?: SavedResumeFacts;
+  confirmedTechnologies?: string[];
+  vacancyTechnologies?: string[];
   templateId: CvTemplateVersion;
   targetLocale?: Locale;
   jobDescription: string;
@@ -229,7 +249,7 @@ const FOREIGN_PHRASES: Record<Locale, RegExp> = {
 
 function applyVacancyTechnologyNames(
   text: string,
-  mentions: ReturnType<ReturnType<typeof createResumeTechnologyMatcher>>,
+  mentions: ReturnType<ReturnType<typeof createTechnologyMatcher>>,
   spellings: Map<string, string>,
 ) {
   let result = "";
@@ -239,6 +259,56 @@ function applyVacancyTechnologyNames(
     end = index + name.length;
   }
   return result + text.slice(end);
+}
+
+function resumeFieldLocation(
+  fieldId: string,
+  profile: CvImportDraft,
+): Pick<ResumeTailorFieldIssue, "field" | "context" | "bullet"> {
+  const [section, recordId, key, bulletId] = fieldId.split(".");
+  if (section === "experience") {
+    const experience = profile.experiences.find(({ id }) => id === recordId);
+    const fields: Record<string, ResumeTailorFieldKind> = {
+      role: "role",
+      location: "location",
+      context: "companyContext",
+      bullet: "bullet",
+    };
+    const index = experience?.responsibilityIds?.indexOf(bulletId) ?? -1;
+    return {
+      field: fields[key] ?? "field",
+      context: experience
+        ? `${experience.company} · ${experience.role}`
+        : undefined,
+      bullet: index >= 0 ? index + 1 : undefined,
+    };
+  }
+  if (section === "education") {
+    return {
+      field:
+        key === "degree" ? "degree" : key === "dates" ? "dates" : "location",
+      context: profile.education.find(({ id }) => id === recordId)?.institution,
+    };
+  }
+  if (section === "language") {
+    return {
+      field: key === "level" ? "languageLevel" : "language",
+      context: profile.languages.find(({ id }) => id === recordId)?.name,
+    };
+  }
+  if (section === "certification") {
+    return {
+      field: "certification",
+      context: profile.certifications.find(({ id }) => id === recordId)?.title,
+    };
+  }
+  const fields: Record<string, ResumeTailorFieldKind> = {
+    "header.degree": "title",
+    "header.summary": "summary",
+    "header.availability": "availability",
+    contact: "location",
+  };
+  return { field: fields[fieldId] ?? fields[section] ?? "field" };
 }
 
 export function validateTailoredResume(
@@ -255,41 +325,79 @@ export function validateTailoredResume(
   const source = selectResumeSource(profile, result.selection);
   validateResumeCoverage(profile, result.selection, template);
   const inventory = resumeTextFields(source, context.templateId);
-  const supplied = new Map<string, string>();
+  const saved = context.localizedFacts?.[result.locale];
+  const supplied = new Map(
+    inventory.flatMap(({ id }) =>
+      saved?.savedFields[id] ? [[id, saved.savedFields[id]] as const] : [],
+    ),
+  );
   const allowed = new Map(inventory.map((field) => [field.id, field]));
   const issues: string[] = [];
+  const fieldIssues: ResumeTailorFieldIssue[] = [];
+  const reportFieldIssue = (
+    field: ResumeTextField,
+    proposed: string,
+    reason: ResumeTailorFieldIssue["reason"],
+    technical: string,
+    details?: Pick<
+      ResumeTailorFieldIssue,
+      "limit" | "locale" | "tokens" | "numericFacts"
+    >,
+  ) => {
+    issues.push(`${field.id}: ${technical}`);
+    fieldIssues.push({
+      fieldId: field.id,
+      ...resumeFieldLocation(field.id, profile),
+      original: field.text,
+      proposed,
+      reason,
+      ...details,
+    });
+  };
+  const profileNames = declaredResumeTechnologies(profile);
+  const vacancyTools = extractJobTools(context.jobDescription, profileNames, [
+    ...(context.vacancyTechnologies ?? []),
+    ...(result.matchAnalysis.vacancyTechnologies ?? []),
+  ]);
   const names = validateResumeTechnologyNames(
     profile,
     source,
     result.technologyNames ?? [],
     context.jobDescription,
+    context.confirmedTechnologies,
+    vacancyTools,
   );
-  const profileNames = [
-    ...profile.skills.flatMap((skill) => skill.items),
-    ...profile.experiences.flatMap(
-      (experience) => experience.technologies ?? [],
-    ),
-  ];
-  const evidenceTechnologies = createResumeTechnologyMatcher(profileNames);
-  const matchTechnologies = createResumeTechnologyMatcher([
+  const evidenceTechnologies = createTechnologyMatcher([
     ...profileNames,
-    ...names.byId.values(),
+    ...vacancyTools,
   ]);
+  const matchTechnologies = createTechnologyMatcher([
+    ...profileNames,
+    ...vacancyTools,
+    ...names.displayNameBySpelling.keys(),
+    ...(context.confirmedTechnologies ?? []),
+  ]);
+  const evidenceKeys = (text: string) =>
+    evidenceTechnologies(text).map(
+      ({ key }) => names.catalogNameByVacancyName.get(key) ?? key,
+    );
   const sourceTools = new Set([
     ...source.skills.flatMap((skill) => skill.items.map(technologyNameKey)),
     ...source.experiences.flatMap((experience) =>
       (experience.technologies ?? []).map(technologyNameKey),
     ),
-    ...inventory.flatMap(({ text }) =>
-      evidenceTechnologies(text).map(({ key }) => key),
-    ),
+    ...inventory.flatMap(({ text }) => evidenceKeys(text)),
   ]);
   const sourceRoles = source.experiences.map((experience) => experience.role);
+  const summaryTools = new Set([
+    ...sourceTools,
+    ...(context.confirmedTechnologies ?? []).map(technologyNameKey),
+  ]);
   const titleTools = new Set(
     source.experiences.flatMap((experience) => [
       ...(experience.technologies ?? []).map(technologyNameKey),
-      ...[experience.role, ...experience.responsibilities].flatMap((text) =>
-        evidenceTechnologies(text).map(({ key }) => key),
+      ...[experience.role, ...experience.responsibilities].flatMap(
+        evidenceKeys,
       ),
     ]),
   );
@@ -301,6 +409,8 @@ export function validateTailoredResume(
       continue;
     }
     const original = allowed.get(field.id);
+    // Previously copied manual prompts may still return a saved field.
+    if (original && saved?.savedFields[field.id]) continue;
     if (!original || supplied.has(field.id)) {
       issues.push(`${field.id}: unknown, unselected or duplicate field`);
       continue;
@@ -320,8 +430,12 @@ export function validateTailoredResume(
       : submittedText;
     supplied.set(field.id, text);
     if (!text || text.length > original.budget)
-      issues.push(
-        `${field.id}: required text, maximum ${original.budget} characters`,
+      reportFieldIssue(
+        original,
+        text,
+        "length",
+        `required text, maximum ${original.budget} characters`,
+        { limit: original.budget },
       );
     if (!text) continue;
     const isProfessionalTitle = field.id === "header.degree";
@@ -330,7 +444,13 @@ export function validateTailoredResume(
       FOREIGN_PHRASES[result.locale].test(text) ||
       (language && language !== result.locale)
     )
-      issues.push(`${field.id}: untranslated content for ${result.locale}`);
+      reportFieldIssue(
+        original,
+        text,
+        "translation",
+        `untranslated content for ${result.locale}`,
+        { locale: result.locale },
+      );
     const sourceNumbers = numericResumeFacts(original.text);
     const numbers = numericResumeFacts(text);
     if (
@@ -338,15 +458,29 @@ export function validateTailoredResume(
         ? numbers.some((number) => !sourceNumbers.includes(number))
         : numbers.join("|") !== sourceNumbers.join("|")
     )
-      issues.push(`${field.id}: changed numeric facts or proficiency level`);
+      reportFieldIssue(
+        original,
+        text,
+        "numericFacts",
+        "changed numeric facts (including explicit CEFR codes)",
+        {
+          numericFacts: { original: sourceNumbers, proposed: numbers },
+        },
+      );
     if (isProfessionalTitle) {
       if (RESUME_TITLE_SEPARATOR.test(text))
-        issues.push(
-          `${field.id}: use one professional title without a second role or degree`,
+        reportFieldIssue(
+          original,
+          text,
+          "multipleTitles",
+          "use one professional title without a second role or degree",
         );
       if (addsRoleLevel(text, sourceRoles))
-        issues.push(
-          `${field.id}: seniority or leadership level is unsupported by the selected roles`,
+        reportFieldIssue(
+          original,
+          text,
+          "seniority",
+          "seniority or leadership level is unsupported by the selected roles",
         );
     }
     if (
@@ -354,42 +488,82 @@ export function validateTailoredResume(
       field.id.endsWith(".level") &&
       changesProficiency(original.text, text)
     )
-      issues.push(`${field.id}: changed proficiency level`);
+      reportFieldIssue(
+        original,
+        text,
+        "proficiency",
+        "changed proficiency level",
+      );
     if (
       field.id.startsWith("language.") &&
       field.id.endsWith(".name") &&
       changesLanguageName(original.text, text)
     )
-      issues.push(`${field.id}: changed language identity`);
-    const supportedTools = isProfessionalTitle ? titleTools : sourceTools;
-    const unexpected = mentions.flatMap(({ key, name }) =>
+      reportFieldIssue(
+        original,
+        text,
+        "languageIdentity",
+        "changed language identity",
+      );
+    const supportedTools = isProfessionalTitle
+      ? titleTools
+      : field.id === "header.summary"
+        ? summaryTools
+        : sourceTools;
+    const verifiedMentions = [...mentions];
+    if (field.id === "header.summary" || field.id.includes(".bullet.")) {
+      for (const name of rewrittenTechnologyNames(
+        original.text,
+        submittedText,
+        evidenceTechnologies,
+      )) {
+        const key = technologyNameKey(name);
+        if (!verifiedMentions.some((mention) => mention.key === key))
+          verifiedMentions.push({
+            name,
+            key,
+            index: submittedText.indexOf(name),
+          });
+      }
+    }
+    const unexpected = verifiedMentions.flatMap(({ key, name }) =>
       supportedTools.has(names.catalogNameByVacancyName.get(key) ?? key)
         ? []
         : [name],
     );
     if (unexpected.length)
-      issues.push(
-        `${field.id}: unsupported technologies: ${unexpected.join(", ")}${isProfessionalTitle ? ". Use technologies linked to or demonstrated by a selected experience." : ""}`,
+      reportFieldIssue(
+        original,
+        text,
+        "technologies",
+        `unsupported technologies: ${unexpected.join(", ")}${isProfessionalTitle ? ". Use technologies linked to or demonstrated by a selected experience." : ""}`,
+        { tokens: unexpected },
       );
     if (addsCredential(original.text, text))
-      issues.push(`${field.id}: unsupported credential`);
+      reportFieldIssue(original, text, "credential", "unsupported credential");
     if (field.id.startsWith("certification.")) {
-      const tokens =
-        original.text.match(
-          /\b[a-z]{2,}-\d+(?:-\d+)*\b|\bi\d+n\b|\bc#|(?:asp)?\.net(?:\s+core)?/giu,
-        ) ?? [];
+      const tokens = [
+        ...extractJobTools(original.text, profileNames),
+        ...(original.text.match(
+          /\b[a-z]{2,}-\d+(?:-\d+)*\b|\b[a-z]\d+[a-z]\b/giu,
+        ) ?? []),
+      ];
       const changed = tokens.filter(
         (token) => !text.toLowerCase().includes(token.toLowerCase()),
       );
       if (changed.length)
-        issues.push(
-          `${field.id}: preserve credential codes and technology names: ${changed.join(", ")}`,
+        reportFieldIssue(
+          original,
+          text,
+          "credentialTokens",
+          `preserve credential codes and technology names: ${changed.join(", ")}`,
+          { tokens: changed },
         );
     }
   }
   for (const field of inventory)
     if (!supplied.has(field.id))
-      issues.push(`${field.id}: missing translation`);
+      reportFieldIssue(field, "", "missing", "missing translation");
   const experiences = source.experiences.map((exp) => {
     const bullets = exp.responsibilities
       .map((_, i) => ({
@@ -409,6 +583,10 @@ export function validateTailoredResume(
       );
     return {
       ...exp,
+      technologies: exp.technologies?.map(
+        (name) =>
+          names.displayNameBySpelling.get(technologyNameKey(name)) ?? name,
+      ),
       role: supplied.get(`experience.${exp.id}.role`) ?? "",
       location: supplied.get(`experience.${exp.id}.location`),
       companyBlurb: supplied.get(`experience.${exp.id}.context`),
@@ -417,8 +595,25 @@ export function validateTailoredResume(
       atsResponsibilities: [],
     };
   });
-  if (issues.length)
-    throw new Error(`Resume validation failed:\n${issues.join("\n")}`);
+  if (issues.length) throw new ResumeTailorValidationError(issues, fieldIssues);
+  const skills = source.skills.map((skill) => ({
+    ...skill,
+    items: skill.items.map(
+      (name, index) => names.byId.get(skill.skillIds?.[index] ?? "") ?? name,
+    ),
+  }));
+  const confirmed = context.confirmedTechnologies ?? [];
+  if (confirmed.length) {
+    const other = skills.find((group) => group.category === "OTHER");
+    const items = [...(other?.items ?? []), ...confirmed];
+    const skillIds = [
+      ...(other?.skillIds ?? []),
+      ...confirmed.map((name) => `vacancy:${technologyNameKey(name)}`),
+    ];
+    if (other) Object.assign(other, { items, skillIds });
+    else
+      skills.push({ id: "vacancy-skills", category: "OTHER", items, skillIds });
+  }
   const document = TailoredResumeDocumentSchema.parse({
     ...source,
     schemaVersion: 1,
@@ -432,12 +627,8 @@ export function validateTailoredResume(
       availability: supplied.get("header.availability"),
     },
     experiences,
-    skills: source.skills.map((skill) => ({
-      ...skill,
-      items: skill.items.map(
-        (name, index) => names.byId.get(skill.skillIds?.[index] ?? "") ?? name,
-      ),
-    })),
+    skills,
+    softSkills: saved?.softSkills.length ? saved.softSkills : undefined,
     education: source.education.map((edu) => ({
       ...edu,
       degreeName: supplied.get(`education.${edu.id}.degree`) ?? "",

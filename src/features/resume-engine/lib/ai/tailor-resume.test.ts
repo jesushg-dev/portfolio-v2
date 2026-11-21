@@ -16,7 +16,10 @@ jest.mock("./providers", () => ({
   requireTenantAiApiKey: () => "test-key",
 }));
 import OpenAI from "openai";
-import { tailorResumeDocument } from "./tailor-resume";
+import {
+  discoverVacancyTechnologies,
+  tailorResumeDocument,
+} from "./tailor-resume";
 import { resumeFixture } from "../tailored-resume.fixture";
 import {
   resumeTextFields,
@@ -76,6 +79,24 @@ const completion = (value: unknown) => ({
   ],
 });
 describe("automatic and manual resume contract", () => {
+  it("accepts arbitrary verbatim names from discovery and drops invented matches", async () => {
+    const create = jest
+      .fn()
+      .mockResolvedValue(
+        completion({ vacancyTechnologies: ["quiet oak", "invented product"] }),
+      );
+    jest
+      .mocked(OpenAI)
+      .mockImplementation(
+        () => ({ chat: { completions: { create } } }) as never,
+      );
+    await expect(
+      discoverVacancyTechnologies("We automate releases with quiet oak.", {
+        keys: {},
+        defaultProvider: null,
+      }),
+    ).resolves.toEqual(["quiet oak"]);
+  });
   it("keeps the explicit CV locale distinct from the interface and job locale", () => {
     const prompt = buildTailoredResumePrompt({
       ...context,
@@ -150,7 +171,7 @@ describe("automatic and manual resume contract", () => {
     );
   });
   it.each([
-    ["v1", 3],
+    ["v1", 4],
     ["v2", 5],
   ] as const)(
     "requests an auditable coverage report for %s",
@@ -166,7 +187,6 @@ describe("automatic and manual resume contract", () => {
       expect(prompt.systemPrompt).toContain(
         "Keep retained responsibilityIds in CMS order",
       );
-      expect(prompt.systemPrompt).toContain("condense achievements toward 60%");
       expect(prompt.systemPrompt).toContain("ANALYSIS AND COVERAGE");
     },
   );
@@ -195,7 +215,16 @@ describe("automatic and manual resume contract", () => {
       "Never shorten first-page achievements to solve overflow on a continuation page",
     );
     expect(prompt.systemPrompt).toContain(
-      "Only when a page exceeds its budget",
+      "Condense a retained achievement only when its text exceeds its field budget or its assigned page exceeds a layout limit.",
+    );
+    expect(prompt.systemPrompt).toContain(
+      "Keep each value attached to the same subject, outcome and qualifier.",
+    );
+    expect(prompt.systemPrompt).toContain(
+      "Preserve every clause with a numeric fact.",
+    );
+    expect(prompt.systemPrompt).toContain(
+      "Before returning fields, compare each retained achievement with the CMS text for the same ID.",
     );
   });
   it("produces exactly the document accepted by manual validation", async () => {
@@ -259,5 +288,30 @@ describe("automatic and manual resume contract", () => {
       tailorResumeDocument(context, { keys: {}, defaultProvider: null }),
     ).rejects.toThrow("header.summary: missing translation");
     expect(create).toHaveBeenCalledTimes(2);
+  });
+  it("appends confirmedTechnologies to skills and includes them in prompt facts", async () => {
+    const vacancyWithConfirmed = {
+      ...context,
+      confirmedTechnologies: ["SQL", ".NET Core"],
+    };
+    const prompt = buildTailoredResumePrompt(vacancyWithConfirmed);
+    const input = decode(prompt.userPrompt) as {
+      confirmedTechnologies: string[];
+    };
+    expect(input.confirmedTechnologies).toEqual(["SQL", ".NET Core"]);
+
+    const create = jest.fn().mockResolvedValue(completion(response));
+    jest
+      .mocked(OpenAI)
+      .mockImplementation(
+        () => ({ chat: { completions: { create } } }) as never,
+      );
+    const tailored = await tailorResumeDocument(vacancyWithConfirmed, {
+      keys: {},
+      defaultProvider: null,
+    });
+    const allSkillItems = tailored.document.skills.flatMap((s) => s.items);
+    expect(allSkillItems).toContain("SQL");
+    expect(allSkillItems).toContain(".NET Core");
   });
 });

@@ -55,10 +55,12 @@ export function addsRoleLevel(title: string, roles: string[]): boolean {
 export function numericResumeFacts(text: string): string[] {
   return [
     ...new Set(
-      text.match(/[+~−-]?\d+(?:[.,]\d+)?(?:%|\+)?|\b[ABC][12]\b/g) ?? [],
+      text
+        .replace(/(\d)\s+%/gu, "$1%")
+        .match(/[+~−-]?\d+(?:[.,]\d+)?(?:%|\+)?|\b[ABC][12]\b\+?/gi) ?? [],
     ),
   ]
-    .map((value) => value.replace(",", ".").replace("−", "-"))
+    .map((value) => value.toUpperCase().replace(",", ".").replace("−", "-"))
     .sort();
 }
 

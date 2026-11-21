@@ -59,7 +59,6 @@ const FIELD_NAMES = new Set([
   "role",
   "dates",
   "meta",
-  "companyMeta",
   "bullet",
   "degree",
   "institution",
@@ -68,8 +67,10 @@ const FIELD_NAMES = new Set([
   "level",
   "category",
   "items",
-  "itemsLeft",
-  "itemsRight",
+  "skillItem",
+  "softSkill",
+  "employmentRole",
+  "companyLocationDates",
   "certification",
 ]);
 export function validateResumeTemplate(
@@ -90,7 +91,7 @@ export function validateResumeTemplate(
       tags.push(child.tag);
       if (child.tag.startsWith("repeat:")) {
         if (
-          !/^repeat:(experiences:\d+|bullets|education|languages|skills|certifications)$/.test(
+          !/^repeat:(experiences:\d+|bullets|education|languages|skills|skillItemsLeft|skillItemsRight|softSkills|certifications)$/.test(
             child.tag,
           )
         )
@@ -203,6 +204,7 @@ export async function renderResumeTemplate(
     skills: document.skills.length > 0,
     languages: document.languages.length > 0,
     certifications: document.certifications.length > 0,
+    softSkills: Boolean(document.softSkills?.length),
     availability: Boolean(document.header.availability),
     contact: document.contacts.length > 0,
   };
@@ -310,7 +312,7 @@ export async function renderResumeTemplate(
   function render(
     part: string,
     values: Values = global,
-    bullets: string[] = [],
+    listItems: string[] = [],
   ): string {
     let output = "",
       cursor = 0;
@@ -353,14 +355,19 @@ export async function renderResumeTemplate(
           const paragraphProperties =
             /<w:pPr\b[^>]*>[\s\S]*?<\/w:pPr>/.exec(body)?.[0] ?? "";
           content = `<w:p>${paragraphProperties}${runs}</w:p>`;
-        } else content = replaceText(body, values[key]);
+        } else if (
+          values[key] ||
+          !["header.availability", "context"].includes(key)
+        ) {
+          content = replaceText(body, values[key]);
+        }
       } else if (tag.startsWith("optional:experiences:")) {
         const page = Number(tag.split(":")[2]);
         content = experiencePages[page]?.length ? render(body) : "";
       } else if (tag === "optional:companyHeader") {
-        content = values.companyHeader ? render(body, values, bullets) : "";
+        content = values.companyHeader ? render(body, values, listItems) : "";
       } else if (tag === "optional:companyDates") {
-        content = values.companyDates ? render(body, values, bullets) : "";
+        content = values.companyDates ? render(body, values, listItems) : "";
       } else if (tag === "format:companyProgression") {
         // Word owns both paragraph styles; only multi-role groups use the timeline.
         const styled = values.companyProgression
@@ -371,7 +378,7 @@ export async function renderResumeTemplate(
                 /(<w:pStyle\b[^>]*w:val=")([^"]+)-Progression("[^>]*\/?>)/g,
                 "$1$2$3",
               );
-        content = render(styled, values, bullets);
+        content = render(styled, values, listItems);
       } else if (tag === "optional:certifications")
         content = document.certifications.length ? render(body) : "";
       else if (tag.startsWith("label:"))
@@ -435,7 +442,14 @@ export async function renderResumeTemplate(
                 role: exp.role,
                 dates,
                 meta,
-                companyMeta: [exp.company, meta, dates]
+                employmentRole: [
+                  exp.employmentType &&
+                    getEmploymentTypeLabel(exp.employmentType, document.locale),
+                  exp.role,
+                ]
+                  .filter(Boolean)
+                  .join(" | "),
+                companyLocationDates: [exp.company, exp.location, dates]
                   .filter(Boolean)
                   .join(" · "),
               },
@@ -444,7 +458,7 @@ export async function renderResumeTemplate(
           })
           .join("");
       } else if (tag === "repeat:bullets")
-        content = bullets
+        content = listItems
           .map((bullet) => render(body, { ...values, bullet }))
           .join("");
       else if (tag === "repeat:education")
@@ -471,16 +485,35 @@ export async function renderResumeTemplate(
       else if (tag === "repeat:skills")
         content = document.skills
           .map((skill) =>
-            render(body, {
-              ...global,
-              category: labels[skill.category],
-              items: skill.items.join(" · "),
-              itemsLeft: skill.items.filter((_, i) => i % 2 === 0).join(" · "),
-              itemsRight: skill.items.filter((_, i) => i % 2 === 1).join(" · "),
-            }),
+            render(
+              body,
+              {
+                ...global,
+                category: labels[skill.category],
+                items: skill.items.join(" · "),
+              },
+              skill.items,
+            ),
           )
           .join("");
-      else if (tag === "repeat:certifications")
+      else if (
+        tag === "repeat:skillItemsLeft" ||
+        tag === "repeat:skillItemsRight"
+      ) {
+        const middle = Math.ceil(listItems.length / 2);
+        const items =
+          tag === "repeat:skillItemsLeft"
+            ? listItems.slice(0, middle)
+            : listItems.slice(middle);
+        content =
+          items
+            .map((skillItem) => render(body, { ...values, skillItem }))
+            .join("") || "<w:p/>";
+      } else if (tag === "repeat:softSkills") {
+        content = (document.softSkills ?? [])
+          .map(({ name }) => render(body, { ...values, softSkill: name }))
+          .join("");
+      } else if (tag === "repeat:certifications")
         content = document.certifications
           .map((cert) =>
             render(body, {

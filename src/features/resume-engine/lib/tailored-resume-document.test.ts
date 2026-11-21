@@ -41,6 +41,41 @@ function setup(
 }
 
 describe("canonical multilingual resume", () => {
+  it("copies saved language and availability for the detected locale even if an older prompt rewrote them", () => {
+    const { context } = setup("en");
+    context.targetLocale = undefined;
+    context.localizedFacts = {
+      es: {
+        savedFields: {
+          "language.lang-1.name": "Español",
+          "language.lang-1.level": "Competencia profesional (B2)",
+          "header.availability": "Disponible en dos semanas",
+        },
+        softSkills: [],
+      },
+    };
+    const response = resumeResponseFixture(drafts.es, "v2");
+    response.fields = response.fields.filter(
+      (field) =>
+        field.id !== "header.availability" &&
+        field.id !== "language.lang-1.name",
+    );
+    response.fields.find(
+      (field) => field.id === "language.lang-1.level",
+    )!.text = "Dominio nativo C2";
+    const document = validateTailoredResume(response, context).document;
+    expect(document.languages[0]).toMatchObject({
+      name: "Español",
+      level: "Competencia profesional (B2)",
+    });
+    expect(document.header.availability).toBe("Disponible en dos semanas");
+  });
+  it("accepts typographic spacing around an unchanged percentage", () => {
+    const { context, response } = setup("es");
+    const field = response.fields.find((item) => item.text.includes("25%"))!;
+    field.text = field.text.replace("25%", "25 %");
+    expect(() => validateTailoredResume(response, context)).not.toThrow();
+  });
   it("rejects even an unchanged name returned as editable text with an actionable correction", () => {
     const { context, response } = setup();
     response.fields.push({
@@ -124,6 +159,37 @@ describe("canonical multilingual resume", () => {
     );
   });
 
+  it("reports the original bullet number, text, and detected values for a rejected rewrite", () => {
+    const { context } = setup();
+    const selection = resumeSelectionFixture(context.source);
+    selection.experiences[0].responsibilityIds = ["resp-0-2"];
+    const response = resumeResponseFixture(context.source, "v2", selection);
+    const fieldId = "experience.exp-0.bullet.resp-0-2";
+    const proposed =
+      "Reduced response times by 50% through SQL query optimization.";
+    response.fields.find(({ id }) => id === fieldId)!.text = proposed;
+
+    expect.assertions(1);
+    try {
+      validateTailoredResume(response, context);
+    } catch (error) {
+      expect(error).toMatchObject({
+        fieldIssues: [
+          {
+            fieldId,
+            field: "bullet",
+            context: "Acme · Software Engineer",
+            bullet: 2,
+            reason: "numericFacts",
+            original: context.source.experiences[0].responsibilities[1],
+            proposed,
+            numericFacts: { original: ["25%"], proposed: ["50%"] },
+          },
+        ],
+      });
+    }
+  });
+
   it("uses the vacancy's casing and keeps distinct technologies separate", () => {
     const { context, response } = setup();
     context.jobDescription = "Experience with reactjs and NextJS.";
@@ -176,28 +242,136 @@ describe("canonical multilingual resume", () => {
   });
 
   it.each([
-    [
-      "unknown-id",
-      "React.js",
-      "skill ID must belong to the selected CV evidence",
-    ],
-    ["skill-react", "react.js", "copy the complete display name verbatim"],
-    ["skill-react", "React Native", "different technology"],
-    ["skill-react", "React.js 19", "preserve technology versions"],
-  ])("rejects a display name proposal for %s as %s", (skillId, name, error) => {
-    const { context, response } = setup();
-    context.jobDescription =
-      "Experience with React.js, React Native, and React.js 19.";
+    ["v1", false],
+    ["v2", false],
+    ["v2", true],
+  ] as const)(
+    "exports the exact keyword APIs REST in %s with a display name proposal (%s)",
+    async (templateId, rename) => {
+      const source = resumeFixture("es");
+      const group = source.skills[1];
+      group.items.push("REST APIs");
+      group.skillIds!.push("skill-rest");
+      source.experiences[0].technologies = ["REST APIs"];
+      source.experiences[0].technologyIds = ["skill-rest"];
+      const { context } = setup("es", templateId);
+      context.source = source;
+      context.jobDescription =
+        "Buscamos experiencia en desarrollo de APIs REST.";
+      const response = resumeResponseFixture(source, templateId);
+      const summary = response.fields.find(
+        ({ id }) => id === "header.summary",
+      )!;
+      summary.text += " Diseño de REST APIs.";
+      const { document } = validateTailoredResume(
+        {
+          ...response,
+          technologyNames: rename
+            ? [{ skillId: "skill-rest", name: "APIs REST" }]
+            : [],
+        },
+        context,
+      );
+      const index = document.skills[1].skillIds!.indexOf("skill-rest");
+      expect(document.skills[1].items[index]).toBe("APIs REST");
+      expect(document.header.summary).toContain("APIs REST");
+      expect(document.experiences[0].technologies).toEqual(["APIs REST"]);
+      expect(group.items).toContain("REST APIs");
+      const template = RESUME_TEMPLATES[templateId];
+      for (const buffer of [
+        await renderResumeTemplate(
+          await loadCvTemplateDocxBuffer(template.id),
+          document,
+          template,
+        ),
+        await generateDocxFromStructured(readResumeSnapshot(document)!),
+      ]) {
+        const xml = await (
+          await JSZip.loadAsync(buffer)
+        )
+          .file("word/document.xml")!
+          .async("string");
+        expect(xml).toContain("APIs REST");
+        expect(xml).not.toContain("REST APIs");
+      }
+    },
+  );
+
+  it.each([
+    ["Stack: NextJS, next.js, next.js.", "next.js"],
+    ["Stack: NextJS, next.js.", "NextJS"],
+  ])(
+    "chooses the most frequent exact spelling and breaks a tie by first mention in %s",
+    (vacancy, expected) => {
+      const { context, response } = setup();
+      context.jobDescription = vacancy;
+      const { document } = validateTailoredResume(
+        {
+          ...response,
+          technologyNames: [{ skillId: "skill-next", name: "next.js" }],
+        },
+        context,
+      );
+      expect(document.skills[0].items).toContain(expected);
+    },
+  );
+
+  it("keeps a reordered spelling that has its own catalog ID with its owner", () => {
+    const source = resumeFixture("es");
+    source.skills[1].items.push("REST APIs", "APIs REST");
+    source.skills[1].skillIds!.push("skill-rest", "other-skill");
+    const { context } = setup("es");
+    context.source = source;
+    context.jobDescription = "Buscamos experiencia con APIs REST.";
     expect(() =>
       validateTailoredResume(
         {
-          ...response,
-          technologyNames: [{ skillId, name }],
+          ...resumeResponseFixture(source, "v2"),
+          technologyNames: [{ skillId: "skill-rest", name: "APIs REST" }],
         },
         context,
       ),
-    ).toThrow(error);
+    ).toThrow("different technology");
   });
+
+  it.each([
+    ["unknown-id", "", "React.js", "technologyNotSelected"],
+    ["skill-next", "Next.js", "React.js", "technologyNotSelected"],
+    ["skill-react", "React", "react.js", "technologyVacancySpelling"],
+    ["skill-react", "React", "React Native", "technologyIdentity"],
+    ["skill-react", "React", "React.js 19", "technologyVersion"],
+  ])(
+    "reports the names for %s (%s) when the proposal %s is rejected",
+    (skillId, original, proposed, reason) => {
+      const { context, response } = setup("en", "v1");
+      response.selection.skills[0].skillIds = [
+        "skill-react",
+        "skill-typescript",
+      ];
+      context.jobDescription =
+        "Experience with React.js, React Native, and React.js 19.";
+      expect.assertions(3);
+      try {
+        validateTailoredResume(
+          {
+            ...response,
+            technologyNames: [{ skillId, name: proposed }],
+          },
+          context,
+        );
+      } catch (error) {
+        expect(error).toMatchObject({
+          fieldIssues: [
+            { field: "technologyName", original, proposed, reason },
+          ],
+        });
+        expect((error as Error).message).toContain(
+          original ? `“${original}” → “${proposed}”` : `“${proposed}”`,
+        );
+        expect((error as Error).message).not.toContain(skillId);
+      }
+    },
+  );
 
   it("validates an auto-detected output locale against a profile sent in a single source locale", () => {
     const { context } = setup();
@@ -239,6 +413,7 @@ describe("canonical multilingual resume", () => {
   });
   it("accepts .NET in the title when it is linked to a selected CMS role", () => {
     const { context } = setup("es", "v1");
+    context.jobDescription = "Buscamos experiencia con .Net.";
     const source = {
       ...drafts.es,
       experiences: drafts.es.experiences.map((experience, index) =>
@@ -252,7 +427,7 @@ describe("canonical multilingual resume", () => {
     response.fields.find((field) => field.id === "header.degree")!.text = title;
     expect(
       validateTailoredResume(response, context).document.header.degree,
-    ).toBe(title);
+    ).toBe("Desarrollador .Net");
 
     const withoutRole = resumeResponseFixture(source, "v1", {
       ...selection,
@@ -375,6 +550,35 @@ describe("canonical multilingual resume", () => {
 });
 
 describe("official Word templates", () => {
+  it("keeps individual skill bullets, the role heading and saved soft skills in V1", async () => {
+    const { context, response } = setup("es", "v1");
+    context.localizedFacts = {
+      es: {
+        savedFields: {},
+        softSkills: [{ id: "team", name: "Colaboración" }],
+      },
+    };
+    const { document } = validateTailoredResume(response, context);
+    const visual = await renderResumeTemplate(
+      await loadCvTemplateDocxBuffer("v1"),
+      document,
+      RESUME_TEMPLATES.v1,
+    );
+    const xml = await (
+      await JSZip.loadAsync(visual)
+    )
+      .file("word/document.xml")!
+      .async("string");
+    expect(xml).toContain('w:pStyle w:val="Ttulo"');
+    expect(xml).toContain(">Tiempo completo | Ingeniero de software<");
+    for (const name of document.skills[0].items)
+      expect(xml).toContain(`>${name}</w:t>`);
+    expect(xml).toContain(">HABILIDADES BLANDAS<");
+    expect(xml).toContain(">Colaboración<");
+    expect(readResumeSnapshot(document)?.softSkills).toEqual(
+      document.softSkills,
+    );
+  });
   it.each(
     Object.values(RESUME_TEMPLATES).flatMap((template) =>
       (["en", "es", "nl"] as const).map((locale) => ({ template, locale })),

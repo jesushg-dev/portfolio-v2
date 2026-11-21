@@ -30,7 +30,7 @@ export interface ResumeTemplate {
 export const RESUME_TEMPLATES = {
   v1: {
     id: "v1",
-    revision: 1,
+    revision: 2,
     recommended: false,
     docx: "cv-template.docx",
     pdf: "cv-template.pdf",
@@ -48,8 +48,8 @@ export const RESUME_TEMPLATES = {
     limits: {
       title: 50,
       summary: 420,
-      bullet: 160,
-      bulletsPerExperience: 3,
+      bullet: 200,
+      bulletsPerExperience: 4,
       certifications: 1,
       sidebarCharacters: 2400,
     },
