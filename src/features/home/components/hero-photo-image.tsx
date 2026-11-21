@@ -3,11 +3,13 @@ import { getHeroImageProps } from "@/lib/seo/hero-image";
 interface HeroPhotoImageProps {
   photoUrl: string;
   imageAlt: string;
+  className?: string;
 }
 
 export default function HeroPhotoImage({
   photoUrl,
   imageAlt,
+  className = "absolute top-0 left-1/2 h-[150%] w-auto max-w-none -translate-x-1/2 object-cover transition-transform duration-500 hover:scale-105",
 }: HeroPhotoImageProps) {
   return (
     // Native img exposes responsive candidates in SSR and shares them with preload.
@@ -16,7 +18,7 @@ export default function HeroPhotoImage({
       {...getHeroImageProps(photoUrl, imageAlt)}
       alt={imageAlt}
       decoding="async"
-      className="absolute top-0 left-1/2 h-[150%] w-auto max-w-none -translate-x-1/2 object-cover transition-transform duration-500 hover:scale-105"
+      className={className}
     />
   );
 }

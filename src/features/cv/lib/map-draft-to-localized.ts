@@ -83,7 +83,10 @@ export function mapDraftToLocalizedCv(draft: CvImportDraft): {
       })),
       skills: [],
     })),
-    softSkills: [],
+    softSkills: (draft.softSkills ?? []).map((skill, order) => ({
+      ...skill,
+      order,
+    })),
     additionalInformation: [],
     personalReferences: [],
     certifications: draft.certifications.map((cert, index) => ({

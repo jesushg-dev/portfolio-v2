@@ -646,7 +646,7 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return null;
 
-      const [languages, header, profile] = await Promise.all([
+      const [languages, header, profile, nowSettings] = await Promise.all([
         ctx.db.appLanguage.findMany(),
         ctx.db.portfolioHeader.findUnique({
           where: { userId: tenantUserId },
@@ -654,8 +654,14 @@ export const portfolioRouter = createTRPCRouter({
         }),
         ctx.db.profile.findUnique({
           where: { userId: tenantUserId },
-          select: { displayName: true },
+          select: { displayName: true, mapLocationLabel: true },
         }),
+        ctx.db.nowSettings?.findUnique
+          ? ctx.db.nowSettings.findUnique({
+              where: { userId: tenantUserId },
+              select: { timezone: true },
+            })
+          : Promise.resolve(null),
       ]);
 
       if (!header) return null;
@@ -678,6 +684,8 @@ export const portfolioRouter = createTRPCRouter({
         heroSummary: t("heroSummary"),
         imageAlt: t("clientImageAlt"),
         availabilityBadge: availabilityBadgeText?.trim() || null,
+        location: profile?.mapLocationLabel?.trim() || null,
+        timezone: nowSettings?.timezone?.trim() || null,
         careerNextStage:
           header.availableForWork && careerNextTitle && careerNextDescription
             ? {

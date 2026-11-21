@@ -80,10 +80,7 @@ const HomeBlog: FC<HomeBlogProps> = async ({ locale }) => {
   if (!featured) return null;
 
   return (
-    <ShowcaseSection
-      ariaLabelledBy="blog-heading"
-      className="bg-background md:py-20"
-    >
+    <ShowcaseSection ariaLabelledBy="blog-heading" className="md:py-20">
       <ShowcaseHeading
         sectionId="blog"
         title={t("titleLead")}
@@ -106,8 +103,9 @@ const HomeBlog: FC<HomeBlogProps> = async ({ locale }) => {
       />
 
       <div
+        data-phone-origin
         className={cn(
-          "grid gap-4 sm:gap-5",
+          "phone-spread grid gap-4 sm:gap-5",
           latest.length > 0 && "lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]",
         )}
       >

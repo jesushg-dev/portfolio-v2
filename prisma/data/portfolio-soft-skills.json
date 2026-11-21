@@ -74,9 +74,9 @@
         "nl": "Mentorschap & Engineeringkwaliteit"
       },
       "description": {
-        "en": "Mentored 4 engineers through rigorous code reviews, pair programming, and tailored technical growth plans that cut production defects by 40%.",
-        "es": "Mentoricé a 4 ingenieros a través de revisiones de código rigurosas, programación en pareja y planes de crecimiento técnico personalizados que redujeron los defectos en producción en un 40%.",
-        "nl": "Begeleidde 4 engineers door rigoureuze code reviews, pair programming en op maat gemaakte technische groeiplannen die productiedefecten met 40% verminderden."
+        "en": "In code reviews, I explain why I’m suggesting a change. I pair with developers so we can work through real problems together.",
+        "es": "En las revisiones de código explico por qué propongo un cambio. También programo en pareja con otros desarrolladores para resolver juntos problemas reales.",
+        "nl": "Bij code reviews leg ik uit waarom ik een wijziging voorstel. Ik programmeer samen met ontwikkelaars om echte problemen op te lossen."
       },
       "badge": {
         "en": "Code Reviews & 1:1s",

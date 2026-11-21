@@ -24,6 +24,17 @@ const CONTACT_ICONS: Record<
   calendly: Calendar,
 };
 
+export function ContactChannelIcon({
+  icon,
+  className,
+}: {
+  icon: ContactIconKey;
+  className: string;
+}) {
+  const Icon = CONTACT_ICONS[icon];
+  return <Icon className={className} aria-hidden="true" />;
+}
+
 interface ContactItemProps {
   href: string;
   label: string;
@@ -37,7 +48,6 @@ const ContactItem: FC<ContactItemProps> = ({
   icon,
   ariaLabel,
 }) => {
-  const Icon = CONTACT_ICONS[icon];
   const isInternal = href.startsWith("/");
 
   const isEmail = href.startsWith("mailto:");
@@ -53,7 +63,10 @@ const ContactItem: FC<ContactItemProps> = ({
       aria-label={ariaLabel ?? label}
       className={className}
     >
-      <Icon className="text-primary size-4 shrink-0" />
+      <ContactChannelIcon
+        icon={icon}
+        className="text-primary size-4 shrink-0"
+      />
       <span className="truncate">{label}</span>
     </Link>
   ) : (
@@ -64,7 +77,10 @@ const ContactItem: FC<ContactItemProps> = ({
       aria-label={ariaLabel ?? label}
       className={className}
     >
-      <Icon className="text-primary size-4 shrink-0" />
+      <ContactChannelIcon
+        icon={icon}
+        className="text-primary size-4 shrink-0"
+      />
       <span className="truncate">{label}</span>
     </a>
   );

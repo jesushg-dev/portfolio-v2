@@ -12,38 +12,107 @@ import { ContactDirectCard } from "./contact-direct-card";
 import { buildContactLinks } from "@/utils/contact-links";
 import { getCalendlyUrl } from "@/utils/calendly-url";
 import { cn } from "@/lib/utils";
+import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
+import { initialsFromDisplayName } from "@/lib/site-brand/site-brand";
+import { IOSFoldableDevice } from "@/components/shared/ios-device/ios-foldable-device";
+
+import { ContactChannelIcon } from "./contact-item";
+import HeroPhotoImage from "../hero-photo-image";
+import {
+  buildVCard,
+  filterContactChannels,
+} from "./lib/contact-server-data";
 
 const Contact: FC = async () => {
   const locale = await getPublicLocale();
   const t = await getTranslations({ locale, namespace: "main.contact" });
-  const data = await api.contact.getPublic({ locale });
+  const [data, profile] = await Promise.all([
+    api.contact.getPublic({ locale }),
+    getCachedHeroPublic(locale),
+  ]);
   const links = buildContactLinks(data.contacts, {
     excludePortfolioUrl: data.portfolioUrl ?? undefined,
   });
   const schedulingEnabled = Boolean(getCalendlyUrl(data.contacts));
   const linkedinUrl = links.find((link) => link.icon === "linkedin")?.href;
   const showContactForm = data.emailFormEnabled;
+  const name = profile?.fullName?.trim() ?? data.displayName ?? "";
+  const phoneText = await getTranslations({
+    locale,
+    namespace: "main.heroMain.phone",
+  });
+  const channels = filterContactChannels(links);
+  const vcard = buildVCard({
+    name,
+    title: profile?.heroSubtitle ?? "",
+    links,
+  });
 
   return (
     <section
       aria-labelledby="contact-heading"
-      className="border-border/80 relative isolate w-full overflow-hidden border-t py-16 sm:py-20 lg:py-24"
+      className="cs-sec relative isolate w-full pb-16 sm:pb-20 lg:pb-24"
     >
+      <IOSFoldableDevice
+        profile={{
+          name,
+          subtitle: profile?.heroSubtitle ?? "",
+          photo: profile?.photoUrl ?? "",
+          initials: initialsFromDisplayName(name, 2),
+          locale,
+          location: data.mapLocation?.label ?? "",
+          addLabel: phoneText("add"),
+          channels: channels.map((link) => link.icon),
+        }}
+      >
+        <span className="cs-av relative">
+          {profile?.photoUrl ? (
+            <HeroPhotoImage
+              photoUrl={profile.photoUrl}
+              imageAlt=""
+              className="size-full object-cover object-[center_15%]"
+            />
+          ) : (
+            initialsFromDisplayName(name, 2)
+          )}
+        </span>
+        <h3>{name}</h3>
+        <p>{profile?.heroSubtitle}</p>
+        <small>{data.mapLocation?.label}</small>
+        <div className="cs-ic">
+          {channels.map((link) => (
+            <a
+              key={link.key}
+              href={link.href}
+              aria-label={t(`channels.${link.icon}`)}
+            >
+              <ContactChannelIcon icon={link.icon} className="size-5" />
+            </a>
+          ))}
+        </div>
+        <a
+          className="cs-add"
+          href={`data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`}
+          download={`${name}.vcf`}
+        >
+          {phoneText("add")}
+        </a>
+      </IOSFoldableDevice>
       <div
-        aria-hidden
-        className="bg-primary/5 pointer-events-none absolute top-1/4 right-0 -z-10 size-80 rounded-full blur-3xl"
-      />
-      <div className="relative mx-auto w-full px-4 sm:px-6 lg:container lg:px-20">
-        <ShowcaseHeading
-          sectionId="contact"
-          title={t("titleLead")}
-          titleGradient={t("titleGradient")}
-          description={t("subtitle")}
-          eyebrow={t("eyebrow")}
-          align="center"
-          className="mb-10 sm:mb-12 md:mb-14"
-        />
-
+        data-contact-container
+        className="relative mx-auto w-full px-4 pt-13 sm:px-6 lg:container lg:px-20"
+      >
+        <div data-contact-title className="mb-10 pt-12 sm:mb-12 md:mb-14">
+          <ShowcaseHeading
+            sectionId="contact"
+            title={t("titleLead")}
+            titleGradient={t("titleGradient")}
+            description={t("subtitle")}
+            eyebrow={t("eyebrow")}
+            align="center"
+            className="mb-0 sm:mb-0 md:mb-0"
+          />
+        </div>
         <ContactLayout showContactForm={showContactForm}>
           {showContactForm && (
             <ViewportSection

@@ -94,6 +94,9 @@ export const CvImportDraftSchema = z.object({
   experiences: z.array(CvImportExperienceDraftSchema),
   education: z.array(CvImportEducationDraftSchema),
   skills: z.array(CvImportSkillDraftSchema),
+  softSkills: z
+    .array(z.object({ id: z.string(), name: z.string() }))
+    .optional(),
   languages: z.array(CvImportLanguageDraftSchema),
   contacts: z.array(CvImportContactDraftSchema),
   certifications: z.array(CvImportCertificationDraftSchema),

@@ -92,13 +92,17 @@ export default async function Home() {
         <Skills locale={locale} skills={skills} />
       </HomeSection>
 
-      <HomeSection id="blog" estimatedHeight="54rem">
-        <HomeBlog locale={locale} />
-      </HomeSection>
-
-      <HomeSection id="contact" estimatedHeight="28rem">
-        <Contact />
-      </HomeSection>
+      <div
+        data-blog-contact-story
+        className="bg-background relative isolate overflow-clip"
+      >
+        <HomeSection id="blog" estimatedHeight="54rem">
+          <HomeBlog locale={locale} />
+        </HomeSection>
+        <div id="contact" className="home-section scroll-mt-24">
+          <Contact />
+        </div>
+      </div>
     </NextIntlClientProvider>
   );
 }
