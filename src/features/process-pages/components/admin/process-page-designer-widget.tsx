@@ -327,7 +327,7 @@ function HeroEditor({
                 <CanvasText
                   name={`${prefix}.visual.live`}
                   placeholder={t("workflowLive")}
-                  className="text-sm text-success"
+                  className="text-success text-sm"
                 />
               }
             >
@@ -335,13 +335,13 @@ function HeroEditor({
                 <CanvasText
                   name={`${prefix}.visual.terminalTitle`}
                   placeholder={t("terminalTitle")}
-                  className="text-right font-mono text-sm text-muted-foreground"
+                  className="text-muted-foreground text-right font-mono text-sm"
                 />
               </div>
               <CanvasText
                 name={`${prefix}.visual.title`}
                 placeholder={t("workflowTitle")}
-                className="mb-4 text-sm font-semibold tracking-widest text-foreground uppercase"
+                className="text-foreground mb-4 text-sm font-semibold tracking-widest uppercase"
               />
               <ProcessHeroWorkflowCycle
                 title={visual.title}
