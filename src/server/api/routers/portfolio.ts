@@ -674,6 +674,8 @@ export const portfolioRouter = createTRPCRouter({
       const availabilityBadgeText = t("availabilityBadge");
       const careerNextTitle = t("careerNextTitle").trim();
       const careerNextDescription = t("careerNextDescription").trim();
+      const availabilityBadge = availabilityBadgeText?.trim();
+      const profileLocation = profile?.mapLocationLabel?.trim();
 
       return {
         fullName: profile?.displayName?.trim() ?? header.fullName,
@@ -683,9 +685,9 @@ export const portfolioRouter = createTRPCRouter({
         heroTagline: t("heroTagline"),
         heroSummary: t("heroSummary"),
         imageAlt: t("clientImageAlt"),
-        availabilityBadge: availabilityBadgeText?.trim() || null,
-        location: profile?.mapLocationLabel?.trim() || null,
-        timezone: nowSettings?.timezone?.trim() || null,
+        availabilityBadge: availabilityBadge ?? null,
+        location: profileLocation ?? null,
+        timezone: nowSettings?.timezone?.trim() ?? null,
         careerNextStage:
           header.availableForWork && careerNextTitle && careerNextDescription
             ? {

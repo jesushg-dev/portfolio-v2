@@ -6,7 +6,7 @@ import type {
 const formatTimezoneClock = (timeZone?: string) => {
   try {
     return new Date().toLocaleTimeString("en-GB", {
-      timeZone: timeZone || "America/Managua",
+      timeZone: timeZone ?? "America/Managua",
       hour: "2-digit",
       minute: "2-digit",
       hourCycle: "h23",
@@ -93,7 +93,8 @@ export const drawHeroScreen: DrawDeviceScreen = (
     ctx.arc(700, 400, 6, 0, 7);
     ctx.fillStyle = palette.foreground;
     ctx.fill();
-    const cityName = profile.location?.split(",")[0]?.trim() || "Managua";
+    const cityName = profile.location?.split(",")[0]?.trim();
+    const displayCityName = cityName ?? "Managua";
     const regionName =
       profile.locationSubtitle ??
       (profile.location?.includes(",")
@@ -106,7 +107,7 @@ export const drawHeroScreen: DrawDeviceScreen = (
       "bold 58px system-ui",
       palette.onPrimary,
     );
-    text(502, 492, cityName, "bold 48px system-ui", palette.onPrimary);
+    text(502, 492, displayCityName, "bold 48px system-ui", palette.onPrimary);
     text(502, 536, regionName, "27px system-ui", palette.onPrimary);
     [
       ["♫", "Spotify"],

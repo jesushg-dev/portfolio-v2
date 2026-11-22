@@ -7,6 +7,8 @@ export interface HeroDeviceServiceLike {
   technologies?: readonly { title: string }[];
 }
 
+type HeroDeviceTechnologySource = Pick<HeroDeviceServiceLike, "technologies">;
+
 export function formatHeroServiceLabel(raw: string): string {
   const segment = raw.split(/[&·/+,]/)[0]?.trim() || raw.trim();
   const words = segment.split(/\s+/);
@@ -14,7 +16,9 @@ export function formatHeroServiceLabel(raw: string): string {
   return firstWord.length <= 10 ? firstWord : firstWord.slice(0, 10);
 }
 
-export function formatHeroServiceTech(service: HeroDeviceServiceLike): string {
+export function formatHeroServiceTech(
+  service: HeroDeviceTechnologySource,
+): string {
   const tech = service.technologies?.[0]?.title?.trim();
   if (tech) {
     if (tech.toLowerCase().startsWith("nest")) return "NestJS";
@@ -36,7 +40,7 @@ export function formatHeroServices(
   const mapped: [string, string][] = services
     .slice(0, 4)
     .map((service) => [
-      formatHeroServiceLabel(service.badge || service.title),
+      formatHeroServiceLabel(service.badge ?? service.title),
       formatHeroServiceTech(service),
     ]);
 
