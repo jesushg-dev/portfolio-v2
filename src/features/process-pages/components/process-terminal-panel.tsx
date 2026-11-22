@@ -56,7 +56,7 @@ export function ProcessTestRunnerOutput({
               ? "text-foreground font-semibold"
               : index >= lines.length - 3
                 ? "text-foreground"
-                : "[[data-color-mode=dark]_&]:text-success text-emerald-800"
+                : "text-success"
           }
         >
           {line}
