@@ -18,10 +18,7 @@ import { IOSFoldableDevice } from "@/components/shared/ios-device/ios-foldable-d
 
 import { ContactChannelIcon } from "./contact-item";
 import HeroPhotoImage from "../hero-photo-image";
-import {
-  buildVCard,
-  filterContactChannels,
-} from "./lib/contact-server-data";
+import { buildVCard, filterContactChannels } from "./lib/contact-server-data";
 
 const Contact: FC = async () => {
   const locale = await getPublicLocale();

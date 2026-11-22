@@ -330,9 +330,7 @@ export function IOSHeroDevice({
                 <i className={styles.circuit}>
                   <b>
                     {profile.circuitTitle ?? "FULLSTACK"}
-                    <small>
-                      {profile.circuitSubtitle ?? "REST · GraphQL"}
-                    </small>
+                    <small>{profile.circuitSubtitle ?? "REST · GraphQL"}</small>
                   </b>
                 </i>
                 <i className={styles.partFront} />

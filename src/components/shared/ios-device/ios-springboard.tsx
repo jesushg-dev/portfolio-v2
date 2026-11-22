@@ -72,10 +72,7 @@ export const IOSSpringBoard: FC<IOSSpringBoardProps> = ({
     }
   };
 
-  const handleKeyDown = (
-    event: React.KeyboardEvent,
-    app: IOSAppItem,
-  ) => {
+  const handleKeyDown = (event: React.KeyboardEvent, app: IOSAppItem) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       handleAppClick(app);

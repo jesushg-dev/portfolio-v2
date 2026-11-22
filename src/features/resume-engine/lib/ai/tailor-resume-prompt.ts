@@ -11,7 +11,7 @@ import { encode } from "@toon-format/toon";
 
 // Always update this version whenever the prompt or contract changes, using date and time in milliseconds: tailored-cv/YYYY-MM-DD.<Date.now()>
 export const TAILORED_RESUME_PROMPT_VERSION =
-"tailored-cv/2026-11-21.1795293933898";
+  "tailored-cv/2026-11-21.1795293933898";
 export const RESUME_INPUT_FORMAT_INSTRUCTION =
   "Input serialization: TOON. Decode the input as TOON data; return JSON only, with fields as an array of {id,text} and each of the 5 scoreBreakdown keys as an object {score,evidence}.";
 
