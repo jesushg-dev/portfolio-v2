@@ -22,6 +22,12 @@ export function mountContactScene(
   cv3: HTMLCanvasElement,
   profile: ContactPhoneProfile,
 ) {
+  if (
+    typeof window !== "undefined" &&
+    !window.matchMedia("(min-width:64rem)").matches
+  ) {
+    return;
+  }
   let canvasOn = false;
   const root = csS.closest<HTMLElement>("[data-blog-contact-story]");
   if (!root) return;

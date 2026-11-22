@@ -33,7 +33,7 @@ export function IOSFoldableDevice({
     function mount() {
       reset();
       const current = generation;
-      if (motion.matches || !near) return;
+      if (motion.matches || !desktop.matches || !near) return;
       void import("./contact-scene").then(({ mountContactScene }) => {
         if (current !== generation) return;
         section!.dataset.motion = "on";

@@ -647,6 +647,21 @@ body:has([data-blog-contact-story]) {
 .cs-readable .cs-face.l {
   visibility: hidden;
 }
+@media (max-width: 63.9375rem) {
+  .cstory,
+  .cs-blog-links,
+  [data-fold-canvas] {
+    display: none !important;
+  }
+
+  .phone-spread {
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce), print {
   .cstory,
   .cs-blog-links {
