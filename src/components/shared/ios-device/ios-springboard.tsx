@@ -31,19 +31,19 @@ export const DEFAULT_IOS_APPS: IOSAppItem[] = [
   },
   {
     id: "cv",
-    name: "Curriculum",
+    name: "CV",
     icon: <FileText className="size-5 text-white" />,
     bgColor: "bg-blue-600",
   },
   {
     id: "projects",
-    name: "Proyectos",
+    name: "Projects",
     icon: <FolderOpen className="size-5 text-white" />,
     bgColor: "bg-amber-600",
   },
   {
     id: "settings",
-    name: "Ajustes",
+    name: "Settings",
     icon: <Settings className="size-5 text-zinc-300" />,
     bgColor: "bg-zinc-700",
   },
@@ -66,9 +66,16 @@ export const IOSSpringBoard: FC<IOSSpringBoardProps> = ({
     if (onOpenApp) {
       onOpenApp(app.id);
     } else if (app.id === "spotify") {
-      push("now-playing", {}, "Reproduciendo");
+      push("now-playing", {}, "Now Playing");
     } else {
       push(app.id, {}, app.name);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent, app: IOSAppItem) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleAppClick(app);
     }
   };
 
@@ -83,10 +90,14 @@ export const IOSSpringBoard: FC<IOSSpringBoardProps> = ({
         {apps.map((app) => (
           <motion.div
             key={app.id}
+            role="button"
+            tabIndex={0}
+            aria-label={app.name}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => handleAppClick(app)}
-            className="group flex cursor-pointer flex-col items-center gap-1"
+            onKeyDown={(e) => handleKeyDown(e, app)}
+            className="group flex cursor-pointer flex-col items-center gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             <div
               className={cn(
@@ -96,12 +107,12 @@ export const IOSSpringBoard: FC<IOSSpringBoardProps> = ({
             >
               {app.icon}
               {app.badge !== undefined && (
-                <span className="absolute -top-1 -right-1 flex size-4.5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow">
+                <span className="absolute -top-1 -right-1 flex size-4.5 items-center justify-center rounded-full bg-red-500 text-[0.625rem] font-bold text-white shadow">
                   {app.badge}
                 </span>
               )}
             </div>
-            <span className="truncate text-[10px] font-medium text-white/90 drop-shadow-sm">
+            <span className="truncate text-[0.625rem] font-medium text-white/90 drop-shadow-sm">
               {app.name}
             </span>
           </motion.div>
@@ -114,11 +125,15 @@ export const IOSSpringBoard: FC<IOSSpringBoardProps> = ({
           {apps.slice(0, 4).map((app) => (
             <motion.div
               key={`dock-${app.id}`}
+              role="button"
+              tabIndex={0}
+              aria-label={app.name}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => handleAppClick(app)}
+              onKeyDown={(e) => handleKeyDown(e, app)}
               className={cn(
-                "flex size-11 cursor-pointer items-center justify-center rounded-2xl shadow-md",
+                "flex size-11 cursor-pointer items-center justify-center rounded-2xl shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
                 app.bgColor,
               )}
             >

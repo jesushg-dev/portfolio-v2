@@ -35,4 +35,24 @@ describe("CvMatchAnalysisSchema", () => {
       })?.notes,
     ).toBe("Emphasized .NET and React.");
   });
+
+  it("coerces bare numbers in scoreBreakdown to dimension objects with fallback evidence", () => {
+    const parsed = parseMatchAnalysis({
+      scoreBreakdown: {
+        technologies: 16,
+        experience: 15,
+        operations: 16,
+        collaboration: 16,
+        prerequisites: 12,
+      },
+    });
+    expect(parsed?.scoreBreakdown?.technologies).toEqual({
+      score: 16,
+      evidence: "Evaluated score for technologies based on CMS evidence.",
+    });
+    expect(parsed?.scoreBreakdown?.experience.score).toBe(15);
+    expect(parsed?.scoreBreakdown?.operations.score).toBe(16);
+    expect(parsed?.scoreBreakdown?.collaboration.score).toBe(16);
+    expect(parsed?.scoreBreakdown?.prerequisites.score).toBe(12);
+  });
 });

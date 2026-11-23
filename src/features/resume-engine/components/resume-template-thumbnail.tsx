@@ -48,9 +48,9 @@ export const TemplateV1Thumbnail: FC<{
         </div>
 
         {/* 2-Column Body (V1: ~36% Left / ~64% Right) */}
-        <div className="grid flex-1 grid-cols-[36%_64%] gap-1 p-1">
+        <div className="grid flex-1 grid-cols-[36%_64%] gap-1 border-b-2 border-[#164e97] p-1">
           {/* Left Column: Contact, Education, Languages, Skills */}
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 border-r border-zinc-300">
             <div className="space-y-0.5">
               <span className="block h-0.5 w-4 rounded-xs bg-[#1a4b8c]" />
               <span className="block h-0.5 w-5 rounded-xs bg-zinc-300" />

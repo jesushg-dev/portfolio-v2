@@ -202,9 +202,9 @@
         "nl": "Remote · San José, Costa Rica"
       },
       "companyBlurb": {
-        "es": "Cliente Walmart Global Tech: plataforma e-commerce de gran escala con millones de interacciones digitales. Colaboración transversal con desarrollo, producto, QA, backend, frontend y negocio.",
-        "en": "Walmart Global Tech client: large-scale e-commerce platform with millions of digital interactions. Cross-functional work with engineering, product, QA, backend, frontend, and business.",
-        "nl": "Klant Walmart Global Tech: grootschalig e-commerceplatform met miljoenen digitale interacties. Cross-functionele samenwerking met engineering, product, QA, backend, frontend en business."
+        "es": "Aplicaciones de compra en línea de Walmart Centroamérica, desde la búsqueda de productos hasta el pago, con retiro en tienda o entrega a domicilio.",
+        "en": "Walmart Central America’s online shopping apps covered product search, checkout, store pickup, and home delivery.",
+        "nl": "Met de winkelapps van Walmart Centraal-Amerika kunnen klanten producten zoeken, afrekenen en kiezen tussen afhalen in de winkel en thuisbezorging."
       },
       "metrics": {
         "es": [
@@ -279,9 +279,9 @@
         "nl": "Remote · Managua, Nicaragua"
       },
       "companyBlurb": {
-        "es": "Operador telecom: plataforma web de orquestación de servicios que reemplazó flujos manuales (hojas de cálculo y correo).",
-        "en": "Telecom operator: web orchestration platform for service requests that replaced spreadsheet/email workflows.",
-        "nl": "Telecomoperator: weborchestratieplatform voor serviceaanvragen dat spreadsheet-/e-mailflows verving."
+        "es": "Sistema interno para registrar solicitudes de servicio, seguir su estado y consultar su historial. Sustituyó el seguimiento en hojas de cálculo y por correo.",
+        "en": "An internal system for logging service requests, tracking their status, and reviewing their history. It replaced tracking in spreadsheets and email.",
+        "nl": "Een intern systeem om serviceaanvragen te registreren en hun status en historie te volgen. Het verving opvolging via spreadsheets en e-mail."
       },
       "metrics": {
         "es": [
@@ -354,9 +354,9 @@
         "nl": "Remote · Texas, United States"
       },
       "companyBlurb": {
-        "es": "Consultora de software: liderazgo de equipo de desarrollo entregando soluciones a clientes internacionales bajo presión de plazos.",
-        "en": "Software consultancy: led a development team delivering solutions for international clients under tight timelines.",
-        "nl": "Softwareconsultancy: leidde een developmentteam dat oplossingen leverde voor internationale klanten onder strakke deadlines."
+        "es": "Proyectos de software empresarial en paralelo para clientes internacionales, con componentes compartidos y entregas coordinadas entre ingeniería, diseño y producto.",
+        "en": "Concurrent enterprise software projects for international clients, with shared components and releases coordinated across engineering, design, and product.",
+        "nl": "Gelijktijdige softwareprojecten voor internationale klanten, met gedeelde componenten en releases afgestemd tussen engineering, design en product."
       },
       "metrics": {
         "es": [
@@ -440,9 +440,9 @@
         "nl": "Remote · Texas, United States"
       },
       "companyBlurb": {
-        "es": "Consultora de software: desarrollo full-stack (C#/Nest.js + Angular/React/Next.js) e integraciones empresariales para clientes internacionales.",
-        "en": "Software consultancy: full-stack delivery (C#/Nest.js + Angular/React/Next.js) and enterprise integrations for international clients.",
-        "nl": "Softwareconsultancy: full-stack delivery (C#/Nest.js + Angular/React/Next.js) en enterprise-integraties voor internationale klanten."
+        "es": "Desarrollo de flujos de trabajo y reportes configurables para PSPro AI, además de integraciones empresariales con QuickBooks.",
+        "en": "Configurable workflows and reports for PSPro AI, along with enterprise integrations with QuickBooks.",
+        "nl": "Configureerbare werkstromen en rapportages voor PSPro AI, naast zakelijke integraties met QuickBooks."
       },
       "metrics": {
         "es": [
@@ -527,9 +527,9 @@
         "nl": "Remote · Managua, Nicaragua"
       },
       "companyBlurb": {
-        "es": "Producto digital multi-usuario: web/móvil con integración a proveedores externos y modernización de frontend legacy.",
-        "en": "Multi-user digital product: web/mobile with external vendor integrations and legacy frontend modernization.",
-        "nl": "Digitaal multi-user product: web/mobile met externe vendor-integraties en modernisering van legacy frontend."
+        "es": "Supermercado en línea de productos frescos y panel de gestión de pedidos, inventario y lotes por fecha de vencimiento para las tiendas.",
+        "en": "An online grocery store for fresh products and an operations dashboard for managing orders, stock, and batches with expiration dates.",
+        "nl": "Een online supermarkt voor verse producten, met een dashboard voor winkelteams om bestellingen, voorraad en houdbaarheidsdatums per partij te beheren."
       },
       "metrics": {
         "es": [
@@ -633,9 +633,9 @@
         "nl": "Hybrid · San José, Costa Rica"
       },
       "companyBlurb": {
-        "es": "Ecosistema fintech cripto: apps React Native B2C y B2B (Telo Wallet y Telo Business mPOS) con WebSockets y pagos QR.",
-        "en": "Crypto fintech ecosystem: B2C & B2B React Native apps (Telo Wallet & Telo Business mPOS) with WebSockets and QR payments.",
-        "nl": "Crypto fintech-ecosysteem: B2C & B2B React Native-apps (Telo Wallet en Telo Business mPOS) met WebSockets en QR-betalingen."
+        "es": "Aplicaciones financieras móviles para transferencias de criptomonedas entre usuarios en Telo Wallet y cobros comerciales mediante códigos QR en Telo Business.",
+        "en": "Mobile financial apps for peer-to-peer cryptocurrency transfers in Telo Wallet and QR code payment acceptance for merchants in Telo Business.",
+        "nl": "Mobiele financiële apps voor overdrachten van cryptovaluta tussen gebruikers in Telo Wallet en het ontvangen van QR-betalingen door ondernemers in Telo Business."
       },
       "metrics": {
         "es": [
@@ -730,9 +730,9 @@
         "nl": "On-site · Managua, Nicaragua"
       },
       "companyBlurb": {
-        "es": "Organización sin fines de lucro: sitio institucional, soporte de TI y formación básica en informática.",
-        "en": "Nonprofit organization: institutional website, IT support, and foundational computer education.",
-        "nl": "Non-profitorganisatie: institutionele website, IT-support en basale computeropleiding."
+        "es": "Sitio web de una organización sin fines de lucro, soporte de equipos y software, y clases de informática para estudiantes de primaria.",
+        "en": "A nonprofit’s website, hardware and software support, and computer classes for primary school students.",
+        "nl": "Website voor een non-profitorganisatie, ondersteuning bij hardware en software en computerlessen voor basisschoolleerlingen."
       },
       "skillKeys": ["React", "Nextjs", "Javascript", "Css", "Typescript"],
       "responsibilities": [

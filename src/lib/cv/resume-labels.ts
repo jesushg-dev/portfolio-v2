@@ -3,6 +3,7 @@ import { getEmploymentTypeLabel } from "./employment-type";
 
 export const RESUME_LABELS = {
   en: {
+    softSkills: "Soft skills",
     summary: "About me",
     experience: "Professional experience",
     education: "Education",
@@ -24,6 +25,7 @@ export const RESUME_LABELS = {
     OTHER: "Other",
   },
   es: {
+    softSkills: "Habilidades blandas",
     summary: "Sobre mí",
     experience: "Experiencia laboral",
     education: "Educación",
@@ -45,6 +47,7 @@ export const RESUME_LABELS = {
     OTHER: "Otros",
   },
   nl: {
+    softSkills: "Persoonlijke vaardigheden",
     summary: "Over mij",
     experience: "Werkervaring",
     education: "Opleiding",

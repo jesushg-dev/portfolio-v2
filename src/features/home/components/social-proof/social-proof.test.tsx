@@ -17,12 +17,25 @@ it("shows published recommendations together without repeated portfolio metrics"
           author: "Second colleague",
           quote: "Thoughtful collaboration.",
         },
+        {
+          id: "unattributed",
+          author: "",
+          quote: "Unattributed draft.",
+        },
+      ]}
+      proofItems={[
+        { description: "I lead delivery across teams." },
+        { description: "I mentor developers through pair programming." },
       ]}
     />,
   );
   expect(screen.getByText("First colleague")).toBeInTheDocument();
   expect(screen.getByText("Second colleague")).toBeInTheDocument();
   expect(screen.getByText(/Software engineer/)).toBeInTheDocument();
+  expect(
+    screen.getByText("I mentor developers through pair programming."),
+  ).toBeInTheDocument();
+  expect(screen.queryByText("Unattributed draft.")).not.toBeInTheDocument();
   expect(screen.queryByText("Projects")).not.toBeInTheDocument();
   expect(screen.queryByText("Years of experience")).not.toBeInTheDocument();
   expect(screen.queryByRole("button")).not.toBeInTheDocument();

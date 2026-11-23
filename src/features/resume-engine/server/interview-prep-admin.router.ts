@@ -126,11 +126,11 @@ export const interviewPrepAdminRouter = createTRPCRouter({
       const snapshotSkills = snapshot
         ? snapshot.skills.flatMap((s) => s.items)
         : [];
-      const matchKeywords = latestExport?.matchAnalysis
-        ? (parseMatchAnalysis(latestExport.matchAnalysis)?.keywords ?? []).map(
-            (k) => k.term,
-          )
-        : [];
+      const analysis = parseMatchAnalysis(latestExport?.matchAnalysis);
+      const matchKeywords =
+        analysis?.vacancyTechnologies ??
+        analysis?.keywords.map(({ term }) => term) ??
+        [];
 
       const suggestedTools = extractJobTools(jd, snapshotSkills, matchKeywords);
 

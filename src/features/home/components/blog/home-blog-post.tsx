@@ -35,7 +35,10 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
       )}
     >
       {featured ? (
-        <div className="relative aspect-video overflow-hidden bg-linear-to-br from-indigo-600 to-sky-500">
+        <div
+          data-phone-cover
+          className="relative aspect-video overflow-hidden bg-linear-to-br from-indigo-600 to-sky-500"
+        >
           <div className="absolute inset-[10%] overflow-hidden rounded-2xl border border-white/20 bg-white/15">
             {post.coverImage ? (
               <Image

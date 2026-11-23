@@ -1,6 +1,5 @@
 import {
   captureExpandRects,
-  EXPANDED_COVER_WIDTH_RATIO,
   getExpandedTargets,
   toElementRect,
 } from "./expand-rects";
@@ -70,22 +69,29 @@ describe("captureExpandRects", () => {
 
 describe("getExpandedTargets", () => {
   it("positions cover and text relative to the screen rect", () => {
-    const screenRect = {
-      top: 100,
-      left: 50,
-      width: 300,
-      height: 600,
-    } as DOMRect;
-
-    const targets = getExpandedTargets(screenRect);
-    const coverSize = screenRect.width * EXPANDED_COVER_WIDTH_RATIO;
-
-    expect(targets.cover.width).toBe(coverSize);
-    expect(targets.cover.height).toBe(coverSize);
-    expect(targets.cover.left).toBe(
-      screenRect.left + (screenRect.width - coverSize) / 2,
+    const screen = document.createElement("div");
+    screen.innerHTML =
+      '<div data-spotify-flight="cover"></div><div data-spotify-flight="title"></div><div data-spotify-flight="artist"></div>';
+    Object.defineProperties(screen, {
+      offsetWidth: { value: 288 },
+      offsetHeight: { value: 603 },
+    });
+    Array.from(screen.children).forEach((element, i) => {
+      Object.defineProperties(element, {
+        offsetParent: { value: screen },
+        offsetLeft: { value: 22 },
+        offsetTop: { value: [69, 362, 389][i] },
+        offsetWidth: { value: 245 },
+        offsetHeight: { value: i === 0 ? 245 : 24 },
+      });
+    });
+    const targets = getExpandedTargets(screen);
+    expect(targets?.cover.width).toBe(245);
+    expect(targets?.cover.height).toBe(245);
+    expect(targets?.cover.left).toBe(
+      (document.documentElement.clientWidth - 288) / 2 + 22,
     );
-    expect(targets.title.top).toBeGreaterThan(targets.cover.top);
-    expect(targets.artist.top).toBeGreaterThan(targets.title.top);
+    expect(targets?.title.top).toBeGreaterThan(targets?.cover.top ?? Infinity);
+    expect(targets?.artist.top).toBeGreaterThan(targets?.title.top ?? Infinity);
   });
 });

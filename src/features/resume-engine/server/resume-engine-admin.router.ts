@@ -1,7 +1,12 @@
 import { buildTailoredResumePrompt } from "@/features/resume-engine/lib/ai/tailor-resume-prompt";
-import { tailorResumeDocument } from "@/features/resume-engine/lib/ai/tailor-resume";
+import {
+  discoverVacancyTechnologies,
+  tailorResumeDocument,
+} from "@/features/resume-engine/lib/ai/tailor-resume";
 import { finalizeTailoredResume } from "@/features/resume-engine/lib/finalize-tailor-export";
 import { resolveTailorContext } from "@/features/resume-engine/lib/resolve-tailor-context";
+import { declaredResumeTechnologies } from "@/features/resume-engine/lib/resume-technology-names";
+import { ResumeTailorValidationError } from "@/features/resume-engine/lib/resume-tailor-validation-error";
 import {
   validateTailoredResume,
   readResumeSnapshot,
@@ -54,11 +59,29 @@ const tailorInputSchema = z
     targetLocale: z.enum(["en", "es", "nl"]).optional(),
     uiLocale: z.enum(["en", "es", "nl"]).optional(),
     tailoredFor: z.string().optional(),
+    confirmedTechnologies: z
+      .array(
+        z
+          .string()
+          .trim()
+          .min(1)
+          .max(80)
+          .regex(/^[^\r\n]+$/u),
+      )
+      .max(32)
+      .optional(),
   })
   .strict();
 
 function rethrowTailorExportError(error: unknown): never {
   if (error instanceof TRPCError) throw error;
+  if (error instanceof ResumeTailorValidationError) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: error.message,
+      cause: error,
+    });
+  }
   if (error instanceof UploadThingNotConfiguredError) {
     throw new TRPCError({
       code: "PRECONDITION_FAILED",
@@ -399,6 +422,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         loadCvStructuredDraft(ctx.db, ctx.user.id, {
           locale: fallbackLocale,
           fallbackLocale,
+          evidenceScope: "all",
         }),
         input.applicationId
           ? ctx.db.application.findFirst({
@@ -432,6 +456,9 @@ export const resumeEngineAdminRouter = createTRPCRouter({
 
       return {
         hasStudioData: Boolean(studioDraft),
+        declaredTechnologies: studioDraft
+          ? declaredResumeTechnologies(studioDraft)
+          : [],
         studioPreview: studioDraft
           ? {
               fullName: studioDraft.header.fullName,
@@ -455,10 +482,25 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       };
     }),
 
+  discoverVacancyTechnologies: protectedProcedure
+    .input(
+      z.object({
+        jobDescription: z.string().min(20),
+        provider: aiProviderSchema,
+      }),
+    )
+    .mutation(async ({ ctx, input }) =>
+      discoverVacancyTechnologies(
+        processJobDescription(input.jobDescription).cleanedText,
+        await loadTenantAiCredentials(ctx.user.id),
+        input.provider,
+      ),
+    ),
   getTailorPrompt: protectedProcedure
     .input(tailorInputSchema)
     .query(async ({ ctx, input }) => {
       const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+        confirmedTechnologies: input.confirmedTechnologies,
         templateId: input.templateVersion,
         targetLocale: input.targetLocale,
         uiLocale: input.uiLocale,
@@ -467,10 +509,20 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       return buildTailoredResumePrompt(context);
     }),
   tailorResume: protectedProcedure
-    .input(tailorInputSchema.extend({ provider: aiProviderSchema }))
+    .input(
+      tailorInputSchema.extend({
+        provider: aiProviderSchema,
+        vacancyTechnologies: z
+          .array(z.string().trim().min(1).max(80))
+          .max(128)
+          .optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       try {
         const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+          confirmedTechnologies: input.confirmedTechnologies,
+          vacancyTechnologies: input.vacancyTechnologies,
           templateId: input.templateVersion,
           targetLocale: input.targetLocale,
           uiLocale: input.uiLocale,
@@ -499,6 +551,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
     .input(tailorInputSchema.extend({ rawJson: z.string().min(2) }))
     .mutation(async ({ ctx, input }) => {
       const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+        confirmedTechnologies: input.confirmedTechnologies,
         templateId: input.templateVersion,
         targetLocale: input.targetLocale,
         uiLocale: input.uiLocale,
@@ -515,6 +568,8 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message:
             error instanceof Error ? error.message : "Invalid resume JSON",
+          cause:
+            error instanceof ResumeTailorValidationError ? error : undefined,
         });
       }
       return finalizeTailoredResume(ctx.db, ctx.user.id, {

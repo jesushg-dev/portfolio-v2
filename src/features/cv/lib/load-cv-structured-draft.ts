@@ -24,7 +24,18 @@ export interface LoadCvStructuredDraftOptions {
   fallbackLocale?: Locale;
   /** Make all CMS achievements selectable for a single shared tailored document. */
   evidenceScope?: "visible" | "all";
+  includeSoftSkills?: boolean;
 }
+
+export type SavedResumeFacts = Partial<
+  Record<
+    Locale,
+    {
+      savedFields: Record<string, string>;
+      softSkills: NonNullable<CvImportDraft["softSkills"]>;
+    }
+  >
+>;
 
 export function certificationYear(
   value: number | null | undefined,
@@ -42,7 +53,7 @@ export async function loadCvStructuredDraft(
   db: PrismaClient,
   userId: string,
   options?: LoadCvStructuredDraftOptions,
-): Promise<CvImportDraft | null> {
+): Promise<(CvImportDraft & { localizedFacts?: SavedResumeFacts }) | null> {
   const [
     appLanguages,
     header,
@@ -53,6 +64,7 @@ export async function loadCvStructuredDraft(
     contacts,
     languages,
     certifications,
+    softSkills,
   ] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     db.cvHeader.findUnique({
@@ -99,6 +111,14 @@ export async function loadCvStructuredDraft(
       include: { CertificationTranslation: true },
       orderBy: { issuedDate: "desc" },
     }),
+    options?.includeSoftSkills
+      ? db.cvSoftSkill.findMany({
+          where: { userId },
+          orderBy: [{ order: "asc" }, { id: "asc" }],
+          include: { translations: true },
+          take: 2,
+        })
+      : [],
   ]);
 
   if (!header) return null;
@@ -127,6 +147,38 @@ export async function loadCvStructuredDraft(
     undefined;
 
   return {
+    ...(options?.evidenceScope === "all" && {
+      localizedFacts: Object.fromEntries(
+        appLanguages.map(({ code, id }) => {
+          const savedFields: Record<string, string> = {};
+          const availability = header.translations
+            .find((row) => row.appLanguageId === id)
+            ?.availabilityBadge?.trim();
+          if (availability) savedFields["header.availability"] = availability;
+          for (const language of languages) {
+            const row = language.translations.find(
+              (translation) => translation.appLanguageId === id,
+            );
+            if (row?.level.trim())
+              savedFields[`language.${language.id}.level`] = row.level.trim();
+            if (row?.name.trim())
+              savedFields[`language.${language.id}.name`] = row.name.trim();
+          }
+          return [
+            code,
+            {
+              savedFields,
+              softSkills: softSkills.flatMap((skill) => {
+                const name = skill.translations
+                  .find((row) => row.appLanguageId === id)
+                  ?.name.trim();
+                return name ? [{ id: skill.id, name }] : [];
+              }),
+            },
+          ];
+        }),
+      ),
+    }),
     detectedLocale: activeLocale,
     header: {
       fullName: header.fullName,

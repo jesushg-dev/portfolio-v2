@@ -4,17 +4,16 @@ import { useLayoutEffect, useMemo, useRef, type FC } from "react";
 import { Maximize2, MicOff } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import type { UseTrackLyricsResult } from "../hooks/use-track-lyrics";
+import type { UseTrackLyricsResult } from "@/components/shared/spotify-widget/hooks/use-track-lyrics";
 import {
   findActiveLyricIndex,
   lyricPreviewWindow,
   parseLrc,
-} from "../utils/parse-lrc";
+} from "@/components/shared/spotify-widget/utils/parse-lrc";
 import { LyricLineContent } from "./lyric-line-content";
 
 interface LyricsCardProps {
   accentColor: string;
-  height: number;
   lyricsState: UseTrackLyricsResult;
   progressMs: number;
   labels: {
@@ -46,7 +45,6 @@ function plainPreviewLines(plainLyrics: string, maxLines = 6): string[] {
 
 const LyricsCard: FC<LyricsCardProps> = ({
   accentColor,
-  height,
   lyricsState,
   progressMs,
   labels,
@@ -115,9 +113,8 @@ const LyricsCard: FC<LyricsCardProps> = ({
       onPointerDown={(event) => event.stopPropagation()}
       aria-label={canExpand ? labels.expand : undefined}
       aria-busy={isLoading || undefined}
-      className="flex w-full shrink-0 flex-col overflow-hidden rounded-xl text-left transition-opacity disabled:cursor-default"
+      className="flex aspect-[10/9] w-full shrink-0 flex-col overflow-hidden rounded-xl text-left transition-opacity disabled:cursor-default"
       style={{
-        height,
         background: `color-mix(in srgb, ${accentColor} 38%, rgba(0,0,0,0.62))`,
       }}
     >

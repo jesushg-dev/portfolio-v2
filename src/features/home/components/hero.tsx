@@ -5,10 +5,14 @@ import { getTranslations } from "next-intl/server";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { resolvePublicTenant } from "@/lib/public-site/tenant";
+import { api } from "@/trpc/server";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
+import { IOSHeroDevice } from "@/components/shared/ios-device/ios-hero-device";
+import { initialsFromDisplayName } from "@/lib/site-brand/site-brand";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
+import { formatHeroDeviceProfile } from "./hero-device-data";
 
 interface HeroStats {
   yearsExperience: number;
@@ -28,7 +32,10 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     namespace: "main.heroMain",
   });
 
-  const heroData = await getCachedHeroPublic(locale);
+  const [heroData, servicesData] = await Promise.all([
+    getCachedHeroPublic(locale),
+    api.portfolio.getServicesPublic({ locale }),
+  ]);
 
   if (!heroData) {
     return <HeroEmpty />;
@@ -60,54 +67,63 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     availabilityBadge,
   };
 
+  const deviceProfile = formatHeroDeviceProfile({
+    heroSubtitle,
+    services: servicesData,
+  });
+
   return (
     <>
-      {photoUrl ? <LcpImagePreload href={photoUrl} /> : null}
-      <section
-        id="top"
-        aria-label={fullName}
-        className="relative flex min-h-[calc(100vh-3.25rem)] w-full flex-col justify-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
-      >
+      {photoUrl && <LcpImagePreload href={photoUrl} />}
+      <section id="top" aria-label={fullName} className="relative w-full">
         <span
           id="about"
-          className="pointer-events-none absolute top-0 scroll-mt-24"
           aria-hidden="true"
+          className="absolute top-0 scroll-mt-24"
         />
-        {/* Radial Gradient Glow Effect */}
-        <div
-          className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)]"
-          aria-hidden="true"
+        <IOSHeroDevice
+          rotateLabel={t("phone.rotate")}
+          profile={{
+            name: fullName,
+            subtitle: heroSubtitle,
+            photo: photoUrl,
+            locale,
+            initials: initialsFromDisplayName(fullName, 2),
+            years: stats.yearsExperience,
+            location: heroData.location ?? undefined,
+            timezone: heroData.timezone ?? undefined,
+            services: deviceProfile.services,
+            circuitTitle: deviceProfile.circuitTitle,
+            circuitSubtitle: deviceProfile.circuitSubtitle,
+            focusTitle: deviceProfile.focusTitle,
+            focusSubtitle: deviceProfile.focusSubtitle,
+          }}
+          staticPortrait={<HeroPhoto heroData={parsedHeroData} />}
+          backdrop={
+            <>
+              {" "}
+              {/* Radial Gradient Glow Effect */}
+              <div
+                className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,color-mix(in_srgb,var(--primary)_20%,transparent),transparent_70%)]"
+                aria-hidden="true"
+              />
+              {/* Subtle Grid Backdrop Overlay */}
+              <div
+                className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(var(--border)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,var(--border)_0.0625rem,transparent_0.0625rem)] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,black_15%,transparent_75%)] bg-[size:3rem_3rem] opacity-30"
+                aria-hidden="true"
+              />
+            </>
+          }
+          content={
+            <HeroContent
+              heroData={parsedHeroData}
+              stats={stats}
+              showCvLink={showCvLink}
+            />
+          }
         />
-
-        {/* Subtle Grid Backdrop Overlay */}
-        <div
-          className="home-hero-backdrop pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(var(--border)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,var(--border)_0.0625rem,transparent_0.0625rem)] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_35%,black_15%,transparent_75%)] bg-[size:3rem_3rem] opacity-30"
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 sm:px-6 md:grid-cols-[1.25fr_1fr] md:gap-16 lg:container lg:px-20">
-          <HeroContent
-            heroData={parsedHeroData}
-            stats={stats}
-            showCvLink={showCvLink}
-          />
-          <HeroPhoto heroData={parsedHeroData} />
-        </div>
-
-        {/* Scroll Down Indicator matching Prototype */}
-        <div className="mt-12 hidden justify-center lg:flex">
-          <a
-            href="#portfolio"
-            className="text-muted-foreground hover:text-foreground flex min-h-11 min-w-11 flex-col items-center justify-center gap-2 font-mono text-sm tracking-widest uppercase transition-colors"
-            aria-label={t("scrollDown")}
-          >
-            <span>{t("scrollDown")}</span>
-            <span className="from-primary h-9 w-px bg-gradient-to-b to-transparent" />
-          </a>
-        </div>
       </section>
     </>
   );
 };
-
 export default Hero;

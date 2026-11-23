@@ -35,13 +35,12 @@ src/components/shared/spotify-widget/
 │   ├── playback-mappers.ts        # Data mappers & explicit content filters
 │   └── spotify-timing.ts          # Timing & polling interval constants
 └── components/
-    ├── playing-indicator.tsx      # Cover artwork badge (equalizer / pause icon)
-    ├── spotify-now-playing-screen.tsx # Expanded player view
+    └── playing-indicator.tsx      # Cover artwork badge (equalizer / pause icon)
 ```
 
 ### Integration with `ios-device` Custom Library
 
-The Spotify Widget UI is assembled inside our custom-built **iOS Device Simulator & Navigation System** located in `src/components/shared/ios-device/` (detailed in [`docs/ios-device.md`](./ios-device.md) and [`docs/mini-apps-guide.md`](./mini-apps-guide.md)):
+The expanded widget mounts the shared Spotify mini app from `src/components/shared/ios-device/apps/spotify/`. The same app runs on the hero device. See the [iOS device documentation](./ios-device.md) and [mini app guide](./mini-apps-guide.md).
 
 - **`<IOSDeviceMockup>`**: Renders realistic iPhone bezels, hardware frame, and safe-area viewports.
 - **`<IOSNavigationStack>`**: Manages native 60+ FPS iOS navigation stack transitions (`push` horizontal parallax and `sheet` vertical modal transitions) across the **Now Playing Screen**, **Synced Lyrics Screen**, and **Queue Screen**.

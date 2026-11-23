@@ -2,12 +2,14 @@
 import type { Locale } from "@/i18n/config";
 
 import type { FC } from "react";
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { CheckCircle2, FileText, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { isTRPCClientError } from "@trpc/client";
 
 import { api } from "@/trpc/react";
+import type { AppRouter } from "@/server/api/root";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,11 +24,18 @@ import {
   type CvMatchAnalysis,
 } from "@/features/resume-engine/lib/cv-match-analysis";
 import { ResumeTemplateSelector } from "./resume-template-selector";
+import { VacancySkillConfirmation } from "./vacancy-skill-confirmation";
+import { vacancySkillSuggestions } from "../lib/extract-job-tools";
+import { parseAiJsonResponse } from "../lib/ai/parse-json-response";
+import { CvMatchAnalysisSchema } from "../lib/cv-match-analysis";
 import {
   DEFAULT_CV_TEMPLATE_VERSION,
   type CvTemplateVersion,
 } from "@/features/resume-engine/lib/template-registry";
-import { ResumeTailorErrorAlert } from "@/features/resume-engine/components/resume-tailor-error-alert";
+import {
+  ResumeTailorErrorAlert,
+  type ResumeTailorFailure,
+} from "@/features/resume-engine/components/resume-tailor-error-alert";
 import { ResumeTailorProgress } from "@/features/resume-engine/components/resume-tailor-progress";
 import { type ExistingCvFile } from "@/features/resume-engine/components/resume-tailor-existing-banner";
 import { ResumeTailorResultView } from "@/features/resume-engine/components/resume-tailor-result-view";
@@ -54,6 +63,13 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     DEFAULT_CV_TEMPLATE_VERSION,
   );
   const [jobDescription, setJobDescription] = useState("");
+  const [confirmedTechnologies, setConfirmedTechnologies] = useState<string[]>(
+    [],
+  );
+  const [discovery, setDiscovery] = useState<{
+    vacancy: string;
+    names: string[];
+  } | null>(null);
   const [tailoredFileName, setTailoredFileName] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [exportId, setExportId] = useState<string | null>(null);
@@ -64,7 +80,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   );
   const [structuredSnapshot, setStructuredSnapshot] = useState<unknown>(null);
   const [pdfDownloadUrl, setPdfDownloadUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ResumeTailorFailure | null>(null);
   const [mode, setMode] = useState<AiProcessingMode>("auto");
   const [provider, setProvider] = useState<AiProviderName | null>(null);
   const [manualTailorJson, setManualTailorJson] = useState("");
@@ -78,6 +94,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   });
   const tailorPrompt = api.resumeEngineAdmin.getTailorPrompt.useQuery(
     {
+      confirmedTechnologies,
       applicationId,
       templateVersion,
       targetLocale: targetLocale === "auto" ? undefined : targetLocale,
@@ -91,6 +108,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   );
 
   const tailorResume = api.resumeEngineAdmin.tailorResume.useMutation();
+  const discoverTechnologies =
+    api.resumeEngineAdmin.discoverVacancyTechnologies.useMutation();
   const tailorResumeManual =
     api.resumeEngineAdmin.tailorResumeManual.useMutation();
 
@@ -111,6 +130,21 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const effectiveMode: AiProcessingMode =
     aiSettings.data && !hasAutoProviders ? "manual" : mode;
   const effectiveProvider = provider ?? defaultProvider;
+  const analysisTerms = useMemo(() => {
+    if (!manualTailorJson.trim()) return [];
+    try {
+      const raw = parseAiJsonResponse(manualTailorJson);
+      if (!raw || typeof raw !== "object" || !("matchAnalysis" in raw))
+        return [];
+      return (
+        CvMatchAnalysisSchema.pick({ vacancyTechnologies: true }).safeParse(
+          raw.matchAnalysis,
+        ).data?.vacancyTechnologies ?? []
+      );
+    } catch {
+      return [];
+    }
+  }, [manualTailorJson]);
 
   const isManualReplacement = Boolean(
     existingCvFile &&
@@ -160,13 +194,41 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     [],
   );
 
+  const handleTailorFailure = useCallback(
+    (error: unknown) => {
+      const message =
+        error instanceof Error ? error.message : t("tailorFailed");
+      const validation = isTRPCClientError<AppRouter>(error)
+        ? error.data?.resumeTailorIssues
+        : undefined;
+      const [issue] = validation ?? [];
+      let description = validation?.length
+        ? t("tailorValidation.intro")
+        : message;
+      if (issue?.field === "technologyName") {
+        description = issue.original
+          ? t("tailorValidation.technologyRename", {
+              original: issue.original,
+              proposed: issue.proposed,
+            })
+          : t("tailorValidation.unknownTechnologyProposal", {
+              proposed: issue.proposed,
+            });
+      }
+      setError({ message, validation });
+      setStep("configure");
+      toast.error(t("tailorFailed"), { description });
+    },
+    [t],
+  );
+
   const handleTailorAuto = useCallback(() => {
     if (effectiveJobDescription.length < 20) {
-      setError(t("tailorJdTooShort"));
+      setError({ message: t("tailorJdTooShort") });
       return;
     }
     if (!hasStudioData) {
-      setError(t("tailorNoStudioData"));
+      setError({ message: t("tailorNoStudioData") });
       return;
     }
 
@@ -174,7 +236,36 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       setError(null);
       setStep("tailoring");
       try {
+        let vacancyTechnologies = discovery?.names ?? [];
+        if (discovery?.vacancy !== effectiveJobDescription) {
+          const names = await discoverTechnologies
+            .mutateAsync({
+              jobDescription: effectiveJobDescription,
+              provider: effectiveProvider ?? undefined,
+            })
+            .catch(() => []);
+          setDiscovery({ vacancy: effectiveJobDescription, names });
+          vacancyTechnologies = names;
+          const declared = pageData.data?.declaredTechnologies ?? [];
+          const offered = vacancySkillSuggestions(
+            effectiveJobDescription,
+            declared,
+            confirmedTechnologies,
+          );
+          const discovered = vacancySkillSuggestions(
+            effectiveJobDescription,
+            declared,
+            names,
+          );
+          if (discovered.some((name) => !offered.includes(name))) {
+            setStep("configure");
+            toast.info(t("vacancySkillsReview"));
+            return;
+          }
+        }
         const result = await tailorResume.mutateAsync({
+          confirmedTechnologies,
+          vacancyTechnologies,
           jobDescription: effectiveJobDescription,
           applicationId,
           provider: effectiveProvider ?? undefined,
@@ -186,17 +277,19 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
         setStep("done");
         toast.success(t("tailorSuccess"));
       } catch (err) {
-        const message = err instanceof Error ? err.message : t("tailorFailed");
-        setError(message);
-        setStep("configure");
-        toast.error(t("tailorFailed"), { description: message });
+        handleTailorFailure(err);
       }
     });
   }, [
     applicationId,
     effectiveJobDescription,
     effectiveProvider,
+    confirmedTechnologies,
+    discovery,
+    discoverTechnologies,
+    pageData.data,
     hasStudioData,
+    handleTailorFailure,
 
     tailorResume,
     applyTailorResult,
@@ -209,11 +302,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
 
   const handleTailorManual = useCallback(() => {
     if (effectiveJobDescription.length < 20) {
-      setError(t("tailorJdTooShort"));
+      setError({ message: t("tailorJdTooShort") });
       return;
     }
     if (!hasStudioData) {
-      setError(t("tailorNoStudioData"));
+      setError({ message: t("tailorNoStudioData") });
       return;
     }
 
@@ -222,6 +315,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       setStep("tailoring");
       try {
         const result = await tailorResumeManual.mutateAsync({
+          confirmedTechnologies,
           jobDescription: effectiveJobDescription,
           applicationId,
           rawJson: manualTailorJson,
@@ -233,17 +327,16 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
         setStep("done");
         toast.success(t("tailorSuccess"));
       } catch (err) {
-        const message = err instanceof Error ? err.message : t("tailorFailed");
-        setError(message);
-        setStep("configure");
-        toast.error(t("tailorFailed"), { description: message });
+        handleTailorFailure(err);
       }
     });
   }, [
     applicationId,
     effectiveJobDescription,
     hasStudioData,
+    handleTailorFailure,
     manualTailorJson,
+    confirmedTechnologies,
 
     tailorResumeManual,
     applyTailorResult,
@@ -256,10 +349,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
 
   const handleLoadTailorPrompt = useCallback(async () => {
     if (effectiveJobDescription.length < 20) {
-      setError(t("tailorJdTooShort"));
+      setError({ message: t("tailorJdTooShort") });
       return null;
     }
     const result = await tailorPrompt.refetch();
+    if (result.error) setError({ message: result.error.message });
     return result.data ?? null;
   }, [effectiveJobDescription.length, t, tailorPrompt]);
 
@@ -275,6 +369,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     setManualTailorJson("");
     setError(null);
     setShowTailorForm(true);
+    setConfirmedTechnologies([]);
   }, []);
 
   const handleSwitchToManual = useCallback(() => {
@@ -287,6 +382,24 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   }, []);
 
   const previewFileUrl = downloadUrl ?? existingCvFile?.url ?? "";
+  const skillConfirmation = hasStudioData && (
+    <VacancySkillConfirmation
+      key={effectiveJobDescription}
+      vacancy={effectiveJobDescription}
+      declared={pageData.data?.declaredTechnologies ?? []}
+      confirmed={confirmedTechnologies}
+      suggestions={[
+        ...analysisTerms,
+        ...(discovery?.vacancy === effectiveJobDescription
+          ? discovery.names
+          : []),
+      ]}
+      onChange={(names) => {
+        setConfirmedTechnologies(names);
+        setError(null);
+      }}
+    />
+  );
   const showExistingBanner =
     Boolean(existingCvFile) && !showTailorForm && step === "configure";
 
@@ -396,6 +509,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               )}
             </div>
 
+            {skillConfirmation}
             {effectiveMode === "manual" ? (
               <ManualAiPanel
                 promptPackage={tailorPrompt.data}
@@ -533,12 +647,18 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                     ? jobDescription
                     : (application?.description ?? "")
                 }
-                onChange={(e) => setJobDescription(e.target.value)}
+                onChange={(e) => {
+                  setJobDescription(e.target.value);
+                  setConfirmedTechnologies([]);
+                  setManualTailorJson("");
+                  setError(null);
+                }}
                 placeholder={t("tailorJdPlaceholder")}
                 rows={10}
                 className="resize-y"
               />
 
+              {skillConfirmation}
               {effectiveMode === "manual" ? (
                 <ManualAiPanel
                   promptPackage={tailorPrompt.data}

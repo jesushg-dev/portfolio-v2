@@ -1,0 +1,306 @@
+.story {
+  position: relative;
+  --tear: 0;
+  --flip: 179deg;
+}
+:global(body):has(.story) {
+  overflow-x: clip;
+}
+.stage {
+  position: relative;
+  height: 100svh;
+  padding-block-start: calc(3.25rem + env(safe-area-inset-top, 0rem));
+  overflow: hidden;
+  isolation: isolate;
+}
+.visual {
+  position: relative;
+  height: min(45rem, 100%);
+  min-width: 0;
+  isolation: isolate;
+}
+.canvas,
+.appLayer {
+  position: absolute;
+  top: -9%;
+  left: -30%;
+  width: 160%;
+  height: 118%;
+  display: block;
+  pointer-events: none;
+}
+.canvas {
+  filter: drop-shadow(0 1.5rem 2.4rem rgb(0 0 0 / 0.35));
+}
+.appLayer {
+  z-index: 1;
+}
+.appSurface {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: calc(var(--ios-device-width) - 2 * var(--ios-device-screen-inset));
+  height: calc(var(--ios-device-height) - 2 * var(--ios-device-screen-inset));
+  transform: var(--projection);
+  transform-origin: 0 0;
+}
+.miniApp {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  border-radius: var(--ios-device-screen-radius);
+  outline: none;
+  background: #191414;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+.front .miniApp {
+  inset: 2% 4%;
+  border-radius: 9%/4.5%;
+}
+.spotifyApp {
+  position: absolute;
+  /* Same bounds as the first icon in the 900 × 1912 home-screen artwork. */
+  inset: 32.53% auto auto 8%;
+  width: 17.23%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+:is(.spotifyApp, .spotifyFallback):is(:hover, :focus-visible) {
+  border-radius: 0.75rem;
+  outline: 0.175rem solid var(--primary);
+  outline-offset: -0.175rem;
+}
+.spotifyFallback {
+  display: none;
+}
+.story[data-render="fallback"][data-screen="apps"]
+  .spotifyFallback:not([hidden]) {
+  position: absolute;
+  /* Bounds of the Spotify icon in the fallback artwork. */
+  inset: 17% auto auto 11%;
+  display: block;
+  width: 16%;
+  height: 10%;
+  pointer-events: auto;
+}
+.story[data-inspection-back] .spotifyFallback {
+  visibility: hidden;
+}
+.story[data-app-open="true"] .device {
+  opacity: 1;
+  transform: none;
+}
+.story[data-app-open="true"] .exploded {
+  visibility: hidden;
+}
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 55rem;
+  z-index: 1;
+  pointer-events: none;
+}
+.story:not([data-render="fallback"]) .fallback,
+.story:not([data-render="webgl"]) .canvas,
+.staticPortrait {
+  display: none;
+}
+.device {
+  position: relative;
+  height: min(76%, var(--ios-device-height));
+  aspect-ratio: var(--ios-device-ratio);
+  transform-style: preserve-3d;
+  opacity: calc(1 - var(--tear));
+  transform: rotateY(var(--inspection-yaw, var(--flip)))
+    rotateX(calc(-25deg * var(--tear))) rotateZ(calc(-12deg * var(--tear)));
+}
+.story[data-inspecting] .device {
+  transition: transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.rotationControl {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(100%, var(--ios-device-width));
+  height: min(86%, var(--ios-device-height));
+  transform: translate(-50%, -50%);
+  border-radius: var(--ios-device-frame-radius);
+  cursor: grab;
+  touch-action: pan-y;
+}
+.rotationControl:active {
+  cursor: grabbing;
+}
+.rotationControl:focus-visible {
+  outline: 0.125rem solid var(--ring);
+  outline-offset: 0.25rem;
+}
+.front,
+.back,
+.exploded i {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-radius: 11%/5%;
+}
+.front {
+  background-image: url("/phone/lock.png");
+  backface-visibility: hidden;
+}
+.story[data-screen="apps"] .front,
+.partFront {
+  background-image: url("/phone/apps.png");
+}
+.back,
+.partBack {
+  background-image: url("/phone/back.png");
+}
+.back {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+.exploded {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: var(--tear);
+  transform-style: preserve-3d;
+}
+.exploded i {
+  inset: auto;
+  height: min(72%, 35.5rem);
+  aspect-ratio: 512/1060;
+  filter: drop-shadow(0 1.9rem 1.4rem rgb(0 0 0 / 0.65));
+}
+.partBack {
+  transform: translate3d(
+      calc(-4.375rem * var(--tear)),
+      calc(7rem * var(--tear)),
+      calc(-5.125rem * var(--tear))
+    )
+    rotateX(57deg) rotateZ(-22deg);
+}
+.circuit {
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 1.2rem,
+      #63d5a95b 1.25rem,
+      transparent 1.375rem 2.8125rem
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #12282c 0 2.125rem,
+      #63d5a961 2.25rem,
+      #12282c 2.375rem 3.6875rem
+    );
+  border: 0.1875rem solid #617d80;
+  box-shadow: inset 0 0 0 0.5rem #26383f;
+  transform: translate3d(
+      0,
+      calc(0.5rem * var(--tear)),
+      calc(2.875rem * var(--tear))
+    )
+    rotateX(57deg) rotateZ(-22deg);
+}
+.circuit b {
+  display: grid;
+  place-items: center;
+  gap: 0.375rem;
+  padding: 8%;
+  border: 0.1875rem solid #60cfa4;
+  border-radius: 12%;
+  background: #112e2f;
+  color: #b4fbe7;
+  font: 700 0.8125rem system-ui;
+}
+.partFront {
+  transform: translate3d(
+      calc(5.3125rem * var(--tear)),
+      calc(-5.9375rem * var(--tear)),
+      calc(7.8125rem * var(--tear))
+    )
+    rotateX(57deg) rotateZ(-22deg);
+}
+@media (width < 48rem) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0;
+    padding: 0 1.25rem;
+  }
+  .story[data-app-open="true"] .grid {
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .story[data-app-open="true"] .copy {
+    display: none;
+  }
+  .story[data-app-open="true"] .device {
+    height: min(92%, var(--ios-device-height));
+  }
+  .visual {
+    order: -1;
+    height: 100%;
+  }
+  .copy {
+    padding-bottom: 2.5rem;
+  }
+  .story .copy :global([data-hero-detail]) {
+    display: none;
+  }
+  .device {
+    height: min(94%, 27rem);
+  }
+  .exploded i {
+    height: min(90%, 26rem);
+  }
+  .exploded {
+    transform: scale(0.77);
+  }
+}
+@media (min-width: 48rem) and (max-height: 48.75rem) {
+  .copy :global([data-hero-stats]) {
+    display: none;
+  }
+}
+@media (width < 48rem) and (height < 46rem) and (prefers-reduced-motion: no-preference) {
+  .copy :global([data-hero-summary]) {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .stage {
+    height: auto;
+    overflow: visible;
+    padding-block: 5rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-rows: auto;
+  }
+  .visual {
+    height: auto;
+    order: 0;
+  }
+  .story .appLayer,
+  .story .rotationControl,
+  .story[data-render="fallback"][data-screen="apps"]
+    .spotifyFallback:not([hidden]),
+  .story .fallback,
+  .story .canvas {
+    display: none;
+  }
+  .staticPortrait {
+    display: block;
+  }
+  .story .copy :global([data-hero-detail]) {
+    display: revert;
+  }
+}

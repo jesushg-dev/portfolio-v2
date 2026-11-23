@@ -26,6 +26,31 @@ const dimensionPrefixes = {
 } as const;
 
 export const CvScoreBreakdownSchema = z.preprocess((input: unknown) => {
+  if (input && typeof input === "object" && !Array.isArray(input)) {
+    const rawObj = input as Record<string, unknown>;
+    const dimensions = [
+      "technologies",
+      "experience",
+      "operations",
+      "collaboration",
+      "prerequisites",
+    ] as const;
+    const hasRawNumber = dimensions.some(
+      (key) => typeof rawObj[key] === "number",
+    );
+    if (hasRawNumber) {
+      const normalized: Record<string, unknown> = { ...rawObj };
+      for (const key of dimensions) {
+        if (typeof rawObj[key] === "number") {
+          normalized[key] = {
+            score: rawObj[key],
+            evidence: `Evaluated score for ${key} based on CMS evidence.`,
+          };
+        }
+      }
+      return normalized;
+    }
+  }
   if (!Array.isArray(input)) return input;
   const rawArray: readonly unknown[] = input;
   const parsed = z.array(dimensionSchema).length(5).safeParse(rawArray);
@@ -54,6 +79,10 @@ export const CvMatchKeywordSchema = z.object({
 });
 
 export const CvMatchAnalysisSchema = z.object({
+  vacancyTechnologies: z
+    .array(z.string().trim().min(1).max(80))
+    .max(128)
+    .optional(),
   scoreBreakdown: CvScoreBreakdownSchema.optional(),
   strengths: z.array(z.string().trim().min(1)).optional(),
   keywords: z.array(CvMatchKeywordSchema).default([]),

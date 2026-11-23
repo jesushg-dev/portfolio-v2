@@ -18,6 +18,7 @@ import {
 import { db } from "@/server/db";
 import { auth } from "@/lib/auth";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { ResumeTailorValidationError } from "@/features/resume-engine/lib/resume-tailor-validation-error";
 
 /**
  * 1. CONTEXT
@@ -60,6 +61,10 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
         ...shape.data,
         zodError:
           error.cause instanceof ZodError ? error.cause.flatten() : null,
+        resumeTailorIssues:
+          error.cause instanceof ResumeTailorValidationError
+            ? error.cause.fieldIssues
+            : null,
       },
     };
   },

@@ -8,6 +8,8 @@ This guide provides a detailed walkthrough of how to design, structure, and inte
 
 A Mini App within the `ios-device` system is a self-contained client application running inside the physical iPhone frame viewport (`IOSDeviceMockup`).
 
+The portfolio hero paints Spotify into the screen material on its existing WebGL model. The corresponding native controls handle focus, scrolling and links. Spotify's hero and footer presentations share the same `SpotifyDeviceScreens` navigation stack and screen layout. Closing the mini app returns to the existing home screen.
+
 ### Layer Structure
 
 1. **Physical Frame Layer (`IOSDeviceMockup`)**: Physical phone chassis (bezels, side buttons, Dynamic Island, safe area insets).
@@ -22,20 +24,25 @@ A Mini App within the `ios-device` system is a self-contained client application
 The Spotify Mini App in this repository serves as the **reference design pattern**. It has the following architecture:
 
 ```
+src/components/shared/ios-device/apps/spotify/
+├── spotify-mini-app.tsx           # Mounts playback in the device launcher
+├── spotify-device-screens.tsx     # Shared OS routes for Now Playing and lyrics
+├── spotify-now-playing-screen.tsx
+├── spotify-lyrics-screen.tsx
+├── spotify-fullscreen-progress.tsx
+├── lyrics-card.tsx
+├── lyrics-fullscreen.tsx
+└── lyric-line-content.tsx
+
 src/components/shared/spotify-widget/
-├── components/                     # Mini App UI views
+├── components/                     # Compact widget UI
 │   ├── animated-gradient.tsx       # Dynamic background canvas based on album cover
-│   ├── lyrics-card.tsx             # Synced lyrics preview card
-│   ├── lyrics-fullscreen.tsx       # Fullscreen lyrics modal sheet view
 │   ├── now-playing-hint.tsx        # Hint / Tooltip overlay
 │   ├── player.tsx                  # Audio preview player component
 │   ├── playing-indicator.tsx       # Animated equalizer indicator
 │   ├── progress-bar.tsx            # Interactive track progress bar
 │   ├── progress-timer.tsx          # Elapsed / Total duration timer (01:30 / 03:45)
-│   ├── recently-played-notice.tsx  # Recently played track notice
-│   ├── spotify-fullscreen-progress.tsx
-│   ├── spotify-lyrics-screen.tsx   # Lyrics screen wrapper for iOS router
-│   └── spotify-now-playing-screen.tsx # Main "Now Playing" screen for iOS router
+│   └── recently-played-notice.tsx  # Recently played track notice
 ├── hooks/                          # Custom React Hooks
 │   ├── use-album-color.ts          # Dominant album color extraction
 │   ├── use-drag-to-close.ts        # Drag-to-dismiss gesture handling

@@ -122,6 +122,11 @@ function buildDocumentBody(draft: CvImportDraft): string {
     }
   }
 
+  if (draft.softSkills?.length) {
+    parts.push(paragraph(labels.softSkills, "heading"));
+    for (const skill of draft.softSkills) parts.push(bullet(skill.name));
+  }
+
   if (draft.header.availability) {
     parts.push(
       paragraph(labels.availability, "heading"),

@@ -83,7 +83,6 @@ function WorkingCard({
   description,
   metric,
   wide = false,
-  placeholder = false,
 }: {
   eyebrow: string;
   title: string;
@@ -91,7 +90,6 @@ function WorkingCard({
   description?: string;
   metric?: SocialProofMetric;
   wide?: boolean;
-  placeholder?: boolean;
 }) {
   return (
     <li className={wide ? "md:col-span-2 lg:col-span-2" : ""}>
@@ -102,16 +100,10 @@ function WorkingCard({
         <h3 className="text-foreground mt-3 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
           {title}
         </h3>
-        {quote && !placeholder ? (
+        {quote ? (
           <Quote item={quote} />
         ) : description ? (
-          <p
-            className={
-              placeholder
-                ? "text-muted-foreground mt-5 text-base leading-relaxed italic opacity-80 sm:text-lg"
-                : "text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg"
-            }
-          >
+          <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
             {description}
           </p>
         ) : null}
@@ -129,9 +121,6 @@ export default function SocialProof({
   const t = useTranslations("main.socialProof");
   const published = testimonials.filter(
     (item) => item.author.trim().length > 0,
-  );
-  const placeholder = testimonials.find(
-    (item) => item.author.trim().length === 0,
   );
   if (published.length === 0 && proofItems.length === 0) return null;
 
@@ -161,8 +150,7 @@ export default function SocialProof({
         <WorkingCard
           eyebrow={t("cards.growing.eyebrow")}
           title={t("cards.growing.title")}
-          description={placeholder?.quote ?? proofItems[1]?.description}
-          placeholder={Boolean(placeholder)}
+          description={proofItems[1]?.description}
           metric={metrics[2]}
         />
         <WorkingCard

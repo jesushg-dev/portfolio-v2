@@ -1,5 +1,6 @@
 export function parseAiJsonResponse(text: string): unknown {
   const cleaned = text
+    .trim()
     .replace(/^```(?:json)?\s*/i, "")
     .replace(/\s*```$/i, "")
     .trim();

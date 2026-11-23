@@ -93,7 +93,10 @@ export function ContactDirectCard({
   }, [email, t]);
 
   return (
-    <div className="home-card-surface bg-card relative box-border flex h-full w-full min-w-0 flex-1 flex-col justify-between overflow-hidden rounded-[2rem] p-6 sm:p-8">
+    <div
+      id="direct-contact"
+      className="home-card-surface bg-card relative box-border flex h-full w-full min-w-0 flex-1 scroll-mt-24 flex-col justify-between overflow-hidden rounded-[2rem] p-6 sm:p-8"
+    >
       <div>
         <p className="text-muted-foreground font-mono text-sm tracking-wider uppercase">
           {t("direct.eyebrow")}

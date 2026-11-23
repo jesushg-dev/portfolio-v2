@@ -14,6 +14,7 @@ The iOS Device System is a standalone, reusable phone simulator and navigation c
 ### Key Features
 
 - **Hardware Chassis Simulator (`IOSDeviceMockup`):** Render realistic iPhone bezels, side buttons, and safe area viewports.
+- **Composable 3D Hardware:** The home hero and the blog/contact foldable use the same device entry point and lazy WebGL renderer. The hero supplies a model and its CSS fallback. The foldable supplies a screen viewport and bezel for its live HTML content, with a separately positioned canvas for the scroll transition.
 - **Declarative Navigation Controller (`IOSNavigationStack`):** Manage route histories with native iOS transitions (`push` horizontal parallax and `sheet` vertical modal).
 - **Lazy Mounting & On-Demand Lifecycle:** Unmounts inactive screens upon pop/dismiss to maintain minimal memory footprint and 60+ FPS performance.
 - **Dynamic Island (`IOSDynamicIsland`):** Live Activity notification system with compact, expanded, and minimal states.
@@ -28,6 +29,13 @@ The iOS Device System is a standalone, reusable phone simulator and navigation c
 src/components/shared/ios-device/
 ├── index.ts                      # Public module exports
 ├── ios-device-mockup.tsx         # Hardware frame, bezels, buttons & safe area wrapper
+├── ios-device-canvas.tsx         # Non-interactive canvas for the 3D device
+├── ios-device-renderer.ts        # WebGL meshes, screen textures and screen projection
+├── ios-device-screen-texture.ts  # Paints the live app view into the screen material
+├── ios-hero-device.tsx           # Single-device scroll presentation and app launcher
+├── ios-foldable-device.tsx       # Foldable scroll presentation
+├── apps/
+│   └── spotify/                 # Now Playing, lyrics and the Spotify mini app
 ├── ios-dynamic-island.tsx        # Dynamic Island with reactive states
 ├── ios-window.tsx                # Viewport container with safe area insets
 ├── ios-navigation-stack.tsx     # Navigation controller & stack router
@@ -48,17 +56,28 @@ src/components/shared/ios-device/
 
 ### 1. `<IOSDeviceMockup>`
 
-Physical iPhone chassis component. Renders bezels, side hardware buttons, and wraps children inside an `IOSSafeAreaProvider`.
+The default chassis renders bezels, side buttons, Dynamic Island and the home indicator. Its live screen sits inside an `IOSSafeAreaProvider`. Spotify uses this chassis with `IOSNavigationStack` for playback and lyrics.
 
 #### Component Signature
 
 ```tsx
-interface IOSDeviceMockupProps {
-  variant?: "iphone-16-pro" | "iphone-se";
+type IOSDeviceMockupProps = {
   className?: string;
-  screenRef?: Ref<HTMLDivElement>;
   children: ReactNode;
-}
+} & (
+  | {
+      variant?: "iphone-16-pro" | "iphone-se";
+      screenRef?: Ref<HTMLDivElement>;
+      depth?: boolean;
+    }
+  | { variant: "model"; model: ReactNode }
+  | {
+      variant: "foldable";
+      screenClassName: string;
+      bezel?: ReactNode;
+      screenRef?: Ref<HTMLDivElement>;
+    }
+);
 ```
 
 #### How to Use
@@ -76,6 +95,12 @@ export function SimplePhoneContainer() {
   );
 }
 ```
+
+Use `variant="model"` to compose a canvas with a fallback and native controls. Use `variant="foldable"` for live HTML inside a foldable chassis. The blog/contact scene positions its canvas outside the sticky layout so the same model can animate from one section into the other. Each scene owns its scroll timing and actions. The device renderer projects native controls onto the drawn screen, so the controls can use browser focus and links.
+
+Use `depth` with the standard chassis to draw the shared WebGL hardware. The device paints its live app view into the screen material and uses native HTML controls for interaction. The CSS frame is the fallback for browsers without WebGL. The hero's Spotify icon opens the mini app on the same device, and the home indicator returns to the launcher. The hero and footer share playback, lyrics and screen layout through `SpotifyDeviceScreens`.
+
+The hero and footer use the chassis dimensions and corner radii defined in `ios-device-mockup.module.css`. The renderer scales the geometry to the available space while retaining the chassis aspect ratio, screen inset and corner proportions.
 
 ---
 
@@ -210,6 +235,7 @@ Bottom indicator home bar with swipe-up gesture and tap interaction.
 interface IOSHomeBarProps {
   className?: string;
   onSwipeUp?: () => void;
+  decorative?: boolean;
 }
 ```
 
@@ -431,8 +457,8 @@ import {
   IOSSpringBoard,
   IOSDynamicIsland
 } from "@/components/shared/ios-device";
-import SpotifyNowPlayingScreen from "@/components/shared/spotify-widget/spotify-now-playing-screen";
-import SpotifyLyricsScreen from "@/components/shared/spotify-widget/spotify-lyrics-screen";
+import SpotifyNowPlayingScreen from "@/components/shared/ios-device/apps/spotify/spotify-now-playing-screen";
+import SpotifyLyricsScreen from "@/components/shared/ios-device/apps/spotify/spotify-lyrics-screen";
 
 export default function PortfolioPhoneDemo() {
   return (

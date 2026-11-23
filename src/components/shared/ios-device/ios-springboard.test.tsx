@@ -13,4 +13,13 @@ describe("IOSSpringBoard", () => {
     fireEvent.click(screen.getByText("Spotify"));
     expect(handleOpenApp).toHaveBeenCalledWith("spotify");
   });
+
+  it("responds to keyboard events on apps", () => {
+    const handleOpenApp = jest.fn();
+    render(<IOSSpringBoard onOpenApp={handleOpenApp} />);
+
+    const terminalApp = screen.getAllByRole("button", { name: "Terminal" })[0];
+    fireEvent.keyDown(terminalApp, { key: "Enter" });
+    expect(handleOpenApp).toHaveBeenCalledWith("terminal");
+  });
 });

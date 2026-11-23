@@ -36,8 +36,8 @@ function HeroVisual({
       <ProcessTerminalPanel
         title={section.visual.terminalTitle}
         badge={
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-200">
-            <span className="size-1.5 rounded-full bg-emerald-200 motion-safe:animate-pulse" />
+          <span className="text-success inline-flex items-center gap-1.5 text-sm font-medium">
+            <span className="bg-success size-1.5 rounded-full motion-safe:animate-pulse" />
             {section.visual.live}
           </span>
         }

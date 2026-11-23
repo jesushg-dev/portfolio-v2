@@ -1,82 +1,56 @@
-const COMMON_TECH_KEYWORDS = [
-  "TypeScript",
-  "JavaScript",
-  "React",
-  "React Native",
-  "React Router",
-  "Next.js",
-  "Vue",
-  "Angular",
-  "AngularJS",
-  "Svelte",
-  "Node.js",
-  "Python",
-  "Go",
-  "Rust",
-  "Java",
-  "Kotlin",
-  "C#",
-  ".NET",
-  "PHP",
-  "Ruby",
-  "Swift",
-  "PostgreSQL",
-  "MySQL",
-  "MongoDB",
-  "Redis",
-  "Elasticsearch",
-  "SQLite",
-  "Prisma",
-  "TypeORM",
-  "Drizzle",
-  "Docker",
-  "Kubernetes",
-  "AWS",
-  "GCP",
-  "Azure",
-  "Terraform",
-  "GraphQL",
-  "REST",
-  "gRPC",
-  "Kafka",
-  "RabbitMQ",
-  "Tailwind",
-  "CSS",
-  "HTML",
-  "Git",
-  "CI/CD",
-  "GitHub Actions",
-  "Jest",
-  "Playwright",
-  "Cypress",
-  "Vitest",
-  "Webpack",
-  "Vite",
-  "Turborepo",
-  "Next-Intl",
-  "Zod",
-  "Redux",
-  "Zustand",
-  "TanStack Query",
-  "tRPC",
-  "Microservices",
-  "Serverless",
-];
-
-function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
 export function technologyNameKey(name: string): string {
   return name.trim().toLowerCase().replace(/\s+/g, " ");
 }
 
-/** Match whole spellings, preferring complete technology names over prefixes. */
+function joinedTechnologyKey(key: string) {
+  return key.replace(/(?<=\p{L})[ .-]+(?=\p{L})/gu, "");
+}
+
+/** Literal names own their spelling. A punctuation variant needs one unambiguous owner. */
+export function knownTechnologySpellings(
+  names: Iterable<string>,
+  observed: Iterable<string> = [],
+) {
+  const owners = new Map<string, string>();
+  const joinedOwners = new Map<string, string | null>();
+  for (const name of names) {
+    const key = technologyNameKey(name);
+    owners.set(key, key);
+    const joined = joinedTechnologyKey(key);
+    const previous = joinedOwners.get(joined);
+    joinedOwners.set(
+      joined,
+      previous === undefined || previous === key ? key : null,
+    );
+    const words = name.trim().split(/\s+/u);
+    if (
+      words.length === 2 &&
+      words.every((word) => /^\.?\p{L}[\p{L}\p{N}.+#-]*$/u.test(word)) &&
+      words.some((word) => /^\p{Lu}{2,}s?$/u.test(word))
+    ) {
+      const reversed = technologyNameKey(`${words[1]} ${words[0]}`);
+      // A literal profile name always owns its spelling, in either insertion order.
+      if (!owners.has(reversed)) owners.set(reversed, key);
+    }
+  }
+  for (const key of [
+    ...joinedOwners.keys(),
+    ...Array.from(observed, technologyNameKey),
+  ]) {
+    const owner = joinedOwners.get(joinedTechnologyKey(key));
+    if (owner && !owners.has(key)) owners.set(key, owner);
+  }
+  return owners;
+}
+
+/** Match the longest complete spelling supplied by the vacancy or the profile. */
 export function createTechnologyMatcher(names: Iterable<string>) {
   const alternatives = [...new Set(Array.from(names, technologyNameKey))]
     .filter(Boolean)
     .sort((a, b) => b.length - a.length)
-    .map((name) => escapeRegex(name).replace(/ /g, "[ \\t]+"))
+    .map((name) =>
+      name.replace(/[.*+?^$(){}|[\]\\]/g, "\\$&").replace(/ /g, "[ \\t]+"),
+    )
     .join("|");
   const pattern = new RegExp(
     "(?<![\\p{L}\\p{N}_+#.])(?:" +
@@ -92,77 +66,124 @@ export function createTechnologyMatcher(names: Iterable<string>) {
     }));
 }
 
-export function createResumeTechnologyMatcher(names: Iterable<string>) {
-  const match = createTechnologyMatcher([...COMMON_TECH_KEYWORDS, ...names]);
-  return (text: string) =>
-    match(text).filter(
-      ({ name, index }) =>
-        !/^(go|rest|swift)$/u.test(name) &&
-        !(
-          name === "react" && /^\s+to\b/iu.test(text.slice(index + name.length))
-        ),
-    );
-}
-
-export function isCommonTechnology(name: string): boolean {
-  const key = technologyNameKey(name);
-  return COMMON_TECH_KEYWORDS.some(
-    (technology) => technologyNameKey(technology) === key,
-  );
-}
-
-/**
- * Extracts and normalizes technical tools, languages, frameworks, and databases
- * from a job description, matched keywords, and candidate CV skills.
- */
-export function extractJobTools(
-  jobDescription: string,
-  candidateSkills: string[] = [],
-  matchAnalysisSkills: string[] = [],
-): string[] {
-  if (!jobDescription || jobDescription.trim().length === 0) {
-    return [];
+// Immediate suggestions before an AI response is available. Read explicit stack
+// lists and distinctive identifiers. Ordinary prose is left to the AI or user.
+function vacancyTerms(text: string): string[] {
+  const terms: string[] = [];
+  text = text.replace(/https?:\/\/\S+|\b\S+@\S+\.\S+/giu, " ");
+  const identifiers =
+    text.match(
+      /(?<![\p{L}\p{N}_.])\.?[\p{L}][\p{L}\p{N}]*(?:[./-][\p{L}\p{N}]+)*(?:\+\+|#)?/gu,
+    ) ?? [];
+  for (const word of identifiers) {
+    if (/^[A-Z][A-Z\d]{1,}$|[a-z][A-Z]|[.#/+]/u.test(word)) terms.push(word);
   }
-
-  const jdText = jobDescription;
-  const foundMap = new Map<string, string>(); // lowercase -> display name
-
-  // 1. Check all candidate skills & match analysis skills against JD
-  const combinedCandidates = [
-    ...candidateSkills,
-    ...matchAnalysisSkills,
-    ...COMMON_TECH_KEYWORDS,
-  ];
-
-  for (const rawSkill of combinedCandidates) {
-    const trimmed = rawSkill.trim();
-    if (trimmed.length < 2) continue;
-
-    const lower = trimmed.toLowerCase();
-    if (foundMap.has(lower)) continue;
-
-    const escaped = escapeRegex(trimmed);
-    // Boundary check that works for both alphanumeric and special names like C#, .NET, Next.js
-    const regex = new RegExp(`(?<![a-zA-Z0-9])${escaped}(?![a-zA-Z0-9])`, "i");
-
-    if (regex.test(jdText)) {
-      foundMap.set(lower, trimmed);
+  for (const line of text.split(/\r?\n/u)) {
+    const stack =
+      /(?:^|\b)(?:tech stack|stack|technologies|tecnologías|technologieën|tools|herramientas|vaardigheden|skills)\s*:\s*(.+)/iu.exec(
+        line,
+      );
+    const list =
+      stack?.[1] ??
+      /(?:skilled in|experience (?:with|in)|experiencia (?:con|en)|ervaring met|requiring|using|utilizando)\s+([^;\n]+)/iu.exec(
+        line,
+      )?.[1];
+    if (!list) continue;
+    for (const part of list
+      .split(/[.!?](?=\s|$)/u, 1)[0]
+      .split(/\s*[,;|]\s*|\s+(?:and|or|y|o|en|of)\s+/iu)) {
+      const term = part
+        .trim()
+        .replace(/^(?:and|or|y|o|en|of)\s+/iu, "")
+        .replace(/\s+(?:required|preferred|requerid[oa]s?|vereist)\b.*$/iu, "")
+        .replace(/[.!:]+$/u, "")
+        .trim();
+      if (
+        term &&
+        term.length <= 80 &&
+        term.split(/\s+/u).length <= 5 &&
+        (stack ||
+          /^(?:[.\p{Lu}][\p{L}\d.#/+-]*)(?:\s+[.\p{Lu}\d][\p{L}\d.#/+-]*)*$/u.test(
+            term,
+          ))
+      )
+        terms.push(term);
     }
   }
+  // A dotted product followed by a capitalized qualifier is one spelling.
+  for (const [name] of text.matchAll(
+    /(?<![\p{L}\d_.])\.?[\p{L}\d]*\.[\p{L}][\p{L}\d]*(?:[ \t]+[\p{Lu}][\p{Ll}\d]+)+/gu,
+  ))
+    terms.push(name);
+  for (const [, name] of text.matchAll(
+    /(?:\b(?:a|an|un|een)\s+)([\p{Lu}][\p{L}\d.+#-]+)\s+(?:engineer|developer|ontwikkelaar)\b/gu,
+  ))
+    terms.push(name);
+  return terms;
+}
 
-  // Convert to unique array preserving display names
-  const results = Array.from(foundMap.values());
-
-  // Prioritize tools that appeared in matchAnalysis or candidateSkills first
-  const candidateLower = new Set(
-    [...candidateSkills, ...matchAnalysisSkills].map((s) => s.toLowerCase()),
+/** A rewrite that keeps the sentence but swaps its named tool must support the entire replacement. */
+export function rewrittenTechnologyNames(
+  original: string,
+  proposed: string,
+  match: ReturnType<typeof createTechnologyMatcher>,
+): string[] {
+  if (original === proposed) return [];
+  const candidates: string[] = [];
+  if (proposed.startsWith(original + " "))
+    candidates.push(proposed.slice(original.length).trim());
+  for (const { index, name } of match(original)) {
+    const before = original.slice(0, index);
+    const after = original.slice(index + name.length);
+    if (proposed.startsWith(before) && proposed.endsWith(after)) {
+      candidates.push(
+        proposed.slice(before.length, proposed.length - after.length),
+      );
+    }
+  }
+  return candidates.filter((name) =>
+    /^[.\p{Lu}][\p{L}\d.#+/-]*(?: [.\p{Lu}\d][\p{L}\d.#+/-]*){0,3}$/u.test(
+      name,
+    ),
   );
+}
 
-  return results.sort((a, b) => {
-    const aInCandidate = candidateLower.has(a.toLowerCase());
-    const bInCandidate = candidateLower.has(b.toLowerCase());
-    if (aInCandidate && !bInCandidate) return -1;
-    if (!aInCandidate && bInCandidate) return 1;
-    return a.localeCompare(b);
-  });
+export function extractJobTools(
+  vacancy: string,
+  candidateSkills: string[] = [],
+  analysisTerms: string[] = [],
+): string[] {
+  const provided = [
+    ...knownTechnologySpellings(candidateSkills).keys(),
+    ...analysisTerms,
+  ];
+  const matches = createTechnologyMatcher([
+    ...provided,
+    ...vacancyTerms(vacancy),
+  ])(vacancy);
+  const byKey = new Map(matches.map(({ name, key }) => [key, name]));
+  const preferred = new Set(provided.map(technologyNameKey));
+  return [...byKey.values()].sort(
+    (a, b) =>
+      Number(preferred.has(technologyNameKey(b))) -
+        Number(preferred.has(technologyNameKey(a))) || a.localeCompare(b),
+  );
+}
+
+export function vacancySkillSuggestions(
+  vacancy: string,
+  knownNames: string[],
+  additionalNames: string[] = [],
+): string[] {
+  const terms = extractJobTools(vacancy, knownNames, additionalNames);
+  const known = knownTechnologySpellings(knownNames, terms);
+  return terms.filter((term) => !known.has(technologyNameKey(term)));
+}
+
+/** Explicit selections can also be complete terms within a longer stack phrase. */
+export function literalVacancyTerm(
+  vacancy: string,
+  term: string,
+): string | undefined {
+  return createTechnologyMatcher([term])(vacancy)[0]?.name;
 }
