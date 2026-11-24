@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Ingeniero en Computación y desarrollador fullstack con más de 6 años de experiencia en aplicaciones web y móviles. Experiencia con React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET y bases de datos SQL/NoSQL. He desarrollado soluciones para Walmart Global Tech y Claro, con foco en integración de APIs, calidad de software, CI/CD y resolución de incidentes de producción.",
-    "en": "Computer Engineer and fullstack developer with 6+ years of experience building web and mobile applications. Experienced with React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET and SQL/NoSQL databases. Delivered solutions for Walmart Global Tech and Claro, focusing on API integration, software quality, CI/CD and production incident resolution.",
-    "nl": "Computertechnisch ingenieur en fullstackontwikkelaar met meer dan 6 jaar ervaring met web- en mobiele applicaties. Ervaring met React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET en SQL/NoSQL-databases. Oplossingen geleverd voor Walmart Global Tech en Claro, met focus op API-integratie, softwarekwaliteit, CI/CD en productie-incidenten."
+    "es": "Ingeniero en Computación y desarrollador fullstack con más de 6 años de experiencia en aplicaciones web y móviles. Experiencia con React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET y bases de datos SQL/NoSQL. He desarrollado soluciones para clientes como Walmart Global Tech (vía Imagemaker) y Claro, con foco en integración de APIs, calidad de software, CI/CD y resolución de incidentes de producción.",
+    "en": "Computer Engineer and fullstack developer with 6+ years of experience building web and mobile applications. Experienced with React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET and SQL/NoSQL databases. Delivered solutions for enterprise clients including Walmart Global Tech (via Imagemaker) and Claro, focusing on API integration, software quality, CI/CD and production incident resolution.",
+    "nl": "Computertechnisch ingenieur en fullstackontwikkelaar met meer dan 6 jaar ervaring met web- en mobiele applicaties. Ervaring met React, TypeScript, Next.js, Node.js, Nest.js, C#/.NET en SQL/NoSQL-databases. Oplossingen geleverd voor onder andere Walmart Global Tech (via Imagemaker) en Claro, met focus op API-integratie, softwarekwaliteit, CI/CD en productie-incidenten."
   },
   "contacts": [
     {
@@ -710,7 +710,7 @@
         }
       ],
       "order": 5,
-      "featuredOnHome": false,
+      "featuredOnHome": true,
       "startDate": "2022-02-01T00:00:00.000Z",
       "endDate": "2022-05-01T00:00:00.000Z"
     },
@@ -765,7 +765,7 @@
         }
       ],
       "order": 6,
-      "featuredOnHome": false,
+      "featuredOnHome": true,
       "startDate": "2019-11-01T00:00:00.000Z",
       "endDate": "2021-12-01T00:00:00.000Z"
     }

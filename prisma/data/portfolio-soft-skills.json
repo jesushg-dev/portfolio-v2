@@ -25,12 +25,12 @@
       }
     },
     {
-      "value": "4+",
+      "value": "6",
       "order": 2,
       "label": {
-        "en": "developers mentored; team velocity up ~40%",
-        "es": "desarrolladores mentoreados; velocidad del equipo aumentó ~40%",
-        "nl": "ontwikkelaars begeleid; teamsnelheid steeg ~40%"
+        "en": "engineers led (4+ directly mentored); team velocity up ~40%",
+        "es": "ingenieros liderados (4+ mentoreados directamente); velocidad ~40% mayor",
+        "nl": "engineers aangestuurd (4+ direct begeleid); teamsnelheid steeg ~40%"
       }
     },
     {

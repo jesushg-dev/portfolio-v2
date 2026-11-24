@@ -11,7 +11,7 @@ import { encode } from "@toon-format/toon";
 
 // Always update this version whenever the prompt or contract changes, using date and time in milliseconds: tailored-cv/YYYY-MM-DD.<Date.now()>
 export const TAILORED_RESUME_PROMPT_VERSION =
-  "tailored-cv/2026-11-23.1795448878833";
+  "tailored-cv/2026-11-24.1795543980000";
 export const RESUME_INPUT_FORMAT_INSTRUCTION =
   "Input serialization: TOON. Decode the input as TOON data; return JSON only, with fields as an array of {id,text} and each of the 5 scoreBreakdown keys as an object {score,evidence}.";
 
@@ -104,7 +104,7 @@ header.degree is one short professional title supported by selected roles and ac
 TECHNOLOGY SPELLINGS
 Extract every named tool, framework, platform and technical pattern requested in the vacancy into matchAnalysis.vacancyTechnologies, regardless of the CMS inventory. Extract all qualifying technologies found into the array; never limit the array to a single item. Use its complete literal spelling, including multiword and lowercase names. Skip generic requirements and never manufacture variants.
 The application appends confirmedTechnologies to the skills section for this vacancy. You may mention familiarity with them in the summary, but do not present them as achievements, employer claims, or role-level evidence. Do not invent IDs or return them in selection, technologyNames, headings, employer claims or achievements. For a vacancy technology absent from the source and confirmations, describe the evidence gap only in matchAnalysis. A requirement in the vacancy is never candidate evidence.
-For candidate technologies, mirror the exact naming, casing, and phrasing used in the job description when it denotes the same technology. technologyNames contains at most one proposal per selected skill ID or technology ID linked to a selected experience. Copy the full vacancy spelling verbatim. A two-term label containing an acronym can use the same words in local word order. Keep the original technology ID for that spelling. Omit doubtful equivalences, related products and unsupported versions. React.js can label React; React Native requires its own evidence. When correcting a proposal, keep other valid entries. Return [] when no changes are needed. Use the vacancy’s most frequent verified spelling consistently in skills and prose, with its first mention breaking ties. The application also applies recognized spellings when technologyNames is empty.
+For candidate technologies, mirror the exact naming, casing, and phrasing used in the job description when it denotes the same technology. technologyNames contains at most one proposal per selected skill ID or technology ID linked to a selected experience. Copy the full vacancy spelling verbatim. A two-term label containing an acronym can use the same words in local word order. Keep the original technology ID for that spelling. Omit doubtful equivalences, related products and unsupported versions. React.js can label React; React Native requires its own evidence. If approvedTechnologyEquivalences pairs a saved technology with a vacancy spelling, mirror that approved spelling in skills, prose, and technologyNames. If rejectedTechnologyEquivalences forbids a pairing, never rename or treat those two names as equivalent. When correcting a proposal, keep other valid entries. Return [] when no changes are needed. Use the vacancy’s most frequent verified spelling consistently in skills and prose, with its first mention breaking ties. The application also applies recognized spellings when technologyNames is empty.
 
 ANALYSIS AND COVERAGE
 In matchAnalysis, scoreBreakdown must follow this exact JSON object structure:
@@ -130,6 +130,15 @@ Before returning fields, compare each retained achievement with the CMS text for
         targetLocale: context.targetLocale ?? "auto",
         uiLocale: context.uiLocale,
         confirmedTechnologies: context.confirmedTechnologies ?? [],
+        ...(context.technologyEquivalences?.length
+          ? { approvedTechnologyEquivalences: context.technologyEquivalences }
+          : {}),
+        ...(context.rejectedTechnologyEquivalences?.length
+          ? {
+              rejectedTechnologyEquivalences:
+                context.rejectedTechnologyEquivalences,
+            }
+          : {}),
         savedFieldsByLocale: Object.fromEntries(
           Object.entries(context.localizedFacts ?? {})
             .filter(
@@ -218,5 +227,42 @@ Before returning fields, compare each retained achievement with the CMS text for
     systemPrompt,
     userPrompt,
     combinedPrompt: `SYSTEM:\n${systemPrompt}\n\nUSER:\n${userPrompt}`,
+  };
+}
+
+export interface TailorCorrectionPromptInput {
+  context: TailorContext;
+  previousRawJson: string;
+  validationError: string;
+}
+
+export function buildTailorCorrectionPrompt({
+  context,
+  previousRawJson,
+  validationError,
+}: TailorCorrectionPromptInput): AiPromptPackage {
+  const base = buildTailoredResumePrompt(context);
+  const rejectedLines = context.rejectedTechnologyEquivalences?.length
+    ? [
+        "USER DECISIONS — NON-EQUIVALENT TECHNOLOGIES (DO NOT CONFLATE OR RENAME):",
+        ...context.rejectedTechnologyEquivalences.map(
+          ({ original, proposed }) =>
+            `- "${original}" and "${proposed}" are DIFFERENT technologies (NOT equivalent). Do NOT rename "${original}" to "${proposed}" in technologyNames; keep "${original}" (or omit the entry) and remove or replace any unconfirmed "${proposed}" claim.`,
+        ),
+      ].join("\n")
+    : "";
+  const userPrompt = [
+    base.userPrompt,
+    rejectedLines,
+    `CORRECTION REQUIRED FOR PREVIOUS RESPONSE:\n${previousRawJson.trim()}`,
+    `Validation errors:\n${validationError.trim()}`,
+    "Return ONLY the complete corrected JSON response matching responseContract. Preserve all valid selections, CMS IDs, metrics, and unaffected fields, never fall back to the source language.",
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+  return {
+    systemPrompt: base.systemPrompt,
+    userPrompt,
+    combinedPrompt: `SYSTEM:\n${base.systemPrompt}\n\nUSER:\n${userPrompt}`,
   };
 }

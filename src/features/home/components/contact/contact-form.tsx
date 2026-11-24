@@ -117,7 +117,7 @@ const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
       >
         <div>
           {responseTime && (
-            <p className="text-primary mb-2 text-xs font-semibold tracking-wider uppercase">
+            <p className="text-primary mb-2 text-sm font-semibold tracking-wider uppercase">
               {responseTime}
             </p>
           )}
@@ -125,7 +125,7 @@ const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
           <h3 className="text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
             {t("title2")}
           </h3>
-          <p className="text-muted-foreground mt-2 mb-6 text-sm leading-relaxed sm:text-base">
+          <p className="text-foreground/80 mt-2 mb-6 text-sm leading-relaxed sm:text-base">
             {t("form.helper")}
           </p>
 
@@ -138,14 +138,14 @@ const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
                   <FormItem
                     label={t("form.name.label")}
                     inputId="contact-name"
-                    className="[&_label]:text-muted-foreground gap-1.5 [&_label]:text-xs [&_label]:font-medium"
+                    className="[&_label]:text-foreground/85 gap-1.5 [&_label]:text-sm [&_label]:font-medium"
                   >
                     <Input
                       {...field}
                       autoComplete="name"
                       placeholder={t("form.name.placeholder")}
                       maxLength={80}
-                      className="bg-background/50 border-border/60 focus-visible:border-primary focus-visible:ring-primary/20 h-12 rounded-2xl px-4 text-base transition-colors md:text-sm"
+                      className="bg-background/50 border-border/60 placeholder:text-foreground/55 focus-visible:border-primary focus-visible:ring-primary/20 h-12 rounded-2xl px-4 text-base font-medium transition-colors placeholder:font-normal placeholder:italic md:text-sm"
                     />
                   </FormItem>
                 )}
@@ -158,7 +158,7 @@ const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
                   <FormItem
                     label={t("form.email.label")}
                     inputId="contact-email"
-                    className="[&_label]:text-muted-foreground gap-1.5 [&_label]:text-xs [&_label]:font-medium"
+                    className="[&_label]:text-foreground/85 gap-1.5 [&_label]:text-sm [&_label]:font-medium"
                   >
                     <Input
                       {...field}
@@ -166,7 +166,7 @@ const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
                       autoComplete="email"
                       placeholder={t("form.email.placeholder")}
                       maxLength={120}
-                      className="bg-background/50 border-border/60 focus-visible:border-primary focus-visible:ring-primary/20 h-12 rounded-2xl px-4 text-base transition-colors md:text-sm"
+                      className="bg-background/50 border-border/60 placeholder:text-foreground/55 focus-visible:border-primary focus-visible:ring-primary/20 h-12 rounded-2xl px-4 text-base font-medium transition-colors placeholder:font-normal placeholder:italic md:text-sm"
                     />
                   </FormItem>
                 )}
@@ -180,14 +180,14 @@ const ContactForm: FC<ContactFormProps> = ({ responseTime }) => {
                 <FormItem
                   label={t("form.message.label")}
                   inputId="contact-message"
-                  className="[&_label]:text-muted-foreground gap-1.5 [&_label]:text-xs [&_label]:font-medium"
+                  className="[&_label]:text-foreground/85 gap-1.5 [&_label]:text-sm [&_label]:font-medium"
                 >
                   <Textarea
                     {...field}
                     rows={4}
                     maxLength={2000}
                     placeholder={t("form.message.placeholder")}
-                    className="bg-background/50 border-border/60 focus-visible:border-primary focus-visible:ring-primary/20 min-h-36 resize-none rounded-2xl px-4 py-3 text-base transition-colors md:text-sm"
+                    className="bg-background/50 border-border/60 placeholder:text-foreground/55 focus-visible:border-primary focus-visible:ring-primary/20 min-h-36 resize-none rounded-2xl px-4 py-3 text-base font-medium transition-colors placeholder:font-normal placeholder:italic md:text-sm"
                   />
                 </FormItem>
               )}

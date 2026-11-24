@@ -3,12 +3,7 @@ import { expect, test } from "@playwright/test";
 import { runAxeAudit, summarizeAxeViolations } from "./helpers/a11y-audit";
 
 const LIGHT_THEMES = ["main-light", "orange-light", "christmas-light"] as const;
-const WHITE_SURFACES = [
-  "#top",
-  "#main-content",
-  ".home-tech-marquee",
-  ".home-section",
-] as const;
+const WHITE_SURFACES = ["#top", "#main-content", ".home-section"] as const;
 
 test.describe("light theme accessibility", () => {
   test.use({ colorScheme: "light", reducedMotion: "reduce" });

@@ -1260,7 +1260,7 @@
         "helper": "Tell me about your project or inquiry and I’ll reply as soon as possible.",
         "name": {
           "label": "Name",
-          "placeholder": "John Doe",
+          "placeholder": "Your full name",
           "success": "Name entered correctly",
           "errors": {
             "required": "Please enter your name",
@@ -1270,7 +1270,7 @@
         },
         "email": {
           "label": "Email",
-          "placeholder": "john@company.com",
+          "placeholder": "you@company.com",
           "success": "Email entered correctly",
           "errors": {
             "required": "Please enter your email",
@@ -4927,6 +4927,8 @@
       "vacancySkillsCustom": "Another technology? Copy its name as written in the vacancy.",
       "vacancySkillsReview": "Review the suggested technologies, then generate your CV.",
       "vacancySkillsConfirm": "Confirm",
+      "savedEquivalencesSummary": "Saved equivalences ({count})",
+      "removeSavedEquivalence": "Remove saved equivalence {original} → {proposed}",
       "tailorJdTitle": "Job description",
       "tailorJdPlaceholder": "Paste the full job description here...",
       "tailorJdTooShort": "Job description is too short. Paste at least 20 characters.",
@@ -4954,6 +4956,7 @@
       "tailorErrorRetry": "Retry",
       "tailorErrorSwitchProvider": "Switch provider",
       "tailorErrorUseManual": "Use manual mode",
+      "tailorErrorCorrectionPrompt": "Generate correction prompt",
       "tailorTechnicalDetails": "Technical details",
       "tailorValidation": {
         "intro": "The proposed changes below couldn’t be used. Compare them with your original CV.",
@@ -4966,6 +4969,18 @@
         "unknownTechnology": "The original technology could not be identified in your CV.",
         "technologyRename": "Review the change from “{original}” to “{proposed}”.",
         "unknownTechnologyProposal": "Review “{proposed}”. The proposal does not identify a technology saved in your CV.",
+        "equivalenceQuestion": "Do “{original}” and “{proposed}” refer to the same technology?",
+        "equivalenceHint": "If they mean the same thing for this vacancy, approve this equivalence and continue immediately. Otherwise, generate a new prompt telling the AI to fix it.",
+        "confirmEquivalence": "Yes, they’re equivalent & continue",
+        "rejectEquivalenceManual": "No, create AI correction prompt",
+        "rejectEquivalenceAuto": "No, ask AI to fix it",
+        "correctionPromptTitle": "AI correction prompt",
+        "correctionPromptHint": "Paste this prompt into your AI chat, then paste the corrected JSON above and tailor again.",
+        "copyCorrectionPrompt": "Copy correction prompt",
+        "copiedCorrectionPrompt": "Copied correction prompt",
+        "viewCorrectionPrompt": "View correction prompt",
+        "correctionPromptReady": "Correction prompt copied. Run it in your AI and paste the fixed JSON.",
+        "correctionPromptFailed": "Could not generate the correction prompt.",
         "fields": {
           "title": "Professional title",
           "summary": "Profile summary",

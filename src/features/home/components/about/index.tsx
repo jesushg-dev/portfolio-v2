@@ -59,7 +59,7 @@ const About: FC = async () => {
       {/* 2-column layout matching prototype: Info on left, Terminal on right */}
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
         <div>
-          <p className="text-primary mb-3 font-mono text-xs font-semibold tracking-wider uppercase sm:text-sm">
+          <p className="text-primary mb-3 font-mono text-sm font-semibold tracking-wider uppercase">
             {t("subtitle")}
           </p>
           <h2
@@ -68,7 +68,7 @@ const About: FC = async () => {
           >
             {t("titleLead")} <HeadingAccent>{t("titleGradient")}</HeadingAccent>
           </h2>
-          <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
+          <p className="text-foreground/80 mt-5 text-base leading-relaxed sm:text-lg">
             {paragraphs[0] ? formatAboutParagraph(paragraphs[0]) : t("title")}
           </p>
           {paragraphs.length > 1 ? (
@@ -76,7 +76,7 @@ const About: FC = async () => {
               {paragraphs.slice(1).map((paragraph) => (
                 <p
                   key={paragraph}
-                  className="text-muted-foreground text-base leading-relaxed sm:text-lg"
+                  className="text-foreground/80 text-base leading-relaxed sm:text-lg"
                 >
                   {formatAboutParagraph(paragraph)}
                 </p>

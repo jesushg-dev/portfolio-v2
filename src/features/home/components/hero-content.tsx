@@ -48,7 +48,7 @@ export default async function HeroContent({
       {heroData.availabilityBadge ? (
         <div
           data-hero-detail
-          className="bg-primary/10 text-primary ring-primary/40 mb-5 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-medium ring-1 ring-inset sm:text-sm"
+          className="bg-primary/10 text-primary ring-primary/40 mb-5 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-sm font-medium ring-1 ring-inset"
         >
           <span className="relative flex size-2">
             <span className="hero-availability-dot bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
@@ -75,7 +75,7 @@ export default async function HeroContent({
         {heroSummary || heroTagline ? (
           <p
             data-hero-summary
-            className="text-muted-foreground mt-6 max-w-[46ch] text-[clamp(1.0625rem,2vw,1.25rem)] leading-normal"
+            className="text-foreground/80 mt-6 max-w-[46ch] text-[clamp(1.0625rem,2vw,1.25rem)] leading-normal"
           >
             {heroSummary || heroTagline}
           </p>
@@ -99,12 +99,12 @@ function HeroStatsBlock({
 }) {
   return (
     <div className="glass-card mt-7 max-w-[32.5rem] rounded-[1.25rem] px-[1.375rem] py-[1.125rem]">
-      <p className="text-muted-foreground mb-3 text-sm font-medium tracking-wider uppercase">
+      <p className="text-foreground/75 mb-3 text-sm font-medium tracking-wider uppercase">
         {t("atAGlance")}
       </p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div>
-          <small className="text-muted-foreground block text-[0.6875rem]">
+          <small className="text-foreground/75 block text-sm">
             {t("availability")}
           </small>
           <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em]">
@@ -112,15 +112,15 @@ function HeroStatsBlock({
           </b>
         </div>
         <div>
-          <small className="text-muted-foreground block text-[0.6875rem]">
+          <small className="text-foreground/75 block text-sm">
             {t("yearsExperience")}
           </small>
           <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em] tabular-nums">
-            {stats.yearsExperience}
+            {stats.yearsExperience}+
           </b>
         </div>
         <div>
-          <small className="text-muted-foreground block text-[0.6875rem]">
+          <small className="text-foreground/75 block text-sm">
             {t("projectsDelivered")}
           </small>
           <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em] tabular-nums">
@@ -129,7 +129,7 @@ function HeroStatsBlock({
         </div>
         {stats.engineersMentored != null ? (
           <div>
-            <small className="text-muted-foreground block text-[0.6875rem]">
+            <small className="text-foreground/75 block text-sm">
               {t("engineersLed")}
             </small>
             <b className="text-foreground mt-0.5 block text-lg font-semibold tracking-[-0.02em] tabular-nums">

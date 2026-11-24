@@ -52,4 +52,23 @@ describe("ServicesCarousel", () => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
     );
   });
+
+  it("renders all services in a visible grid without manual carousel pagination buttons", () => {
+    const services: ExpertiseItem[] = Array.from({ length: 7 }, (_, i) => ({
+      ...service,
+      id: `svc-${i}`,
+      title: `Expertise ${i + 1}`,
+    }));
+    renderWithIntl(<ServicesCarousel dbServices={services} />);
+
+    for (const item of services) {
+      expect(screen.getByText(item.title)).toBeInTheDocument();
+    }
+    expect(
+      screen.queryByRole("button", { name: "Previous card" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Next card" }),
+    ).not.toBeInTheDocument();
+  });
 });

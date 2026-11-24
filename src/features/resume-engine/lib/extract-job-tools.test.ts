@@ -1,4 +1,8 @@
-import { extractJobTools, vacancySkillSuggestions } from "./extract-job-tools";
+import {
+  extractJobTools,
+  knownTechnologySpellings,
+  vacancySkillSuggestions,
+} from "./extract-job-tools";
 
 describe("extractJobTools", () => {
   it("recognizes a verified punctuation variant and keeps ambiguous names and versions available to confirm", () => {
@@ -81,5 +85,35 @@ describe("extractJobTools", () => {
     expect(tools).toContain("C#");
     expect(tools).toContain(".NET Core");
     expect(tools).toContain("AWS");
+  });
+
+  it("requires explicit user equivalence for different spellings and keeps unrelated terms separate", () => {
+    const vacancy =
+      "Stack: APIs SOAP. Build scalable RESTful APIs in production.";
+    const declared = ["REST APIs"];
+
+    expect(
+      knownTechnologySpellings(declared, ["RESTful APIs"]).has("restful apis"),
+    ).toBe(false);
+
+    const equivalences = [{ original: "REST APIs", proposed: "RESTful APIs" }];
+    expect(
+      knownTechnologySpellings(declared, [], equivalences).get("restful apis"),
+    ).toBe("rest apis");
+    expect(extractJobTools(vacancy, declared, [], equivalences)).toEqual(
+      expect.arrayContaining(["RESTful APIs", "APIs SOAP"]),
+    );
+    expect(
+      vacancySkillSuggestions(vacancy, declared, [], equivalences),
+    ).toEqual(["APIs SOAP"]);
+
+    // An approved equivalence never overwrites a separately declared CMS technology.
+    expect(
+      knownTechnologySpellings(
+        ["REST APIs", "RESTful APIs"],
+        [],
+        equivalences,
+      ).get("restful apis"),
+    ).toBe("restful apis");
   });
 });

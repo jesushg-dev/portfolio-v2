@@ -4,6 +4,7 @@ import {
   extractJobTools,
   knownTechnologySpellings,
   technologyNameKey,
+  type TechnologyEquivalence,
 } from "./extract-job-tools";
 import { numericResumeFacts } from "./resume-content-validation";
 import {
@@ -65,6 +66,7 @@ export function validateResumeTechnologyNames(
   jobDescription: string,
   confirmedTechnologies: string[] = [],
   vacancyTools: string[] = [],
+  technologyEquivalences: TechnologyEquivalence[] = [],
 ) {
   const catalog = resumeTechnologyCatalog(profile);
   const selectedCatalog = resumeTechnologyCatalog(selected);
@@ -72,10 +74,12 @@ export function validateResumeTechnologyNames(
     ...vacancyTools,
     ...names.map(({ name }) => name),
     ...confirmedTechnologies,
+    ...technologyEquivalences.map(({ proposed }) => proposed),
   ];
   const spellings = knownTechnologySpellings(
     listedResumeTechnologies(profile),
     candidates,
+    technologyEquivalences,
   );
   const mentions = createTechnologyMatcher([
     ...spellings.keys(),

@@ -1255,7 +1255,7 @@
         "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
         "name": {
           "label": "Naam",
-          "placeholder": "Jan Jansen",
+          "placeholder": "Je volledige naam",
           "success": "Naam correct ingevoerd",
           "errors": {
             "required": "Naam is verplicht",
@@ -1265,7 +1265,7 @@
         },
         "email": {
           "label": "E-mailadres",
-          "placeholder": "jan@bedrijf.com",
+          "placeholder": "jij@bedrijf.com",
           "success": "E-mailadres correct ingevoerd",
           "errors": {
             "required": "E-mailadres is verplicht",
@@ -4836,6 +4836,8 @@
       "vacancySkillsCustom": "Ontbreekt er een technologie? Neem de naam over uit de vacature.",
       "vacancySkillsReview": "Controleer de voorgestelde technologieën en genereer daarna je cv.",
       "vacancySkillsConfirm": "Bevestigen",
+      "savedEquivalencesSummary": "Opgeslagen gelijkwaardigheden ({count})",
+      "removeSavedEquivalence": "Opgeslagen gelijkwaardigheid {original} → {proposed} verwijderen",
       "tailorJdTitle": "Vacatureomschrijving",
       "tailorJdPlaceholder": "Plak hier de volledige vacatureomschrijving...",
       "tailorJdTooShort": "Vacatureomschrijving is te kort. Plak minstens 20 tekens.",
@@ -4863,6 +4865,7 @@
       "tailorErrorRetry": "Opnieuw proberen",
       "tailorErrorSwitchProvider": "Van provider wisselen",
       "tailorErrorUseManual": "Handmatige modus gebruiken",
+      "tailorErrorCorrectionPrompt": "Correctieprompt maken",
       "tailorTechnicalDetails": "Technische details",
       "tailorValidation": {
         "intro": "Deze voorstellen konden niet worden gebruikt. Vergelijk ze met je oorspronkelijke cv.",
@@ -4875,6 +4878,18 @@
         "unknownTechnology": "De oorspronkelijke technologie is niet terug te vinden in je cv.",
         "technologyRename": "Controleer de wijziging van ‘{original}’ naar ‘{proposed}’.",
         "unknownTechnologyProposal": "Controleer ‘{proposed}’. Het voorstel verwijst niet naar een bekende technologie in je cv.",
+        "equivalenceQuestion": "Verwijzen ‘{original}’ en ‘{proposed}’ naar dezelfde technologie?",
+        "equivalenceHint": "Als ze voor deze vacature hetzelfde betekenen, keur deze gelijkwaardigheid dan goed en ga direct door. Zo niet, maak een nieuwe prompt zodat de AI dit corrigeert.",
+        "confirmEquivalence": "Ja, ze zijn gelijkwaardig en doorgaan",
+        "rejectEquivalenceManual": "Nee, maak correctieprompt voor AI",
+        "rejectEquivalenceAuto": "Nee, laat AI dit corrigeren",
+        "correctionPromptTitle": "Correctieprompt voor AI",
+        "correctionPromptHint": "Plak deze prompt in je AI-chat, plak daarna de gecorrigeerde JSON hierboven en probeer opnieuw.",
+        "copyCorrectionPrompt": "Correctieprompt kopiëren",
+        "copiedCorrectionPrompt": "Correctieprompt gekopieerd",
+        "viewCorrectionPrompt": "Correctieprompt bekijken",
+        "correctionPromptReady": "Correctieprompt gekopieerd. Voer hem uit in je AI en plak de gecorrigeerde JSON.",
+        "correctionPromptFailed": "Kan de correctieprompt niet genereren.",
         "fields": {
           "title": "Beroepstitel",
           "summary": "Profielsamenvatting",

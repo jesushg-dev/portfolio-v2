@@ -1,8 +1,14 @@
 /** @jest-environment node */
 
-jest.mock("@/features/resume-engine/lib/ai/tailor-resume-prompt", () => ({
-  buildTailoredResumePrompt: jest.fn(),
-}));
+jest.mock("@/features/resume-engine/lib/ai/tailor-resume-prompt", () => {
+  const actual = jest.requireActual<
+    typeof import("@/features/resume-engine/lib/ai/tailor-resume-prompt")
+  >("@/features/resume-engine/lib/ai/tailor-resume-prompt");
+  return {
+    buildTailoredResumePrompt: jest.fn(),
+    buildTailorCorrectionPrompt: actual.buildTailorCorrectionPrompt,
+  };
+});
 jest.mock("@/features/resume-engine/lib/ai/tailor-resume", () => ({
   tailorResumeDocument: jest.fn(),
 }));
@@ -107,6 +113,11 @@ function createDb() {
     },
     application: { findFirst: jest.fn().mockResolvedValue(null) },
     resumeExport: { findFirst: jest.fn().mockResolvedValue(null) },
+    cvTechnologyEquivalence: {
+      findMany: jest.fn().mockResolvedValue([]),
+      upsert: jest.fn<Promise<unknown>, [unknown]>().mockResolvedValue({}),
+      deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
+    },
   };
 }
 
@@ -365,5 +376,93 @@ describe("resumeEngineAdminRouter", () => {
     await expect(
       caller.tailorResumeManual({ ...input, rawJson: JSON.stringify(raw) }),
     ).rejects.toThrow("unsupported technologies");
+  });
+
+  it("applies user-approved technology equivalences and builds manual correction prompts on rejection", async () => {
+    const source = resumeFixture("en");
+    source.skills[1].items.push("REST APIs");
+    source.skills[1].skillIds!.push("skill-rest");
+    jest.mocked(loadCvStructuredDraft).mockResolvedValue(source);
+    const db = createDb();
+    const caller = createRouterCaller(
+      resumeEngineAdminRouter,
+      createTrpcTestContext({ db }),
+    );
+    const raw = resumeResponseFixture(source, "v2");
+    const rawJson = JSON.stringify({
+      ...raw,
+      technologyNames: [{ skillId: "skill-rest", name: "RESTful APIs" }],
+    });
+    const baseInput = {
+      templateVersion: "v2" as const,
+      jobDescription:
+        "We build scalable RESTful APIs in cloud-native services.",
+      rawJson,
+    };
+
+    await expect(caller.tailorResumeManual(baseInput)).rejects.toThrow(
+      "different technology",
+    );
+
+    const correction = await caller.getTailorCorrectionPrompt({
+      templateVersion: baseInput.templateVersion,
+      jobDescription: baseInput.jobDescription,
+      rejectedTechnologyEquivalences: [
+        { original: "REST APIs", proposed: "RESTful APIs" },
+      ],
+      previousRawJson: rawJson,
+      validationError:
+        "Technology name “REST APIs” → “RESTful APIs”: display name belongs to a different technology.",
+    });
+    expect(correction.userPrompt).toContain(
+      '"REST APIs" and "RESTful APIs" are DIFFERENT technologies',
+    );
+    expect(correction.combinedPrompt).toContain(rawJson);
+
+    await expect(
+      caller.tailorResumeManual({
+        ...baseInput,
+        technologyEquivalences: [
+          { original: "REST APIs", proposed: "not in vacancy" },
+        ],
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+
+    await caller.tailorResumeManual({
+      ...baseInput,
+      technologyEquivalences: [
+        { original: "REST APIs", proposed: "RESTful APIs" },
+      ],
+    });
+    expect(db.cvTechnologyEquivalence.upsert).toHaveBeenCalledTimes(1);
+    expect(db.cvTechnologyEquivalence.upsert.mock.calls[0]?.[0]).toMatchObject({
+      create: {
+        userId: MOCK_OWNER_USER.id,
+        original: "REST APIs",
+        originalKey: "rest apis",
+        proposed: "RESTful APIs",
+        proposedKey: "restful apis",
+      },
+    });
+    const doc = jest.mocked(finalizeTailoredResume).mock.lastCall![2].document;
+    expect(doc.skills[1].items).toContain("RESTful APIs");
+
+    db.cvTechnologyEquivalence.findMany.mockResolvedValue([
+      { id: "eq-1", original: "REST APIs", proposed: "RESTful APIs" },
+    ]);
+    await expect(caller.getTailorPageData({})).resolves.toMatchObject({
+      savedTechnologyEquivalences: [
+        { id: "eq-1", original: "REST APIs", proposed: "RESTful APIs" },
+      ],
+    });
+    await caller.tailorResumeManual(baseInput);
+    const nextDoc = jest.mocked(finalizeTailoredResume).mock.lastCall![2]
+      .document;
+    expect(nextDoc.skills[1].items).toContain("RESTful APIs");
+
+    await caller.deleteTechnologyEquivalence({ id: "eq-1" });
+    expect(db.cvTechnologyEquivalence.deleteMany).toHaveBeenCalledWith({
+      where: { id: "eq-1", userId: MOCK_OWNER_USER.id },
+    });
   });
 });

@@ -28,7 +28,7 @@
     {
       "locale": "es",
       "title": "Walmart Centroamérica: Plataforma Móvil Multi-Formato",
-      "description": "Plataforma móvil empresarial de retail y e-commerce omnicanal para el ecosistema de Walmart Centroamérica y sus diversos formatos comerciales: hipermercados Walmart, bodegas de descuento (Maxi Palí, Maxi Despensa) y supermercados (Masxmenos, La Despensa de Don Juan, Paiz), atendiendo a millones de usuarios en 5 países con arquitectura Flutter, Dart y VTEX IO.",
+      "description": "Plataforma móvil empresarial de retail y e-commerce omnicanal desarrollada vía Imagemaker para el ecosistema de Walmart Centroamérica (hipermercados Walmart, Maxi Palí, Maxi Despensa, Masxmenos, La Despensa de Don Juan y Paiz), atendiendo a millones de usuarios en 5 países con Flutter, Dart y VTEX IO.",
       "caseStudy": {
         "chips": [
           "Multi-Banner Retail",
@@ -41,7 +41,7 @@
           {
             "key": "my-role",
             "label": "Mi rol",
-            "value": "Ingeniero de Software Senior (Walmart Global Tech / Imagemaker)"
+            "value": "Ingeniero de Software Senior (vía Imagemaker · Walmart Global Tech)"
           },
           {
             "key": "platform",
@@ -626,7 +626,7 @@
     {
       "locale": "en",
       "title": "Walmart Central America: Multi-Banner Mobile Platform",
-      "description": "Enterprise-scale omnichannel retail and e-commerce mobile platform powering the Walmart Central America ecosystem across all retail banners: Walmart hypermarkets, discount warehouse bodegas (Maxi Palí, Maxi Despensa), and supermarkets (Masxmenos, La Despensa de Don Juan, Paiz), serving millions of shoppers across 5 countries with Flutter, Dart, and VTEX IO.",
+      "description": "Enterprise-scale omnichannel retail and e-commerce mobile platform engineered via Imagemaker for the Walmart Central America ecosystem across all retail banners (Walmart, Maxi Palí, Maxi Despensa, Masxmenos, La Despensa de Don Juan, Paiz), serving millions of shoppers across 5 countries with Flutter, Dart, and VTEX IO.",
       "caseStudy": {
         "chips": [
           "Multi-Banner Retail",
@@ -639,7 +639,7 @@
           {
             "key": "my-role",
             "label": "My Role",
-            "value": "Senior Software Engineer (Walmart Global Tech / Imagemaker)"
+            "value": "Senior Software Engineer (via Imagemaker · Walmart Global Tech)"
           },
           {
             "key": "platform",
@@ -1224,7 +1224,7 @@
     {
       "locale": "nl",
       "title": "Walmart Midden-Amerika: Multi-Format Mobiel Platform",
-      "description": "Grootschalig mobiel retail- en e-commerceplatform voor het Walmart Midden-Amerika ecosysteem en zijn diverse winkelformules: Walmart-hypermarkten, discountbodega's (Maxi Palí, Maxi Despensa) en supermarkten (Masxmenos, La Despensa de Don Juan, Paiz), die miljoenen shoppers bedienen in 5 landen met Flutter, Dart en VTEX IO.",
+      "description": "Grootschalig omnichannel mobiel retail- en e-commerceplatform ontwikkeld via Imagemaker voor het ecosysteem van Walmart Midden-Amerika en zijn winkelformules (Walmart, Maxi Palí, Maxi Despensa, Masxmenos, La Despensa de Don Juan, Paiz), dat miljoenen shoppers bedient in 5 landen met Flutter, Dart en VTEX IO.",
       "caseStudy": {
         "chips": [
           "Multi-Banner Retail",
@@ -1237,7 +1237,7 @@
           {
             "key": "my-role",
             "label": "Mijn rol",
-            "value": "Senior Software Engineer (Walmart Global Tech / Imagemaker)"
+            "value": "Senior Software Engineer (via Imagemaker · Walmart Global Tech)"
           },
           {
             "key": "platform",

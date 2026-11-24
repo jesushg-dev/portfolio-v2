@@ -60,7 +60,7 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
     <div className="relative z-10 mx-auto w-full py-6">
       <div className="home-card-surface bg-card border-border/80 w-full overflow-hidden rounded-2xl border shadow-2xl">
         {/* Terminal Chrome Bar */}
-        <div className="border-border/60 bg-muted/20 text-muted-foreground flex items-center gap-1.5 border-b px-4 py-3 text-sm">
+        <div className="border-border/60 bg-muted/20 text-foreground/75 flex items-center gap-1.5 border-b px-4 py-3 text-sm">
           <span
             className="size-2.5 rounded-full bg-[#ff5f57]"
             aria-hidden="true"
@@ -73,7 +73,7 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
             className="size-2.5 rounded-full bg-[#28c840]"
             aria-hidden="true"
           />
-          <span className="text-muted-foreground ml-auto font-mono text-sm">
+          <span className="text-foreground ml-auto font-mono text-sm">
             expertise.json
           </span>
         </div>
@@ -85,12 +85,12 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
               key={row.key}
               className="grid gap-2.5 py-5 md:grid-cols-[12rem_1fr] md:gap-8"
             >
-              <dt className="text-primary font-mono text-sm md:pt-1">
-                <span aria-hidden="true" className="text-muted-foreground">
+              <dt className="text-primary font-mono text-sm font-semibold sm:text-base md:pt-1">
+                <span aria-hidden="true" className="text-foreground/70">
                   &quot;
                 </span>
                 {row.key}
-                <span aria-hidden="true" className="text-muted-foreground">
+                <span aria-hidden="true" className="text-foreground/70">
                   &quot;
                 </span>
               </dt>
@@ -107,7 +107,7 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
                       "hover:text-primary inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 transition-colors hover:underline",
                       i < 3
                         ? "text-foreground font-semibold"
-                        : "text-muted-foreground font-normal",
+                        : "text-foreground/80 font-medium",
                     )}
                   >
                     {title}
@@ -119,7 +119,7 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
         </dl>
 
         {/* Spec Sheet Footer */}
-        <div className="border-border/60 text-muted-foreground flex flex-wrap items-center justify-between gap-2 border-t px-6 py-3 font-mono text-sm sm:px-8">
+        <div className="border-border/60 text-foreground flex flex-wrap items-center justify-between gap-2 border-t px-6 py-3 font-mono text-sm sm:px-8">
           <span className="flex items-center gap-1.5">
             <Check className="size-4 text-emerald-400" aria-hidden="true" />
             <span>{t("updatedTech")}</span>

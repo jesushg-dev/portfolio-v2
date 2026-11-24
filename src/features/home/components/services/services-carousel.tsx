@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronLeft, ChevronRight, Pause, Play, Plus, X } from "lucide-react";
-import { useReducedMotion } from "motion/react";
+import { Pause, Play, Plus, X } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,8 +12,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ExpertiseVisual } from "./expertise-visual";
+import { cn } from "@/lib/utils";
 import type { RouterOutputs } from "@/trpc/react";
+import { ExpertiseVisual } from "./expertise-visual";
 
 export type ExpertiseItem =
   RouterOutputs["portfolio"]["getServicesPublic"][number];
@@ -26,165 +27,55 @@ export function ServicesCarousel({
   dbServices: ExpertiseItem[];
 }) {
   const t = useTranslations("main.services");
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
-  const alignmentRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const prefersReducedMotion = useReducedMotion();
   const [motionPaused, setMotionPaused] = useState(false);
   const [selected, setSelected] = useState<ExpertiseItem | null>(null);
-  const [railInset, setRailInset] = useState<number | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const anchor = alignmentRef.current;
-    if (!anchor) return;
-    const measure = () =>
-      setRailInset(Math.max(0, anchor.getBoundingClientRect().left));
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(anchor);
-    window.addEventListener("resize", measure);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
-  const updateScrollState = useCallback(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 1);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-    const firstCard = listRef.current?.firstElementChild as HTMLElement | null;
-    const step = (firstCard?.offsetWidth ?? 372) + 20;
-    const index = Math.round(el.scrollLeft / step);
-    setActiveIndex(Math.min(dbServices.length - 1, Math.max(0, index)));
-  }, [dbServices.length]);
-
-  useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    updateScrollState();
-    const observer = new ResizeObserver(updateScrollState);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [dbServices, updateScrollState]);
-
-  const scroll = (direction: -1 | 1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const firstCard = listRef.current?.firstElementChild as HTMLElement | null;
-    const cardWidth = firstCard?.offsetWidth ?? 0;
-    const step = cardWidth > 0 ? cardWidth + 20 : 392;
-    el.scrollBy({
-      left: direction * step,
-      behavior: prefersReducedMotion ? "instant" : "smooth",
-    });
-  };
 
   if (dbServices.length === 0) return null;
 
+  const hasWideSpotlight = dbServices.length > 3 && dbServices.length % 3 === 1;
+
   return (
     <>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none mx-auto h-0 w-full px-4 sm:px-6 lg:container lg:px-20"
+      <section
+        aria-label={t("title")}
+        className="mx-auto w-full px-4 sm:px-6 lg:container lg:px-20"
       >
-        <div ref={alignmentRef} className="h-0 w-full" />
-      </div>
-      <section aria-label={t("title")} aria-roledescription="carousel">
-        <div
-          ref={scrollerRef}
-          onScroll={updateScrollState}
-          tabIndex={0}
-          aria-label={t("carouselInstructions")}
-          onKeyDown={(event) => {
-            if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-              event.preventDefault();
-              scroll(event.key === "ArrowLeft" ? -1 : 1);
-            }
-          }}
-          style={
-            railInset === null
-              ? undefined
-              : { scrollPaddingInline: `${railInset}px` }
-          }
-          className="focus-visible:ring-ring snap-x snap-mandatory scroll-pl-4 [scrollbar-width:none] overflow-x-auto overscroll-x-contain py-4 outline-none focus-visible:ring-2 focus-visible:ring-inset sm:scroll-pl-6 lg:scroll-pl-20 [&::-webkit-scrollbar]:hidden"
-        >
-          <ul
-            ref={listRef}
-            style={
-              railInset === null
-                ? undefined
-                : { paddingInline: `${railInset}px` }
-            }
-            className="flex w-max items-stretch gap-5 px-4 sm:px-6 lg:px-20"
-          >
-            {dbServices.map((item) => (
-              <ExpertiseCard
-                key={item.id}
-                item={item}
-                paused={motionPaused}
-                t={t}
-                onSelect={(next, triggerEl) => {
-                  triggerRef.current = triggerEl;
-                  setSelected(next);
-                }}
-              />
-            ))}
-          </ul>
-        </div>
-        <div
-          style={
-            railInset === null ? undefined : { paddingInline: `${railInset}px` }
-          }
-          className="mt-5 flex items-center justify-end gap-3 px-4 sm:px-6 lg:px-20"
-        >
-          {/* Counter 01 / 07 */}
-          <span className="text-muted-foreground mr-1 font-mono text-sm whitespace-nowrap tabular-nums select-none">
-            {String(activeIndex + 1).padStart(2, "0")} /{" "}
-            {String(dbServices.length).padStart(2, "0")}
-          </span>
-
+        <div className="mb-5 flex justify-end">
           <Button
             type="button"
             variant="outline"
-            size="icon"
-            className="bg-card size-11 min-h-11 min-w-11 rounded-full"
+            size="sm"
+            className="bg-card min-h-11 gap-2 rounded-full px-4 text-sm font-medium"
             aria-label={t(motionPaused ? "resumeMotion" : "pauseMotion")}
             onClick={() => setMotionPaused((previous) => !previous)}
           >
             {motionPaused ? (
-              <Play className="size-4" />
+              <Play className="size-4" aria-hidden="true" />
             ) : (
-              <Pause className="size-4" />
+              <Pause className="size-4" aria-hidden="true" />
             )}
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label={t("previousCard")}
-            disabled={!canScrollLeft}
-            onClick={() => scroll(-1)}
-            className="bg-card size-11 min-h-11 min-w-11 rounded-full"
-          >
-            <ChevronLeft className="size-5" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label={t("nextCard")}
-            disabled={!canScrollRight}
-            onClick={() => scroll(1)}
-            className="bg-card size-11 min-h-11 min-w-11 rounded-full"
-          >
-            <ChevronRight className="size-5" />
+            <span>{t(motionPaused ? "resumeMotion" : "pauseMotion")}</span>
           </Button>
         </div>
+
+        <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {dbServices.map((item, index) => (
+            <ExpertiseCard
+              key={item.id}
+              item={item}
+              paused={motionPaused}
+              wide={hasWideSpotlight && index === dbServices.length - 1}
+              t={t}
+              onSelect={(next, triggerEl) => {
+                triggerRef.current = triggerEl;
+                setSelected(next);
+              }}
+            />
+          ))}
+        </ul>
       </section>
+
       <Dialog
         open={selected !== null}
         onOpenChange={(open) => {
@@ -216,37 +107,54 @@ function ExpertiseCard({
   item,
   onSelect,
   paused,
+  wide,
   t,
 }: {
   item: ExpertiseItem;
   paused: boolean;
+  wide: boolean;
   t: ServicesTranslations;
   onSelect: (item: ExpertiseItem, triggerEl: HTMLElement) => void;
 }) {
   return (
-    <li className="w-[min(23.25rem,82vw)] flex-none snap-start">
+    <li className={cn(wide && "md:col-span-2 lg:col-span-3")}>
       <button
         type="button"
         onClick={(e) => onSelect(item, e.currentTarget)}
-        className="home-card-surface home-card-surface-interactive bg-card group flex h-full min-h-[30rem] w-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] text-left transition-all duration-300 motion-safe:hover:-translate-y-1"
+        className={cn(
+          "home-card-surface home-card-surface-interactive bg-card group flex h-full w-full cursor-pointer overflow-hidden rounded-[1.75rem] text-left transition-all duration-300 motion-safe:hover:-translate-y-1",
+          wide
+            ? "min-h-[18rem] flex-col md:grid md:grid-cols-[1.05fr_1fr] md:items-center"
+            : "min-h-[25rem] flex-col",
+        )}
       >
         <span className="sr-only">
           {t("viewDetails", { title: item.title })}
         </span>
-        <div className="w-full px-7 pt-7">
+        <div
+          className={cn(
+            "w-full px-6 pt-6 sm:px-7 sm:pt-7",
+            wide && "md:py-8 md:pr-4",
+          )}
+        >
           {item.badge && (
             <span className="text-primary mb-2 block text-sm font-semibold tracking-wider uppercase">
               {item.badge}
             </span>
           )}
-          <h3 className="text-foreground text-[1.5625rem] leading-[1.15] font-bold tracking-[-0.025em]">
+          <h3 className="text-foreground text-2xl leading-[1.15] font-bold tracking-[-0.025em]">
             {item.title}
           </h3>
-          <p className="text-muted-foreground mt-3 line-clamp-3 text-[0.9375rem] leading-[1.45]">
+          <p className="text-foreground/80 mt-3 line-clamp-3 text-base leading-relaxed">
             {item.description}
           </p>
         </div>
-        <div className="relative mt-auto h-[15.625rem] w-full p-4">
+        <div
+          className={cn(
+            "relative h-[14.5rem] w-full p-4",
+            wide ? "mt-auto md:mt-0 md:h-[16.5rem]" : "mt-auto",
+          )}
+        >
           <ExpertiseVisual
             image={item.image}
             visualType={item.visualType}
@@ -282,7 +190,7 @@ function ExpertiseDetails({
 }) {
   return (
     <>
-      <div className="text-muted-foreground flex items-center justify-between px-5 pt-4 sm:px-7">
+      <div className="text-foreground/75 flex items-center justify-between px-5 pt-4 sm:px-7">
         <span className="font-mono text-sm tabular-nums">
           {String(index + 1).padStart(2, "0")} /{" "}
           {String(total).padStart(2, "0")}
@@ -329,17 +237,17 @@ function ExpertiseDetails({
           <DialogTitle className="text-2xl font-bold tracking-tight sm:text-3xl">
             {item.title}
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
+          <DialogDescription className="text-foreground/85 mt-3 text-base leading-relaxed">
             {item.description}
           </DialogDescription>
           {item.practicePoints.length > 0 && (
             <div className="mt-6">
-              <h4 className="text-muted-foreground text-sm font-semibold tracking-widest uppercase">
+              <h4 className="text-foreground/80 text-sm font-semibold tracking-widest uppercase">
                 {t("inPractice")}
               </h4>
-              <ul className="text-foreground marker:text-primary mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed">
-                {item.practicePoints.map((point, index) => (
-                  <li key={`${index}-${point}`}>{point}</li>
+              <ul className="text-foreground marker:text-primary mt-3 list-disc space-y-2 pl-4 text-sm leading-relaxed sm:text-base">
+                {item.practicePoints.map((point, idx) => (
+                  <li key={`${idx}-${point}`}>{point}</li>
                 ))}
               </ul>
             </div>
@@ -357,7 +265,7 @@ function ExpertiseDetails({
               {item.technologies.map((tech) => (
                 <li
                   key={tech.id}
-                  className="border-border text-muted-foreground rounded-full border px-2.5 py-1 text-sm"
+                  className="border-border text-foreground/85 rounded-full border px-3 py-1 text-sm"
                 >
                   {tech.title}
                 </li>

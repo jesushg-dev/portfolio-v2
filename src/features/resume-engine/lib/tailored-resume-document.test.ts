@@ -334,6 +334,60 @@ describe("canonical multilingual resume", () => {
     ).toThrow("different technology");
   });
 
+  it("rejects RESTful APIs for REST APIs until approved as an equivalence, then mirrors it cleanly", () => {
+    const source = resumeFixture("en");
+    const group = source.skills[1];
+    group.items.push("REST APIs");
+    group.skillIds!.push("skill-rest");
+    source.experiences[0].technologies = ["REST APIs"];
+    source.experiences[0].technologyIds = ["skill-rest"];
+    const { context } = setup("en", "v2");
+    context.source = source;
+    context.jobDescription =
+      "We build scalable RESTful APIs. Experience with RESTful APIs required.";
+
+    const firstAttempt = resumeResponseFixture(source, "v2");
+    expect(() =>
+      validateTailoredResume(
+        {
+          ...firstAttempt,
+          technologyNames: [{ skillId: "skill-rest", name: "RESTful APIs" }],
+        },
+        context,
+      ),
+    ).toThrow("different technology");
+
+    const approvedContext: TailorContext = {
+      ...context,
+      technologyEquivalences: [
+        { original: "REST APIs", proposed: "RESTful APIs" },
+      ],
+    };
+
+    for (const [summarySuffix, technologyNames] of [
+      [
+        " Experience with RESTful APIs.",
+        [{ skillId: "skill-rest", name: "RESTful APIs" }],
+      ],
+      [" Experience with REST APIs.", []],
+    ] as const) {
+      const nextResponse = resumeResponseFixture(source, "v2");
+      nextResponse.fields.find(({ id }) => id === "header.summary")!.text +=
+        summarySuffix;
+      const { document } = validateTailoredResume(
+        {
+          ...nextResponse,
+          technologyNames: [...technologyNames],
+        },
+        approvedContext,
+      );
+      const index = document.skills[1].skillIds!.indexOf("skill-rest");
+      expect(document.skills[1].items[index]).toBe("RESTful APIs");
+      expect(document.header.summary).toContain("RESTful APIs");
+      expect(document.experiences[0].technologies).toEqual(["RESTful APIs"]);
+    }
+  });
+
   it.each([
     ["unknown-id", "", "React.js", "technologyNotSelected"],
     ["skill-next", "Next.js", "React.js", "technologyNotSelected"],
