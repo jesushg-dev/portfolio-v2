@@ -4,6 +4,8 @@ This document outlines the architecture, component API, hooks, and usage example
 
 > [!NOTE]
 > For a step-by-step guide on building interactive Mini Apps (Spotify pattern) within the iOS emulator, see [mini-apps-guide.md](./mini-apps-guide.md).
+>
+> For the animation mechanics, scroll math, and critical preservation invariants for the **Foldable Phone to Contact Card handoff transition**, see [foldable-card-handoff-animation.md](./foldable-card-handoff-animation.md).
 
 ---
 
