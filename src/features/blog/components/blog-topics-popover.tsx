@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Check, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { useOutsideClick } from "@/hooks/use-outside-click";
 
 export interface TagCountItem {
   tag: string;
@@ -28,24 +29,19 @@ export function BlogTopicsPopover({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
 
+  useOutsideClick(containerRef, () => {
+    if (isOpen) setIsOpen(false);
+  });
+
   useEffect(() => {
     if (!isOpen) return;
-    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleOutsideClick);
-    document.addEventListener("touchstart", handleOutsideClick);
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("touchstart", handleOutsideClick);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen]);

@@ -97,9 +97,9 @@ const Contact: FC = async () => {
       </IOSFoldableDevice>
       <div
         data-contact-container
-        className="relative mx-auto w-full px-4 pt-13 sm:px-6 lg:container lg:px-20"
+        className="relative mx-auto w-full px-4 pt-6 sm:px-6 sm:pt-8 lg:container lg:px-20"
       >
-        <div data-contact-title className="mb-10 pt-12 sm:mb-12 md:mb-14">
+        <div data-contact-title className="mb-10 pt-4 sm:mb-12 md:mb-14">
           <ShowcaseHeading
             sectionId="contact"
             title={t("titleLead")}

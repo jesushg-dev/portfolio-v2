@@ -688,7 +688,7 @@
     "featured": false,
     "order": 6,
     "image": "",
-    "skillTitles": ["GitHub Copilot", "Claude 3.5", "Playwright"],
+    "skillTitles": ["GitHub Copilot", "Claude", "Playwright"],
     "translations": [
       {
         "locale": "es",

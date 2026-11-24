@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, Pause, Play, Plus, X } from "lucide-react";
+import { useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,7 +27,10 @@ export function ServicesCarousel({
 }) {
   const t = useTranslations("main.services");
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const alignmentRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   const [motionPaused, setMotionPaused] = useState(false);
   const [selected, setSelected] = useState<ExpertiseItem | null>(null);
   const [railInset, setRailInset] = useState<number | null>(null);
@@ -35,13 +39,13 @@ export function ServicesCarousel({
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const heading = document.getElementById("services-heading");
-    if (!heading) return;
+    const anchor = alignmentRef.current;
+    if (!anchor) return;
     const measure = () =>
-      setRailInset(Math.max(0, heading.getBoundingClientRect().left));
+      setRailInset(Math.max(0, anchor.getBoundingClientRect().left));
     measure();
     const observer = new ResizeObserver(measure);
-    observer.observe(heading);
+    observer.observe(anchor);
     window.addEventListener("resize", measure);
     return () => {
       observer.disconnect();
@@ -54,16 +58,10 @@ export function ServicesCarousel({
     if (!el) return;
     setCanScrollLeft(el.scrollLeft > 1);
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll > 0) {
-      const progress = el.scrollLeft / maxScroll;
-      setActiveIndex(
-        Math.min(
-          dbServices.length - 1,
-          Math.max(0, Math.round(progress * (dbServices.length - 1))),
-        ),
-      );
-    }
+    const firstCard = listRef.current?.firstElementChild as HTMLElement | null;
+    const step = (firstCard?.offsetWidth ?? 372) + 20;
+    const index = Math.round(el.scrollLeft / step);
+    setActiveIndex(Math.min(dbServices.length - 1, Math.max(0, index)));
   }, [dbServices.length]);
 
   useEffect(() => {
@@ -78,12 +76,12 @@ export function ServicesCarousel({
   const scroll = (direction: -1 | 1) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const firstCard = listRef.current?.firstElementChild as HTMLElement | null;
+    const cardWidth = firstCard?.offsetWidth ?? 0;
+    const step = cardWidth > 0 ? cardWidth + 20 : 392;
     el.scrollBy({
-      left: direction * el.clientWidth,
-      behavior: reducedMotion ? "instant" : "smooth",
+      left: direction * step,
+      behavior: prefersReducedMotion ? "instant" : "smooth",
     });
   };
 
@@ -91,6 +89,12 @@ export function ServicesCarousel({
 
   return (
     <>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none mx-auto h-0 w-full px-4 sm:px-6 lg:container lg:px-20"
+      >
+        <div ref={alignmentRef} className="h-0 w-full" />
+      </div>
       <section aria-label={t("title")} aria-roledescription="carousel">
         <div
           ref={scrollerRef}
@@ -111,6 +115,7 @@ export function ServicesCarousel({
           className="focus-visible:ring-ring snap-x snap-mandatory scroll-pl-4 [scrollbar-width:none] overflow-x-auto overscroll-x-contain py-4 outline-none focus-visible:ring-2 focus-visible:ring-inset sm:scroll-pl-6 lg:scroll-pl-20 [&::-webkit-scrollbar]:hidden"
         >
           <ul
+            ref={listRef}
             style={
               railInset === null
                 ? undefined
@@ -124,8 +129,8 @@ export function ServicesCarousel({
                 item={item}
                 paused={motionPaused}
                 t={t}
-                onSelect={(next) => {
-                  triggerRef.current = document.activeElement as HTMLElement;
+                onSelect={(next, triggerEl) => {
+                  triggerRef.current = triggerEl;
                   setSelected(next);
                 }}
               />
@@ -216,13 +221,13 @@ function ExpertiseCard({
   item: ExpertiseItem;
   paused: boolean;
   t: ServicesTranslations;
-  onSelect: (item: ExpertiseItem) => void;
+  onSelect: (item: ExpertiseItem, triggerEl: HTMLElement) => void;
 }) {
   return (
     <li className="w-[min(23.25rem,82vw)] flex-none snap-start">
       <button
         type="button"
-        onClick={() => onSelect(item)}
+        onClick={(e) => onSelect(item, e.currentTarget)}
         className="home-card-surface home-card-surface-interactive bg-card group flex h-full min-h-[30rem] w-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] text-left transition-all duration-300 motion-safe:hover:-translate-y-1"
       >
         <span className="sr-only">

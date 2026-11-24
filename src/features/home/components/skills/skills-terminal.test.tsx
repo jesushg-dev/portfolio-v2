@@ -46,13 +46,13 @@ const mockSkills: SkillType[] = [
   {
     id: "ai-1",
     userId: "user-1",
-    title: "OpenAI GPT-4o",
+    title: "OpenAI",
     type: "AI",
     featured: true,
     trend: true,
     image: "/icons/openai.svg",
     createdAt: new Date(),
-    description: "OpenAI GPT-4o model",
+    description: "OpenAI model",
     appLanguageId: "lang-1",
     skillId: "ai-1",
     urlWiki: "https://openai.com",
@@ -158,9 +158,9 @@ describe("SkillsTerminal Spec Sheet", () => {
     expect(nodeLink).toBeInTheDocument();
     expect(nodeLink).toHaveAttribute("href", "/skills/node-js");
 
-    const openAiLink = screen.getByRole("link", { name: "OpenAI GPT-4o" });
+    const openAiLink = screen.getByRole("link", { name: "OpenAI" });
     expect(openAiLink).toBeInTheDocument();
-    expect(openAiLink).toHaveAttribute("href", "/skills/openai-gpt-4o");
+    expect(openAiLink).toHaveAttribute("href", "/skills/openai");
   });
 
   it("renders footer with updated technologies badge and certificates link", () => {
