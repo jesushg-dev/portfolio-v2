@@ -31,7 +31,7 @@ const PREVIEW_LINE_COUNT = 11;
 
 const SKELETON_WIDTHS = ["92%", "78%", "88%", "70%", "84%", "62%"] as const;
 
-function plainPreviewLines(plainLyrics: string, maxLines = 6): string[] {
+function plainPreviewLines(plainLyrics: string, maxLines = 8): string[] {
   return plainLyrics
     .split("\n")
     .map((line) => line.trimEnd())
@@ -113,30 +113,30 @@ const LyricsCard: FC<LyricsCardProps> = ({
       onPointerDown={(event) => event.stopPropagation()}
       aria-label={canExpand ? labels.expand : undefined}
       aria-busy={isLoading || undefined}
-      className="flex aspect-[10/9] w-full shrink-0 flex-col overflow-hidden rounded-xl text-left transition-opacity disabled:cursor-default"
+      className="flex min-h-[16rem] w-full flex-1 flex-col overflow-hidden rounded-2xl text-left transition-opacity disabled:cursor-default sm:min-h-[18rem]"
       style={{
         background: `color-mix(in srgb, ${accentColor} 38%, rgba(0,0,0,0.62))`,
       }}
     >
-      <div className="flex shrink-0 items-center justify-between gap-2 px-3 pt-2.5 pb-1.5">
-        <p className="text-[0.65rem] font-bold tracking-wide text-white/90 uppercase">
+      <div className="flex shrink-0 items-center justify-between gap-2 px-4 pt-3.5 pb-2">
+        <p className="text-xs font-bold tracking-wider text-white/90 uppercase sm:text-sm">
           {labels.title}
         </p>
         {canExpand && (
-          <Maximize2 className="size-3.5 shrink-0 text-white/70" aria-hidden />
+          <Maximize2 className="size-4 shrink-0 text-white/70" aria-hidden />
         )}
       </div>
 
       <div
         ref={viewportRef}
-        className="relative min-h-0 flex-1 overflow-hidden px-3 pb-4"
+        className="relative min-h-0 flex-1 overflow-hidden px-4 pb-6"
       >
         {isLoading && (
-          <div className="space-y-2.5 pt-0.5" aria-hidden>
+          <div className="space-y-3 pt-1" aria-hidden>
             {SKELETON_WIDTHS.map((width, index) => (
               <Skeleton
                 key={index}
-                className="h-5 rounded-full bg-white/20"
+                className="h-6 rounded-full bg-white/20"
                 style={{ width }}
               />
             ))}
@@ -145,9 +145,9 @@ const LyricsCard: FC<LyricsCardProps> = ({
         )}
 
         {isEmpty && (
-          <div className="flex h-full flex-col items-center justify-center gap-2 px-2 text-center">
-            <MicOff className="size-6 text-white/40" aria-hidden />
-            <p className="text-[0.75rem] leading-snug font-medium text-white/55">
+          <div className="flex h-full flex-col items-center justify-center gap-2.5 px-3 text-center">
+            <MicOff className="size-7 text-white/40" aria-hidden />
+            <p className="text-sm leading-snug font-medium text-white/60">
               {emptyMessage}
             </p>
           </div>
@@ -156,7 +156,7 @@ const LyricsCard: FC<LyricsCardProps> = ({
         {canExpand && useSynced && (
           <div
             ref={trackRef}
-            className="space-y-1.5 will-change-transform"
+            className="space-y-2 will-change-transform"
             style={{ transition: "transform 120ms ease-out" }}
           >
             {syncedPreview.lines.map((line, index) => {
@@ -170,8 +170,8 @@ const LyricsCard: FC<LyricsCardProps> = ({
                   ref={isActive ? activeLineRef : undefined}
                   className={
                     isUpcoming
-                      ? "text-[1rem] leading-snug font-bold wrap-break-word text-white/35 transition-colors"
-                      : "text-[1rem] leading-snug font-bold wrap-break-word text-white transition-colors"
+                      ? "text-lg leading-relaxed font-bold wrap-break-word text-white/35 transition-colors sm:text-xl"
+                      : "text-lg leading-relaxed font-bold wrap-break-word text-white transition-colors sm:text-xl"
                   }
                 >
                   <LyricLineContent text={line.text} />
@@ -182,11 +182,11 @@ const LyricsCard: FC<LyricsCardProps> = ({
         )}
 
         {canExpand && !useSynced && (
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {plainLines.map((line, index) => (
               <p
                 key={`${index}-${line.slice(0, 24) || "gap"}`}
-                className="text-[0.875rem] leading-snug font-bold wrap-break-word text-white/95"
+                className="text-base leading-relaxed font-bold wrap-break-word text-white/95 sm:text-lg"
               >
                 <LyricLineContent text={line} />
               </p>
@@ -197,7 +197,7 @@ const LyricsCard: FC<LyricsCardProps> = ({
         {(canExpand || isLoading) && (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-10 rounded-b-xl"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-12 rounded-b-2xl"
             style={{
               background: `linear-gradient(to top, color-mix(in srgb, ${accentColor} 38%, rgba(0,0,0,0.62)) 15%, transparent 100%)`,
             }}

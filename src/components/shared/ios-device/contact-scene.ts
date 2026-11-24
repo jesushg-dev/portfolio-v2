@@ -17,6 +17,18 @@ const closedPhonePause = 280;
 const contactHandoffDuration = 680;
 const hingeCloseDuration = 520;
 const phoneDockDuration = 200;
+
+/**
+ * Smooth Apple-like spring overshoot function for landing/docking with natural bounce.
+ * Starts at 0, overshoots to ~1.05 around t=0.6, and settles cleanly to 1.0 at t=1.
+ */
+function springBounce(t: number): number {
+  if (t <= 0) return 0;
+  if (t >= 1) return 1;
+  const c4 = 1.35;
+  return 1 + (c4 + 1) * Math.pow(t - 1, 3) + c4 * Math.pow(t - 1, 2);
+}
+
 export function mountContactScene(
   csS: HTMLElement,
   cv3: HTMLCanvasElement,
@@ -619,10 +631,10 @@ export function mountContactScene(
     if (alive) end3d?.retex();
   });
   let handoffStartedAt: number | undefined;
-  let handoffScroll: number | undefined;
   let contactLift = 0;
   let renderedProgress = 0;
   let lastCloseFrame: number | undefined;
+  let lastValidBlogWidth = 0;
   function csUpdate(now = performance.now()) {
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const unit = (n: number) => n * rem;
@@ -638,8 +650,16 @@ export function mountContactScene(
       landing = landingTitle.getBoundingClientRect(),
       blogEnd = blogSection?.getBoundingClientRect().bottom,
       bR = bg ? bg.getBoundingClientRect() : null;
-    const desktop = innerWidth >= unit(64);
-    const fo2 = !!(end3d && desktop && bR && bR.width > unit(35));
+    if (bR && bR.width > unit(35)) {
+      lastValidBlogWidth = bR.width;
+    }
+    const desktop =
+      typeof window !== "undefined"
+        ? window.matchMedia("(min-width:64rem)").matches
+        : innerWidth >= unit(64);
+    const blogWidth = bR && bR.width > 0 ? bR.width : lastValidBlogWidth;
+    const isDuo = desktop && blogWidth > unit(35);
+    const fo2 = !!(end3d && isDuo);
     const foldOffset =
       bR && desktop
         ? ((blogHeading?.getBoundingClientRect().top ?? bR.top) +
@@ -648,18 +668,20 @@ export function mountContactScene(
           2
         : (bR?.bottom ?? rc.top) - vh * 0.85;
     const foldStart = sY + foldOffset;
-    const foldDistance = Math.min(unit(24), vh * 0.44);
+    const targetLandingTop = top0 + unit(2.5);
+    const neededDistance = landing.top + sY - foldStart - targetLandingTop;
+    const foldDistance = Math.max(unit(30), Math.min(vh * 1.1, neededDistance));
     const scrollProgress = clamp((sY - foldStart) / foldDistance);
     const skipHandoff =
       Boolean(contactLayout?.contains(document.activeElement)) ||
-      (scrollProgress === 1 && landing.bottom <= top0);
+      landing.top < top0 - unit(12);
     const openHeight = Math.min(H * 0.8, unit(47.5));
     const openBottom = bR
       ? bR.top + (bR.height + openHeight) / 2 - foldOffset
       : 0;
     const unshiftedHeadingTop = landing.top + contactLift;
     // Keep the Duo open until the heading reaches its lower edge.
-    const closeFrom = fo2
+    const closeFrom = isDuo
       ? Math.max(
           0.36,
           Math.min(
@@ -669,9 +691,9 @@ export function mountContactScene(
           ),
         )
       : 0.3;
-    const closeTo = fo2 ? closeFrom + 0.26 : 0.62;
+    const closeTo = isDuo ? closeFrom + 0.26 : 0.62;
     if (
-      fo2 &&
+      isDuo &&
       !skipHandoff &&
       scrollProgress > renderedProgress &&
       scrollProgress > closeFrom
@@ -695,7 +717,6 @@ export function mountContactScene(
     }
     if (scrollProgress < 0.84) {
       handoffStartedAt = undefined;
-      handoffScroll = undefined;
     } else if (skipHandoff) {
       handoffStartedAt = now - closedPhonePause - contactHandoffDuration;
     } else if (
@@ -704,7 +725,6 @@ export function mountContactScene(
       !panel.querySelector(":focus-visible")
     ) {
       handoffStartedAt = now;
-      handoffScroll = sY;
     }
     const elapsed = handoffStartedAt === undefined ? 0 : now - handoffStartedAt;
     const settle = skipHandoff
@@ -714,24 +734,15 @@ export function mountContactScene(
           closedPhonePause + contactHandoffDuration,
           elapsed,
         );
-    const nextLift =
-      settle > 0 && handoffScroll !== undefined
-        ? settle *
-          Math.max(
-            0,
-            landing.top + contactLift + sY - handoffScroll - top0 - unit(3),
-          )
-        : 0;
-    const liftChange = nextLift - contactLift;
-    contactLift = nextLift;
-    contactContainer.style.top = contactLift ? -contactLift + "px" : "";
-    contactContainer.style.marginBottom = contactContainer.style.top;
+    contactLift = 0;
+    contactContainer.style.top = "";
+    contactContainer.style.marginBottom = "";
     if (handoffStartedAt !== undefined && settle < 1) schedule();
     const m = handoffStartedAt === undefined ? renderedProgress : 1,
-      c0 = fo2 ? 0.58 : 0.55,
-      c1 = fo2 ? 0.66 : 0.82,
-      g = sm(fo2 ? closeTo - 0.06 : 0.3, fo2 ? 1 : 0.85, m),
-      f = fo2 ? sm(closeFrom, closeTo, m) : 0,
+      c0 = isDuo ? 0.58 : 0.55,
+      c1 = isDuo ? 0.66 : 0.82,
+      g = sm(isDuo ? closeTo - 0.06 : 0.3, isDuo ? 1 : 0.85, m),
+      f = isDuo ? sm(closeFrom, closeTo, m) : 0,
       q = fo2
         ? [0.74, 0.88, 0.74, 0.83, 0.83, 0.92]
         : [0.7, 0.92, 0.72, 0.95, 0.78, 0.97];
@@ -772,7 +783,7 @@ export function mountContactScene(
           fy - gap - landing.height / 2,
         )
       : top0 + H / 2;
-    const landingCenter = landing.top - liftChange + landing.height / 2;
+    const landingCenter = landing.top + landing.height / 2;
     /* Fase 1: origen = toda la rejilla del blog (si no existe, el panel grande de antes) */
     const o = bR
       ? [ox + ow * 0.5 * f, oy, ow * (1 - 0.5 * f), oh, unit(2.375)]
@@ -793,7 +804,7 @@ export function mountContactScene(
       mob ? contactLayout : (directContact ?? contactLayout)
     )?.getBoundingClientRect();
     if (destination && settle > 0 && settle < 1) {
-      const travel = sm(0, 0.87, settle);
+      const travel = springBounce(sm(0, 0.88, settle));
       const targetHeight = Math.min(
         ph * 0.72,
         destination.height,
@@ -996,21 +1007,40 @@ export function mountContactScene(
     const reveal = stacked
       ? sm(0.78, 0.97, m)
       : entrance * sm(unit(11), unit(17), room);
+    const titleCrossfade = sm(0.8, 1, settle);
+    landingTitle.style.opacity = settle >= 1 ? "1" : titleCrossfade.toFixed(3);
     heading.style.setProperty(
       "--ho",
-      String(settle >= 1 ? 0 : Math.max(preview, reveal, settle)),
+      String(
+        settle >= 1
+          ? 0
+          : Math.max(preview, reveal, settle) * (1 - titleCrossfade),
+      ),
     );
-    landingTitle.style.opacity = settle >= 1 ? "1" : "0";
+
+    const cardSpring =
+      settle >= 1 ? 1 : 0.94 + 0.06 * springBounce(sm(0.1, 0.95, settle));
     if (contactLayout) {
-      contactLayout.style.opacity = String(sm(0.15, 1, settle));
+      contactLayout.style.opacity =
+        settle >= 1 ? "1" : String(sm(0.08, 0.75, settle));
       contactLayout.style.pointerEvents = settle >= 0.55 ? "" : "none";
+      contactLayout.style.transform =
+        settle >= 1 ? "" : `scale(${cardSpring.toFixed(4)})`;
     }
     if (!mob && directContact) {
-      directContact.style.opacity = String(sm(0.55, 1, settle));
-      directContact.style.pointerEvents = settle >= 0.78 ? "" : "none";
+      directContact.style.opacity =
+        settle >= 1 ? "1" : String(sm(0.18, 0.85, settle));
+      directContact.style.pointerEvents = settle >= 0.7 ? "" : "none";
+      directContact.style.transform =
+        settle >= 1 ? "" : `scale(${cardSpring.toFixed(4)})`;
     } else {
       directContact?.style.removeProperty("opacity");
       directContact?.style.removeProperty("pointer-events");
+      directContact?.style.removeProperty("transform");
+    }
+    if (settle >= 1) {
+      cv3.style.visibility = "hidden";
+      panel.style.visibility = "hidden";
     }
   }
   let frame = 0;
@@ -1052,8 +1082,10 @@ export function mountContactScene(
     landingTitle.style.removeProperty("opacity");
     contactLayout?.style.removeProperty("opacity");
     contactLayout?.style.removeProperty("pointer-events");
+    contactLayout?.style.removeProperty("transform");
     directContact?.style.removeProperty("opacity");
     directContact?.style.removeProperty("pointer-events");
+    directContact?.style.removeProperty("transform");
     backdrop.style.removeProperty("--contact-backdrop-top");
     backdrop.style.removeProperty("--contact-backdrop-opacity");
     backdrop.style.removeProperty("--contact-backdrop-feather");

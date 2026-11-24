@@ -94,6 +94,10 @@ describe("hero-device-data", () => {
       const architect = resolveCircuitLabels("Lead Solutions Architect");
       expect(architect.circuitTitle).toBe("ARCHITECT");
       expect(architect.focusTitle).toBe("Architecture");
+
+      const engineer = resolveCircuitLabels("Senior Software Engineer");
+      expect(engineer.circuitTitle).toBe("ENGINEER");
+      expect(engineer.focusTitle).toBe("Senior Software Engineer");
     });
   });
 

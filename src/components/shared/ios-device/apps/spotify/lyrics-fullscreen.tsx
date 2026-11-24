@@ -90,24 +90,26 @@ const LyricsFullscreen: FC<LyricsFullscreenProps> = ({
       onPointerDown={(event) => event.stopPropagation()}
     >
       <header className="relative z-20 shrink-0 px-3.5 pt-9.5 pb-2">
-        <div className="grid grid-cols-[1.75rem_1fr_1.75rem] items-center gap-2">
+        <div className="grid grid-cols-[2.75rem_1fr_2.75rem] items-center gap-2">
           <button
             type="button"
             onClick={onBack}
-            className="flex size-7 items-center justify-center text-white/90"
+            className="flex size-11 items-center justify-center text-white/90 hover:text-white"
             aria-label={backLabel}
           >
-            <ChevronDown className="size-5" strokeWidth={2.5} />
+            <ChevronDown className="size-6" strokeWidth={2.5} />
           </button>
 
           <div className="min-w-0 text-center">
-            <p className="truncate text-[0.8125rem] font-bold text-white">
+            <p className="truncate text-sm font-bold text-white sm:text-base">
               {title}
             </p>
-            <p className="truncate text-[0.65rem] text-white/70">{artist}</p>
+            <p className="truncate text-xs text-white/75 sm:text-sm">
+              {artist}
+            </p>
           </div>
 
-          <span className="size-7" aria-hidden />
+          <span className="size-11" aria-hidden />
         </div>
       </header>
 

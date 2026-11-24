@@ -1,3 +1,22 @@
+export interface WeatherHourlyForecast {
+  time: string;
+  temp: number;
+  weatherCode?: number;
+  isDay?: boolean;
+}
+
+export interface WeatherData {
+  city: string;
+  temperature: number;
+  unit?: "C" | "F";
+  condition: string;
+  high: number;
+  low: number;
+  isDay?: boolean;
+  weatherCode?: number;
+  hourly?: WeatherHourlyForecast[];
+}
+
 export interface PhoneProfile {
   name: string;
   subtitle: string;
@@ -13,6 +32,7 @@ export interface PhoneProfile {
   location?: string;
   locationSubtitle?: string;
   timezone?: string;
+  weather?: WeatherData;
 }
 export interface PhoneRenderer {
   setScreenTexture(source: HTMLCanvasElement | null): boolean;
@@ -20,6 +40,7 @@ export interface PhoneRenderer {
   vis(visible: boolean): void;
   dispose(): void;
   retex(): void;
+  updateProfile?(profile: PhoneProfile): void;
 }
 
 export interface DevicePalette {
@@ -579,9 +600,9 @@ export function createPhone(
       [0, camY, 0],
     );
     for (const [x, y] of [
-      [-0.85, 2.1],
-      [-0.3, 1.83],
-      [-0.85, 1.56],
+      [0.85, 2.1],
+      [0.3, 1.83],
+      [0.85, 1.56],
     ]) {
       add(
         "back",
@@ -617,7 +638,7 @@ export function createPhone(
         0.55,
         0,
         false,
-        [x + 0.025, y + 0.013, 0],
+        [x - 0.025, y + 0.013, 0],
       );
       add(
         "back",
@@ -626,7 +647,7 @@ export function createPhone(
         0.1,
         0.06,
         false,
-        [x - 0.038, y + 0.04, 0],
+        [x + 0.038, y + 0.04, 0],
       );
     }
     add(
@@ -636,7 +657,7 @@ export function createPhone(
       0.4,
       0.2,
       false,
-      [0.78, 2.12, 0],
+      [-0.78, 2.12, 0],
     );
     add(
       "back",
@@ -645,25 +666,44 @@ export function createPhone(
       0.4,
       0,
       false,
-      [0.78, 1.55, 0],
+      [-0.78, 1.55, 0],
     );
+    // Lower back glass card: authentic inset panel with clean spacing from camera plateau
+    const cardW = 2.38;
+    const cardH = 3.34;
+    const cardR = 0.36;
+    const cardY = -0.87;
     add(
       "back",
-      face(2.2, 3.25, 0.3, -0.184, -1),
+      face(cardW, cardH, cardR, -0.184, -1),
       [0.15, 0.18, 0.23, 1],
       0.7,
       0,
       false,
-      [0, -0.5, 0],
+      [0, cardY, 0],
+    );
+    add(
+      "back",
+      band([
+        [cardW, cardH, cardR, -0.178],
+        [cardW + 0.02, cardH + 0.02, cardR + 0.01, -0.183],
+      ]),
+      [0.26, 0.3, 0.36, 1],
+      0.85,
+      0,
+      false,
+      [0, cardY, 0],
     );
     // Side hardware: independent meshes allow side silhouettes while turning.
-    for (const [x, y, h] of [
-      [-1.38, 1.2, 0.38],
-      [-1.38, 0.37, 0.46],
-      [-1.38, -0.22, 0.46],
-      [1.38, 0.31, 0.65],
+    // Left: Action button, Volume Up, Volume Down. Right: Side/Power button, Camera Control.
+    for (const [x, y, h, d] of [
+      [-1.38, 1.2, 0.38, 0.16],
+      [-1.38, 0.37, 0.46, 0.16],
+      [-1.38, -0.22, 0.46, 0.16],
+      [1.38, 0.35, 0.62, 0.16],
+      [1.38, -0.72, 0.44, 0.11],
     ])
-      add("back", box(0.075, h, 0.16), [0.64, 0.71, 0.79, 1], 0.93, 0, false, [
+      add("back", box(0.075, h, d), [0.64, 0.71, 0.79, 1], 0.93, 0, false, [
         x,
         y,
         0,
@@ -797,12 +837,12 @@ export function createPhone(
           A = [
             edgeRadius * Math.cos(a),
             -length / 2,
-            depthRadius * Math.sin(a),
+            Math.min(0, depthRadius * Math.sin(a)),
           ],
           B = [
             edgeRadius * Math.cos(c),
             -length / 2,
-            depthRadius * Math.sin(c),
+            Math.min(0, depthRadius * Math.sin(c)),
           ],
           C = [B[0], length / 2, B[2]],
           E = [A[0], length / 2, A[2]],
@@ -838,8 +878,8 @@ export function createPhone(
     );
     // cristal frontal: marco negro + pantalla exterior (textura)
     if (cfg.fold) {
-      const fR = [ins(0.07)[0], 0.02, 0.02, ins(0.07)[3]],
-        sR = [ins(0.15)[0], 0.02, 0.02, ins(0.15)[3]];
+      const fR = [ins(0.07)[0], 0, 0, ins(0.07)[3]],
+        sR = [ins(0.15)[0], 0, 0, ins(0.15)[3]];
       add(
         "front",
         face2(Ws - 0.07, H - 0.14, fR, foldLeafHalfDepth + 0.004, 1),
@@ -857,6 +897,15 @@ export function createPhone(
         0,
         "innerR",
         [cxo - 0.075, 0, 0],
+      );
+      add(
+        "front",
+        box(0.06, H - 0.14, 0.015),
+        [0.02, 0.03, 0.05, 1],
+        0.5,
+        0,
+        false,
+        [-W / 2 + hingeInset, 0, foldLeafHalfDepth + 0.003],
       );
     } else {
       add(
@@ -912,8 +961,8 @@ export function createPhone(
         [cxo, 0, 0],
       );
       {
-        const fR = [ins(0.07)[0], 0.02, 0.02, ins(0.07)[3]],
-          sR = [ins(0.15)[0], 0.02, 0.02, ins(0.15)[3]];
+        const fR = [ins(0.07)[0], 0, 0, ins(0.07)[3]],
+          sR = [ins(0.15)[0], 0, 0, ins(0.15)[3]];
         add(
           "cover",
           face2(Ws - 0.07, H - 0.14, fR, -foldLeafHalfDepth - 0.004, -1),
@@ -1234,6 +1283,8 @@ export function createPhone(
   }
   let currentInspectionYaw: number | null = null;
   let lastFrameTime: number | undefined;
+  let appSurfaceW = 0;
+  let appSurfaceH = 0;
   function render(time: number) {
     if (!live) {
       running = false;
@@ -1251,13 +1302,19 @@ export function createPhone(
     ) {
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
+      appSurfaceW = 0;
+      appSurfaceH = 0;
       gl.viewport(0, 0, canvas.width, canvas.height);
     }
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     const reduced = motion.matches;
     if (reduced) smooth = target;
-    else smooth = interpolate(smooth, target, 0.095);
+    else {
+      const k = 1 - Math.exp(-elapsed / 45);
+      smooth = interpolate(smooth, target, Math.min(1, k));
+      if (Math.abs(smooth - target) < 0.0002) smooth = target;
+    }
     LIGHT = [
       Math.sin(smooth * 7 + (reduced ? 0 : time * 0.0005)) * 0.95,
       0.55 + Math.cos(smooth * 5) * 0.25,
@@ -1308,15 +1365,34 @@ export function createPhone(
       reduced || appOpen || inspectYaw != null || cfg.fold
         ? 0
         : Math.sin(time * 0.00055) * 0.06;
-    const isMobile = matchMedia("(width < 48rem)").matches;
-    const cam = [0, 0, isMobile ? 10.7 : 9.85];
+    const vh = height / (rootFont || 16);
+    const vw = width / (rootFont || 16);
+    const isMobile = vw < 48;
+    // Fluidly dynamic camera distance based on viewport dimensions
+    const baseCam = isMobile
+      ? 10.7
+      : Math.min(10.2, Math.max(8.9, 11.6 - vh * 0.04 - vw * 0.015));
+    const cam = [0, 0, baseCam];
     const fov = (42 * Math.PI) / 180;
+    const sizingEl = cfg.frame ?? cfg.appSurface;
+    const currentFrameH = sizingEl
+      ? parseFloat(
+          getComputedStyle(sizingEl).getPropertyValue("--ios-device-height") ||
+            "",
+        ) * rootFont || frameHeight
+      : frameHeight;
+    const currentFrameW = sizingEl
+      ? parseFloat(
+          getComputedStyle(sizingEl).getPropertyValue("--ios-device-width") ||
+            "",
+        ) * rootFont || frameWidth
+      : frameWidth;
     const maxDeviceHeight =
       cfg.frame?.offsetHeight ??
       Math.min(
-        frameHeight,
-        height * (appOpen ? 0.84 : 0.75),
-        ((innerWidth - rootFont * 2.5) * frameHeight) / frameWidth,
+        currentFrameH,
+        height * (appOpen ? 0.88 : 0.74),
+        ((innerWidth - rootFont * 2.5) * currentFrameH) / currentFrameW,
       );
     const fitScale = matchesChassis
       ? (maxDeviceHeight * cam[2]) /
@@ -1372,6 +1448,10 @@ export function createPhone(
     if (cfg.appSurface) {
       cfg.appSurface.hidden = loadedMode !== 2 || tear > 0.05;
       if (!cfg.appSurface.hidden) {
+        if (!appSurfaceW || !appSurfaceH) {
+          appSurfaceW = cfg.appSurface.offsetWidth;
+          appSurfaceH = cfg.appSurface.offsetHeight;
+        }
         projectSurface(
           cfg.appSurface,
           frontScreen,
@@ -1379,8 +1459,8 @@ export function createPhone(
           viewProj,
           width,
           height,
-          cfg.appSurface.offsetWidth,
-          cfg.appSurface.offsetHeight,
+          appSurfaceW,
+          appSurfaceH,
           0,
           0,
         );
@@ -1551,6 +1631,10 @@ export function createPhone(
       }
     },
     retex: repaintTextures,
+    updateProfile(nextProfile) {
+      profile = nextProfile;
+      repaintTextures();
+    },
     dispose() {
       if (cfg.appSurface) cfg.appSurface.hidden = true;
       themeObserver.disconnect();
