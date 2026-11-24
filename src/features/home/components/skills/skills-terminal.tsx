@@ -73,7 +73,7 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
             className="size-2.5 rounded-full bg-[#28c840]"
             aria-hidden="true"
           />
-          <span className="text-foreground/75 ml-auto font-mono text-sm">
+          <span className="text-foreground ml-auto font-mono text-sm">
             expertise.json
           </span>
         </div>
@@ -119,7 +119,7 @@ export default function SkillsTerminal({ skills }: SkillsTerminalProps) {
         </dl>
 
         {/* Spec Sheet Footer */}
-        <div className="border-border/60 text-foreground/75 flex flex-wrap items-center justify-between gap-2 border-t px-6 py-3 font-mono text-sm sm:px-8">
+        <div className="border-border/60 text-foreground flex flex-wrap items-center justify-between gap-2 border-t px-6 py-3 font-mono text-sm sm:px-8">
           <span className="flex items-center gap-1.5">
             <Check className="size-4 text-emerald-400" aria-hidden="true" />
             <span>{t("updatedTech")}</span>
