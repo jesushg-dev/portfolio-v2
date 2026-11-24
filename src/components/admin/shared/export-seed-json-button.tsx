@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { downloadBlob } from "@/lib/utils/download";
 import type { SeedExportEntity } from "@/lib/seed-export/entities";
 import { api } from "@/trpc/react";
 
@@ -13,17 +14,6 @@ export type SeedExportTarget = SeedExportEntity | "all";
 
 interface ExportSeedJsonButtonProps {
   entity: SeedExportTarget;
-}
-
-function downloadBlob(fileName: string, blob: Blob) {
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = fileName;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  URL.revokeObjectURL(url);
 }
 
 function downloadJsonFile(fileName: string, json: string) {

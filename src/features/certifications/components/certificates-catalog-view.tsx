@@ -388,26 +388,21 @@ export function CertificatesCatalogView({
   // Keyboard shortcut '/' to search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.key === "/" &&
-        !/INPUT|TEXTAREA|SELECT/.test(
-          (document.activeElement as HTMLElement)?.tagName || "",
-        )
-      ) {
+      const target = e.target as HTMLElement | null;
+      const isInput =
+        Boolean(target?.isContentEditable) ||
+        Boolean(
+          target?.tagName && /^(INPUT|TEXTAREA|SELECT)$/i.test(target.tagName),
+        );
+
+      if (e.key === "/" && !isInput) {
         e.preventDefault();
         searchInputRef.current?.focus();
-      }
-      if (
-        e.key === "Escape" &&
-        document.activeElement === searchInputRef.current &&
-        query
-      ) {
-        setQuery("");
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [query]);
+  }, []);
 
   // Compute top technologies from initial certificates
   const topTech = useMemo(() => {
@@ -724,6 +719,11 @@ export function CertificatesCatalogView({
                 type="search"
                 value={query}
                 onChange={handleSearchChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape" && query) {
+                    setQuery("");
+                  }
+                }}
                 placeholder={t("catalog.searchPlaceholder")}
                 autoComplete="off"
                 className="border-border/80 bg-background/80 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 w-full rounded-full border py-3 pr-11 pl-11 text-sm outline-hidden transition-all focus:ring-2"

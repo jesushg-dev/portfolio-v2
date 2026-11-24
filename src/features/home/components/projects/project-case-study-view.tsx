@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import CaseStudyNextProject from "./case-study-next-project";
@@ -45,6 +48,34 @@ export default function ProjectCaseStudyView({
 
   const pageSections = buildCaseStudyPageSections(project, t);
 
+  const [activeSection, setActiveSection] = useState(
+    pageSections[0]?.key ?? "",
+  );
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const entries = pageSections
+      .map((s) => sectionRefs.current[s.key])
+      .filter((el): el is HTMLDivElement => Boolean(el));
+    if (entries.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (observerEntries) => {
+        for (const entry of observerEntries) {
+          if (entry.isIntersecting) {
+            const key = entry.target.getAttribute("data-section-key");
+            if (key) setActiveSection(key);
+          }
+        }
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: 0 },
+    );
+
+    entries.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [pageSections]);
+
   const shortOnTimeSections = pageSections.filter((section) =>
     ["role", "decisions", "results"].includes(section.key),
   );
@@ -86,16 +117,26 @@ export default function ProjectCaseStudyView({
         <ProjectSnapshot project={project} />
 
         <div className="mt-16 grid w-full max-w-full min-w-0 gap-12 lg:grid-cols-[13.125rem_minmax(0,1fr)]">
-          <CaseStudySidebar sections={pageSections} />
+          <CaseStudySidebar
+            sections={pageSections}
+            activeSection={activeSection}
+          />
           <div className="min-w-0 space-y-20">
             {pageSections.map((section, index) => (
-              <CaseStudyPageSectionView
+              <div
                 key={section.key}
-                entry={section}
-                index={index}
-                content={content}
-                shortOnTimeSections={shortOnTimeSections}
-              />
+                ref={(el) => {
+                  sectionRefs.current[section.key] = el;
+                }}
+                data-section-key={section.key}
+              >
+                <CaseStudyPageSectionView
+                  entry={section}
+                  index={index}
+                  content={content}
+                  shortOnTimeSections={shortOnTimeSections}
+                />
+              </div>
             ))}
           </div>
         </div>

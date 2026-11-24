@@ -1,7 +1,8 @@
-import { useEffect, type ReactNode, type FC } from "react";
+import { type ReactNode, type FC } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useBodyOverlayLock } from "@/hooks/use-body-overlay-lock";
 
 interface IModalProps {
   className?: string;
@@ -10,12 +11,7 @@ interface IModalProps {
 }
 
 const Modal: FC<IModalProps> = ({ children, onClickBackdrop, className }) => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
+  useBodyOverlayLock(true);
 
   return (
     <AnimatePresence>

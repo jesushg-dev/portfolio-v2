@@ -1,3 +1,5 @@
+"use client";
+
 import { ProcessBenefitsGrid } from "@/features/process-pages/components/process-benefits-grid";
 import { ProcessClosingCta } from "@/features/process-pages/components/process-closing-cta";
 import { ProcessFaqSection } from "@/features/process-pages/components/process-faq-section";
@@ -5,6 +7,10 @@ import { ProcessHero } from "@/features/process-pages/components/process-hero";
 import { ProcessHeroWorkflowCycle } from "@/features/process-pages/components/process-hero-workflow-cycle";
 import { ProcessPageNav } from "@/features/process-pages/components/process-page-nav";
 import { ProcessPageShell } from "@/features/process-pages/components/process-section-header";
+import {
+  ProcessPageNavProvider,
+  useProcessPageNav,
+} from "@/features/process-pages/components/process-page-context";
 import { ProcessRolesSection } from "@/features/process-pages/components/process-roles-section";
 import { ProcessStepsAccordion } from "@/features/process-pages/components/process-steps-accordion";
 import { ProcessStepsTimeline } from "@/features/process-pages/components/process-steps-timeline";
@@ -64,11 +70,7 @@ function HeroVisual({
   return null;
 }
 
-export function ProcessPageSection({
-  section,
-}: {
-  section: ProcessPageWidget;
-}) {
+function ProcessSectionContent({ section }: { section: ProcessPageWidget }) {
   switch (section.type) {
     case "nav":
       return <ProcessPageNav label={section.label} items={section.items} />;
@@ -176,12 +178,41 @@ export function ProcessPageSection({
   }
 }
 
+export function ProcessPageSection({
+  section,
+}: {
+  section: ProcessPageWidget;
+}) {
+  const nav = useProcessPageNav();
+  const anchorId = "anchorId" in section ? section.anchorId : section.id;
+
+  if (section.type === "nav") {
+    return <ProcessSectionContent section={section} />;
+  }
+
+  return (
+    <div
+      ref={(el) => {
+        if (!nav) return;
+        nav.registerSection(anchorId, el);
+        if (section.type === "hero") nav.registerSection("hero", el);
+        if (section.type === "closingCta") nav.registerSection("contact", el);
+      }}
+      data-section-id={anchorId}
+    >
+      <ProcessSectionContent section={section} />
+    </div>
+  );
+}
+
 export function ProcessPageView({ page }: { page: ProcessPageViewModel }) {
   return (
-    <ProcessPageShell>
-      {page.content.sections.map((section) => (
-        <ProcessPageSection key={section.id} section={section} />
-      ))}
-    </ProcessPageShell>
+    <ProcessPageNavProvider>
+      <ProcessPageShell>
+        {page.content.sections.map((section) => (
+          <ProcessPageSection key={section.id} section={section} />
+        ))}
+      </ProcessPageShell>
+    </ProcessPageNavProvider>
   );
 }
