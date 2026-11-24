@@ -21,17 +21,16 @@ const SkillItem: FC<SkillItemProps> = ({ image, title, featured }) => {
         params: { slug: skillSlugFromTitle(title) },
       }}
       scroll={false}
-      className={cn(
-        "group/item text-foreground active:bg-muted/40 inline-flex min-h-11 w-full items-center gap-2.5 rounded-lg border-none bg-transparent px-2.5 py-2 text-sm transition-opacity duration-150 sm:min-h-0 sm:w-auto sm:gap-2 sm:p-0.5 sm:active:bg-transparent",
-        featured ? "opacity-100" : "opacity-[0.68] hover:opacity-100",
-      )}
+      className="group/item text-foreground active:bg-muted/40 inline-flex min-h-11 w-full items-center gap-2.5 rounded-lg border-none bg-transparent px-2.5 py-2 text-sm transition-colors duration-150 sm:min-h-0 sm:w-auto sm:gap-2 sm:p-0.5 sm:active:bg-transparent"
       title={title}
     >
       <SkillIcon image={image} title={title} />
       <span
         className={cn(
-          "text-foreground group-hover/item:text-primary group-hover/item:decoration-primary group-hover/item:underline group-hover/item:decoration-[1.5px] group-hover/item:underline-offset-4",
-          featured ? "font-medium" : "font-normal",
+          "group-hover/item:text-primary group-hover/item:decoration-primary group-hover/item:underline group-hover/item:decoration-[0.09375rem] group-hover/item:underline-offset-4",
+          featured
+            ? "text-foreground font-medium"
+            : "text-foreground/80 font-normal",
         )}
       >
         {title}

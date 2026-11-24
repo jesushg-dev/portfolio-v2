@@ -71,7 +71,7 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
         }
       >
         <div>
-          <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-sm tracking-wider uppercase">
+          <p className="text-foreground/75 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-sm tracking-wider uppercase">
             {post.topic ? (
               <span className="inline-flex max-w-[75%] min-w-0 items-center gap-2">
                 <span className="truncate">{post.topic}</span>
@@ -107,7 +107,7 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
           >
             <Link
               href={{ pathname: "/blog/[slug]", params: { slug: post.slug } }}
-              className="focus-visible:after:outline-primary inline-block min-h-11 min-w-11 after:absolute after:inset-0 after:rounded-[inherit] focus-visible:after:outline-2 focus-visible:after:-outline-offset-2"
+              className="focus-visible:after:outline-primary block min-h-11 min-w-11 after:absolute after:inset-0 after:rounded-[inherit] focus-visible:after:outline-2 focus-visible:after:-outline-offset-2"
             >
               {post.title}
             </Link>
@@ -115,7 +115,7 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
           {post.excerpt ? (
             <p
               className={cn(
-                "text-muted-foreground text-sm leading-relaxed wrap-break-word sm:text-base",
+                "text-foreground/80 text-base leading-relaxed wrap-break-word",
                 featured ? "mt-3 line-clamp-3" : "mt-1.5 line-clamp-2",
               )}
             >

@@ -1,7 +1,6 @@
 import { getPublicLocale } from "@/lib/public-site/locale";
 import { api } from "@/trpc/server";
 import Hero from "@/features/home/components/hero";
-import { HomeTechMarquee } from "@/features/home/components/home-tech-marquee";
 import Portfolio from "@/features/home/components/portfolio";
 import Experience from "@/features/home/components/experience";
 import Services from "@/features/home/components/services";
@@ -66,7 +65,6 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
       <Hero stats={stats} />
-      <HomeTechMarquee items={skills} />
 
       <HomeSection id="portfolio" estimatedHeight="36rem">
         <Portfolio />
@@ -92,10 +90,7 @@ export default async function Home() {
         <Skills locale={locale} skills={skills} />
       </HomeSection>
 
-      <div
-        data-blog-contact-story
-        className="bg-background relative isolate overflow-clip"
-      >
+      <div data-blog-contact-story className="bg-background relative isolate">
         <div id="blog" className="home-section scroll-mt-24">
           <HomeBlog locale={locale} />
         </div>

@@ -29,53 +29,32 @@ const HomeBlog: FC<HomeBlogProps> = async ({ locale }) => {
     if (s.slug) seriesCountMap.set(s.slug, s.count);
   }
 
-  const seenSeries = new Set<string>();
-  const selectedIds = new Set(
-    data.posts
-      .filter((post) => {
-        const seriesKey = post.seriesId ?? post.seriesSlug;
-        if (!seriesKey) return true;
-        if (seenSeries.has(seriesKey)) return false;
-        seenSeries.add(seriesKey);
-        return true;
-      })
-      .slice(0, 4)
-      .map((post) => post.id),
-  );
-
-  for (const post of data.posts) {
-    if (selectedIds.size === 4) break;
-    selectedIds.add(post.id);
-  }
-
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     month: "short",
     year: "numeric",
     timeZone: "UTC",
   });
-  const [featured, ...latest] = data.posts
-    .filter((post) => selectedIds.has(post.id))
-    .map((post) => {
-      const seriesTotal =
-        (post.seriesId ? seriesCountMap.get(post.seriesId) : undefined) ??
-        (post.seriesSlug ? seriesCountMap.get(post.seriesSlug) : undefined);
-      let partLabel: string | undefined;
-      if (post.seriesOrder !== null) {
-        partLabel = seriesTotal
-          ? t("partOfTotal", { part: post.seriesOrder, total: seriesTotal })
-          : t("part", { part: post.seriesOrder });
-      }
+  const [featured, ...latest] = data.posts.slice(0, 4).map((post) => {
+    const seriesTotal =
+      (post.seriesId ? seriesCountMap.get(post.seriesId) : undefined) ??
+      (post.seriesSlug ? seriesCountMap.get(post.seriesSlug) : undefined);
+    let partLabel: string | undefined;
+    if (post.seriesOrder !== null) {
+      partLabel = seriesTotal
+        ? t("partOfTotal", { part: post.seriesOrder, total: seriesTotal })
+        : t("part", { part: post.seriesOrder });
+    }
 
-      return {
-        ...post,
-        topic: post.seriesName ?? post.tags.find((tag) => !isSeriesTag(tag)),
-        dateLabel: post.publishedAt
-          ? dateFormatter.format(new Date(post.publishedAt))
-          : undefined,
-        partLabel,
-        minReadLabel: t("minRead", { count: post.readingTime }),
-      };
-    });
+    return {
+      ...post,
+      topic: post.seriesName ?? post.tags.find((tag) => !isSeriesTag(tag)),
+      dateLabel: post.publishedAt
+        ? dateFormatter.format(new Date(post.publishedAt))
+        : undefined,
+      partLabel,
+      minReadLabel: t("minRead", { count: post.readingTime }),
+    };
+  });
 
   if (!featured) return null;
 
@@ -117,7 +96,7 @@ const HomeBlog: FC<HomeBlogProps> = async ({ locale }) => {
           <div className="home-card-surface bg-card flex h-full min-w-0 flex-col overflow-hidden rounded-4xl p-6 sm:p-8 [[data-color-mode=dark]_&]:bg-[color-mix(in_srgb,var(--card)_94%,var(--foreground))]">
             <h3
               id="home-blog-latest"
-              className="text-muted-foreground mb-5 shrink-0 font-mono text-sm font-medium tracking-widest uppercase"
+              className="text-foreground/80 mb-5 shrink-0 font-mono text-sm font-medium tracking-widest uppercase"
             >
               {t("latest")}
             </h3>

@@ -46,7 +46,6 @@ export function mountContactScene(
   const backdrop = root;
   const bg = root.querySelector<HTMLElement>("[data-phone-origin]"),
     blogSection = bg?.closest("section"),
-    blogHeading = blogSection?.querySelector("#blog-heading"),
     container = root.querySelector<HTMLElement>("[data-contact-container]"),
     stageNode = csS.querySelector<HTMLElement>(".cs-stage");
   if (!container || !stageNode) return;
@@ -662,10 +661,7 @@ export function mountContactScene(
     const fo2 = !!(end3d && isDuo);
     const foldOffset =
       bR && desktop
-        ? ((blogHeading?.getBoundingClientRect().top ?? bR.top) +
-            (blogEnd ?? bR.bottom) -
-            vh) /
-          2
+        ? (bR.bottom ?? rc.top) - vh * 0.72
         : (bR?.bottom ?? rc.top) - vh * 0.85;
     const foldStart = sY + foldOffset;
     const targetLandingTop = top0 + unit(2.5);
@@ -692,35 +688,54 @@ export function mountContactScene(
         )
       : 0.3;
     const closeTo = isDuo ? closeFrom + 0.26 : 0.62;
-    if (
-      isDuo &&
-      !skipHandoff &&
-      scrollProgress > renderedProgress &&
-      scrollProgress > closeFrom
-    ) {
-      const elapsed = Math.min(100, now - (lastCloseFrame ?? now));
-      const closing = renderedProgress < closeTo;
-      const phaseStart = closing ? closeFrom : closeTo;
-      const phaseEnd = closing ? closeTo : 1;
-      const duration = closing ? hingeCloseDuration : phoneDockDuration;
-      renderedProgress = Math.min(
-        scrollProgress,
-        phaseEnd,
-        Math.max(renderedProgress, phaseStart) +
-          ((phaseEnd - phaseStart) * elapsed) / duration,
-      );
-      lastCloseFrame = renderedProgress < scrollProgress ? now : undefined;
-      if (lastCloseFrame !== undefined) schedule();
+    if (isDuo && !skipHandoff) {
+      if (scrollProgress > renderedProgress && scrollProgress > closeFrom) {
+        // Forward: animate closing and docking smoothly
+        const elapsed = Math.min(100, now - (lastCloseFrame ?? now));
+        const closing = renderedProgress < closeTo;
+        const phaseStart = closing ? closeFrom : closeTo;
+        const phaseEnd = closing ? closeTo : 1;
+        const duration = closing ? hingeCloseDuration : phoneDockDuration;
+        renderedProgress = Math.min(
+          scrollProgress,
+          phaseEnd,
+          Math.max(renderedProgress, phaseStart) +
+            ((phaseEnd - phaseStart) * elapsed) / duration,
+        );
+        lastCloseFrame = renderedProgress < scrollProgress ? now : undefined;
+        if (lastCloseFrame !== undefined) schedule();
+      } else if (
+        scrollProgress < renderedProgress &&
+        renderedProgress > closeFrom
+      ) {
+        // Reverse: animate unclosing and undocking smoothly
+        const elapsed = Math.min(100, now - (lastCloseFrame ?? now));
+        const opening = renderedProgress > closeTo;
+        const phaseStart = opening ? 1 : closeTo;
+        const phaseEnd = opening ? closeTo : closeFrom;
+        const duration = opening ? phoneDockDuration : hingeCloseDuration;
+        renderedProgress = Math.max(
+          scrollProgress,
+          phaseEnd,
+          Math.min(renderedProgress, phaseStart) -
+            ((phaseStart - phaseEnd) * elapsed) / duration,
+        );
+        lastCloseFrame = renderedProgress > scrollProgress ? now : undefined;
+        if (lastCloseFrame !== undefined) schedule();
+      } else {
+        renderedProgress = scrollProgress;
+        lastCloseFrame = undefined;
+      }
     } else {
       renderedProgress = scrollProgress;
       lastCloseFrame = undefined;
     }
-    if (scrollProgress < 0.84) {
+    if (scrollProgress < 0.96) {
       handoffStartedAt = undefined;
     } else if (skipHandoff) {
       handoffStartedAt = now - closedPhonePause - contactHandoffDuration;
     } else if (
-      renderedProgress === 1 &&
+      renderedProgress >= 0.99 &&
       handoffStartedAt === undefined &&
       !panel.querySelector(":focus-visible")
     ) {
@@ -827,7 +842,9 @@ export function mountContactScene(
     panel.style.opacity = (fo2 && !dom1 ? 0 : fo).toFixed(3);
     panel.style.visibility =
       (fo2 ? dom1 : !bR || m > 0) && fo > 0 ? "visible" : "hidden";
-    if (bg) bg.style.visibility = m > 0 && bR && bR.bottom > 0 ? "hidden" : "";
+    if (bg)
+      bg.style.visibility =
+        fo2 && m >= 0.25 && bR && bR.bottom > 0 ? "hidden" : "";
     panel.style.left = (X - st.left).toFixed(1) + "px";
     panel.style.top = (Y - st.top).toFixed(1) + "px";
     panel.style.width = PW.toFixed(1) + "px";
@@ -1041,6 +1058,9 @@ export function mountContactScene(
     if (settle >= 1) {
       cv3.style.visibility = "hidden";
       panel.style.visibility = "hidden";
+    } else {
+      panel.style.visibility =
+        (fo2 ? dom1 : !bR || m > 0) && fo > 0 ? "visible" : "hidden";
     }
   }
   let frame = 0;

@@ -909,7 +909,7 @@
     [data-theme="orange-light"],
     [data-theme="christmas-light"]
   )
-  :is(#main-content, .home-section, .home-tech-marquee) {
+  :is(#main-content, .home-section) {
   background: #ffffff;
 }
 
@@ -1731,35 +1731,4 @@ video::-webkit-media-controls {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* Home Tech Marquee */
-@keyframes home-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.a-home-marquee {
-  display: flex;
-  gap: 0.875rem;
-  width: max-content;
-  animation: home-marquee 100s linear infinite;
-}
-
-.a-home-marquee-reverse {
-  display: flex;
-  gap: 0.875rem;
-  width: max-content;
-  animation: home-marquee 120s linear infinite reverse;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .a-home-marquee,
-  .a-home-marquee-reverse {
-    animation: none !important;
-  }
 }
