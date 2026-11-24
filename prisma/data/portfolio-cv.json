@@ -471,9 +471,9 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Desarrollé aplicaciones backend (C# / Nest.js) y frontend (Angular / React/Next.js) con soluciones robustas y dinámicas.",
-            "en": "Built backend apps (C# / Nest.js) and frontend (Angular / React/Next.js) with robust, dynamic solutions.",
-            "nl": "Backend-apps (C# / Nest.js) en frontend (Angular / React/Next.js) gebouwd met robuuste, dynamische oplossingen."
+            "es": "Desarrollé aplicaciones backend (C# / Nest.js) y frontend (Angular / React / Next.js) con soluciones robustas y dinámicas.",
+            "en": "Built backend apps (C# / Nest.js) and frontend (Angular / React / Next.js) with robust, dynamic solutions.",
+            "nl": "Backend-apps (C# / Nest.js) en frontend (Angular / React / Next.js) gebouwd met robuuste, dynamische oplossingen."
           },
           "order": 0,
           "atsOnly": false

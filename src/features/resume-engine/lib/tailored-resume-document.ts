@@ -434,7 +434,7 @@ export function validateTailoredResume(
         original,
         text,
         "length",
-        `required text, maximum ${original.budget} characters`,
+        `required text, maximum ${original.budget} characters (received ${text?.length ?? 0})`,
         { limit: original.budget },
       );
     if (!text) continue;

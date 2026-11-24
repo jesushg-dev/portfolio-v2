@@ -34,8 +34,8 @@ export function ResumeTemplateSelector({
   studioPreview,
 }: Props) {
   const t = useTranslations("admin.resumeStudio");
-  const templateRadioGroupRef = useRef<HTMLDivElement>(null);
-  const languageRadioGroupRef = useRef<HTMLDivElement>(null);
+  const templateButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const languageButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const templatesList = Object.values(RESUME_TEMPLATES);
 
@@ -91,11 +91,7 @@ export function ResumeTemplateSelector({
       if (nextIndex !== currentIndex && templatesList[nextIndex]) {
         const nextTemplate = templatesList[nextIndex];
         onTemplateVersionChange(nextTemplate.id);
-        const buttons =
-          templateRadioGroupRef.current?.querySelectorAll<HTMLButtonElement>(
-            "button[role='radio']",
-          );
-        buttons?.[nextIndex]?.focus();
+        templateButtonRefs.current[nextIndex]?.focus();
       }
     },
     [onTemplateVersionChange, templatesList],
@@ -116,11 +112,7 @@ export function ResumeTemplateSelector({
       if (nextIndex !== currentIndex && languageOptions[nextIndex]) {
         const nextLang = languageOptions[nextIndex];
         onTargetLocaleChange(nextLang.id);
-        const buttons =
-          languageRadioGroupRef.current?.querySelectorAll<HTMLButtonElement>(
-            "button[role='radio']",
-          );
-        buttons?.[nextIndex]?.focus();
+        languageButtonRefs.current[nextIndex]?.focus();
       }
     },
     [languageOptions, onTargetLocaleChange],
@@ -141,7 +133,6 @@ export function ResumeTemplateSelector({
       <div className="space-y-2">
         <Label>{t("tailorTemplateVersionLabel")}</Label>
         <div
-          ref={templateRadioGroupRef}
           role="radiogroup"
           aria-label={t("tailorTemplateVersionLabel")}
           className="grid grid-cols-2 gap-3"
@@ -168,6 +159,9 @@ export function ResumeTemplateSelector({
             return (
               <ResumeOptionCard
                 key={template.id}
+                ref={(el) => {
+                  templateButtonRefs.current[index] = el;
+                }}
                 selected={templateVersion === template.id}
                 onSelect={() => onTemplateVersionChange(template.id)}
                 title={title}
@@ -208,7 +202,6 @@ export function ResumeTemplateSelector({
       <div className="space-y-2">
         <Label>{t("tailorOutputLanguage")}</Label>
         <div
-          ref={languageRadioGroupRef}
           role="radiogroup"
           aria-label={t("tailorOutputLanguage")}
           className="grid grid-cols-2 gap-2.5 sm:grid-cols-4"
@@ -218,6 +211,9 @@ export function ResumeTemplateSelector({
             return (
               <ResumeOptionCard
                 key={lang.id}
+                ref={(el) => {
+                  languageButtonRefs.current[index] = el;
+                }}
                 selected={isSelected}
                 onSelect={() => onTargetLocaleChange(lang.id)}
                 title={lang.title}

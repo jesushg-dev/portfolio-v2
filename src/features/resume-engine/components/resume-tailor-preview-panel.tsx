@@ -25,6 +25,10 @@ import {
   buildAtsCvFileName,
   inferCvRoleTrack,
 } from "@/lib/cv/build-ats-cv-file-name";
+import {
+  downloadBlob,
+  downloadUrl as triggerDownloadUrl,
+} from "@/lib/utils/download";
 
 type PreviewMode = "word" | "pdf" | "ats" | "match";
 
@@ -162,22 +166,9 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       const response = await fetch(url);
       if (!response.ok) throw new Error("Download request failed");
       const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = targetFilename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      downloadBlob(targetFilename, blob);
     } catch {
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = targetFilename;
-      link.target = "_self";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      triggerDownloadUrl(targetFilename, url);
     }
   };
 

@@ -19,6 +19,7 @@ export interface ResumeOptionCardProps {
   onKeyDown?: (e: KeyboardEvent<HTMLButtonElement>) => void;
   role?: "radio" | "button";
   indicatorSize?: "sm" | "default";
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 export const ResumeOptionCard: FC<ResumeOptionCardProps> = ({
@@ -35,11 +36,13 @@ export const ResumeOptionCard: FC<ResumeOptionCardProps> = ({
   onKeyDown,
   role = "radio",
   indicatorSize = "default",
+  ref,
 }) => {
   const isSm = indicatorSize === "sm";
 
   return (
     <button
+      ref={ref}
       type="button"
       role={role}
       aria-checked={role === "radio" ? selected : undefined}

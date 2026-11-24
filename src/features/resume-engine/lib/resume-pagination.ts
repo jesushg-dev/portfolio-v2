@@ -38,7 +38,7 @@ export function paginateResumeExperiences(
   let page = 0;
   let characters = document.header.summary?.length ?? 0;
   let usedLines =
-    4 +
+    2 +
     lines(
       document.header.summary ?? "",
       template.experiencePageLayout[0].charactersPerLine,
@@ -48,11 +48,11 @@ export function paginateResumeExperiences(
       const width = template.experiencePageLayout[index].charactersPerLine;
       const newCompany = pages[index].at(-1)?.company !== experience.company;
       return (
-        (newCompany ? 3 + lines(experience.companyBlurb ?? "", width) : 1) +
+        (newCompany ? 2 + lines(experience.companyBlurb ?? "", width) : 1) +
         lines(experience.role, Math.floor(width * 0.65)) +
         lines(experience.location ?? "", width) +
         experience.responsibilities.reduce(
-          (sum, bullet) => sum + lines(bullet, width - 4) + 0.5,
+          (sum, bullet) => sum + lines(bullet, width - 4) + 0.2,
           0,
         )
       );

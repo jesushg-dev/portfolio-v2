@@ -194,8 +194,13 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Don't intercept when user is typing in a textarea or input
-      const activeTag = document.activeElement?.tagName?.toLowerCase();
-      if (activeTag === "textarea" || activeTag === "input") return;
+      const target = event.target as HTMLElement | null;
+      if (
+        target?.isContentEditable ||
+        (target?.tagName && /^(INPUT|TEXTAREA|SELECT)$/i.test(target.tagName))
+      ) {
+        return;
+      }
 
       if (event.code === "Space" || event.key === " ") {
         event.preventDefault();
