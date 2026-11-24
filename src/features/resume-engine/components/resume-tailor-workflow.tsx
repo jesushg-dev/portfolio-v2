@@ -25,7 +25,12 @@ import {
 } from "@/features/resume-engine/lib/cv-match-analysis";
 import { ResumeTemplateSelector } from "./resume-template-selector";
 import { VacancySkillConfirmation } from "./vacancy-skill-confirmation";
-import { vacancySkillSuggestions } from "../lib/extract-job-tools";
+import {
+  technologyNameKey,
+  vacancySkillSuggestions,
+  type TechnologyEquivalence,
+} from "../lib/extract-job-tools";
+import type { AiPromptPackage } from "../lib/ai/prompt-package";
 import { parseAiJsonResponse } from "../lib/ai/parse-json-response";
 import { CvMatchAnalysisSchema } from "../lib/cv-match-analysis";
 import {
@@ -34,6 +39,7 @@ import {
 } from "@/features/resume-engine/lib/template-registry";
 import {
   ResumeTailorErrorAlert,
+  type ResumeTailorErrorAlertProps,
   type ResumeTailorFailure,
 } from "@/features/resume-engine/components/resume-tailor-error-alert";
 import { ResumeTailorProgress } from "@/features/resume-engine/components/resume-tailor-progress";
@@ -41,6 +47,23 @@ import { type ExistingCvFile } from "@/features/resume-engine/components/resume-
 import { ResumeTailorResultView } from "@/features/resume-engine/components/resume-tailor-result-view";
 
 type Step = "configure" | "tailoring" | "done";
+
+function mergeEquivalencePair(
+  list: TechnologyEquivalence[],
+  pair: TechnologyEquivalence,
+): TechnologyEquivalence[] {
+  const key = `${technologyNameKey(pair.original)}->${technologyNameKey(pair.proposed)}`;
+  if (
+    list.some(
+      (entry) =>
+        `${technologyNameKey(entry.original)}->${technologyNameKey(entry.proposed)}` ===
+        key,
+    )
+  ) {
+    return list;
+  }
+  return [...list, pair];
+}
 
 interface ResumeTailorWorkflowProps {
   applicationId?: string;
@@ -66,6 +89,13 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const [confirmedTechnologies, setConfirmedTechnologies] = useState<string[]>(
     [],
   );
+  const [technologyEquivalences, setTechnologyEquivalences] = useState<
+    TechnologyEquivalence[]
+  >([]);
+  const [rejectedTechnologyEquivalences, setRejectedTechnologyEquivalences] =
+    useState<TechnologyEquivalence[]>([]);
+  const [correctionPrompt, setCorrectionPrompt] =
+    useState<AiPromptPackage | null>(null);
   const [discovery, setDiscovery] = useState<{
     vacancy: string;
     names: string[];
@@ -95,6 +125,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const tailorPrompt = api.resumeEngineAdmin.getTailorPrompt.useQuery(
     {
       confirmedTechnologies,
+      technologyEquivalences,
+      rejectedTechnologyEquivalences,
       applicationId,
       templateVersion,
       targetLocale: targetLocale === "auto" ? undefined : targetLocale,
@@ -112,7 +144,15 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     api.resumeEngineAdmin.discoverVacancyTechnologies.useMutation();
   const tailorResumeManual =
     api.resumeEngineAdmin.tailorResumeManual.useMutation();
+  const getCorrectionPrompt =
+    api.resumeEngineAdmin.getTailorCorrectionPrompt.useMutation();
+  const deleteEquivalence =
+    api.resumeEngineAdmin.deleteTechnologyEquivalence.useMutation();
 
+  const savedEquivalences = useMemo(
+    () => pageData.data?.savedTechnologyEquivalences ?? [],
+    [pageData.data?.savedTechnologyEquivalences],
+  );
   const application = pageData.data?.application;
   const latestExport = pageData.data?.latestExport;
   const hasStudioData = pageData.data?.hasStudioData ?? false;
@@ -222,130 +262,308 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     [t],
   );
 
-  const handleTailorAuto = useCallback(() => {
-    if (effectiveJobDescription.length < 20) {
-      setError({ message: t("tailorJdTooShort") });
-      return;
-    }
-    if (!hasStudioData) {
-      setError({ message: t("tailorNoStudioData") });
-      return;
-    }
-
-    startTransition(async () => {
-      setError(null);
-      setStep("tailoring");
-      try {
-        let vacancyTechnologies = discovery?.names ?? [];
-        if (discovery?.vacancy !== effectiveJobDescription) {
-          const names = await discoverTechnologies
-            .mutateAsync({
-              jobDescription: effectiveJobDescription,
-              provider: effectiveProvider ?? undefined,
-            })
-            .catch(() => []);
-          setDiscovery({ vacancy: effectiveJobDescription, names });
-          vacancyTechnologies = names;
-          const declared = pageData.data?.declaredTechnologies ?? [];
-          const offered = vacancySkillSuggestions(
-            effectiveJobDescription,
-            declared,
-            confirmedTechnologies,
-          );
-          const discovered = vacancySkillSuggestions(
-            effectiveJobDescription,
-            declared,
-            names,
-          );
-          if (discovered.some((name) => !offered.includes(name))) {
-            setStep("configure");
-            toast.info(t("vacancySkillsReview"));
-            return;
-          }
-        }
-        const result = await tailorResume.mutateAsync({
-          confirmedTechnologies,
-          vacancyTechnologies,
-          jobDescription: effectiveJobDescription,
-          applicationId,
-          provider: effectiveProvider ?? undefined,
-          templateVersion,
-          targetLocale: targetLocale === "auto" ? undefined : targetLocale,
-          uiLocale,
-        });
-        applyTailorResult(result);
-        setStep("done");
-        toast.success(t("tailorSuccess"));
-      } catch (err) {
-        handleTailorFailure(err);
+  const runTailorAuto = useCallback(
+    (overrides?: {
+      confirmed?: string[];
+      equivalences?: TechnologyEquivalence[];
+      rejected?: TechnologyEquivalence[];
+    }) => {
+      if (effectiveJobDescription.length < 20) {
+        setError({ message: t("tailorJdTooShort") });
+        return;
       }
-    });
-  }, [
-    applicationId,
-    effectiveJobDescription,
-    effectiveProvider,
-    confirmedTechnologies,
-    discovery,
-    discoverTechnologies,
-    pageData.data,
-    hasStudioData,
-    handleTailorFailure,
+      if (!hasStudioData) {
+        setError({ message: t("tailorNoStudioData") });
+        return;
+      }
 
-    tailorResume,
-    applyTailorResult,
-    t,
+      const nextConfirmed = overrides?.confirmed ?? confirmedTechnologies;
+      const nextEquivalences =
+        overrides?.equivalences ?? technologyEquivalences;
+      const nextRejected =
+        overrides?.rejected ?? rejectedTechnologyEquivalences;
 
-    templateVersion,
-    targetLocale,
-    uiLocale,
-  ]);
+      startTransition(async () => {
+        setError(null);
+        setCorrectionPrompt(null);
+        setStep("tailoring");
+        try {
+          let vacancyTechnologies = discovery?.names ?? [];
+          if (discovery?.vacancy !== effectiveJobDescription) {
+            const names = await discoverTechnologies
+              .mutateAsync({
+                jobDescription: effectiveJobDescription,
+                provider: effectiveProvider ?? undefined,
+              })
+              .catch(() => []);
+            setDiscovery({ vacancy: effectiveJobDescription, names });
+            vacancyTechnologies = names;
+            const declared = pageData.data?.declaredTechnologies ?? [];
+            const knownEquivalences = [
+              ...savedEquivalences,
+              ...nextEquivalences,
+            ];
+            const offered = vacancySkillSuggestions(
+              effectiveJobDescription,
+              declared,
+              nextConfirmed,
+              knownEquivalences,
+            );
+            const discovered = vacancySkillSuggestions(
+              effectiveJobDescription,
+              declared,
+              names,
+              knownEquivalences,
+            );
+            if (discovered.some((name) => !offered.includes(name))) {
+              setStep("configure");
+              toast.info(t("vacancySkillsReview"));
+              return;
+            }
+          }
+          const result = await tailorResume.mutateAsync({
+            confirmedTechnologies: nextConfirmed,
+            technologyEquivalences: nextEquivalences,
+            rejectedTechnologyEquivalences: nextRejected,
+            vacancyTechnologies,
+            jobDescription: effectiveJobDescription,
+            applicationId,
+            provider: effectiveProvider ?? undefined,
+            templateVersion,
+            targetLocale: targetLocale === "auto" ? undefined : targetLocale,
+            uiLocale,
+          });
+          applyTailorResult(result);
+          setStep("done");
+          toast.success(t("tailorSuccess"));
+        } catch (err) {
+          handleTailorFailure(err);
+        } finally {
+          if (nextEquivalences.length > 0) void pageData.refetch?.();
+        }
+      });
+    },
+    [
+      applicationId,
+      effectiveJobDescription,
+      effectiveProvider,
+      confirmedTechnologies,
+      technologyEquivalences,
+      savedEquivalences,
+      rejectedTechnologyEquivalences,
+      discovery,
+      discoverTechnologies,
+      pageData,
+      hasStudioData,
+      handleTailorFailure,
+      tailorResume,
+      applyTailorResult,
+      t,
+      templateVersion,
+      targetLocale,
+      uiLocale,
+    ],
+  );
+
+  const handleTailorAuto = useCallback(() => {
+    runTailorAuto();
+  }, [runTailorAuto]);
+
+  const runTailorManual = useCallback(
+    (overrides?: {
+      confirmed?: string[];
+      equivalences?: TechnologyEquivalence[];
+    }) => {
+      if (effectiveJobDescription.length < 20) {
+        setError({ message: t("tailorJdTooShort") });
+        return;
+      }
+      if (!hasStudioData) {
+        setError({ message: t("tailorNoStudioData") });
+        return;
+      }
+
+      const nextConfirmed = overrides?.confirmed ?? confirmedTechnologies;
+      const nextEquivalences =
+        overrides?.equivalences ?? technologyEquivalences;
+
+      startTransition(async () => {
+        setError(null);
+        setCorrectionPrompt(null);
+        setStep("tailoring");
+        try {
+          const result = await tailorResumeManual.mutateAsync({
+            confirmedTechnologies: nextConfirmed,
+            technologyEquivalences: nextEquivalences,
+            rejectedTechnologyEquivalences,
+            jobDescription: effectiveJobDescription,
+            applicationId,
+            rawJson: manualTailorJson,
+            templateVersion,
+            targetLocale: targetLocale === "auto" ? undefined : targetLocale,
+            uiLocale,
+          });
+          applyTailorResult(result);
+          setStep("done");
+          toast.success(t("tailorSuccess"));
+        } catch (err) {
+          handleTailorFailure(err);
+        } finally {
+          if (nextEquivalences.length > 0) void pageData.refetch?.();
+        }
+      });
+    },
+    [
+      applicationId,
+      effectiveJobDescription,
+      hasStudioData,
+      handleTailorFailure,
+      manualTailorJson,
+      confirmedTechnologies,
+      technologyEquivalences,
+      rejectedTechnologyEquivalences,
+      tailorResumeManual,
+      applyTailorResult,
+      pageData,
+      t,
+      templateVersion,
+      targetLocale,
+      uiLocale,
+    ],
+  );
 
   const handleTailorManual = useCallback(() => {
-    if (effectiveJobDescription.length < 20) {
-      setError({ message: t("tailorJdTooShort") });
-      return;
-    }
-    if (!hasStudioData) {
-      setError({ message: t("tailorNoStudioData") });
-      return;
-    }
+    runTailorManual();
+  }, [runTailorManual]);
 
-    startTransition(async () => {
-      setError(null);
-      setStep("tailoring");
+  const requestCorrectionPrompt = useCallback(
+    async (rejected: TechnologyEquivalence[]) => {
+      if (!error?.message || manualTailorJson.trim().length < 2) return;
       try {
-        const result = await tailorResumeManual.mutateAsync({
+        const promptPkg = await getCorrectionPrompt.mutateAsync({
           confirmedTechnologies,
-          jobDescription: effectiveJobDescription,
+          technologyEquivalences,
+          rejectedTechnologyEquivalences: rejected,
           applicationId,
-          rawJson: manualTailorJson,
           templateVersion,
           targetLocale: targetLocale === "auto" ? undefined : targetLocale,
           uiLocale,
+          jobDescription: effectiveJobDescription,
+          previousRawJson: manualTailorJson,
+          validationError: error.message,
         });
-        applyTailorResult(result);
-        setStep("done");
-        toast.success(t("tailorSuccess"));
+        setCorrectionPrompt(promptPkg);
+        try {
+          await navigator.clipboard.writeText(promptPkg.combinedPrompt);
+          toast.success(t("tailorValidation.correctionPromptReady"));
+        } catch {
+          // Preview panel remains visible with an explicit copy button if clipboard fails.
+        }
       } catch (err) {
-        handleTailorFailure(err);
+        toast.error(
+          err instanceof Error
+            ? err.message
+            : t("tailorValidation.correctionPromptFailed"),
+        );
       }
-    });
-  }, [
-    applicationId,
-    effectiveJobDescription,
-    hasStudioData,
-    handleTailorFailure,
-    manualTailorJson,
-    confirmedTechnologies,
+    },
+    [
+      applicationId,
+      confirmedTechnologies,
+      effectiveJobDescription,
+      error,
+      getCorrectionPrompt,
+      manualTailorJson,
+      t,
+      targetLocale,
+      templateVersion,
+      technologyEquivalences,
+      uiLocale,
+    ],
+  );
 
-    tailorResumeManual,
-    applyTailorResult,
-    t,
+  const handleConfirmEquivalence = useCallback(
+    (pair: TechnologyEquivalence) => {
+      const nextEquivalences = mergeEquivalencePair(
+        technologyEquivalences,
+        pair,
+      );
+      const nextConfirmed = confirmedTechnologies.filter(
+        (name) => technologyNameKey(name) !== technologyNameKey(pair.proposed),
+      );
+      setTechnologyEquivalences(nextEquivalences);
+      setConfirmedTechnologies(nextConfirmed);
+      setCorrectionPrompt(null);
+      if (effectiveMode === "manual") {
+        runTailorManual({
+          confirmed: nextConfirmed,
+          equivalences: nextEquivalences,
+        });
+      } else {
+        runTailorAuto({
+          confirmed: nextConfirmed,
+          equivalences: nextEquivalences,
+        });
+      }
+    },
+    [
+      confirmedTechnologies,
+      effectiveMode,
+      runTailorAuto,
+      runTailorManual,
+      technologyEquivalences,
+    ],
+  );
 
-    templateVersion,
-    targetLocale,
-    uiLocale,
-  ]);
+  const handleRejectEquivalence = useCallback(
+    (pair: TechnologyEquivalence) => {
+      const nextRejected = mergeEquivalencePair(
+        rejectedTechnologyEquivalences,
+        pair,
+      );
+      setRejectedTechnologyEquivalences(nextRejected);
+      if (effectiveMode === "manual") {
+        void requestCorrectionPrompt(nextRejected);
+      } else {
+        runTailorAuto({ rejected: nextRejected });
+      }
+    },
+    [
+      effectiveMode,
+      rejectedTechnologyEquivalences,
+      requestCorrectionPrompt,
+      runTailorAuto,
+    ],
+  );
+
+  const handleCreateCorrectionPrompt = useCallback(() => {
+    void requestCorrectionPrompt(rejectedTechnologyEquivalences);
+  }, [rejectedTechnologyEquivalences, requestCorrectionPrompt]);
+
+  const handleRemoveSavedEquivalence = useCallback(
+    (id: string) => {
+      const removed = savedEquivalences.find((entry) => entry.id === id);
+      startTransition(async () => {
+        try {
+          await deleteEquivalence.mutateAsync({ id });
+          if (removed) {
+            const removedKey = `${technologyNameKey(removed.original)}->${technologyNameKey(removed.proposed)}`;
+            setTechnologyEquivalences((prev) =>
+              prev.filter(
+                (entry) =>
+                  `${technologyNameKey(entry.original)}->${technologyNameKey(entry.proposed)}` !==
+                  removedKey,
+              ),
+            );
+          }
+          await pageData.refetch?.();
+        } catch (err) {
+          toast.error(err instanceof Error ? err.message : t("tailorFailed"));
+        }
+      });
+    },
+    [deleteEquivalence, pageData, savedEquivalences, t],
+  );
 
   const handleLoadTailorPrompt = useCallback(async () => {
     if (effectiveJobDescription.length < 20) {
@@ -370,15 +588,20 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     setError(null);
     setShowTailorForm(true);
     setConfirmedTechnologies([]);
+    setTechnologyEquivalences([]);
+    setRejectedTechnologyEquivalences([]);
+    setCorrectionPrompt(null);
   }, []);
 
   const handleSwitchToManual = useCallback(() => {
     setMode("manual");
     setError(null);
+    setCorrectionPrompt(null);
   }, []);
 
   const handleClearError = useCallback(() => {
     setError(null);
+    setCorrectionPrompt(null);
   }, []);
 
   const previewFileUrl = downloadUrl ?? existingCvFile?.url ?? "";
@@ -388,6 +611,9 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       vacancy={effectiveJobDescription}
       declared={pageData.data?.declaredTechnologies ?? []}
       confirmed={confirmedTechnologies}
+      equivalences={technologyEquivalences}
+      savedEquivalences={savedEquivalences}
+      isRemovingEquivalence={deleteEquivalence.isPending}
       suggestions={[
         ...analysisTerms,
         ...(discovery?.vacancy === effectiveJobDescription
@@ -398,8 +624,26 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
         setConfirmedTechnologies(names);
         setError(null);
       }}
+      onRemoveSavedEquivalence={handleRemoveSavedEquivalence}
     />
   );
+  const errorAlertProps: ResumeTailorErrorAlertProps = {
+    error,
+    isPending,
+    isGeneratingCorrection: getCorrectionPrompt.isPending,
+    effectiveMode,
+    hasAutoProviders,
+    correctionPrompt,
+    onRetry: effectiveMode === "manual" ? handleTailorManual : handleTailorAuto,
+    onClearError: handleClearError,
+    onSwitchToManual: handleSwitchToManual,
+    onConfirmEquivalence: handleConfirmEquivalence,
+    onRejectEquivalence: handleRejectEquivalence,
+    onCreateCorrectionPrompt:
+      manualTailorJson.trim().length >= 2
+        ? handleCreateCorrectionPrompt
+        : undefined,
+  };
   const showExistingBanner =
     Boolean(existingCvFile) && !showTailorForm && step === "configure";
 
@@ -546,19 +790,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               {t("tailorCta")}
             </Button>
 
-            <ResumeTailorErrorAlert
-              error={error}
-              isPending={isPending}
-              effectiveMode={effectiveMode}
-              hasAutoProviders={hasAutoProviders}
-              onRetry={
-                effectiveMode === "manual"
-                  ? handleTailorManual
-                  : handleTailorAuto
-              }
-              onClearError={handleClearError}
-              onSwitchToManual={handleSwitchToManual}
-            />
+            <ResumeTailorErrorAlert {...errorAlertProps} />
           </div>
         )}
       </div>
@@ -650,6 +882,9 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                 onChange={(e) => {
                   setJobDescription(e.target.value);
                   setConfirmedTechnologies([]);
+                  setTechnologyEquivalences([]);
+                  setRejectedTechnologyEquivalences([]);
+                  setCorrectionPrompt(null);
                   setManualTailorJson("");
                   setError(null);
                 }}
@@ -689,19 +924,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                 </Button>
               )}
 
-              <ResumeTailorErrorAlert
-                error={error}
-                isPending={isPending}
-                effectiveMode={effectiveMode}
-                hasAutoProviders={hasAutoProviders}
-                onRetry={
-                  effectiveMode === "manual"
-                    ? handleTailorManual
-                    : handleTailorAuto
-                }
-                onClearError={handleClearError}
-                onSwitchToManual={handleSwitchToManual}
-              />
+              <ResumeTailorErrorAlert {...errorAlertProps} />
             </CardContent>
           </Card>
         </>

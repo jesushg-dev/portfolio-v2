@@ -1281,7 +1281,7 @@
         "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
         "name": {
           "label": "Nombre",
-          "placeholder": "Jesús Hernández",
+          "placeholder": "Tu nombre completo",
           "success": "Nombre ingresado correctamente",
           "errors": {
             "required": "El nombre es requerido",
@@ -1291,7 +1291,7 @@
         },
         "email": {
           "label": "Correo electrónico",
-          "placeholder": "correo@empresa.com",
+          "placeholder": "tu@empresa.com",
           "success": "Correo electrónico ingresado correctamente",
           "errors": {
             "required": "El correo electrónico es requerido",
@@ -4862,6 +4862,8 @@
       "vacancySkillsCustom": "¿Falta otra? Copia su nombre tal como aparece en la vacante.",
       "vacancySkillsReview": "Revisa las tecnologías detectadas y pulsa Generar para continuar.",
       "vacancySkillsConfirm": "Confirmar",
+      "savedEquivalencesSummary": "Equivalencias guardadas ({count})",
+      "removeSavedEquivalence": "Olvidar equivalencia guardada {original} → {proposed}",
       "tailorJdTitle": "Descripción del puesto",
       "tailorJdPlaceholder": "Pega aquí la descripción completa del puesto...",
       "tailorJdTooShort": "La descripción es muy corta. Pega al menos 20 caracteres.",
@@ -4889,6 +4891,7 @@
       "tailorErrorRetry": "Reintentar",
       "tailorErrorSwitchProvider": "Cambiar proveedor",
       "tailorErrorUseManual": "Usar modo manual",
+      "tailorErrorCorrectionPrompt": "Crear prompt de corrección",
       "tailorTechnicalDetails": "Detalles técnicos",
       "tailorValidation": {
         "intro": "Estas propuestas no se pudieron usar. Compáralas con tu CV original.",
@@ -4901,6 +4904,18 @@
         "unknownTechnology": "No se pudo identificar la tecnología original en tu CV.",
         "technologyRename": "Revisa el cambio de «{original}» a «{proposed}».",
         "unknownTechnologyProposal": "Revisa «{proposed}». La propuesta no identifica una tecnología guardada en tu CV.",
+        "equivalenceQuestion": "¿«{original}» y «{proposed}» se refieren a la misma tecnología?",
+        "equivalenceHint": "Si significan lo mismo para esta vacante, aprueba esa equivalencia y continúa de inmediato. Si no, crea un nuevo prompt para que la IA lo corrija.",
+        "confirmEquivalence": "Sí, son equivalentes y continuar",
+        "rejectEquivalenceManual": "No, crear prompt para que la IA corrija",
+        "rejectEquivalenceAuto": "No, pedir a la IA que corrija",
+        "correctionPromptTitle": "Nuevo prompt de corrección para la IA",
+        "correctionPromptHint": "Pega este prompt en tu chat de IA, luego pega el JSON corregido arriba y vuelve a adaptar el CV.",
+        "copyCorrectionPrompt": "Copiar prompt de corrección",
+        "copiedCorrectionPrompt": "Prompt de corrección copiado",
+        "viewCorrectionPrompt": "Ver prompt de corrección",
+        "correctionPromptReady": "Prompt de corrección copiado. Ejecútalo en tu IA y pega el JSON corregido.",
+        "correctionPromptFailed": "No se pudo generar el prompt de corrección.",
         "fields": {
           "title": "Título profesional",
           "summary": "Perfil profesional",

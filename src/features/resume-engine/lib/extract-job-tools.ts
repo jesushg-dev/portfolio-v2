@@ -6,10 +6,16 @@ function joinedTechnologyKey(key: string) {
   return key.replace(/(?<=\p{L})[ .-]+(?=\p{L})/gu, "");
 }
 
-/** Literal names own their spelling. A punctuation variant needs one unambiguous owner. */
+export interface TechnologyEquivalence {
+  original: string;
+  proposed: string;
+}
+
+/** Literal names own their spelling. Punctuation and approved equivalences need one unambiguous owner. */
 export function knownTechnologySpellings(
   names: Iterable<string>,
   observed: Iterable<string> = [],
+  equivalences: Iterable<TechnologyEquivalence> = [],
 ) {
   const owners = new Map<string, string>();
   const joinedOwners = new Map<string, string | null>();
@@ -39,6 +45,15 @@ export function knownTechnologySpellings(
   ]) {
     const owner = joinedOwners.get(joinedTechnologyKey(key));
     if (owner && !owners.has(key)) owners.set(key, owner);
+  }
+  for (const { original, proposed } of equivalences) {
+    const originalKey = technologyNameKey(original);
+    const proposedKey = technologyNameKey(proposed);
+    const owner = owners.get(originalKey);
+    // Applicant confirmation binds a vacancy spelling only when it does not own another catalog item.
+    if (owner === originalKey && !owners.has(proposedKey)) {
+      owners.set(proposedKey, owner);
+    }
   }
   return owners;
 }
@@ -152,9 +167,10 @@ export function extractJobTools(
   vacancy: string,
   candidateSkills: string[] = [],
   analysisTerms: string[] = [],
+  equivalences: Iterable<TechnologyEquivalence> = [],
 ): string[] {
   const provided = [
-    ...knownTechnologySpellings(candidateSkills).keys(),
+    ...knownTechnologySpellings(candidateSkills, [], equivalences).keys(),
     ...analysisTerms,
   ];
   const matches = createTechnologyMatcher([
@@ -174,9 +190,15 @@ export function vacancySkillSuggestions(
   vacancy: string,
   knownNames: string[],
   additionalNames: string[] = [],
+  equivalences: Iterable<TechnologyEquivalence> = [],
 ): string[] {
-  const terms = extractJobTools(vacancy, knownNames, additionalNames);
-  const known = knownTechnologySpellings(knownNames, terms);
+  const terms = extractJobTools(
+    vacancy,
+    knownNames,
+    additionalNames,
+    equivalences,
+  );
+  const known = knownTechnologySpellings(knownNames, terms, equivalences);
   return terms.filter((term) => !known.has(technologyNameKey(term)));
 }
 

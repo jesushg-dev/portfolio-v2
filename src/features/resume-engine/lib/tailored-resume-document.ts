@@ -18,6 +18,7 @@ import {
   extractJobTools,
   rewrittenTechnologyNames,
   technologyNameKey,
+  type TechnologyEquivalence,
 } from "./extract-job-tools";
 import {
   declaredResumeTechnologies,
@@ -173,10 +174,14 @@ export interface ResumeTextField {
   text: string;
   budget: number;
 }
+export type { TechnologyEquivalence } from "./extract-job-tools";
+
 export interface TailorContext {
   source: CvImportDraft;
   localizedFacts?: SavedResumeFacts;
   confirmedTechnologies?: string[];
+  technologyEquivalences?: TechnologyEquivalence[];
+  rejectedTechnologyEquivalences?: TechnologyEquivalence[];
   vacancyTechnologies?: string[];
   templateId: CvTemplateVersion;
   targetLocale?: Locale;
@@ -355,10 +360,15 @@ export function validateTailoredResume(
     });
   };
   const profileNames = declaredResumeTechnologies(profile);
-  const vacancyTools = extractJobTools(context.jobDescription, profileNames, [
-    ...(context.vacancyTechnologies ?? []),
-    ...(result.matchAnalysis.vacancyTechnologies ?? []),
-  ]);
+  const vacancyTools = extractJobTools(
+    context.jobDescription,
+    profileNames,
+    [
+      ...(context.vacancyTechnologies ?? []),
+      ...(result.matchAnalysis.vacancyTechnologies ?? []),
+    ],
+    context.technologyEquivalences,
+  );
   const names = validateResumeTechnologyNames(
     profile,
     source,
@@ -366,6 +376,7 @@ export function validateTailoredResume(
     context.jobDescription,
     context.confirmedTechnologies,
     vacancyTools,
+    context.technologyEquivalences,
   );
   const evidenceTechnologies = createTechnologyMatcher([
     ...profileNames,

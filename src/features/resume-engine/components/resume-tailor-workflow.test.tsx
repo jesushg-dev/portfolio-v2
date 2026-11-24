@@ -6,6 +6,9 @@ import { ResumeTailorWorkflow } from "./resume-tailor-workflow";
 
 const mockDiscover = jest.fn();
 const mockGenerate = jest.fn();
+const mockGenerateManual = jest.fn();
+const mockCorrectionPrompt = jest.fn();
+const mockDeleteEquivalence = jest.fn();
 jest.mock("sonner", () => ({
   toast: { info: jest.fn(), error: jest.fn(), success: jest.fn() },
 }));
@@ -33,11 +36,25 @@ jest.mock("@/trpc/react", () => ({
         }),
       },
       getTailorPrompt: { useQuery: () => ({}) },
+      getTailorCorrectionPrompt: {
+        useMutation: () => ({
+          mutateAsync: mockCorrectionPrompt,
+          isPending: false,
+        }),
+      },
+      deleteTechnologyEquivalence: {
+        useMutation: () => ({
+          mutateAsync: mockDeleteEquivalence,
+          isPending: false,
+        }),
+      },
       discoverVacancyTechnologies: {
         useMutation: () => ({ mutateAsync: mockDiscover }),
       },
       tailorResume: { useMutation: () => ({ mutateAsync: mockGenerate }) },
-      tailorResumeManual: { useMutation: () => ({}) },
+      tailorResumeManual: {
+        useMutation: () => ({ mutateAsync: mockGenerateManual }),
+      },
     },
   },
 }));
@@ -109,3 +126,73 @@ it.each(["REST APIs", ""])(
     });
   },
 );
+
+it("lets the user confirm an equivalence to continue or generate a manual correction prompt when rejected", async () => {
+  const pair = { original: "REST APIs", proposed: "RESTful APIs" };
+  const identityError = TRPCClientError.from({
+    error: {
+      code: -32600,
+      message:
+        "Resume validation failed:\nTechnology name “REST APIs” → “RESTful APIs”: display name belongs to a different technology.",
+      data: {
+        resumeTailorIssues: [
+          {
+            fieldId: "technologyNames[0]",
+            field: "technologyName",
+            original: pair.original,
+            proposed: pair.proposed,
+            reason: "technologyIdentity",
+          },
+        ],
+      },
+    },
+  });
+
+  mockDiscover.mockResolvedValue([]);
+  mockGenerateManual
+    .mockReset()
+    .mockRejectedValueOnce(identityError)
+    .mockResolvedValueOnce({ downloadUrl: "/cv.docx", aiScore: 88 });
+  mockCorrectionPrompt.mockReset().mockResolvedValue({
+    systemPrompt: "sys",
+    userPrompt: "usr",
+    combinedPrompt: "SYSTEM:\nsys\n\nUSER:\nfix RESTful APIs",
+  });
+
+  renderWithIntl(<ResumeTailorWorkflow applicationId="test" embedded />);
+  fireEvent.click(screen.getByRole("radio", { name: /Manual/i }));
+  fireEvent.change(await screen.findByPlaceholderText(/detectedLocale/i), {
+    target: { value: '{"schemaVersion":1}' },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Tailor resume" }));
+
+  const rejectBtn = await screen.findByRole("button", {
+    name: "No, create AI correction prompt",
+  });
+  await waitFor(() => expect(rejectBtn).toBeEnabled());
+  fireEvent.click(rejectBtn);
+
+  await waitFor(() =>
+    expect(mockCorrectionPrompt).toHaveBeenCalledWith(
+      expect.objectContaining({
+        rejectedTechnologyEquivalences: [pair],
+        previousRawJson: '{"schemaVersion":1}',
+      }),
+    ),
+  );
+  expect(await screen.findByText("AI correction prompt")).toBeVisible();
+
+  const confirmBtn = screen.getByRole("button", {
+    name: "Yes, they’re equivalent & continue",
+  });
+  await waitFor(() => expect(confirmBtn).toBeEnabled());
+  fireEvent.click(confirmBtn);
+
+  await waitFor(() =>
+    expect(mockGenerateManual).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        technologyEquivalences: [pair],
+      }),
+    ),
+  );
+});

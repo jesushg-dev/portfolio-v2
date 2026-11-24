@@ -1,4 +1,7 @@
-import { buildTailoredResumePrompt } from "@/features/resume-engine/lib/ai/tailor-resume-prompt";
+import {
+  buildTailorCorrectionPrompt,
+  buildTailoredResumePrompt,
+} from "@/features/resume-engine/lib/ai/tailor-resume-prompt";
 import {
   discoverVacancyTechnologies,
   tailorResumeDocument,
@@ -6,6 +9,10 @@ import {
 import { finalizeTailoredResume } from "@/features/resume-engine/lib/finalize-tailor-export";
 import { resolveTailorContext } from "@/features/resume-engine/lib/resolve-tailor-context";
 import { declaredResumeTechnologies } from "@/features/resume-engine/lib/resume-technology-names";
+import {
+  technologyNameKey,
+  type TechnologyEquivalence,
+} from "@/features/resume-engine/lib/extract-job-tools";
 import { ResumeTailorValidationError } from "@/features/resume-engine/lib/resume-tailor-validation-error";
 import {
   validateTailoredResume,
@@ -49,6 +56,23 @@ import {
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import { processJobDescription } from "@/features/resume-engine/lib/ai/clean-job-description";
 
+const technologyEquivalenceSchema = z
+  .object({
+    original: z
+      .string()
+      .trim()
+      .min(1)
+      .max(80)
+      .regex(/^[^\r\n]+$/u),
+    proposed: z
+      .string()
+      .trim()
+      .min(1)
+      .max(80)
+      .regex(/^[^\r\n]+$/u),
+  })
+  .strict();
+
 const tailorInputSchema = z
   .object({
     applicationId: z.string().optional(),
@@ -70,8 +94,55 @@ const tailorInputSchema = z
       )
       .max(32)
       .optional(),
+    technologyEquivalences: z
+      .array(technologyEquivalenceSchema)
+      .max(32)
+      .optional(),
+    rejectedTechnologyEquivalences: z
+      .array(technologyEquivalenceSchema)
+      .max(32)
+      .optional(),
   })
   .strict();
+
+async function persistTechnologyEquivalences(
+  db: PrismaClient,
+  userId: string,
+  requested: readonly TechnologyEquivalence[] | undefined,
+  resolved: readonly TechnologyEquivalence[] | undefined,
+) {
+  if (!requested?.length || !resolved?.length || !db.cvTechnologyEquivalence) {
+    return;
+  }
+  const requestedKeys = new Set(
+    requested.map(
+      ({ original, proposed }) =>
+        `${technologyNameKey(original)}->${technologyNameKey(proposed)}`,
+    ),
+  );
+  for (const { original, proposed } of resolved) {
+    const originalKey = technologyNameKey(original);
+    const proposedKey = technologyNameKey(proposed);
+    if (!requestedKeys.has(`${originalKey}->${proposedKey}`)) continue;
+    await db.cvTechnologyEquivalence.upsert({
+      where: {
+        userId_originalKey_proposedKey: {
+          userId,
+          originalKey,
+          proposedKey,
+        },
+      },
+      create: {
+        userId,
+        original,
+        originalKey,
+        proposed,
+        proposedKey,
+      },
+      update: { original, proposed },
+    });
+  }
+}
 
 function rethrowTailorExportError(error: unknown): never {
   if (error instanceof TRPCError) throw error;
@@ -418,47 +489,54 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           ? profile.defaultLocale
           : "en";
 
-      const [studioDraft, application, latestExport] = await Promise.all([
-        loadCvStructuredDraft(ctx.db, ctx.user.id, {
-          locale: fallbackLocale,
-          fallbackLocale,
-          evidenceScope: "all",
-        }),
-        input.applicationId
-          ? ctx.db.application.findFirst({
-              where: { id: input.applicationId, userId: ctx.user.id },
-              include: { company: true },
-            })
-          : Promise.resolve(null),
-        input.applicationId
-          ? ctx.db.resumeExport.findFirst({
-              where: {
-                applicationId: input.applicationId,
-                userId: ctx.user.id,
-              },
-              orderBy: { createdAt: "desc" },
-              select: {
-                id: true,
-                fileUrl: true,
-                fileName: true,
-                mimeType: true,
-                pdfFileUrl: true,
-                pdfFileName: true,
-                structuredSnapshot: true,
-                matchAnalysis: true,
-                aiScore: true,
-                pitchSubject: true,
-                pitchBody: true,
-              },
-            })
-          : Promise.resolve(null),
-      ]);
+      const [studioDraft, application, latestExport, savedEquivalences] =
+        await Promise.all([
+          loadCvStructuredDraft(ctx.db, ctx.user.id, {
+            locale: fallbackLocale,
+            fallbackLocale,
+            evidenceScope: "all",
+          }),
+          input.applicationId
+            ? ctx.db.application.findFirst({
+                where: { id: input.applicationId, userId: ctx.user.id },
+                include: { company: true },
+              })
+            : Promise.resolve(null),
+          input.applicationId
+            ? ctx.db.resumeExport.findFirst({
+                where: {
+                  applicationId: input.applicationId,
+                  userId: ctx.user.id,
+                },
+                orderBy: { createdAt: "desc" },
+                select: {
+                  id: true,
+                  fileUrl: true,
+                  fileName: true,
+                  mimeType: true,
+                  pdfFileUrl: true,
+                  pdfFileName: true,
+                  structuredSnapshot: true,
+                  matchAnalysis: true,
+                  aiScore: true,
+                  pitchSubject: true,
+                  pitchBody: true,
+                },
+              })
+            : Promise.resolve(null),
+          ctx.db.cvTechnologyEquivalence?.findMany({
+            where: { userId: ctx.user.id },
+            orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+            select: { id: true, original: true, proposed: true },
+          }) ?? [],
+        ]);
 
       return {
         hasStudioData: Boolean(studioDraft),
         declaredTechnologies: studioDraft
           ? declaredResumeTechnologies(studioDraft)
           : [],
+        savedTechnologyEquivalences: savedEquivalences,
         studioPreview: studioDraft
           ? {
               fullName: studioDraft.header.fullName,
@@ -501,12 +579,45 @@ export const resumeEngineAdminRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const context = await resolveTailorContext(ctx.db, ctx.user.id, {
         confirmedTechnologies: input.confirmedTechnologies,
+        technologyEquivalences: input.technologyEquivalences,
+        rejectedTechnologyEquivalences: input.rejectedTechnologyEquivalences,
         templateId: input.templateVersion,
         targetLocale: input.targetLocale,
         uiLocale: input.uiLocale,
         jobDescription: processJobDescription(input.jobDescription).cleanedText,
       });
       return buildTailoredResumePrompt(context);
+    }),
+  getTailorCorrectionPrompt: protectedProcedure
+    .input(
+      tailorInputSchema.extend({
+        previousRawJson: z.string().min(2),
+        validationError: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+        confirmedTechnologies: input.confirmedTechnologies,
+        technologyEquivalences: input.technologyEquivalences,
+        rejectedTechnologyEquivalences: input.rejectedTechnologyEquivalences,
+        templateId: input.templateVersion,
+        targetLocale: input.targetLocale,
+        uiLocale: input.uiLocale,
+        jobDescription: processJobDescription(input.jobDescription).cleanedText,
+      });
+      return buildTailorCorrectionPrompt({
+        context,
+        previousRawJson: input.previousRawJson,
+        validationError: input.validationError,
+      });
+    }),
+  deleteTechnologyEquivalence: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }).strict())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.cvTechnologyEquivalence?.deleteMany({
+        where: { id: input.id, userId: ctx.user.id },
+      });
+      return { ok: true };
     }),
   tailorResume: protectedProcedure
     .input(
@@ -522,6 +633,8 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       try {
         const context = await resolveTailorContext(ctx.db, ctx.user.id, {
           confirmedTechnologies: input.confirmedTechnologies,
+          technologyEquivalences: input.technologyEquivalences,
+          rejectedTechnologyEquivalences: input.rejectedTechnologyEquivalences,
           vacancyTechnologies: input.vacancyTechnologies,
           templateId: input.templateVersion,
           targetLocale: input.targetLocale,
@@ -529,6 +642,12 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           jobDescription: processJobDescription(input.jobDescription)
             .cleanedText,
         });
+        await persistTechnologyEquivalences(
+          ctx.db,
+          ctx.user.id,
+          input.technologyEquivalences,
+          context.technologyEquivalences,
+        );
         const credentials = await loadTenantAiCredentials(ctx.user.id);
         const { document, result, provider } = await tailorResumeDocument(
           context,
@@ -552,11 +671,19 @@ export const resumeEngineAdminRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const context = await resolveTailorContext(ctx.db, ctx.user.id, {
         confirmedTechnologies: input.confirmedTechnologies,
+        technologyEquivalences: input.technologyEquivalences,
+        rejectedTechnologyEquivalences: input.rejectedTechnologyEquivalences,
         templateId: input.templateVersion,
         targetLocale: input.targetLocale,
         uiLocale: input.uiLocale,
         jobDescription: processJobDescription(input.jobDescription).cleanedText,
       });
+      await persistTechnologyEquivalences(
+        ctx.db,
+        ctx.user.id,
+        input.technologyEquivalences,
+        context.technologyEquivalences,
+      );
       let validated;
       try {
         validated = validateTailoredResume(

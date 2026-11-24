@@ -31,3 +31,33 @@ it("leaves new technologies unchecked and allows an unlisted name copied from th
   fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
   expect(onChange).toHaveBeenCalledWith(["quiet oak"]);
 });
+
+it("applies saved equivalences automatically and lets the user remove them", () => {
+  const onRemove = jest.fn();
+  renderWithIntl(
+    <VacancySkillConfirmation
+      vacancy="Stack: MVC, RESTful APIs."
+      declared={["REST APIs"]}
+      confirmed={[]}
+      savedEquivalences={[
+        { id: "eq-1", original: "REST APIs", proposed: "RESTful APIs" },
+      ]}
+      suggestions={[]}
+      onChange={jest.fn()}
+      onRemoveSavedEquivalence={onRemove}
+    />,
+  );
+
+  expect(
+    screen.queryByRole("checkbox", { name: "RESTful APIs" }),
+  ).not.toBeInTheDocument();
+  expect(screen.getByRole("checkbox", { name: "MVC" })).toBeInTheDocument();
+  expect(screen.getByText("Saved equivalences (1)")).toBeVisible();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Remove saved equivalence REST APIs → RESTful APIs",
+    }),
+  );
+  expect(onRemove).toHaveBeenCalledWith("eq-1");
+});

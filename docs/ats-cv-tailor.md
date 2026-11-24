@@ -16,6 +16,22 @@ Technology discovery reads the vacancy itself. Explicit stack lists and technica
 
 `tailored-resume-document.ts` defines schema version 1, output locale, template ID/revision, header, experiences, education, skills, languages, contacts and certifications. Items and responsibility bullets keep stable CMS IDs. The application copies identity, company and institution names, contacts, dates, photo URL and credential years from CMS. Skill IDs resolve against visible catalogue selections. The model can propose a display name from the vacancy for a selected catalogue ID. The server verifies the selected ID, exact vacancy wording, version numbers and collisions with other known technologies. For selected technologies, the generated CV uses the most frequent verified spelling in the vacancy, even when the model omits a proposal. The first mention breaks ties. If the vacancy has no verified spelling, the CV uses the catalogue title.
 
+### No hardcoded technology synonym dictionaries
+
+Do **not** maintain hardcoded synonym lists, morphological stemmers, or equivalence dictionaries (such as mapping `"REST APIs"` ↔ `"RESTful APIs"`, `"Postgres"` ↔ `"PostgreSQL"`, or `"Microservices"` ↔ `"Micro-services"`) in code. Dictionaries grow unboundedly as vacancies vary and silently bypass applicant judgment.
+
+Only deterministic surface normalization belongs in `knownTechnologySpellings`:
+
+- exact literal CMS names;
+- unambiguous punctuation/spacing variants (`joinedTechnologyKey`, e.g., `Next.js` ↔ `NextJS`);
+- unambiguous two-word uppercase acronym order reversals (`REST APIs` ↔ `APIs REST`);
+- explicit per-vacancy equivalences confirmed by the applicant (`technologyEquivalences`).
+
+When validation rejects a rename as `technologyIdentity`, the UI asks the applicant whether the saved term and the AI-proposed term refer to the same technology:
+
+- **Equivalent:** the applicant approves `{ original, proposed }` (`technologyEquivalences`) and tailoring continues immediately using the approved vacancy spelling (without altering CMS records). Each approved equivalence is persisted per user in `CvTechnologyEquivalence` and re-applied automatically whenever future job descriptions contain that spelling, while remaining removable from the UI.
+- **Not equivalent:** tailoring generates a targeted correction prompt (`buildTailorCorrectionPrompt` / `rejectedTechnologyEquivalences`) instructing the AI that the two terms are distinct and must not be conflated.
+
 Both generation modes accept exactly the same response shape:
 
 ```json

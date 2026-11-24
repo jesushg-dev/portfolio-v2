@@ -79,4 +79,64 @@ describe("ResumeTailorErrorAlert", () => {
       screen.getByText("Technical details").parentElement,
     ).not.toHaveAttribute("open");
   });
+
+  it("asks whether mismatched technology names are equivalent and renders the AI correction prompt", () => {
+    const onConfirmEquivalence = jest.fn();
+    const onRejectEquivalence = jest.fn();
+    const pair = { original: "REST APIs", proposed: "RESTful APIs" };
+
+    renderWithIntl(
+      <ResumeTailorErrorAlert
+        error={{
+          message:
+            "Resume validation failed: Technology name “REST APIs” → “RESTful APIs”: display name belongs to a different technology.",
+          validation: [
+            {
+              fieldId: "technologyNames[0]",
+              field: "technologyName",
+              original: pair.original,
+              proposed: pair.proposed,
+              reason: "technologyIdentity",
+            },
+          ],
+        }}
+        effectiveMode="manual"
+        hasAutoProviders={false}
+        correctionPrompt={{
+          systemPrompt: "sys",
+          userPrompt: "usr",
+          combinedPrompt:
+            'SYSTEM:\nsys\n\nUSER:\nusr\n\nUSER DECISIONS:\n- "REST APIs" and "RESTful APIs" are DIFFERENT technologies',
+        }}
+        onRetry={jest.fn()}
+        onClearError={jest.fn()}
+        onSwitchToManual={jest.fn()}
+        onConfirmEquivalence={onConfirmEquivalence}
+        onRejectEquivalence={onRejectEquivalence}
+        onCreateCorrectionPrompt={jest.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByText(
+        "Do “REST APIs” and “RESTful APIs” refer to the same technology?",
+      ),
+    ).toBeVisible();
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Yes, they’re equivalent & continue",
+      }),
+    );
+    expect(onConfirmEquivalence).toHaveBeenCalledWith(pair);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "No, create AI correction prompt" }),
+    );
+    expect(onRejectEquivalence).toHaveBeenCalledWith(pair);
+
+    expect(screen.getByText("AI correction prompt")).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Copy correction prompt" }),
+    ).toBeVisible();
+  });
 });

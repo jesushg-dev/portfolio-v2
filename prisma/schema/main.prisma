@@ -78,9 +78,10 @@ model User {
   InterviewPrepQuestion InterviewPrepQuestion[]
 
   // Resume Engine
-  CvSourceUpload CvSourceUpload[]
-  ResumeExport   ResumeExport[]
-  CvPdfEmailLog  CvPdfEmailLog[]
+  CvSourceUpload          CvSourceUpload[]
+  ResumeExport            ResumeExport[]
+  CvPdfEmailLog           CvPdfEmailLog[]
+  CvTechnologyEquivalence CvTechnologyEquivalence[]
 
   // First-party audience measurement (aggregated, no IPs)
   AnalyticsDailyStat AnalyticsDailyStat[]

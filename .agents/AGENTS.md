@@ -1182,3 +1182,18 @@ Every translatable model (`*Translation`) in `prisma/schema/main.prisma` MUST st
    - Projects live in individual files under `prisma/data/projects/<slug>.json` (1 file per project as a single object).
    - Monolithic `portfolio-projects.json` is obsolete and forbidden.
    - Clear separation: Card metadata (`title`, short `description`, `skills`) vs. Case Study content (`tldr`, `sections`, `architecture`, `decisions`). Card highlights derive from `caseStudy.tldr`. Do NOT repeat the card description word-for-word in `context`.
+
+---
+
+## CV Tailored — No Hardcoded Technology Synonym Dictionaries
+
+### ❌ NEVER add curated technology synonym dictionaries or morphological word lists in code
+
+Do not maintain hardcoded mapping tables or token-stemmers in `src/features/resume-engine/` (e.g., mapping `"REST APIs"` ↔ `"RESTful APIs"`, `"Postgres"` ↔ `"PostgreSQL"`, `"Microservices"` ↔ `"Micro-services"`). Every vacancy introduces new phrasing, so hardcoded dictionaries grow indefinitely and bypass explicit user intent.
+
+### ✅ Ask the applicant when spellings diverge, and generate a correction prompt on rejection
+
+- Keep `knownTechnologySpellings` (`extract-job-tools.ts`) strictly limited to literal saved names, punctuation/spacing normalization (`joinedTechnologyKey`), unambiguous two-word uppercase acronym reversal (`REST APIs` ↔ `APIs REST`), and **explicit applicant-approved equivalences** (`technologyEquivalences`).
+- When validation fails with `technologyIdentity`, ask the applicant whether `{ original }` and `{ proposed }` refer to the same technology:
+  - **Same technology:** approve `{ original, proposed }` in `technologyEquivalences` and continue immediately; persist approved pairs per-user in `CvTechnologyEquivalence` so future vacancies reuse them without re-prompting.
+  - **Different technologies:** record `{ original, proposed }` in `rejectedTechnologyEquivalences` and generate a targeted AI correction prompt (`buildTailorCorrectionPrompt`) instead of mutating validation rules with hardcoded aliases.
