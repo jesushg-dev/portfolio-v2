@@ -1,10 +1,10 @@
 .dimensions {
-  --ios-device-width: 18.75rem;
-  --ios-device-height: 38.4375rem;
-  --ios-device-screen-inset: 0.375rem;
+  --ios-device-width: clamp(16.5rem, min(23vw, 34svh), 24.5rem);
+  --ios-device-height: calc(var(--ios-device-width) * 41 / 20);
+  --ios-device-screen-inset: calc(var(--ios-device-width) * 0.019);
   --ios-device-ratio: 20 / 41;
-  --ios-device-frame-radius: 2rem;
-  --ios-device-screen-radius: 1.9rem;
+  --ios-device-frame-radius: calc(var(--ios-device-width) * 0.104);
+  --ios-device-screen-radius: calc(var(--ios-device-width) * 0.098);
 }
 
 .dimensions [data-ios-texture-ready] {

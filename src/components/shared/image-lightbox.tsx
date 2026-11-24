@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { MediaImage } from "@/components/shared/media-image";
+import { useBodyOverlayLock } from "@/hooks/use-body-overlay-lock";
 import { useMounted } from "@/hooks/use-mounted";
 import { cn } from "@/lib/utils";
 
@@ -35,12 +36,10 @@ export function ImageLightbox({
   imageClassName,
 }: ImageLightboxProps) {
   const isMounted = useMounted();
+  useBodyOverlayLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -50,7 +49,6 @@ export function ImageLightbox({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);

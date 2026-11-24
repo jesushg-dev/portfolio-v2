@@ -13,6 +13,7 @@ import {
   validateTailoredResume,
   type TailorContext,
 } from "../tailored-resume-document";
+import { ResumeTailorValidationError } from "../resume-tailor-validation-error";
 import type { AiPromptPackage } from "./prompt-package";
 import { buildTailoredResumePrompt } from "./tailor-resume-prompt";
 import { createTechnologyMatcher } from "../extract-job-tools";
@@ -111,7 +112,22 @@ export async function tailorResumeDocument(
       };
     } catch (error) {
       if (attempt === 1) throw error;
-      correction = `\nCorrect your previous response ${JSON.stringify(raw)}. Validation errors:\n${error instanceof Error ? error.message : String(error)}\nReturn the complete corrected JSON, never fall back to the source language.`;
+      let errorDetails = error instanceof Error ? error.message : String(error);
+      if (error instanceof ResumeTailorValidationError) {
+        const lengthIssues = error.fieldIssues.filter(
+          (issue) => issue.reason === "length",
+        );
+        if (lengthIssues.length) {
+          const summary = lengthIssues
+            .map(
+              (issue) =>
+                `- ${issue.fieldId}: length ${issue.proposed.length} > budget ${issue.limit ?? "N/A"}`,
+            )
+            .join("\n");
+          errorDetails += `\n\nCRITICAL BUDGET VIOLATION:\n${summary}\nInstrucción de corrección: acorta solo ese campo, conserva métricas y requiredCoverage. Shorten only the oversized fields so length <= budget; preserve all metrics, percentages, dates, versions, and requiredCoverage. Remove familiarity phrases, adjectives, and redundant technology lists.`;
+        }
+      }
+      correction = `\nCorrect your previous response ${JSON.stringify(raw)}. Validation errors:\n${errorDetails}\nReturn the complete corrected JSON, never fall back to the source language.`;
     }
   }
   throw new Error("Resume generation did not complete");

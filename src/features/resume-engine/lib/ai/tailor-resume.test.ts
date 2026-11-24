@@ -289,6 +289,38 @@ describe("automatic and manual resume contract", () => {
     ).rejects.toThrow("header.summary: missing translation");
     expect(create).toHaveBeenCalledTimes(2);
   });
+  it("formats targeted correction instructions when fields exceed text budget", async () => {
+    const oversizedSummary = "A".repeat(700);
+    const oversizedFields = response.fields.map((f) =>
+      f.id === "header.summary" ? { ...f, text: oversizedSummary } : f,
+    );
+    const create = jest
+      .fn()
+      .mockResolvedValueOnce(
+        completion({ ...response, fields: oversizedFields }),
+      )
+      .mockResolvedValueOnce(completion(response));
+    jest
+      .mocked(OpenAI)
+      .mockImplementation(
+        () => ({ chat: { completions: { create } } }) as never,
+      );
+    const result = await tailorResumeDocument(context, {
+      keys: {},
+      defaultProvider: null,
+    });
+    expect(result.document.locale).toBe("en");
+    expect(create).toHaveBeenCalledTimes(2);
+    const retryRequest = (
+      create.mock.calls as [{ messages: { content: string }[] }][]
+    )[1][0];
+    const retryContent = retryRequest.messages[1].content;
+    expect(retryContent).toContain("CRITICAL BUDGET VIOLATION");
+    expect(retryContent).toContain("header.summary: length 700 > budget 650");
+    expect(retryContent).toContain(
+      "acorta solo ese campo, conserva métricas y requiredCoverage",
+    );
+  });
   it("appends confirmedTechnologies to skills and includes them in prompt facts", async () => {
     const vacancyWithConfirmed = {
       ...context,

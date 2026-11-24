@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Check, Copy, Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { downloadBlob } from "@/lib/utils/download";
 
 interface BackupCodesListProps {
   codes: string[];
@@ -29,12 +30,7 @@ const BackupCodesList: FC<BackupCodesListProps> = ({ codes }) => {
     const blob = new Blob([`${codes.join("\n")}\n`], {
       type: "text/plain;charset=utf-8",
     });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "backup-codes.txt";
-    anchor.click();
-    URL.revokeObjectURL(url);
+    downloadBlob("backup-codes.txt", blob);
   }, [codes]);
 
   return (

@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type MouseEvent,
@@ -10,27 +11,39 @@ import {
 } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import { useBodyOverlayLock } from "@/hooks/use-body-overlay-lock";
 import { IOSDeviceMockup, IOSHomeBar } from "@/components/shared/ios-device";
 import { IOSDeviceCanvas } from "@/components/shared/ios-device/ios-device-canvas";
-import { observeDeviceScreen } from "@/components/shared/ios-device/ios-device-screen-texture";
 import { IOSDeviceRotationControl } from "./ios-device-rotation-control";
 import type { PhoneProfile, PhoneRenderer } from "./ios-device-renderer";
+import { TRPCReactProvider } from "@/trpc/react";
+import { useLiveWeather } from "./hooks/use-live-weather";
 import styles from "./hero-phone.module.css";
 
-const SpotifyMiniApp = dynamic(
-  () => import("@/components/shared/ios-device/apps/spotify/spotify-mini-app"),
-  { ssr: false },
-);
+const loadSpotifyMiniApp = () =>
+  import("@/components/shared/ios-device/apps/spotify/spotify-mini-app");
+
+function preloadSpotify(): void {
+  void loadSpotifyMiniApp();
+}
+
+const SpotifyMiniApp = dynamic(loadSpotifyMiniApp, { ssr: false });
 
 function HeroSpotifyScreen({ onClose }: { onClose: () => void }) {
   const t = useTranslations("global.footer");
+  const screenRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    screenRef.current?.focus({ preventScroll: true });
+  }, []);
+
   return (
     <div
+      ref={screenRef}
       className={styles.miniApp}
       role="region"
       aria-label="Spotify"
       data-hero-mini-app
-      data-ios-texture-source
       tabIndex={-1}
     >
       <SpotifyMiniApp onClose={onClose} />
@@ -56,7 +69,7 @@ interface IOSHeroDeviceProps {
   staticPortrait: ReactNode;
 }
 
-export function IOSHeroDevice({
+function IOSHeroDeviceContent({
   content,
   profile,
   rotateLabel,
@@ -72,6 +85,48 @@ export function IOSHeroDevice({
   const [spotifyOpen, setSpotifyOpen] = useState(false);
   const [hasWebGL, setHasWebGL] = useState(false);
   const [canInspect, setCanInspect] = useState(false);
+  const canInspectRef = useRef(false);
+
+  const [unitOverride, setUnitOverride] = useState<"C" | "F" | null>(null);
+
+  const rawWeather = useLiveWeather(
+    profile.locale,
+    profile.location?.split(",")[0]?.trim() ?? "Managua",
+  );
+  const liveWeather = useMemo(() => {
+    if (!unitOverride || rawWeather.unit === unitOverride) return rawWeather;
+    const toC = unitOverride === "C";
+    const convert = (t: number) =>
+      toC ? Math.round(((t - 32) * 5) / 9) : Math.round((t * 9) / 5 + 32);
+
+    return {
+      ...rawWeather,
+      unit: unitOverride,
+      temperature: convert(rawWeather.temperature),
+      high: convert(rawWeather.high),
+      low: convert(rawWeather.low),
+      hourly: rawWeather.hourly?.map((h) => ({
+        ...h,
+        temp: convert(h.temp),
+      })),
+    };
+  }, [rawWeather, unitOverride]);
+  const activeProfile = useMemo(
+    () => ({
+      ...profile,
+      weather: liveWeather,
+    }),
+    [profile, liveWeather],
+  );
+  const activeProfileRef = useRef(activeProfile);
+  const modelRef = useRef<PhoneRenderer | null>(null);
+
+  useEffect(() => {
+    activeProfileRef.current = activeProfile;
+    if (modelRef.current) {
+      modelRef.current.updateProfile?.(activeProfile);
+    }
+  }, [activeProfile]);
 
   function rotatePhone(yaw: number) {
     inspectionYaw.current = yaw;
@@ -92,20 +147,37 @@ export function IOSHeroDevice({
     setSpotifyOpen(false);
   }, []);
 
+  useBodyOverlayLock(spotifyOpen);
+
+  // Preload Spotify bundle in the background during idle time for instantaneous opening
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const preload = () => {
+      void loadSpotifyMiniApp();
+    };
+    if ("requestIdleCallback" in window) {
+      const win = window as Window & {
+        requestIdleCallback: (
+          cb: () => void,
+          opts?: { timeout: number },
+        ) => number;
+        cancelIdleCallback?: (id: number) => void;
+      };
+      const handle = win.requestIdleCallback(preload, { timeout: 2500 });
+      return () => win.cancelIdleCallback?.(handle);
+    }
+    const timer = setTimeout(preload, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     if (!spotifyOpen) return;
-    const previousOverflow = document.body.style.overflow;
     const restoreFocus = launcher.current;
-    document.body.style.overflow = "hidden";
-    track.current
-      ?.querySelector<HTMLElement>("[data-hero-mini-app]")
-      ?.focus({ preventScroll: true });
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !event.defaultPrevented) closeSpotify();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
       restoreFocus?.focus({ preventScroll: true });
     };
@@ -117,7 +189,6 @@ export function IOSHeroDevice({
     if (!story || !surface) return;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let model: PhoneRenderer | null = null;
-    let stopScreen: (() => void) | undefined;
     let alive = true,
       visible = false,
       frame = 0;
@@ -125,13 +196,14 @@ export function IOSHeroDevice({
     let resolved = false;
     let introComplete = false;
     let lastModelProgress = 0;
+
     function update() {
       if (!story || !visible) return;
       const progress = motion.matches
         ? 0
         : smooth(
             0,
-            story.clientHeight * 0.27,
+            story.clientHeight * 0.55,
             -story.getBoundingClientRect().top,
           );
       const exiting = progress > 0;
@@ -142,7 +214,10 @@ export function IOSHeroDevice({
         ? homePose + (assembledPose - homePose) * progress
         : homePose * (elapsed / introTurnMs);
       const inspect = resolved && !motion.matches && introComplete && !exiting;
-      setCanInspect(inspect);
+      if (canInspectRef.current !== inspect) {
+        canInspectRef.current = inspect;
+        setCanInspect(inspect);
+      }
       if (!inspect) {
         inspectionYaw.current = null;
         story.style.removeProperty("--inspection-yaw");
@@ -202,16 +277,15 @@ export function IOSHeroDevice({
                   `.${styles.staticPortrait} img`,
                 ),
               },
-              profile,
+              activeProfileRef.current,
             );
+            modelRef.current = model;
           } catch {
             model = null;
+            modelRef.current = null;
           }
           resolved = true;
           story!.dataset.render = model ? "webgl" : "fallback";
-          if (model && appSurface.current) {
-            stopScreen = observeDeviceScreen(appSurface.current, model);
-          }
           setHasWebGL(Boolean(model));
           preference();
         })
@@ -229,10 +303,9 @@ export function IOSHeroDevice({
     }
     function onLoss(event: Event) {
       event.preventDefault();
-      stopScreen?.();
-      stopScreen = undefined;
       model?.dispose();
       model = null;
+      modelRef.current = null;
       setHasWebGL(false);
       story!.dataset.render = "fallback";
       schedule();
@@ -248,8 +321,8 @@ export function IOSHeroDevice({
       alive = false;
       observer.disconnect();
       cancelAnimationFrame(frame);
-      stopScreen?.();
       model?.dispose();
+      modelRef.current = null;
       motion.removeEventListener("change", onMotion);
       surface.removeEventListener("webglcontextlost", onLoss);
       surface.removeEventListener("webglcontextrestored", loadModel);
@@ -299,10 +372,89 @@ export function IOSHeroDevice({
                   type="button"
                   className={styles.spotifyApp}
                   onClick={openSpotify}
+                  onMouseEnter={preloadSpotify}
+                  onFocus={preloadSpotify}
                   hidden={spotifyOpen}
+                  title="Open Spotify"
                 >
                   <span className="sr-only">Spotify</span>
                 </button>
+                {!spotifyOpen && (
+                  <>
+                    <a
+                      href="#skills"
+                      className={styles.terminalApp}
+                      title="Terminal / Skills"
+                    >
+                      <span className="sr-only">Terminal</span>
+                    </a>
+                    <a
+                      href="#portfolio"
+                      className={styles.projectsApp}
+                      title="Projects & Case Studies"
+                    >
+                      <span className="sr-only">Projects</span>
+                    </a>
+                    <a
+                      href="#experience"
+                      className={styles.cvApp}
+                      title="Experience & CV"
+                    >
+                      <span className="sr-only">CV</span>
+                    </a>
+                    <a
+                      href="#blog"
+                      className={styles.blogApp}
+                      title="Blog & Articles"
+                    >
+                      <span className="sr-only">Blog</span>
+                    </a>
+                    <a
+                      href="https://github.com/jesushg"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.codeApp}
+                      title="GitHub Profile"
+                    >
+                      <span className="sr-only">Code</span>
+                    </a>
+                    <a
+                      href="https://linkedin.com/in/jesushg"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.linkedInApp}
+                      title="LinkedIn Profile"
+                    >
+                      <span className="sr-only">LinkedIn</span>
+                    </a>
+                    <a
+                      href="#contact"
+                      className={styles.mailApp}
+                      title="Contact Jesús"
+                    >
+                      <span className="sr-only">Mail</span>
+                    </a>
+                    <a
+                      href="#experience"
+                      className={styles.profileWidgetApp}
+                      title="Profile Highlights"
+                    >
+                      <span className="sr-only">Profile Highlights</span>
+                    </a>
+                    <button
+                      type="button"
+                      className={styles.weatherWidgetApp}
+                      onClick={() => {
+                        setUnitOverride((prev) =>
+                          (prev ?? liveWeather.unit) === "C" ? "F" : "C",
+                        );
+                      }}
+                      title={`Toggle Weather Unit (°${(unitOverride ?? liveWeather.unit) === "C" ? "F" : "C"})`}
+                    >
+                      <span className="sr-only">Toggle Weather Unit</span>
+                    </button>
+                  </>
+                )}
                 {spotifyOpen && hasWebGL && (
                   <HeroSpotifyScreen onClose={closeSpotify} />
                 )}
@@ -315,6 +467,8 @@ export function IOSHeroDevice({
                     type="button"
                     className={styles.spotifyFallback}
                     onClick={openSpotify}
+                    onMouseEnter={preloadSpotify}
+                    onFocus={preloadSpotify}
                     hidden={spotifyOpen}
                   >
                     <span className="sr-only">Spotify</span>
@@ -341,5 +495,13 @@ export function IOSHeroDevice({
         </div>
       </div>
     </div>
+  );
+}
+
+export function IOSHeroDevice(props: IOSHeroDeviceProps) {
+  return (
+    <TRPCReactProvider>
+      <IOSHeroDeviceContent {...props} />
+    </TRPCReactProvider>
   );
 }

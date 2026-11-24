@@ -96,9 +96,9 @@ export default async function Home() {
         data-blog-contact-story
         className="bg-background relative isolate overflow-clip"
       >
-        <HomeSection id="blog" estimatedHeight="54rem">
+        <div id="blog" className="home-section scroll-mt-24">
           <HomeBlog locale={locale} />
-        </HomeSection>
+        </div>
         <div id="contact" className="home-section scroll-mt-24">
           <Contact />
         </div>

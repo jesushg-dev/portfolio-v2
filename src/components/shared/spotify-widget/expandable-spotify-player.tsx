@@ -16,6 +16,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Pause, Play, Volume2 } from "lucide-react";
 
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import { useBodyOverlayLock } from "@/hooks/use-body-overlay-lock";
 
 import type { SpotifyPlayback } from "./types/types";
 import type { TrackLyricsRequest } from "./types/track-lyrics-types";
@@ -122,17 +123,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
     if (isExpanded && expandedRef.current) closeExpanded();
   }, [closeExpanded, isExpanded]);
   useOutsideClick(expandedRef, closeFromOutside);
-
-  useEffect(() => {
-    if (!isExpanded) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isExpanded]);
+  useBodyOverlayLock(isExpanded);
 
   useEffect(() => {
     if (!isExpanded || !expandRects || !screenRef.current) return;

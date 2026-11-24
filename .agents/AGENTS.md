@@ -31,6 +31,40 @@ These commands are expensive in tokens and time. The user runs them manually whe
 
 ---
 
+## Git Commits — Require Explicit User Instruction per Commit
+
+### ❌ NEVER create git commits automatically or assume permission from previous requests
+
+Do NOT run `git commit` unless the user explicitly instructs you to commit in their immediate request.
+
+- Prior approval or instruction to commit on an earlier request does NOT carry over to subsequent changes.
+- For each new commit, the user MUST explicitly ask for it (e.g., "haz commit", "make a commit", "commit these changes").
+- If the user has not explicitly requested a commit in their current message, leave changes in the working tree and simply report the status.
+
+---
+
+## Forbidden: Direct DOM Tree Queries & Anti-React Global Document Usage
+
+### ❌ NEVER use raw DOM queries to locate or mutate elements inside React component trees
+
+Do NOT use:
+
+- `document.getElementById()`, `document.querySelector()`, `document.querySelectorAll()` to find components, headers, cards, or list items across the tree.
+- `el.querySelectorAll(...)` or `el.querySelector(...)` inside React components when React already manages state, refs, and arrays.
+- `document.activeElement` to track which button triggered a modal or action when React synthetic events (`event.currentTarget`) provide it.
+- `document.createElement`, `document.body.appendChild`, `document.execCommand` for clipboards or UI helpers.
+- Direct DOM mutations (e.g. setting `style.overflow` or manual class hacks on outside elements) when React state, refs, or CSS tokens can achieve it.
+
+### ✅ ALWAYS use React idiomatic patterns:
+
+1. **Refs (`useRef`)**: Bind refs to internal elements for measurements, scrolling, and focus restoration.
+2. **Component Composition & Props**: Pass refs, state, or event callbacks down from parents or shared layout boundaries.
+3. **Synthetic Events**: Use `event.currentTarget` / `event.target` in event handlers.
+4. **Dedicated React Hooks**: Use canonical hooks (`useOutsideClick`, `useReducedMotion`) for viewport/window subscriptions (e.g. `window.addEventListener("keydown")` for Escape, with cleanup).
+5. **Modern Standard Web APIs**: Use `navigator.clipboard.writeText(text)` instead of legacy DOM shims.
+
+---
+
 ## Accessibility — Shield (WCAG 2.2 AAA)
 
 Full standard: [`.agents/skills/A11Y.md`](skills/A11Y.md). Run `pnpm test:a11y` to audit `/`, `/login`, `/privacy`.

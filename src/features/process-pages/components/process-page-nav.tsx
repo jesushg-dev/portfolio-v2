@@ -9,6 +9,7 @@ import {
   processEyebrowStyles,
   processTextLinkStyles,
 } from "./process-page-styles";
+import { useProcessPageNav } from "./process-page-context";
 
 interface ProcessPageNavProps {
   items: ProcessNavItem[];
@@ -20,25 +21,31 @@ export function ProcessPageNav({ items, label }: ProcessPageNavProps) {
   const [visible, setVisible] = useState(false);
   const heroVisible = useRef(true);
   const ctaVisible = useRef(false);
+  const nav = useProcessPageNav();
 
   useEffect(() => {
+    if (!nav) return;
     const sectionIds = items.map((item) => item.id);
     const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
+      .map((id) => nav.getSection(id))
+      .filter((el): el is HTMLElement => Boolean(el));
 
     const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveId(entry.target.id);
+          if (entry.isIntersecting) {
+            const id =
+              entry.target.getAttribute("data-section-id") ?? entry.target.id;
+            if (id) setActiveId(id);
+          }
         });
       },
       { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
     );
     sections.forEach((section) => sectionObserver.observe(section));
 
-    const hero = document.getElementById("hero");
-    const cta = document.getElementById("contact");
+    const hero = nav.getSection("hero");
+    const cta = nav.getSection("contact");
 
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
@@ -57,7 +64,7 @@ export function ProcessPageNav({ items, label }: ProcessPageNavProps) {
       sectionObserver.disconnect();
       visibilityObserver.disconnect();
     };
-  }, [items]);
+  }, [items, nav]);
 
   return (
     <nav

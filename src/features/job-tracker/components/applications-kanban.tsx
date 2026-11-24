@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useMemo, useState, useTransition, type FC } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+  type FC,
+} from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { GripVertical, Plus, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -300,9 +307,10 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
     return new Map(flat.map((app) => [app.id, app]));
   }, [columns]);
 
+  const columnRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
   const scrollToColumn = useCallback((status: ApplicationStatus) => {
-    if (typeof window === "undefined") return;
-    const col = document.getElementById(`kanban-col-${status}`);
+    const col = columnRefs.current[status];
     if (col) {
       col.scrollIntoView({
         behavior: "smooth",
@@ -499,6 +507,9 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
               <KanbanColumn
                 key={status}
                 value={status}
+                ref={(node) => {
+                  columnRefs.current[status] = node;
+                }}
                 id={`kanban-col-${status}`}
                 className="bg-muted/25 border-border h-full min-h-0 w-[84vw] max-w-[21.25rem] shrink-0 snap-center gap-2.5 overflow-hidden rounded-xl border p-2.5 sm:p-3 md:w-[17rem] md:snap-align-none"
               >

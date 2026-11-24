@@ -30,14 +30,14 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
       className={cn(
         "group relative min-w-0",
         featured
-          ? "home-card-surface bg-card h-full overflow-hidden rounded-4xl [[data-color-mode=dark]_&]:bg-[color-mix(in_srgb,var(--card)_94%,var(--foreground))]"
+          ? "home-card-surface bg-card flex h-full flex-col overflow-hidden rounded-4xl [[data-color-mode=dark]_&]:bg-[color-mix(in_srgb,var(--card)_94%,var(--foreground))]"
           : "rounded-sm",
       )}
     >
       {featured ? (
         <div
           data-phone-cover
-          className="relative aspect-video overflow-hidden bg-linear-to-br from-indigo-600 to-sky-500"
+          className="relative aspect-video shrink-0 overflow-hidden bg-linear-to-br from-indigo-600 to-sky-500"
         >
           <div className="absolute inset-[10%] overflow-hidden rounded-2xl border border-white/20 bg-white/15">
             {post.coverImage ? (
@@ -45,6 +45,7 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
                 src={post.coverImage}
                 alt=""
                 fill
+                crossOrigin="anonymous"
                 className="object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]"
                 sizes="(min-width: 64rem) 44vw, 80vw"
               />
@@ -62,58 +63,66 @@ export function HomeBlogPost({ post, readPostLabel }: HomeBlogPostProps) {
         </div>
       ) : null}
 
-      <div className={featured ? "p-6 sm:p-8" : undefined}>
-        <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-sm tracking-wider uppercase">
-          {post.topic ? (
-            <span className="inline-flex max-w-[75%] min-w-0 items-center gap-2">
-              <span className="truncate">{post.topic}</span>
-              {post.partLabel ? (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span className="shrink-0">{post.partLabel}</span>
-                </>
-              ) : null}
-            </span>
-          ) : null}
-          {post.dateLabel ? (
-            <span className="inline-flex items-center gap-2">
-              {post.topic ? <span aria-hidden="true">·</span> : null}
-              <time dateTime={post.publishedAt ?? undefined}>
-                {post.dateLabel}
-              </time>
-            </span>
-          ) : null}
-          <span className="inline-flex items-center gap-2">
-            {post.topic || post.dateLabel ? (
-              <span aria-hidden="true">·</span>
+      <div
+        className={
+          featured
+            ? "themed-scrollbar flex min-h-0 flex-1 flex-col justify-between overflow-y-auto overscroll-contain p-6 sm:p-8"
+            : undefined
+        }
+      >
+        <div>
+          <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-sm tracking-wider uppercase">
+            {post.topic ? (
+              <span className="inline-flex max-w-[75%] min-w-0 items-center gap-2">
+                <span className="truncate">{post.topic}</span>
+                {post.partLabel ? (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span className="shrink-0">{post.partLabel}</span>
+                  </>
+                ) : null}
+              </span>
             ) : null}
-            {post.minReadLabel}
-          </span>
-        </p>
+            {post.dateLabel ? (
+              <span className="inline-flex items-center gap-2">
+                {post.topic ? <span aria-hidden="true">·</span> : null}
+                <time dateTime={post.publishedAt ?? undefined}>
+                  {post.dateLabel}
+                </time>
+              </span>
+            ) : null}
+            <span className="inline-flex items-center gap-2">
+              {post.topic || post.dateLabel ? (
+                <span aria-hidden="true">·</span>
+              ) : null}
+              {post.minReadLabel}
+            </span>
+          </p>
 
-        <Title
-          className={cn(
-            "text-foreground group-hover:text-primary leading-tight font-semibold tracking-tight wrap-break-word transition-colors",
-            featured ? "mt-3 text-2xl sm:text-3xl" : "mt-2 text-lg",
-          )}
-        >
-          <Link
-            href={{ pathname: "/blog/[slug]", params: { slug: post.slug } }}
-            className="focus-visible:after:outline-primary inline-block min-h-11 min-w-11 after:absolute after:inset-0 after:rounded-[inherit] focus-visible:after:outline-2 focus-visible:after:-outline-offset-2"
-          >
-            {post.title}
-          </Link>
-        </Title>
-        {post.excerpt ? (
-          <p
+          <Title
             className={cn(
-              "text-muted-foreground text-sm leading-relaxed wrap-break-word sm:text-base",
-              featured ? "mt-3 line-clamp-3" : "mt-1.5 line-clamp-2",
+              "text-foreground group-hover:text-primary leading-tight font-semibold tracking-tight wrap-break-word transition-colors",
+              featured ? "mt-3 text-2xl sm:text-3xl" : "mt-2 text-lg",
             )}
           >
-            {post.excerpt}
-          </p>
-        ) : null}
+            <Link
+              href={{ pathname: "/blog/[slug]", params: { slug: post.slug } }}
+              className="focus-visible:after:outline-primary inline-block min-h-11 min-w-11 after:absolute after:inset-0 after:rounded-[inherit] focus-visible:after:outline-2 focus-visible:after:-outline-offset-2"
+            >
+              {post.title}
+            </Link>
+          </Title>
+          {post.excerpt ? (
+            <p
+              className={cn(
+                "text-muted-foreground text-sm leading-relaxed wrap-break-word sm:text-base",
+                featured ? "mt-3 line-clamp-3" : "mt-1.5 line-clamp-2",
+              )}
+            >
+              {post.excerpt}
+            </p>
+          ) : null}
+        </div>
 
         {featured ? (
           <span

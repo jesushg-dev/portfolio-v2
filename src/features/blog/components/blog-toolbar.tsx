@@ -47,18 +47,16 @@ export function BlogToolbar({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const activeEl = document.activeElement;
+      const target = e.target as HTMLElement | null;
       const isInput =
-        activeEl instanceof HTMLInputElement ||
-        activeEl instanceof HTMLTextAreaElement ||
-        activeEl instanceof HTMLSelectElement;
+        Boolean(target?.isContentEditable) ||
+        Boolean(
+          target?.tagName && /^(INPUT|TEXTAREA|SELECT)$/i.test(target.tagName),
+        );
 
       if (e.key === "/" && !isInput) {
         e.preventDefault();
         searchInputRef.current?.focus();
-      }
-      if (e.key === "Escape" && activeEl === searchInputRef.current) {
-        searchInputRef.current?.blur();
       }
     };
 
@@ -98,6 +96,11 @@ export function BlogToolbar({
             type="search"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                searchInputRef.current?.blur();
+              }
+            }}
             placeholder={t("searchPlaceholder")}
             autoComplete="off"
             className={cn(

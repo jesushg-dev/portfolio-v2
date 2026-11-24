@@ -58,35 +58,35 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
       style={{ y: dragY, background: buildSpotifyFullscreenBg(accentColor) }}
       className="relative flex size-full min-h-0 cursor-grab flex-col overflow-hidden text-white active:cursor-grabbing"
     >
-      <header className="relative z-20 shrink-0 px-3.5 pt-9.5 pb-1">
-        <div className="grid grid-cols-[1.75rem_1fr_1.75rem] items-center gap-2">
+      <header className="relative z-20 shrink-0 px-3.5 pt-9.5 pb-2">
+        <div className="grid grid-cols-[2.75rem_1fr_2.75rem] items-center gap-2">
           <button
             type="button"
             onClick={onClose}
-            className="flex size-7 items-center justify-center text-white/90"
+            className="flex size-11 items-center justify-center text-white/90 hover:text-white"
             aria-label={t("spotify.fullscreen.close")}
           >
-            <ChevronDown className="size-5" strokeWidth={2.5} />
+            <ChevronDown className="size-6" strokeWidth={2.5} />
           </button>
 
-          <p className="truncate text-center text-[0.70rem] font-semibold text-white/90">
+          <p className="truncate text-center text-sm font-semibold text-white/90">
             {isRecentlyPlayed
               ? t("spotify.lastPlayed")
               : t("titles.NowPlaying")}
           </p>
 
-          <span className="size-7" aria-hidden />
+          <span className="size-11" aria-hidden />
         </div>
       </header>
 
       <div
         data-ios-texture-scroll
-        className="min-h-0 flex-1 [scrollbar-width:none] overflow-x-hidden overflow-y-auto overscroll-contain px-3.5 pb-4"
+        className="min-h-0 flex-1 [scrollbar-width:none] overflow-x-hidden overflow-y-auto overscroll-contain px-4 pb-6"
         style={{ WebkitOverflowScrolling: "touch" }}
         onPointerDown={(event) => event.stopPropagation()}
       >
         {isRecentlyPlayed && (
-          <p className="mb-2 text-center text-[0.625rem] text-amber-200/90">
+          <p className="mb-2.5 text-center text-xs font-medium text-amber-200/90 sm:text-sm">
             {t("spotify.notPlayingNow")}
             {playback.playedAt
               ? ` · ${formatPlayedAt(playback.playedAt, locale)}`
@@ -94,19 +94,19 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
           </p>
         )}
 
-        <div className="mx-auto w-full max-w-[15.3125rem] shrink-0">
+        <div className="mx-auto flex w-full max-w-[24rem] flex-1 flex-col">
           <div
             data-spotify-flight="cover"
-            className="aspect-square w-full touch-none"
+            className="mx-auto aspect-square w-full max-w-[20rem] touch-none sm:max-w-[22rem]"
             style={{ opacity: flyComplete ? 1 : 0 }}
           >
             <Image
               src={playback.imageUrl ?? "/images/spotify.png"}
               alt={playback.imageAlt}
-              width={256}
-              height={256}
+              width={384}
+              height={384}
               draggable={false}
-              className="pointer-events-none size-full rounded-[0.5rem] object-cover shadow-md select-none"
+              className="pointer-events-none size-full rounded-xl object-cover shadow-lg select-none"
               preload
             />
           </div>
@@ -120,10 +120,10 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               href={playback.contentUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2.5 mb-3 inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1 text-[0.55rem] font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/55"
+              className="mt-3 mb-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-black/40 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/55"
             >
-              <span className="flex size-3 items-center justify-center rounded-[0.1875rem] border border-white/80">
-                <SpotifyIcon className="size-2.5" />
+              <span className="flex size-3.5 items-center justify-center rounded-[0.25rem] border border-white/80">
+                <SpotifyIcon className="size-3" />
               </span>
               {t("spotify.fullscreen.openInSpotify")}
             </a>
@@ -133,7 +133,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               href={playback.contentUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="block overflow-hidden text-[1.0625rem] leading-snug font-bold text-white hover:underline"
+              className="block overflow-hidden text-xl leading-tight font-bold text-white hover:underline sm:text-2xl"
               style={{ opacity: flyComplete ? 1 : 0 }}
             >
               <SpotifyScrollingText>{playback.title}</SpotifyScrollingText>
@@ -144,14 +144,14 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               href={playback.subtitleUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-0.5 block overflow-hidden text-[0.8125rem] text-white/70 hover:text-white hover:underline"
+              className="mt-1 block overflow-hidden text-sm font-medium text-white/80 hover:text-white hover:underline sm:text-base"
               style={{ opacity: flyComplete ? 1 : 0 }}
             >
               <SpotifyScrollingText>{playback.subtitle}</SpotifyScrollingText>
             </a>
 
             {playback.source === "now_playing" && (
-              <div className="mt-3">
+              <div className="mt-3.5">
                 <SpotifyFullscreenProgress
                   progressMs={liveProgressMs}
                   durationMs={playback.durationMs}
@@ -160,7 +160,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
             )}
           </motion.div>
           {showLyrics && flyComplete && (
-            <div className="mt-3">
+            <div className="mt-4 flex-1 pb-4">
               <LyricsCard
                 key={playback.contentId}
                 accentColor={accentColor}

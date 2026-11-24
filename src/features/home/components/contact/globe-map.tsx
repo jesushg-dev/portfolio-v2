@@ -334,15 +334,23 @@ export function GlobeMap({
     initialProjection === "globe" ? 0 : 100,
   ]);
   const [worldData, setWorldData] = useState<GeoFeature[]>([]);
-  const [rotation, setRotation] = useState([0, 0]);
+  const distinctOrigin =
+    origin.lat !== destination.lat || origin.lon !== destination.lon;
+
+  const [rotation, setRotation] = useState<[number, number]>(() =>
+    distinctOrigin ? [0, 0] : [-destination.lon, -destination.lat],
+  );
   const [userZoomMultiplier, setUserZoomMultiplier] = useState(1);
   const [translation] = useState([0, 0]);
   const [isDragging, setIsDragging] = useState(false);
   const [lastMouse, setLastMouse] = useState([0, 0]);
 
-  const [connectionPhase, setConnectionPhase] =
-    useState<ConnectionPhase>("idle");
-  const [cameraZoom, setCameraZoom] = useState(1);
+  const [connectionPhase, setConnectionPhase] = useState<ConnectionPhase>(() =>
+    distinctOrigin ? "idle" : "done",
+  );
+  const [cameraZoom, setCameraZoom] = useState(() =>
+    distinctOrigin ? 1 : 1.8,
+  );
   const [lineProgress, setLineProgress] = useState(0);
   const [showGraticule, setShowGraticule] = useState(true);
   const [showOceanFill, setShowOceanFill] = useState(true);
@@ -463,7 +471,7 @@ export function GlobeMap({
   };
 
   const handleReset = () => {
-    setRotation([0, 0]);
+    setRotation(distinctOrigin ? [0, 0] : [-destination.lon, -destination.lat]);
     setUserZoomMultiplier(1);
   };
 
@@ -472,6 +480,7 @@ export function GlobeMap({
   useEffect(() => {
     if (
       !autoPlayConnection ||
+      !distinctOrigin ||
       worldData.length === 0 ||
       hasAutoPlayedRef.current
     )
@@ -479,7 +488,7 @@ export function GlobeMap({
     hasAutoPlayedRef.current = true;
     playConnectionSequence();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoPlayConnection, worldData]);
+  }, [autoPlayConnection, distinctOrigin, worldData]);
 
   useEffect(() => {
     if (connectionPhase !== "zoomingOut") return;

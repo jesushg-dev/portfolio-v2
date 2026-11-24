@@ -77,6 +77,9 @@ export function resolveCircuitLabels(
     } else if (/architect/i.test(sub)) {
       circuitTitle = "ARCHITECT";
       focusTitle = "Architecture";
+    } else if (/engineer|software|developer/i.test(sub)) {
+      circuitTitle = "ENGINEER";
+      focusTitle = sub.length <= 26 ? sub : "Software Engineer";
     } else {
       const firstWord = sub.split(/[\s·,-]/)[0]?.trim();
       if (firstWord && firstWord.length <= 12) {

@@ -1291,8 +1291,8 @@
     "featured": false
   },
   {
-    "key": "OpenAIGpt4o",
-    "title": "OpenAI GPT-4o",
+    "key": "OpenAI",
+    "title": "OpenAI",
     "type": "AI",
     "image": "https://cdn.simpleicons.org/openai",
     "featured": true,
@@ -1300,24 +1300,24 @@
     "translations": [
       {
         "locale": "es",
-        "description": "Modelo insignia omnicanal de OpenAI con razonamiento avanzado en texto, voz y visión.",
-        "urlWiki": "https://en.wikipedia.org/wiki/GPT-4o"
+        "description": "Plataforma y modelos de lenguaje avanzados de OpenAI para razonamiento, visión y generación de código.",
+        "urlWiki": "https://en.wikipedia.org/wiki/OpenAI"
       },
       {
         "locale": "en",
-        "description": "OpenAI flagship omni-modal model with advanced reasoning across text, voice, and vision.",
-        "urlWiki": "https://en.wikipedia.org/wiki/GPT-4o"
+        "description": "OpenAI advanced language and reasoning models for code generation, text, and multimodal workflows.",
+        "urlWiki": "https://en.wikipedia.org/wiki/OpenAI"
       },
       {
         "locale": "nl",
-        "description": "OpenAI vlaggenschip omni-model met geavanceerde redenering over tekst, audio en visie.",
-        "urlWiki": "https://en.wikipedia.org/wiki/GPT-4o"
+        "description": "OpenAI geavanceerde taal- en redeneermodellen voor codegeneratie, tekst en multimodale workflows.",
+        "urlWiki": "https://en.wikipedia.org/wiki/OpenAI"
       }
     ]
   },
   {
-    "key": "Claude35",
-    "title": "Claude 3.5",
+    "key": "Claude",
+    "title": "Claude",
     "type": "AI",
     "image": "https://cdn.simpleicons.org/anthropic",
     "featured": true,
@@ -1341,8 +1341,8 @@
     ]
   },
   {
-    "key": "Gemini15Pro",
-    "title": "Gemini 1.5 Pro",
+    "key": "Gemini",
+    "title": "Gemini",
     "type": "AI",
     "image": "https://cdn.simpleicons.org/google",
     "featured": true,
@@ -1350,17 +1350,17 @@
     "translations": [
       {
         "locale": "es",
-        "description": "Modelo multimodal de Google con ventana de contexto de millones de tokens para análisis masivo.",
+        "description": "Modelo multimodal de Google con ventana de contexto extendida para análisis masivo y generación de código.",
         "urlWiki": "https://en.wikipedia.org/wiki/Gemini_(chatbot)"
       },
       {
         "locale": "en",
-        "description": "Google multimodal model featuring million-token context windows for massive data comprehension.",
+        "description": "Google multimodal models featuring large context windows for massive data comprehension and code generation.",
         "urlWiki": "https://en.wikipedia.org/wiki/Gemini_(chatbot)"
       },
       {
         "locale": "nl",
-        "description": "Google multimodaal model met miljoenen tokens contextvenster voor grootschalige gegevensanalyse.",
+        "description": "Google multimodaal model met uitgebreid contextvenster voor grootschalige gegevensanalyse en code.",
         "urlWiki": "https://en.wikipedia.org/wiki/Gemini_(chatbot)"
       }
     ]

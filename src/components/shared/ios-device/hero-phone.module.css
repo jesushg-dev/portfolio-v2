@@ -15,7 +15,7 @@
 }
 .visual {
   position: relative;
-  height: min(45rem, 100%);
+  height: clamp(32rem, 78svh, 51rem);
   min-width: 0;
   isolation: isolate;
 }
@@ -30,7 +30,24 @@
   pointer-events: none;
 }
 .canvas {
-  filter: drop-shadow(0 1.5rem 2.4rem rgb(0 0 0 / 0.35));
+  contain: strict;
+  will-change: transform;
+  z-index: 1;
+}
+.visual::after {
+  content: "";
+  position: absolute;
+  inset: 12% 8% 6% 8%;
+  border-radius: 40%;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    rgb(0 0 0 / 0.38) 0%,
+    rgb(0 0 0 / 0.15) 45%,
+    transparent 70%
+  );
+  filter: blur(1.5rem);
+  pointer-events: none;
+  z-index: 0;
 }
 .appLayer {
   z-index: 1;
@@ -43,6 +60,22 @@
   transform: var(--projection);
   transform-origin: 0 0;
 }
+@keyframes iosAppLaunch {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) translate(-20%, -15%);
+    border-radius: 2.5rem;
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.015) translate(0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+    border-radius: var(--ios-device-screen-radius);
+  }
+}
 .miniApp {
   position: absolute;
   inset: 0;
@@ -50,9 +83,17 @@
   overscroll-behavior: contain;
   border-radius: var(--ios-device-screen-radius);
   outline: none;
-  background: #191414;
+  background: #121212;
   pointer-events: auto;
   touch-action: pan-y;
+  animation: iosAppLaunch 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .miniApp {
+    animation: none;
+    will-change: auto;
+  }
 }
 .front .miniApp {
   inset: 2% 4%;
@@ -66,7 +107,87 @@
   height: 10.46%;
   pointer-events: auto;
 }
-:is(.spotifyApp, .spotifyFallback):is(:hover, :focus-visible) {
+.terminalApp {
+  position: absolute;
+  inset: 32.43% auto auto 30.33%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.projectsApp {
+  position: absolute;
+  inset: 32.43% auto auto 52.44%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.cvApp {
+  position: absolute;
+  inset: 32.43% auto auto 74.55%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.blogApp {
+  position: absolute;
+  inset: 43.67% auto auto 8.22%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.codeApp {
+  position: absolute;
+  inset: 43.67% auto auto 30.33%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.linkedInApp {
+  position: absolute;
+  inset: 43.67% auto auto 52.44%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.mailApp {
+  position: absolute;
+  inset: 43.67% auto auto 74.55%;
+  width: 17.22%;
+  height: 10.46%;
+  pointer-events: auto;
+}
+.profileWidgetApp {
+  position: absolute;
+  inset: 55.44% auto auto 7.11%;
+  width: 85.78%;
+  height: 18.83%;
+  pointer-events: auto;
+}
+.weatherWidgetApp {
+  position: absolute;
+  /* Bounds of the weather widget in the 900 × 1912 home-screen artwork. */
+  inset: 9.15% auto auto 52.89%;
+  width: 40%;
+  height: 18.83%;
+  pointer-events: auto;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 1.5rem;
+}
+:is(
+  .spotifyApp,
+  .spotifyFallback,
+  .terminalApp,
+  .projectsApp,
+  .cvApp,
+  .blogApp,
+  .codeApp,
+  .linkedInApp,
+  .mailApp,
+  .profileWidgetApp,
+  .weatherWidgetApp
+):is(:hover, :focus-visible) {
   border-radius: 0.75rem;
   outline: 0.175rem solid var(--primary);
   outline-offset: -0.175rem;

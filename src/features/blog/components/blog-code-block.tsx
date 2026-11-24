@@ -36,19 +36,7 @@ export function BlogCodeBlock({ node }: BlogCodeBlockProps) {
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(textToCopy);
-      } else if (typeof document !== "undefined") {
-        const textarea = document.createElement("textarea");
-        textarea.value = textToCopy;
-        textarea.setAttribute("readonly", "");
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
       }
-
       setCopied(true);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);

@@ -109,21 +109,21 @@ const HomeBlog: FC<HomeBlogProps> = async ({ locale }) => {
           latest.length > 0 && "lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]",
         )}
       >
-        <article className="min-w-0">
+        <article className="h-full min-w-0">
           <HomeBlogPost post={featured} readPostLabel={t("readPost")} />
         </article>
 
         {latest.length > 0 ? (
-          <div className="home-card-surface bg-card min-w-0 rounded-4xl p-6 sm:p-8 [[data-color-mode=dark]_&]:bg-[color-mix(in_srgb,var(--card)_94%,var(--foreground))]">
+          <div className="home-card-surface bg-card flex h-full min-w-0 flex-col overflow-hidden rounded-4xl p-6 sm:p-8 [[data-color-mode=dark]_&]:bg-[color-mix(in_srgb,var(--card)_94%,var(--foreground))]">
             <h3
               id="home-blog-latest"
-              className="text-muted-foreground mb-5 font-mono text-sm font-medium tracking-widest uppercase"
+              className="text-muted-foreground mb-5 shrink-0 font-mono text-sm font-medium tracking-widest uppercase"
             >
               {t("latest")}
             </h3>
             <ul
               aria-labelledby="home-blog-latest"
-              className="divide-border divide-y"
+              className="divide-border themed-scrollbar min-h-0 flex-1 divide-y overflow-y-auto overscroll-contain pr-1.5"
             >
               {latest.map((post) => (
                 <li key={post.id} className="py-5 first:pt-0 last:pb-0">
