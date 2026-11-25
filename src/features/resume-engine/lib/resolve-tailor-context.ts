@@ -4,6 +4,7 @@ import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draf
 import type { TailorContext } from "./tailored-resume-document";
 import { declaredResumeTechnologies } from "./resume-technology-names";
 import {
+  formatTechnologyDisplayName,
   knownTechnologySpellings,
   literalVacancyTerm,
   technologyNameKey,
@@ -101,7 +102,7 @@ export async function resolveTailorContext(
     const key = technologyNameKey(spelling);
     if (seen.has(key)) return [];
     seen.add(key);
-    return [spelling];
+    return [formatTechnologyDisplayName(spelling)];
   });
   return {
     ...input,

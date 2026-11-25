@@ -19,7 +19,10 @@ import {
   buildTailorCorrectionPrompt,
   buildTailoredResumePrompt,
 } from "./tailor-resume-prompt";
-import { createTechnologyMatcher } from "../extract-job-tools";
+import {
+  createTechnologyMatcher,
+  expandVacancyToolTerm,
+} from "../extract-job-tools";
 import { CvMatchAnalysisSchema } from "../cv-match-analysis";
 
 async function requestJson(
@@ -85,11 +88,10 @@ export async function discoverVacancyTechnologies(
   const { vacancyTechnologies } = CvMatchAnalysisSchema.pick({
     vacancyTechnologies: true,
   }).parse(parseAiJsonResponse(raw));
+  const expanded = (vacancyTechnologies ?? []).flatMap(expandVacancyToolTerm);
   return [
     ...new Set(
-      createTechnologyMatcher(vacancyTechnologies ?? [])(vacancy).map(
-        ({ name }) => name,
-      ),
+      createTechnologyMatcher(expanded)(vacancy).map(({ name }) => name),
     ),
   ];
 }

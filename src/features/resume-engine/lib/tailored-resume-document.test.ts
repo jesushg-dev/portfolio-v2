@@ -76,6 +76,14 @@ describe("canonical multilingual resume", () => {
     field.text = field.text.replace("25%", "25 %");
     expect(() => validateTailoredResume(response, context)).not.toThrow();
   });
+
+  it("ignores embedded digits in technical acronyms like E2E or OAuth2 when checking numeric facts", () => {
+    const { context, response } = setup("en");
+    const summary = response.fields.find(({ id }) => id === "header.summary")!;
+    summary.text =
+      "Computer engineer with 6+ years of experience in E2E/unit testing, OAuth2, S3, and B2B platforms.";
+    expect(() => validateTailoredResume(response, context)).not.toThrow();
+  });
   it("rejects even an unchanged name returned as editable text with an actionable correction", () => {
     const { context, response } = setup();
     response.fields.push({

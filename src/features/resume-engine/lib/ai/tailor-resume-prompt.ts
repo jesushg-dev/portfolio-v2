@@ -85,6 +85,7 @@ HEADER SUMMARY RULES AND TEMPLATE
   Sentence 3: Core primary stack (maximum 6 key technologies directly relevant to the vacancy).
   Sentence 4: Quality, collaboration, or operational impact.
 - Do not list every technology. Do not include verbose phrases like "Familiaridad con..." or "Familiarity with..." if they risk exceeding the budget.
+- Keep ONLY the numeric facts present in the source header.summary (never copy percentages or metrics from experience bullets into header.summary).
 - Omit secondary technologies (e.g., Node.js, Nest.js, TypeScript) if they are not strictly required for the vacancy and are already represented in the skills section.
 
 SELECTION AND EVIDENCE

@@ -71,7 +71,7 @@ it.each([true, false])(
       .mockResolvedValue({ downloadUrl: "/cv.docx", aiScore: 70 });
     renderWithIntl(<ResumeTailorWorkflow applicationId="test" embedded />);
     fireEvent.click(screen.getByRole("button", { name: "Tailor resume" }));
-    const term = await screen.findByRole("checkbox", { name: "quiet oak" });
+    const term = await screen.findByRole("checkbox", { name: "Quiet Oak" });
     expect(mockGenerate).not.toHaveBeenCalled();
     if (confirm) fireEvent.click(term);
     const generate = screen.getByRole("button", { name: "Tailor resume" });
@@ -80,7 +80,7 @@ it.each([true, false])(
     await waitFor(() =>
       expect(mockGenerate).toHaveBeenCalledWith(
         expect.objectContaining({
-          confirmedTechnologies: confirm ? ["quiet oak"] : [],
+          confirmedTechnologies: confirm ? ["Quiet Oak"] : [],
           vacancyTechnologies: ["quiet oak"],
         }),
       ),
@@ -167,7 +167,7 @@ it("lets the user confirm an equivalence to continue or generate a manual correc
   fireEvent.click(screen.getByRole("button", { name: "Tailor resume" }));
 
   const rejectBtn = await screen.findByRole("button", {
-    name: "No, create AI correction prompt",
+    name: "Create AI correction prompt",
   });
   await waitFor(() => expect(rejectBtn).toBeEnabled());
   fireEvent.click(rejectBtn);
@@ -183,7 +183,7 @@ it("lets the user confirm an equivalence to continue or generate a manual correc
   expect(await screen.findByText("AI correction prompt")).toBeVisible();
 
   const confirmBtn = screen.getByRole("button", {
-    name: "Yes, they’re equivalent & continue",
+    name: "All equivalent & continue",
   });
   await waitFor(() => expect(confirmBtn).toBeEnabled());
   fireEvent.click(confirmBtn);

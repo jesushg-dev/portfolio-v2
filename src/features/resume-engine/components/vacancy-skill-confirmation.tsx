@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
+  formatTechnologyDisplayName,
   knownTechnologySpellings,
   literalVacancyTerm,
   technologyNameKey,
@@ -56,14 +57,17 @@ export function VacancySkillConfirmation({
         declared,
         suggestions,
         allEquivalences,
-      ),
+      ).map(formatTechnologyDisplayName),
       ...confirmed,
     ]),
   ];
-  const customMatch =
+  const matchedCustom =
     !knownTechnologySpellings(declared, [custom], allEquivalences).has(
       technologyNameKey(custom),
     ) && literalVacancyTerm(vacancy, custom);
+  const customMatch = matchedCustom
+    ? formatTechnologyDisplayName(matchedCustom)
+    : undefined;
   if (vacancy.length < 20) {
     return savedEquivalences.length > 0 ? (
       <SavedEquivalencesDetails

@@ -605,6 +605,12 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         uiLocale: input.uiLocale,
         jobDescription: processJobDescription(input.jobDescription).cleanedText,
       });
+      await persistTechnologyEquivalences(
+        ctx.db,
+        ctx.user.id,
+        input.technologyEquivalences,
+        context.technologyEquivalences,
+      );
       return buildTailorCorrectionPrompt({
         context,
         previousRawJson: input.previousRawJson,

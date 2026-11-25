@@ -80,22 +80,28 @@ describe("ResumeTailorErrorAlert", () => {
     ).not.toHaveAttribute("open");
   });
 
-  it("asks whether mismatched technology names are equivalent and renders the AI correction prompt", () => {
-    const onConfirmEquivalence = jest.fn();
-    const onRejectEquivalence = jest.fn();
-    const pair = { original: "REST APIs", proposed: "RESTful APIs" };
+  it("supports batch Yes/No decisions for multiple mismatched technology names without repeating prose", () => {
+    const onResolveEquivalences = jest.fn();
+    const restPair = { original: "REST APIs", proposed: "RESTful APIs" };
+    const pgPair = { original: "Postgres", proposed: "PostgreSQL" };
 
     renderWithIntl(
       <ResumeTailorErrorAlert
         error={{
-          message:
-            "Resume validation failed: Technology name “REST APIs” → “RESTful APIs”: display name belongs to a different technology.",
+          message: "Resume validation failed",
           validation: [
             {
               fieldId: "technologyNames[0]",
               field: "technologyName",
-              original: pair.original,
-              proposed: pair.proposed,
+              original: restPair.original,
+              proposed: restPair.proposed,
+              reason: "technologyIdentity",
+            },
+            {
+              fieldId: "technologyNames[1]",
+              field: "technologyName",
+              original: pgPair.original,
+              proposed: pgPair.proposed,
               reason: "technologyIdentity",
             },
           ],
@@ -105,34 +111,38 @@ describe("ResumeTailorErrorAlert", () => {
         correctionPrompt={{
           systemPrompt: "sys",
           userPrompt: "usr",
-          combinedPrompt:
-            'SYSTEM:\nsys\n\nUSER:\nusr\n\nUSER DECISIONS:\n- "REST APIs" and "RESTful APIs" are DIFFERENT technologies',
+          combinedPrompt: "SYSTEM:\nsys\n\nUSER:\nfix",
         }}
         onRetry={jest.fn()}
         onClearError={jest.fn()}
         onSwitchToManual={jest.fn()}
-        onConfirmEquivalence={onConfirmEquivalence}
-        onRejectEquivalence={onRejectEquivalence}
+        onResolveEquivalences={onResolveEquivalences}
         onCreateCorrectionPrompt={jest.fn()}
       />,
     );
 
-    expect(
-      screen.getByText(
-        "Do “REST APIs” and “RESTful APIs” refer to the same technology?",
-      ),
-    ).toBeVisible();
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "Yes, they’re equivalent & continue",
-      }),
-    );
-    expect(onConfirmEquivalence).toHaveBeenCalledWith(pair);
+    expect(screen.getAllByText("Same technology?")).toHaveLength(2);
+
+    const yesButtons = screen.getAllByRole("button", { name: "Yes" });
+    const noButtons = screen.getAllByRole("button", { name: "No" });
+    fireEvent.click(yesButtons[0]);
+    fireEvent.click(noButtons[1]);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "No, create AI correction prompt" }),
+      screen.getByRole("button", { name: "Create AI correction prompt" }),
     );
-    expect(onRejectEquivalence).toHaveBeenCalledWith(pair);
+    expect(onResolveEquivalences).toHaveBeenCalledWith({
+      approved: [restPair],
+      rejected: [pgPair],
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "All equivalent & continue" }),
+    );
+    expect(onResolveEquivalences).toHaveBeenCalledWith({
+      approved: [restPair, pgPair],
+      rejected: [],
+    });
 
     expect(screen.getByText("AI correction prompt")).toBeVisible();
     expect(

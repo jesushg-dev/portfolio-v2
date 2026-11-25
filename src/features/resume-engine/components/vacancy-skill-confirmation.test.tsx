@@ -29,7 +29,7 @@ it("leaves new technologies unchecked and allows an unlisted name copied from th
     target: { value: "quiet oak" },
   });
   fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
-  expect(onChange).toHaveBeenCalledWith(["quiet oak"]);
+  expect(onChange).toHaveBeenCalledWith(["Quiet Oak"]);
 });
 
 it("applies saved equivalences automatically and lets the user remove them", () => {

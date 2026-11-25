@@ -1,3 +1,41 @@
+const GRAMMAR_CONJUNCTION = /^(?:and|or|y|o|en|of)$/iu;
+const TITLE_CONNECTOR =
+  /^(?:and|or|of|in|on|for|with|to|as|a|an|the|de|y|o|en)$/iu;
+
+/** Splits compound slash labels like `AWS/Lambda` into distinct tools while keeping short/numeric codes like `CI/CD` or `HTTP/2`. */
+export function expandVacancyToolTerm(term: string): string[] {
+  const trimmed = term.trim();
+  if (!trimmed || GRAMMAR_CONJUNCTION.test(trimmed)) return [];
+  if (!trimmed.includes("/")) return [trimmed];
+  const parts = trimmed
+    .split("/")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (parts.every((part) => GRAMMAR_CONJUNCTION.test(part))) return [];
+  if (
+    parts.length > 1 &&
+    parts.every((part) => /\p{L}{3,}|[.#+]/u.test(part))
+  ) {
+    return parts.filter((part) => !GRAMMAR_CONJUNCTION.test(part));
+  }
+  return [trimmed];
+}
+
+/** Capitalizes lowercase technology phrases while preserving intentional casing like `eCommerce`, `iOS`, or `DynamoDB`. */
+export function formatTechnologyDisplayName(name: string): string {
+  const trimmed = name.trim().replace(/\s+/g, " ");
+  if (!trimmed) return "";
+  return trimmed
+    .split(/([\s-]+)/u)
+    .map((segment, index) => {
+      if (!segment || /^[\s-]+$/u.test(segment)) return segment;
+      if (/\p{Lu}/u.test(segment)) return segment;
+      if (index > 0 && TITLE_CONNECTOR.test(segment)) return segment;
+      return segment[0].toLocaleUpperCase() + segment.slice(1);
+    })
+    .join("");
+}
+
 export function technologyNameKey(name: string): string {
   return name.trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -109,7 +147,7 @@ function vacancyTerms(text: string): string[] {
       .split(/\s*[,;|]\s*|\s+(?:and|or|y|o|en|of)\s+/iu)) {
       const term = part
         .trim()
-        .replace(/^(?:and|or|y|o|en|of)\s+/iu, "")
+        .replace(/^(?:and\/or|or\/and|y\/o|en\/of|and|or|y|o|en|of)\s+/iu, "")
         .replace(/\s+(?:required|preferred|requerid[oa]s?|vereist)\b.*$/iu, "")
         .replace(/[.!:]+$/u, "")
         .trim();
@@ -171,12 +209,10 @@ export function extractJobTools(
 ): string[] {
   const provided = [
     ...knownTechnologySpellings(candidateSkills, [], equivalences).keys(),
-    ...analysisTerms,
+    ...analysisTerms.flatMap(expandVacancyToolTerm),
   ];
-  const matches = createTechnologyMatcher([
-    ...provided,
-    ...vacancyTerms(vacancy),
-  ])(vacancy);
+  const extracted = vacancyTerms(vacancy).flatMap(expandVacancyToolTerm);
+  const matches = createTechnologyMatcher([...provided, ...extracted])(vacancy);
   const byKey = new Map(matches.map(({ name, key }) => [key, name]));
   const preferred = new Set(provided.map(technologyNameKey));
   return [...byKey.values()].sort(

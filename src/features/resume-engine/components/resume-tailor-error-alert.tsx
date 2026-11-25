@@ -17,6 +17,11 @@ export interface ResumeTailorFailure {
   validation?: ResumeTailorFieldIssue[] | null;
 }
 
+export interface EquivalenceResolutionBatch {
+  approved: TechnologyEquivalence[];
+  rejected: TechnologyEquivalence[];
+}
+
 export interface ResumeTailorErrorAlertProps {
   error: ResumeTailorFailure | null;
   isPending?: boolean;
@@ -27,14 +32,18 @@ export interface ResumeTailorErrorAlertProps {
   onRetry: () => void;
   onClearError: () => void;
   onSwitchToManual: () => void;
-  onConfirmEquivalence?: (pair: TechnologyEquivalence) => void;
-  onRejectEquivalence?: (pair: TechnologyEquivalence) => void;
+  onResolveEquivalences?: (batch: EquivalenceResolutionBatch) => void;
   onCreateCorrectionPrompt?: () => void;
 }
 
 type ResumeStudioTranslate = ReturnType<
   typeof useTranslations<"admin.resumeStudio">
 >;
+
+interface IdentityCandidate {
+  fieldId: string;
+  pair: TechnologyEquivalence;
+}
 
 export const ResumeTailorErrorAlert: FC<ResumeTailorErrorAlertProps> = ({
   error,
@@ -46,11 +55,17 @@ export const ResumeTailorErrorAlert: FC<ResumeTailorErrorAlertProps> = ({
   onRetry,
   onClearError,
   onSwitchToManual,
-  onConfirmEquivalence,
-  onRejectEquivalence,
+  onResolveEquivalences,
   onCreateCorrectionPrompt,
 }) => {
   const t = useTranslations("admin.resumeStudio");
+  const [trackedError, setTrackedError] = useState(error);
+  const [decisions, setDecisions] = useState<Record<string, "yes" | "no">>({});
+
+  if (trackedError !== error) {
+    setTrackedError(error);
+    setDecisions({});
+  }
 
   if (!error) return null;
   const issuesByField = new Map<string, ResumeTailorFieldIssue[]>();
@@ -60,6 +75,29 @@ export const ResumeTailorErrorAlert: FC<ResumeTailorErrorAlertProps> = ({
     else issuesByField.set(issue.fieldId, [issue]);
   }
   const hasValidation = issuesByField.size > 0;
+  const identityCandidates: IdentityCandidate[] = [];
+  for (const [fieldId, issues] of issuesByField) {
+    const [first] = issues;
+    if (
+      first &&
+      issues.some((entry) => entry.reason === "technologyIdentity") &&
+      first.original &&
+      first.proposed
+    ) {
+      identityCandidates.push({
+        fieldId,
+        pair: { original: first.original, proposed: first.proposed },
+      });
+    }
+  }
+  const hasIdentityChoices =
+    identityCandidates.length > 0 && Boolean(onResolveEquivalences);
+  const hasNoDecision = identityCandidates.some(
+    ({ fieldId }) => decisions[fieldId] === "no",
+  );
+  const allMarkedYes =
+    identityCandidates.length > 0 &&
+    identityCandidates.every(({ fieldId }) => decisions[fieldId] === "yes");
 
   return (
     <div
@@ -85,14 +123,62 @@ export const ResumeTailorErrorAlert: FC<ResumeTailorErrorAlertProps> = ({
                   key={fieldId}
                   t={t}
                   issues={issues}
-                  effectiveMode={effectiveMode}
-                  isPending={isPending}
-                  isGeneratingCorrection={isGeneratingCorrection}
-                  onConfirmEquivalence={onConfirmEquivalence}
-                  onRejectEquivalence={onRejectEquivalence}
+                  decision={decisions[fieldId]}
+                  showEquivalenceToggle={hasIdentityChoices}
+                  onDecisionChange={(next) =>
+                    setDecisions((prev) => ({ ...prev, [fieldId]: next }))
+                  }
                 />
               ))}
             </ul>
+          ) : null}
+          {hasIdentityChoices && onResolveEquivalences ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                size="sm"
+                disabled={isPending || isGeneratingCorrection}
+                onClick={() =>
+                  onResolveEquivalences({
+                    approved: identityCandidates.map(({ pair }) => pair),
+                    rejected: [],
+                  })
+                }
+              >
+                {t(
+                  allMarkedYes
+                    ? "tailorValidation.applyAndContinue"
+                    : "tailorValidation.allEquivalentContinue",
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={isPending || isGeneratingCorrection}
+                onClick={() => {
+                  const approved: TechnologyEquivalence[] = [];
+                  const rejected: TechnologyEquivalence[] = [];
+                  for (const { fieldId, pair } of identityCandidates) {
+                    if (decisions[fieldId] === "yes") approved.push(pair);
+                    else rejected.push(pair);
+                  }
+                  onResolveEquivalences({
+                    approved,
+                    rejected:
+                      hasNoDecision || approved.length > 0
+                        ? rejected
+                        : identityCandidates.map(({ pair }) => pair),
+                  });
+                }}
+              >
+                {t(
+                  effectiveMode === "manual"
+                    ? "tailorValidation.fixMismatchesManual"
+                    : "tailorValidation.fixMismatchesAuto",
+                )}
+              </Button>
+            </div>
           ) : null}
           <div className="mt-2.5 flex flex-wrap gap-2">
             <Button
@@ -106,6 +192,7 @@ export const ResumeTailorErrorAlert: FC<ResumeTailorErrorAlertProps> = ({
               {t("tailorErrorRetry")}
             </Button>
             {hasValidation &&
+            !hasIdentityChoices &&
             effectiveMode === "manual" &&
             onCreateCorrectionPrompt ? (
               <Button
@@ -162,19 +249,15 @@ export const ResumeTailorErrorAlert: FC<ResumeTailorErrorAlertProps> = ({
 function TailorFieldComparison({
   t,
   issues,
-  effectiveMode,
-  isPending,
-  isGeneratingCorrection,
-  onConfirmEquivalence,
-  onRejectEquivalence,
+  decision,
+  showEquivalenceToggle,
+  onDecisionChange,
 }: {
   t: ResumeStudioTranslate;
   issues: ResumeTailorFieldIssue[];
-  effectiveMode: AiProcessingMode;
-  isPending: boolean;
-  isGeneratingCorrection: boolean;
-  onConfirmEquivalence?: (pair: TechnologyEquivalence) => void;
-  onRejectEquivalence?: (pair: TechnologyEquivalence) => void;
+  decision?: "yes" | "no";
+  showEquivalenceToggle: boolean;
+  onDecisionChange: (next: "yes" | "no") => void;
 }) {
   const [issue] = issues;
   if (!issue) return null;
@@ -185,10 +268,10 @@ function TailorFieldComparison({
       : t(`tailorValidation.fields.${issue.field}`);
   const facts = issues.find(({ numericFacts }) => numericFacts)?.numericFacts;
   const canResolveEquivalence =
+    showEquivalenceToggle &&
     issues.some((entry) => entry.reason === "technologyIdentity") &&
     Boolean(issue.original) &&
-    Boolean(issue.proposed) &&
-    Boolean(onConfirmEquivalence ?? onRejectEquivalence);
+    Boolean(issue.proposed);
 
   return (
     <li className="bg-background border-border rounded-md border p-3 text-sm wrap-break-word">
@@ -242,52 +325,29 @@ function TailorFieldComparison({
         </div>
       </dl>
       {canResolveEquivalence ? (
-        <div className="border-border bg-muted/30 mt-3 rounded-md border p-3">
-          <p className="text-foreground text-sm font-medium">
-            {t("tailorValidation.equivalenceQuestion", {
-              original: issue.original,
-              proposed: issue.proposed,
-            })}
-          </p>
-          <p className="text-muted-foreground mt-1 text-sm">
-            {t("tailorValidation.equivalenceHint")}
-          </p>
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            {onConfirmEquivalence ? (
-              <Button
-                type="button"
-                size="sm"
-                disabled={isPending}
-                onClick={() =>
-                  onConfirmEquivalence({
-                    original: issue.original,
-                    proposed: issue.proposed,
-                  })
-                }
-              >
-                {t("tailorValidation.confirmEquivalence")}
-              </Button>
-            ) : null}
-            {onRejectEquivalence ? (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={isPending || isGeneratingCorrection}
-                onClick={() =>
-                  onRejectEquivalence({
-                    original: issue.original,
-                    proposed: issue.proposed,
-                  })
-                }
-              >
-                {t(
-                  effectiveMode === "manual"
-                    ? "tailorValidation.rejectEquivalenceManual"
-                    : "tailorValidation.rejectEquivalenceAuto",
-                )}
-              </Button>
-            ) : null}
+        <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+          <span className="text-muted-foreground text-sm">
+            {t("tailorValidation.sameTechnologyShort")}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <Button
+              type="button"
+              size="sm"
+              variant={decision === "yes" ? "default" : "outline"}
+              aria-pressed={decision === "yes"}
+              onClick={() => onDecisionChange("yes")}
+            >
+              {t("tailorValidation.answerYes")}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={decision === "no" ? "destructive" : "outline"}
+              aria-pressed={decision === "no"}
+              onClick={() => onDecisionChange("no")}
+            >
+              {t("tailorValidation.answerNo")}
+            </Button>
           </div>
         </div>
       ) : null}

@@ -57,7 +57,9 @@ export function numericResumeFacts(text: string): string[] {
     ...new Set(
       text
         .replace(/(\d)\s+%/gu, "$1%")
-        .match(/[+~−-]?\d+(?:[.,]\d+)?(?:%|\+)?|\b[ABC][12]\b\+?/gi) ?? [],
+        .match(
+          /(?<![\p{L}_])[+~−-]?\d+(?:[.,]\d+)?(?:%|\+)?|\b[ABC][12]\b\+?/giu,
+        ) ?? [],
     ),
   ]
     .map((value) => value.toUpperCase().replace(",", ".").replace("−", "-"))

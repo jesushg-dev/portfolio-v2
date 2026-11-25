@@ -355,7 +355,7 @@ describe("resumeEngineAdminRouter", () => {
     await caller.tailorResumeManual(input);
     const doc = jest.mocked(finalizeTailoredResume).mock.lastCall![2].document;
     expect(doc.skills.at(-1)?.items).toEqual(
-      expect.arrayContaining(["ASP.NET Core", "quiet oak"]),
+      expect.arrayContaining(["ASP.NET Core", "Quiet Oak"]),
     );
     expect(doc.skills.at(-1)?.items).toHaveLength(2);
     expect(

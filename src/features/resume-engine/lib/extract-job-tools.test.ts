@@ -1,5 +1,7 @@
 import {
+  expandVacancyToolTerm,
   extractJobTools,
+  formatTechnologyDisplayName,
   knownTechnologySpellings,
   vacancySkillSuggestions,
 } from "./extract-job-tools";
@@ -115,5 +117,29 @@ describe("extractJobTools", () => {
         equivalences,
       ).get("restful apis"),
     ).toBe("restful apis");
+  });
+
+  it("splits slash-joined tools like AWS/Lambda, drops and/or, and capitalizes lowercase terms", () => {
+    expect(expandVacancyToolTerm("AWS/Lambda")).toEqual(["AWS", "Lambda"]);
+    expect(expandVacancyToolTerm("CI/CD")).toEqual(["CI/CD"]);
+    expect(expandVacancyToolTerm("and/or")).toEqual([]);
+    expect(formatTechnologyDisplayName("microservices")).toBe("Microservices");
+    expect(formatTechnologyDisplayName("event-based architectures")).toBe(
+      "Event-Based Architectures",
+    );
+    expect(formatTechnologyDisplayName("eCommerce")).toBe("eCommerce");
+
+    const vacancy =
+      "Stack: AWS/Lambda, microservices, event-based architectures, and/or eCommerce.";
+    expect(
+      vacancySkillSuggestions(vacancy, ["AWS"]).map(
+        formatTechnologyDisplayName,
+      ),
+    ).toEqual([
+      "eCommerce",
+      "Event-Based Architectures",
+      "Lambda",
+      "Microservices",
+    ]);
   });
 });

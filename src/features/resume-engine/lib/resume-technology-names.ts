@@ -94,26 +94,33 @@ export function validateResumeTechnologyNames(
   }
   const proposedIds = new Set<string>();
   const confirmedNames = new Set(confirmedTechnologies.map(technologyNameKey));
+  const identityMessages: string[] = [];
+  const identityIssues: ResumeTailorFieldIssue[] = [];
   for (const [index, { skillId, name }] of names.entries()) {
     const original = selectedCatalog.get(skillId);
-    const invalidName = (
+    const buildIssue = (
       reason: ResumeTailorFieldIssue["reason"],
       detail: string,
     ) => {
       const savedName = original ?? catalog.get(skillId);
       const proposal = savedName ? `“${savedName}” → “${name}”` : `“${name}”`;
-      return new ResumeTailorValidationError(
-        [`Technology name ${proposal}: ${detail}.`],
-        [
-          {
-            fieldId: `technologyNames[${index}]`,
-            field: "technologyName",
-            original: savedName ?? "",
-            proposed: name,
-            reason,
-          },
-        ],
-      );
+      return {
+        message: `Technology name ${proposal}: ${detail}.`,
+        issue: {
+          fieldId: `technologyNames[${index}]`,
+          field: "technologyName" as const,
+          original: savedName ?? "",
+          proposed: name,
+          reason,
+        },
+      };
+    };
+    const invalidName = (
+      reason: ResumeTailorFieldIssue["reason"],
+      detail: string,
+    ) => {
+      const built = buildIssue(reason, detail);
+      return new ResumeTailorValidationError([built.message], [built.issue]);
     };
     const key = technologyNameKey(name);
     if (!original)
@@ -164,14 +171,21 @@ export function validateResumeTechnologyNames(
       (confirmedNames.has(key) ||
         (owner !== undefined && owner !== originalKey) ||
         !sameSpelling)
-    )
-      throw invalidName(
+    ) {
+      const built = buildIssue(
         "technologyIdentity",
         "display name belongs to a different technology",
       );
+      identityMessages.push(built.message);
+      identityIssues.push(built.issue);
+      continue;
+    }
 
     proposedIds.add(skillId);
     catalogNameByVacancyName.set(key, originalKey);
+  }
+  if (identityIssues.length) {
+    throw new ResumeTailorValidationError(identityMessages, identityIssues);
   }
   // Counts retain the posting's order, so equally common spellings use the first mention.
   const preferred = new Map<string, string>();

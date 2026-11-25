@@ -39,6 +39,7 @@ import {
 } from "@/features/resume-engine/lib/template-registry";
 import {
   ResumeTailorErrorAlert,
+  type EquivalenceResolutionBatch,
   type ResumeTailorErrorAlertProps,
   type ResumeTailorFailure,
 } from "@/features/resume-engine/components/resume-tailor-error-alert";
@@ -437,12 +438,18 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   }, [runTailorManual]);
 
   const requestCorrectionPrompt = useCallback(
-    async (rejected: TechnologyEquivalence[]) => {
+    async (
+      rejected: TechnologyEquivalence[],
+      approvedOverride?: TechnologyEquivalence[],
+      confirmedOverride?: string[],
+    ) => {
       if (!error?.message || manualTailorJson.trim().length < 2) return;
+      const nextEquivalences = approvedOverride ?? technologyEquivalences;
+      const nextConfirmed = confirmedOverride ?? confirmedTechnologies;
       try {
         const promptPkg = await getCorrectionPrompt.mutateAsync({
-          confirmedTechnologies,
-          technologyEquivalences,
+          confirmedTechnologies: nextConfirmed,
+          technologyEquivalences: nextEquivalences,
           rejectedTechnologyEquivalences: rejected,
           applicationId,
           templateVersion,
@@ -453,6 +460,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           validationError: error.message,
         });
         setCorrectionPrompt(promptPkg);
+        if (approvedOverride?.length) void pageData.refetch?.();
         try {
           await navigator.clipboard.writeText(promptPkg.combinedPrompt);
           toast.success(t("tailorValidation.correctionPromptReady"));
@@ -474,6 +482,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       error,
       getCorrectionPrompt,
       manualTailorJson,
+      pageData,
       t,
       targetLocale,
       templateVersion,
@@ -482,57 +491,62 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     ],
   );
 
-  const handleConfirmEquivalence = useCallback(
-    (pair: TechnologyEquivalence) => {
-      const nextEquivalences = mergeEquivalencePair(
+  const handleResolveEquivalences = useCallback(
+    ({ approved, rejected }: EquivalenceResolutionBatch) => {
+      const nextEquivalences = approved.reduce(
+        (acc, pair) => mergeEquivalencePair(acc, pair),
         technologyEquivalences,
-        pair,
+      );
+      const approvedProposedKeys = new Set(
+        approved.map((pair) => technologyNameKey(pair.proposed)),
       );
       const nextConfirmed = confirmedTechnologies.filter(
-        (name) => technologyNameKey(name) !== technologyNameKey(pair.proposed),
+        (name) => !approvedProposedKeys.has(technologyNameKey(name)),
+      );
+      const nextRejected = rejected.reduce(
+        (acc, pair) => mergeEquivalencePair(acc, pair),
+        rejectedTechnologyEquivalences,
       );
       setTechnologyEquivalences(nextEquivalences);
       setConfirmedTechnologies(nextConfirmed);
-      setCorrectionPrompt(null);
+      if (rejected.length === 0) {
+        setCorrectionPrompt(null);
+        if (effectiveMode === "manual") {
+          runTailorManual({
+            confirmed: nextConfirmed,
+            equivalences: nextEquivalences,
+          });
+        } else {
+          runTailorAuto({
+            confirmed: nextConfirmed,
+            equivalences: nextEquivalences,
+          });
+        }
+        return;
+      }
+      setRejectedTechnologyEquivalences(nextRejected);
       if (effectiveMode === "manual") {
-        runTailorManual({
-          confirmed: nextConfirmed,
-          equivalences: nextEquivalences,
-        });
+        void requestCorrectionPrompt(
+          nextRejected,
+          nextEquivalences,
+          nextConfirmed,
+        );
       } else {
         runTailorAuto({
           confirmed: nextConfirmed,
           equivalences: nextEquivalences,
+          rejected: nextRejected,
         });
       }
     },
     [
       confirmedTechnologies,
       effectiveMode,
-      runTailorAuto,
-      runTailorManual,
-      technologyEquivalences,
-    ],
-  );
-
-  const handleRejectEquivalence = useCallback(
-    (pair: TechnologyEquivalence) => {
-      const nextRejected = mergeEquivalencePair(
-        rejectedTechnologyEquivalences,
-        pair,
-      );
-      setRejectedTechnologyEquivalences(nextRejected);
-      if (effectiveMode === "manual") {
-        void requestCorrectionPrompt(nextRejected);
-      } else {
-        runTailorAuto({ rejected: nextRejected });
-      }
-    },
-    [
-      effectiveMode,
       rejectedTechnologyEquivalences,
       requestCorrectionPrompt,
       runTailorAuto,
+      runTailorManual,
+      technologyEquivalences,
     ],
   );
 
@@ -637,8 +651,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     onRetry: effectiveMode === "manual" ? handleTailorManual : handleTailorAuto,
     onClearError: handleClearError,
     onSwitchToManual: handleSwitchToManual,
-    onConfirmEquivalence: handleConfirmEquivalence,
-    onRejectEquivalence: handleRejectEquivalence,
+    onResolveEquivalences: handleResolveEquivalences,
     onCreateCorrectionPrompt:
       manualTailorJson.trim().length >= 2
         ? handleCreateCorrectionPrompt
