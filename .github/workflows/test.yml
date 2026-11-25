@@ -41,6 +41,7 @@ jobs:
       - run: pnpm type
       - run: pnpm test
       - run: pnpm build
+        if: github.ref == 'refs/heads/main'
 
   e2e-smoke:
     runs-on: ubuntu-latest
@@ -72,13 +73,55 @@ jobs:
 
       - run: pnpm exec playwright install --with-deps chromium
 
+      - name: Wait for Vercel Preview URL
+        id: vercel
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const sha = context.payload.pull_request?.head?.sha || context.sha;
+            const deadline = Date.now() + 8 * 60 * 1000;
+            while (Date.now() < deadline) {
+              const { data: deployments } = await github.rest.repos.listDeployments({
+                owner,
+                repo,
+                sha,
+              });
+              for (const dep of deployments) {
+                if (!dep.environment?.toLowerCase().includes("preview")) continue;
+                const { data: statuses } = await github.rest.repos.listDeploymentStatuses({
+                  owner,
+                  repo,
+                  deployment_id: dep.id,
+                  per_page: 5,
+                });
+                const ok = statuses.find(
+                  (s) => s.state === "success" && s.environment_url,
+                );
+                if (ok) {
+                  core.setOutput("url", ok.environment_url);
+                  return;
+                }
+                if (statuses.some((s) => s.state === "failure" || s.state === "error")) {
+                  core.setFailed(`Vercel Preview deployment failed (${dep.environment})`);
+                  return;
+                }
+              }
+              await new Promise((r) => setTimeout(r, 10000));
+            }
+            core.setFailed("Timed out waiting for Vercel Preview URL");
+
       - run: pnpm db:push && pnpm db:seed
 
       - name: Build production server
+        if: steps.vercel.outputs.url == ''
         run: pnpm build
 
       - run: pnpm test:e2e
         env:
+          E2E_BASE_URL: ${{ steps.vercel.outputs.url || 'http://127.0.0.1:3000' }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           E2E_PREBUILT: "1"
           E2E_FULL: ${{ github.ref == 'refs/heads/main' && '1' || '0' }}
 
